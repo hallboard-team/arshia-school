@@ -1,0 +1,53 @@
+<section  class="section-register">
+    <mat-tab-group class="slider">
+        <mat-tab label="دانش آموزان">
+   
+        </mat-tab>
+        
+        <mat-tab label="ثبت شهریه دانش آموز">
+            <form [formGroup]="addAttendencFg" (ngSubmit)="addAttendencFg.valid && addAttendence()">
+              <div class="content">
+                <!-- UserName -->
+                <mat-form-field appearance="outline">
+                  <mat-label>Username</mat-label>
+                  <input type="text" formControlName="userNameCtrl" label="Username" placeHolder="Your username"
+                    matInput>
+                  <mat-hint>Between 1 to 30 characters.</mat-hint>
+                  @if (UserNameCtrl.hasError('required')) {
+                  <mat-error>This field is required.</mat-error>
+                  }
+                </mat-form-field>
+            
+                <!-- Days Of Week -->
+                <mat-form-field appearance="outline">
+                  <mat-label>DaysOfWeek</mat-label>
+                  <input type="text" formControlName="daysOfWeekCtrl" label="Days Of Week" placeHolder="Enter Days Of Week" matInput>
+                  @if (DaysOfWeekCtrl.hasError('required')) {
+                  <mat-error>This field is required.</mat-error>
+                  }
+                </mat-form-field>
+          
+                <!-- Date -->
+                <mat-form-field appearance="outline">
+                  <mat-label>Date</mat-label>
+                  <input type="text" formControlName="dateCtrl" label="Date" placeHolder="Enter Date." matInput>
+                  @if (DateCtrl.hasError('required')) {
+                  <mat-error>This field is required.</mat-error>
+                  }
+                </mat-form-field>
+            
+                <!-- AbsentOrPresentCtrl -->
+                <mat-form-field appearance="outline">
+                  <mat-label>AbsentOrPresent</mat-label>
+                  <input type="text" formControlName="absentOrPresentCtrl" label="AbsentOrPresent" placeHolder="Enter AbsentOrPresent" matInput>
+                  @if (AbsentOrPresentCtrl.hasError('required')) {
+                  <mat-error>This field is required.</mat-error>
+                  }
+                </mat-form-field>
+          
+                <button type="submit" [disabled]="addAttendencFg.invalid" mat-raised-button color="primary">ثبت</button>
+              </div>
+            </form>
+        </mat-tab>
+    </mat-tab-group>
+</section>

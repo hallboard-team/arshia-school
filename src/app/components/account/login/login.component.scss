@@ -1,0 +1,67 @@
+.section-login-page {
+    // background-color: red;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3rem;
+    gap: 2rem;
+
+    width: 100%;
+
+    .div-photo-login-page {
+        height: 500px;
+        width: 50%;
+
+        .photo1 {
+            height: 100%;
+            width: 100%;
+        }
+    }
+
+    #section-slider-login {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .slider-login {
+            width: 100%;
+            place-items: center;
+
+            .login-form {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-right: 1rem;
+            
+                h1 {
+                    color: black;
+                    font-size: 20px;
+                }
+                .matn-sepanta {
+                    color: rgba(0, 0, 0, 0.486);
+                    font-size: 12px;
+                }
+            
+                .content {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 1rem;
+            
+                    width: 35rem;
+            
+                    // border: 1px solid rgb(172, 172, 172);
+                    border-radius: 1rem;
+            
+                    padding: 1rem;
+            
+                }
+            
+                mat-form-field {
+                    min-width: 30rem;
+                }
+            }
+        }
+    }
+}
