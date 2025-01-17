@@ -60,7 +60,6 @@ export class ManageerPannelComponent implements OnInit, OnDestroy{
   usersWithRoles: UserWithRole[] = [];
   private snackBar = inject(MatSnackBar);
 
-
   //#endregion injects and vars
 
   //#region auto-run methods
@@ -227,7 +226,7 @@ export class ManageerPannelComponent implements OnInit, OnDestroy{
     return this.addSecretaryFg.get('lessonSecCtrl') as FormControl;
   }
 
-  //for add-corse
+  //for add-course
   get UserNameCtrl(): FormControl {
     return this.addCorseFg.get('userNameCtrl') as FormControl;
   }

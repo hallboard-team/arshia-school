@@ -118,6 +118,13 @@
     </section>
 </section>
 
+<div class="container">
+    <form (ngSubmit)="submitColor()">
+        <label for="colorInput">pick your favorite color</label>
+        <input type="color" id="colorInput" [(ngModel)]="favoriteColor" name="favoriteColor" />
+        <button type="submit" class="neumorphic-button">click</button>
+    </form>
+</div>
 
 
 <!-- old Code SliderPhoto is here -->
