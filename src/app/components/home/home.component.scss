@@ -1,55 +1,228 @@
-#main-section {
+.main-section {
+    font-family: 'Arial', sans-serif;
     width: 100%;
+    height: 84vh;
+    
     display: flex;
     flex-direction: column;
-    
-    .section-picture {
-        width: 100%;
-        height: 31.5rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        // background-color: #e0e0e0;
-        position: relative;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.664);
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px; /* برای ایجاد عمق */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.664);
+    background: rgb(172,172,172);
+    background: radial-gradient(circle, rgba(172,172,172,1) 12%, rgba(224,224,224,1) 55%);
 
-        background: rgb(172,172,172);
-        background: radial-gradient(circle, rgba(172,172,172,1) 12%, rgba(224,224,224,1) 55%);
+        .container {
+                width: 500px;
+                height: 460px;
+                // max-width: 1200px;
+                background-color: #d8eefe; /* رنگ آبی ملایم */
+                border-radius: 20px; /* لبه‌های گرد */
+                // margin: 50px auto; /* وسط‌چین کردن */
+                position: relative; /* برای موقعیت‌دهی آیتم‌ها روی آن */
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* سایه برای برجسته‌سازی */
+                transform: rotateX(60deg) rotate(-40deg) ; /* چرخاندن برای ایجاد زاویه سه‌بعدی */
+                transform-style: preserve-3d; /* ایجاد جلوه سه‌بعدی */
+            .item {
+                width: 200px;
+                height: 150px;
+                background-color: #f0f0f0;
+                border: 1px solid #ccc;
+                box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+                transform: rotate(-10deg) translate(10px, 20px);
+                transform-origin: center; /* نقطه محوری برای تغییر زاویه */
+                transition: transform 0.3s ease-in-out; /* انیمیشن برای تغییرات */
+              }
+              
+              /* برای ایجاد حالت سه‌بعدی */
+              .item-3d {
+                transform: rotateX(15deg) rotateY(-15deg) translateZ(50px);
+                transform-style: preserve-3d;
+                perspective: 1000px; /* ایجاد عمق در صفحه */
+              }
+              
+              /* افکت هنگام هاور */
+              .item:hover {
+                transform: rotate(0deg) translate(0px, 0px) scale(1.05); /* بازگشت به حالت اصلی */
+              }
+        }
+ 
+  .scene {
+    position: relative;
+    width: 600px;
+    height: 400px;
+    transform-style: preserve-3d;
+    .monitor {
+      position: absolute;
+      width: 200px;
+      height: 150px;
+      background: #e0e0e0;
+      border-radius: 10px;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2), -5px -5px 10px rgba(255, 255, 255, 0.7);
+      transform: translateZ(50px) rotateX(10deg) rotateY(-15deg);
+    }
+    .screen {
+      position: absolute;
+      width: 180px;
+      height: 120px;
+      background: #333;
+      border-radius: 5px;
+      top: 15px;
+      left: 10px;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      padding: 10px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .screen p {
+      margin: 0;
+      color: #00ff00;
+    }
+    /* کیبورد */
+    .keyboard {
+      position: absolute;
+      width: 220px;
+      height: 30px;
+      background: #ccc;
+      top: 170px;
+      left: 0;
+      right: 0;
+      margin: auto;
+      border-radius: 5px;
+      box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2), -3px -3px 6px rgba(255, 255, 255, 0.5);
+      .keys {
+        position: absolute;
+        width: 90%;
+        height: 80%;
+        background: #bbb;
+        border-radius: 3px;
+        top: 5%;
+        left: 5%;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+    }
+    /* میز */
+    .desk {
+      position: absolute;
+      width: 400px;
+      height: 10px;
+      background: #d9d9d9;
+      bottom: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+    }
+    /* افراد (شخصیت‌ها) */
+    .student {
+      position: absolute;
+      font-size: 50px;
+      top: 200px;
+    }
+    
+    .student.girl {
+      left: -50px;
+    }
+    
+    .student.boy {
+      right: -50px;
+    }
+    
+    /* دکمه CTA (اقدام) */
+    .cta-button {
+      position: absolute;
+      bottom: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      background: linear-gradient(145deg, #6ec1e4, #4e95c8);
+      color: white;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2), -3px -3px 6px rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out;
+    }
+    
+    .cta-button:hover {
+      transform: scale(1.1);
+    }
+    
+  }
+  
+
+        //oldCode
         
-        .main-photo {
-            height: 300px;
-            width: 450px;
-            // background-color: blue;
+        .div-photo-boy {
+            background: linear-gradient(225deg, #f0f0f0, #cacaca);
+            box-shadow:  -5px 5px 10px #5a5a5a,
+                5px -5px 10px #ffffff;
             position: absolute;
-            left: 0;    
+            right: 20px;    
             bottom: 0;
+            height: 270px;
+            width: 250px;
+            border-radius: 100px;
+            overflow: hidden;
+            .photoBoy {
+                height: 100%;
+                width: 100%;
+            }
         }
-        .main-photo1 {
-            height: 350px;
-            width: 500px;
+        .div-photo-girl {
             position: absolute;
-            right: 0;    
-            top: 0;
+            left: 5px;    
+            bottom: 5px;
+            height: 260px;
+            width: 400px;
+            border-radius: 50%;
+            overflow: hidden;
+            // background: #e0e0e0;
+            // box-shadow: inset -5px -5px 10px #5a5a5a,
+            //     inset 5px 5px 10px #ffffff;
+
+            .photoGirl {
+                height: 100%;
+                width: 100%;
+            }
         }
-        .main-photo2 {
-            height: 350px;
-            width: 500px;
-            // background-color: blue;
-            position: absolute;
-            right: 0;    
-            bottom: 0;
+        .main-div {
+            // background-color: red;
+            height: 400px;
+            width: 350px;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            flex-direction: column;
+            position: relative;
+
+            button {
+                position: absolute;
+                top: 100px;
+                left: 150px;
+                height: 30px;
+                width: 120px;
+                border: none;
+                border-radius: 5px;
+                background: linear-gradient(225deg, #f0f0f0, #cacaca);
+                box-shadow:  -5px 5px 10px #5a5a5a,
+                    5px -5px 10px #ffffff;
+            }
         }
         .monitor {
             height: 300px;
             width: 350px;
-            margin-top: 10px;
         }
         .keyboard {
-            height: 120px;
-            width: 300px;
-            margin-left: 250px;
-            // background-color: red;
+            height: 90px;
+            width: 200px;
+            margin-left: 120px;
         }
         .div-p {
             position: absolute;
@@ -64,22 +237,25 @@
             // background-color: #e0e0e093;
             border-radius: 5px;
             backdrop-filter: 3px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.493);
+            // box-shadow: 0 0 10px rgba(0, 0, 0, 0.493);
+            // transform: rotate(-1deg);
+            transform: skewX(10deg);
+            transform-style: preserve-3d;
 
             .p1 {
-                font-size: 70px;
+                font-size: 60px;
                 color: black;
                 font-weight: bold;
                 margin: 0;
             }
             .p2 {
-                font-size: 30px;
+                font-size: 25px;
                 color: red;
                 // font-weight: bold;
                 margin: 0;
             }
             .p3 {
-                font-size: 70px;
+                font-size: 60px;
                 color: black;
                 font-weight: bold;
                 margin: 0;
@@ -531,7 +707,6 @@
             }
         }
     }
-}
 
 .container {
     display: flex;

@@ -23,40 +23,40 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent{
   // selectStepByIndex(index: number): void {
     //   this.selectedIndex = index;
     // }
-  http = inject(HttpClient);
-  private readonly _apiUrl = environment.apiUrl + 'color/';
+  // http = inject(HttpClient);
+  // private readonly _apiUrl = environment.apiUrl + 'color/';
     
-  favoriteColor: string = '#ffffff';
+  // favoriteColor: string = '#ffffff';
     
-  ngOnInit(): void {
-    this.http.get<{ color: string }>(this._apiUrl + 'get-color')
-    .subscribe(response => {
-      const userColor = response.color;
-      this.applyBackgroundColor(userColor);
-    })
-  }
+  // ngOnInit(): void {
+  //   this.http.get<{ color: string }>(this._apiUrl + 'get-color')
+  //   .subscribe(response => {
+  //     const userColor = response.color;
+  //     this.applyBackgroundColor(userColor);
+  //   })
+  // }
 
-  submitColor() {
-    this.http.post(this._apiUrl + 'set-color', { color: this.favoriteColor})
-    .subscribe(response => {
-      console.log('Color saved successfully', response);
-    })
-  }
+  // submitColor() {
+  //   this.http.post(this._apiUrl + 'set-color', { color: this.favoriteColor})
+  //   .subscribe(response => {
+  //     console.log('Color saved successfully', response);
+  //   })
+  // }
 
-  applyBackgroundColor(color: string) {
-    document.body.style.backgroundColor = color; 
-    const elements = document.querySelectorAll('.neumorphic-button, input[type="color"]'); 
-    elements.forEach((element) => { 
-      (element as HTMLElement).style.boxShadow = ` 
-        8px 8px 15px ${color},
-        -8px -8px 15px ${(color)} 
-      `; 
-    });
-  }
+  // applyBackgroundColor(color: string) {
+  //   document.body.style.backgroundColor = color; 
+  //   const elements = document.querySelectorAll('.neumorphic-button, input[type="color"]'); 
+  //   elements.forEach((element) => { 
+  //     (element as HTMLElement).style.boxShadow = ` 
+  //       8px 8px 15px ${color},
+  //       -8px -8px 15px ${(color)} 
+  //     `; 
+  //   });
+  // }
 
   // applyBackgroundColor(color: string) {
   //   document.body.style.backgroundColor = color; 
