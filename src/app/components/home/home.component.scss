@@ -37,12 +37,12 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); 
             transform-style: preserve-3d; /* ایجاد جلوه سه‌بعدی */
             background-color: #8ecae6;
-            background: linear-gradient(225deg, #98d8f6, #80b6cf);
-            box-shadow:  -11px 11px 22px #77aac1,
-                11px -11px 22px #a5eaff;
-            // background: linear-gradient(225deg, #f0f0f0, #cacaca);
-            // box-shadow:  -11px 11px 22px #bcbcbc,
-            //     11px -11px 22px #ffffff;
+            // background: linear-gradient(225deg, #98d8f6, #80b6cf);
+            // box-shadow:  -11px 11px 22px #77aac1,
+            //     11px -11px 22px #a5eaff;
+            background: linear-gradient(225deg, #f0f0f0, #cacaca);
+            box-shadow:  -11px 11px 22px #bcbcbc,
+                11px -11px 22px #ffffff;
         }
 
             .item {
@@ -69,7 +69,7 @@
               }
     }
     .mainMonitor {
-        height: 270px;
+        height: 230px;
         width: 370px;
         position: absolute;
         bottom: 270px;
@@ -112,9 +112,9 @@
         transform: rotate(-10deg) rotateY(25deg);
         // background-color: red;
     }
-    .div-matn-monitor {
+    .div-inside-monitor {
         // background-color: red;
-        height: 250px;
+        height: 220px;
         width: 300px;
         display: flex;
         justify-content: center;
@@ -122,7 +122,7 @@
         flex-direction: column;
         gap: 20px;
         position: absolute;
-        top: 50px;
+        top: 75px;
         right: 340px;
         z-index: 2;
         transform: rotate(-15deg) rotateX(-30deg) rotateY(20deg);
@@ -156,22 +156,23 @@
             .top {
                 width: 100%;
                 display: flex;
-                justify-content: space-between;
+                justify-content: space-evenly;
                 align-items: center;
 
                 button {
                     border: none;
-                    background-color: none;
                     height: 50px;
                     width: 50px;
                     border-radius: 50%;
+                    background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                    box-shadow:  5px 5px 10px #9b9b9b,
+                        -5px -5px 10px #ffffff;
                 }
-
             }
             .bottom {
                 width: 100%;
                 display: flex;
-                justify-content: space-between;
+                justify-content: space-evenly;
                 align-items: center;
 
                 button {
@@ -180,9 +181,49 @@
                     height: 45px;
                     width: 45px;
                     border-radius: 50%;
+                    background: #e0e0e0;
+                    box-shadow: inset 5px 5px 10px #9d9d9d,
+                        inset -5px -5px 10px #ffffff;
                 }
             }
         }
+    }
+    .programmers-photo {
+        height: 120px;
+        width: 120px;
+        position: absolute;
+    }
+    .img3 {
+        position: absolute;
+        right: 230px;
+        top: 160px;
+        transform: rotate(-10deg);
+    }
+    .img2 {
+        position: absolute;
+        left: 520px;
+        top: 180px;
+        transform: rotateY(30deg) rotate(-20deg) rotateX(-10deg);
+    }
+    .img13 {
+        position: absolute;
+        left: 520px;
+        top: 50px;
+        transform: rotateY(30deg) rotate(-20deg) rotateX(-10deg);
+    }
+    .img14 {
+        position: absolute;
+        right: 280px;
+        top: 50px;
+        transform: rotateY(30deg) rotate(-20deg) rotateX(-10deg);
+    }
+    .img7 {
+        position: absolute;
+        right: 280px;
+        top: 230px;
+        height: 70px;
+        width: 70px;
+        transform: rotateY(20deg) rotate(20deg) rotateX(20deg);
     }
 
  
