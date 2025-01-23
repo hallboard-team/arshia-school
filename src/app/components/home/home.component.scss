@@ -16,8 +16,45 @@ main {
         .left-items {
             width: 20%;
             height: 100%;
-            // background-color: blue;
+            display: flex;
+            flex-wrap: wrap;
+            // gap: 10px;
+            justify-content: center;
+            align-items: center;
 
+            .div1 {
+                height: 200px;
+                width: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+
+                span {
+                    font-size: 15px;
+                    color: black;
+                    font-weight: bold;
+                }
+                img {
+                    height: 100px;
+                    width: 100px;
+                }
+            }
+            .div2 {
+                height: 200px;
+                width: 50%;
+                background-color: red;
+            }
+            .div3 {
+                height: 200px;
+                width: 50%;
+                background-color: red;
+            }
+            .div4 {
+                height: 200px;
+                width: 50%;
+                background-color: red;
+            }
         }
         .center-photo {
             width: 60%;
@@ -490,12 +527,9 @@ main {
                 border-radius: 20px;
                 border: none;
                 color: #fff;
-background: linear-gradient(315deg, #fe0229, #d50222);
-box-shadow:  -50px -50px 100px #eb0226,
-             50px 50px 100px #ef0226;
-                    // background: hsl(345deg 100% 47%);
-
-
+                background: linear-gradient(315deg, #02fee1, #02d5bd);
+                box-shadow:  -50px -50px 100px #02ebd0,
+                    50px 50px 100px #02efd4;
             }
         }
         .div-card2 {
@@ -505,14 +539,62 @@ box-shadow:  -50px -50px 100px #eb0226,
             background: linear-gradient(145deg, #f0f0f0, #cacaca);
             box-shadow:  5px 5px 10px #b3b3b3,
              -5px -5px 10px #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            span {
+                font-size: 15px;
+                font-weight: bold;
+            }
+            img {
+                width: 180px;
+                height: 100px;
+
+            }
+            button {
+                margin-top: 5px;
+                height: 30px;
+                width: 100px;
+                border-radius: 20px;
+                border: none;
+                color: #fff;
+                background: linear-gradient(315deg, #fe0229, #d50222);
+                box-shadow:  -50px -50px 100px #eb0226,
+                    50px 50px 100px #ef0226;
+            }
         }
         .div-card3 {
             height: 100%;
             width: 200px;
             border-radius: 10px;
-            background: linear-gradient(145deg, #c7c7c7, #a7a7a7);
-            box-shadow:  5px 5px 10px #959595,
-             -5px -5px 10px #dfdfdf;
+            background: linear-gradient(145deg, #f0f0f0, #cacaca);
+            box-shadow:  5px 5px 10px #b3b3b3,
+             -5px -5px 10px #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            span {
+                font-size: 15px;
+                font-weight: bold;
+            }
+            img {
+                width: 180px;
+                height: 100px;
+
+            }
+            button {
+                margin-top: 5px;
+                height: 30px;
+                width: 100px;
+                border-radius: 20px;
+                border: none;
+                color: #fff;
+                background: linear-gradient(315deg, #02fee1, #02d5bd);
+                box-shadow:  -50px -50px 100px #02ebd0,
+                    50px 50px 100px #02efd4;
+            }
         }
     }
 }
@@ -528,7 +610,7 @@ box-shadow:  -50px -50px 100px #eb0226,
         display: flex;
         flex-direction: column;
         gap: 10px;
-        transform-style: preserve-3d;
+        transform-style: preserve-3d; 
 
         .links {
             background-color: red;
