@@ -3,6 +3,7 @@
         <div class="left-items">
             
         </div>
+
         <div class="center-photo">
             <div class="div-laptop-item">
                 <img class="monitor" src="../assets/images/laptop1.png" alt="">
@@ -11,25 +12,41 @@
                 <img class="into-laptop" src="../assets/images/sky4.webp" alt="">
                 <!-- <img class="into-laptop" src="../assets/images/programmingPhoto2.jpeg" alt=""> -->
                 <!-- <img class="into-laptop" src="../assets/images/programmingPhoto3.jpeg" alt=""> -->
+                <!-- <img class="into-laptop" src="../assets/images/programmingPhoto4.jpeg" alt=""> -->
+
+                <div class="div-title">
+                    <span class="title1">ACADEMY</span>
+                    <span class="title2">TOLU FANAVARI</span>
+                    <span class="matn">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+                        Et reiciendis eveniet quis
+                    </span>
+                    <button>
+                        <span class="shadow"></span>
+                        <span class="edge"></span>
+                        <span class="front text">
+                            START NOW
+                        </span>
+                    </button>
+                </div>
 
                 <nav>
                     <section class="right">
-                        <button class="btn-icon"></button>
-                        <!-- <div class="div-links">
-                            <div class="div-transsform-style">
-                                <button class="btn1">درباره ما</button>
-                                <button class="btn2">درباره ما</button>
-                                <button class="btn3">درباره ما</button>
-                                <button class="btn4">درباره ما</button>
-                                <button class="btn5">درباره ما</button>
-                            </div>
-                        </div> -->
-                    </section>
-                
-                    <section class="center">
-                        <div class="div-name-amozeshgah">
-                            <p>طلوع فناوری</p>
-                        </div>
+                        <button [mat-menu-trigger-for]="appMenu" class="menu-button">
+                            <mat-icon>menu</mat-icon>
+                        </button>
+
+                          <mat-menu #appMenu [class]="'mat-menu'">
+                              <div class="div-transsform-style">
+                                <div class="links">
+                                    <button class="btn1">درباره ما</button>
+                                    <button class="btn2">درباره ما</button>
+                                    <button class="btn3">درباره ما</button>
+                                    <button class="btn4">درباره ما</button>
+                                    <button class="btn5">درباره ما</button>
+                                </div>
+                              </div>
+                          </mat-menu>
                     </section>
                 
                     <section class="left">
@@ -44,11 +61,61 @@
                 </nav>
             </div>
         </div>
+
         <div class="right-items">
             
         </div>
     </section>
-    <section class="bottom-side"></section>
+    <section class="bottom-side">
+        <div class="div-mobile">
+            <img src="../assets/images/mobile.png" alt="">
+            <img class="background" src="../assets/images/sky4.webp" alt="">
+            <div class="navbar">
+                <div class="top-menu-button-div">
+                    <button><mat-icon>menu</mat-icon></button>
+                </div>
+            </div>
+            <div class="div-matn">
+                <span class="text-top">ACADEMY</span>
+                <span class="text-bottom">TOLU</span>
+                <span class="text-bottom">FANAVARI</span>
+            </div>
+            <div class="footer"></div>
+        </div>
+
+        <div class="div-page-size-small">
+            <div class="navbar">
+                <div class="left">
+                    <button> دانشجویان</button>
+                    <button> اساتید</button>
+                </div>
+                <div class="right">
+                    <button><mat-icon>menu</mat-icon></button>
+                </div>
+            </div>
+            <img src="../assets/images/sky4.webp" alt="">
+            <div class="div-matn">
+                <span class="text-top">ACADEMY</span>
+                <span class="text-bottom">TOLU FANAVARI</span>
+            </div>
+            <div class="bottom-side"></div>
+        </div>
+
+        <div class="div-card1">
+            <span>WEB DEVELOPMENT</span>
+            <img src="../assets/images/laptop1.png" alt="">
+            <button>START NOW</button>
+        </div>
+        <div class="div-card2">
+
+        </div>
+        <div class="div-card3">
+
+        </div>
+        <div class="dic-card4">
+
+        </div>
+    </section>
 
 </main>
 

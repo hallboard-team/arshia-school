@@ -12,14 +12,15 @@ import { environment } from '../../../environments/environment.development';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
-    MatButtonModule, MatIconModule, NgTemplateOutlet,
+    MatButtonModule, MatIconModule, 
     RouterModule, MatInputModule, MatDividerModule,
-    FormsModule, NavbarComponent
+    FormsModule, NavbarComponent, MatMenuModule
   ], 
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
