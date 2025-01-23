@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment.development';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,7 @@ import { FormsModule } from '@angular/forms';
   imports: [
     MatButtonModule, MatIconModule, NgTemplateOutlet,
     RouterModule, MatInputModule, MatDividerModule,
-    FormsModule
+    FormsModule, NavbarComponent
   ], 
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
