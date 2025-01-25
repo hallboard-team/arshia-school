@@ -4,8 +4,8 @@ main {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-
+    // gap: 1rem;
+  
     .top-side {
         display: flex;
         justify-content: center;
@@ -228,17 +228,20 @@ main {
                 
                 .monitor {
                     margin-left: 20px;
+                    margin-top: -15px;
                     width: 120%;
                     height: 420px;
                     overflow: hidden;
+                    z-index: 3;
                 }
                 .into-laptop {
                     position: absolute;
                     left: 47px;
-                    bottom: 50px;
+                    bottom: 70px;
                     width: 673px;
                     height: 250px;
                     border-radius: 5px;
+                    z-index: 3;
                 }
                 .div-title {
                     position: absolute;
@@ -251,6 +254,7 @@ main {
                     gap: 3rem;
                     width: 350px;
                     text-align: center;
+                    z-index: 3;
 
                     .title1 {
                         font-family: 'Courier New', monospace;
@@ -424,9 +428,10 @@ main {
                     background-color: #e0e0e0;
                     box-shadow: 0 0 10px black;
                     position: absolute;
-                    top: 50px;
+                    top: 38px;
                     left: 47px;
                     border-radius: 5px 5px 0px 0px;
+                    z-index: 3;
                 
                     .right {
                         display: flex;
@@ -527,7 +532,7 @@ main {
 
         .right-items {
             width: 20%;
-            height: 100%;
+            height: 95%;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -542,7 +547,7 @@ main {
                 position: absolute;
                 left: 26px;
                 top: 10px;
-                height: 378px;
+                height: 359px;
                 width: 207px;
                 z-index: 1;
                 border-radius: 20px;
@@ -551,7 +556,7 @@ main {
                 position: absolute;
                 left: 26px;
                 top: 10px;
-                height: 378px;
+                height: 359px;
                 width: 207px;
                 background-color: rgba(0, 0, 0, 0.323);
                 backdrop-filter: blur(3px);
@@ -603,9 +608,9 @@ main {
         height: 170px;
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-evenly;
+        justify-content: center;
         align-items: center;
-        gap: 1rem;
+        gap: 2rem;
 
         .div-page-size-small {
             height: 100%;
@@ -696,7 +701,7 @@ main {
             }
         }
         .cards {
-            height: 100%;
+            height: 95%;
             width: 200px;
             border-radius: 10px;
             background: linear-gradient(145deg, #f0f0f0, #cacaca);
@@ -705,15 +710,16 @@ main {
             display: flex;
             flex-direction: column;
             align-items: center;
+            // gap: 5px;
 
             span {
-                font-size: 15px;
+                font-size: 13px;
                 font-weight: bold;
                 color: rgba(0, 0, 0, 0.611);
             }
             .div-photo {
-                width: 180px;
-                height: 100px;
+                width: 170px;
+                height: 80px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -730,8 +736,9 @@ main {
             button {
                 height: 30px;
                 width: 130px;
+                margin-top: 8px;
                 font-weight: bold;
-                font-size: 12px;
+                font-size: 13px;
                 color: rgba(0, 0, 0, 0.611);
                 border: none;
                 border-radius: 10px;
