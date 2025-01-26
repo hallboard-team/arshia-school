@@ -30,14 +30,14 @@ export const routes: Routes = [
         runGuardsAndResolvers: 'always', 
         canActivate: [authGuard],
         children: [
-            { path: 'کاربران سپنتا', component: MemberListComponent },
-            { path: 'ادمین', component: AdminComponent },
-            { path: 'پروفایل', component: UserProfileComponent },
-            { path: 'add-discription', component: AddDiscriptionComponent },
-            { path: 'مدیر', component: ManageerPannelComponent },
-            { path: 'منشی', component: SecretaryComponent },
-            { path: 'معلم', component: TeacherComponent },
-            { path: 'user/user-edit', component: UserEditComponent },
+            // { path: 'کاربران سپنتا', component: MemberListComponent },
+            // { path: 'ادمین', component: AdminComponent },
+            // { path: 'پروفایل', component: UserProfileComponent },
+            // { path: 'add-discription', component: AddDiscriptionComponent },
+            // { path: 'مدیر', component: ManageerPannelComponent },
+            // { path: 'منشی', component: SecretaryComponent },
+            // { path: 'معلم', component: TeacherComponent },
+            // { path: 'user/user-edit', component: UserEditComponent },
 
             // { path: 'no-access', component: NoAccessComponent }
         ]

@@ -20,8 +20,6 @@
                     <img src="../assets/images/homeImage4NoB.png" alt="">
                 </div>
             </div>
-
-            
         </div>
 
         <div class="center-photo">
@@ -32,7 +30,10 @@
                 <!-- <img class="into-laptop" src="../assets/images/sky4.webp" alt=""> -->
                 <!-- <img class="into-laptop" src="../assets/images/programmingPhoto2.jpeg" alt=""> -->
                 <!-- <img class="into-laptop" src="../assets/images/programmingPhoto3.jpeg" alt=""> -->
-                <img class="into-laptop" src="../assets/images/homePicture1.jpeg" alt="">
+                <!-- <img class="into-laptop" src="../assets/images/homePicture1.jpeg" alt=""> -->
+                <!-- <img class="into-laptop" src="../assets/images/cloudAiPhoto.jpg" alt=""> -->
+                <!-- <img class="into-laptop" src="../assets/images/cloudAiPhoto1.jpg" alt=""> -->
+                <img class="into-laptop" src="../assets/images/cloudAiPhoto3.jpg" alt="">
 
                 <div class="div-title">
                     <span class="title1">آکادمی طلوع فناوری</span>
@@ -55,29 +56,21 @@
                 </div>
 
                 <nav>
-                    <section class="right">
-                        <button [mat-menu-trigger-for]="appMenu" class="menu-button">
-                            <mat-icon>menu</mat-icon>
-                        </button>
+                    <div class="div-transsform-style">
+                        <div class="links">
+                            <button class="btn1">درباره ما</button>
+                            <button class="btn2">دوره ها</button>
+                            <button class="btn3">تماس با ما</button>
+                            <button class="btn4">خانه</button>
+                            <!-- <button class="btn5">درباره ما</button> -->
+                        </div>
+                      </div>
 
-                          <mat-menu #appMenu [class]="'mat-menu'">
-                              <div class="div-transsform-style">
-                                <div class="links">
-                                    <button class="btn1">درباره ما</button>
-                                    <button class="btn2">درباره ما</button>
-                                    <button class="btn3">درباره ما</button>
-                                    <button class="btn4">درباره ما</button>
-                                    <button class="btn5">درباره ما</button>
-                                </div>
-                              </div>
-                          </mat-menu>
-                    </section>
-                
                     <section class="left">
                         <div class="div-btns">
-                            <button class="btn1">ورود اساتید</button>
+                            <button class="btn1" routerLink="account/login">ورود اساتید</button>
                 
-                            <button class="btn2">
+                            <button class="btn2" routerLink="account/login">
                                 <span class="text">ورود دانشجویان</span>
                             </button>
                         </div>
@@ -88,7 +81,8 @@
 
         <div class="right-items">
             <img src="../assets/images/phonePhoto.png" alt="">
-            <img class="background" src="../assets/images/homePicture1.jpeg" alt="">
+            <!-- <img class="background" src="../assets/images/homePicture1.jpeg" alt=""> -->
+            <img class="background" src="../assets/images/cloudAiPhoto3.jpg" alt="">
             <div class="div-background-matn">
                 <span class="p1">آموزش</span>
                 <span class="p2">برنامه نویسی</span>
@@ -115,19 +109,23 @@
             <div class="bottom-side"></div>
         </div> -->
         <div class="cube-loader">
-            <div class="cube-top"></div>
+            <div class="cube-top">
+                <!-- <div class="div-background-black">
+                    <span>console.log</span>
+                </div> -->
+            </div>
             <div class="cube-wrapper">
             <span style="--i:0" class="cube-span">
                 <img src="../assets/images/angularIcon.png" alt="">
             </span>
             <span style="--i:1" class="cube-span">
-                <img src="../assets/images/moneyIcon.png" alt="">
+                <img src="../assets/images/typeScriptIcon.png" alt="">
             </span>
             <span style="--i:2" class="cube-span">
                 <img src="../assets/images/cSharpIcon.png" alt="">
             </span>
             <span style="--i:3" class="cube-span">
-                <img src="../assets/images/brainIcon.png" alt="">
+                <img src="../assets/images/cSharpIcon.png" alt="">
             </span>
             </div>
         </div>
