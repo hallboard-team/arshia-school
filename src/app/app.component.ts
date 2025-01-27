@@ -19,19 +19,19 @@ export class AppComponent {
   private accountService = inject(AccountService);
   private platformId = inject(PLATFORM_ID);
 
-  ngOnInit(): void {
-    this.initUserOnPageRefresh();
-  }
+  // ngOnInit(): void {
+  //   this.initUserOnPageRefresh();
+  // }
 
-  initUserOnPageRefresh(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const loggedInUserStr = localStorage.getItem('loggedInUser');
+  // initUserOnPageRefresh(): void {
+  //   if (isPlatformBrowser(this.platformId)) {
+  //     const loggedInUserStr = localStorage.getItem('loggedInUser');
 
-      if (loggedInUserStr) {
-        this.accountService.authorizeLoggedInUser();
+  //     if (loggedInUserStr) {
+  //       this.accountService.authorizeLoggedInUser();
 
-        this.accountService.setCurrentUser(JSON.parse(loggedInUserStr))
-      }
-    }
-  }
+  //       this.accountService.setCurrentUser(JSON.parse(loggedInUserStr))
+  //     }
+  //   }
+  // }
 }
