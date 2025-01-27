@@ -187,18 +187,19 @@ main {
                 }
                 .into-laptop {
                     position: absolute;
-                    left: 47px;
-                    bottom: 70px;
-                    width: 673px;
-                    height: 250px;
+                    left: 6.1%;
+                    bottom: 18%;
+                    width: 87.5%;
+                    height: 56%;
                     border-radius: 5px;
                     z-index: 3;
                 }
                 .div-title {
-                    height: 150px;
+                    height: 35%;
+                    width: 50%;
                     position: absolute;
-                    left: 210px;
-                    bottom: 90px;
+                    left: 24%;
+                    bottom: 24%;
                     display: flex;
                     justify-content: space-evenly;
                     align-items: center;
@@ -217,15 +218,6 @@ main {
                         font-weight: bold;
                         color: #fff;
                         // color: hsl(345deg 100% 47%);
-                    }
-                    .title2 {
-                        font-size: 15px;
-                        font-weight: bold;
-                        color: #fff;
-                    }
-                    .matn {
-                        font-size: 15px;
-                        color: #fff;
                     }
                     .div-buttons {
                         display: flex;
@@ -378,13 +370,13 @@ main {
                     flex-direction: row-reverse;
                     justify-content: space-evenly;
                     align-items: center;
-                    height: 4rem;
-                    width: 673px;
+                    height: 4.1rem;
+                    width: 87.5%;
                     background-color: #e0e0e0;
                     box-shadow: 0 0 10px black;
                     position: absolute;
-                    top: 38px;
-                    left: 47px;
+                    top: 9.5%;
+                    left: 6.1%;
                     border-radius: 5px 5px 0px 0px;
                     z-index: 3;
 
@@ -484,6 +476,33 @@ main {
                         transform: translate3d(0, 0, 50px);
                         box-shadow: rgba(5, 71, 17, 0.2) -5px 20px 10px 0px;
                     }
+
+                    .div-menu-btn {
+                        // display: none;
+                        opacity: 0;
+
+                        button {
+                            height: 35px;
+                            width: 35px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            border-radius: 5px;
+                            background-color: #e0e0e0;
+                            box-shadow: inset 4px 4px 10px #bcbcbc, inset -4px -4px 10px #ffffff;
+                            cursor: pointer;
+                            transition: all 0.2s ease-in-out;
+                            border: 2px solid rgb(206, 206, 206);
+                        }
+                        button:hover {
+                            box-shadow: inset 2px 2px 5px #bcbcbc, inset -2px -2px 5px #ffffff, 2px 2px 5px #bcbcbc, -2px -2px 5px #ffffff;
+                        }
+                          
+                        button:focus {
+                            outline: none;
+                            box-shadow: inset 2px 2px 5px #bcbcbc, inset -2px -2px 5px #ffffff, 2px 2px 5px #bcbcbc, -2px -2px 5px #ffffff;
+                        }
+                    }
                     
                     .left {
                         margin-left: 10px;
@@ -572,12 +591,8 @@ main {
             }
             .background {
                 position: absolute;
-                // left: 26px;
-                // top: 10px;
-                left: 16px;
-                top: 10px;
-                // height: 359px;
-                // width: 207px;
+                left: 6.1%;
+                top: 2%;
                 height: 95%;
                 width: 85%;
                 z-index: 1;
@@ -585,10 +600,10 @@ main {
             }
             .div-background-matn {
                 position: absolute;
-                left: 26px;
-                top: 10px;
-                height: 359px;
-                width: 207px;
+                left: 6.1%;
+                top: 2%;
+                height: 95%;
+                width: 85%;
                 background-color: rgba(0, 0, 0, 0.171);
                 backdrop-filter: blur(2px);
                 z-index: 1;
@@ -920,12 +935,96 @@ main {
     }
 }
 
-::ng-deep .mat-menu {
-    background-color: #e0e0e0!important;
-    height: 250px;
-    width: 150px;
-    position: absolute;
-    top: 20px;
-    left: -150px;
+@media (max-width: 1100px) {
+    main {
+        .top-side {
+            // flex-direction: column;
+            .center-photo {
+
+                nav {
+                    .div-transsform-style {
+                        display: none;
+                    }
+                    .div-menu-btn {
+                        display: none;
+                        background-color: red;
+                        // opacity: 1;
+                        // justify-content: center;
+                        // align-items: center;
+                    }
+                }
+                .div-laptop-item {
+
+                    .div-title {
+                        .title1 {
+                            font-size: 25px;
+                        }
+                    }
+                }
+            }
+            .right-items {
+                .div-background-matn {
+                    .p1 {
+                        font-size: 25px;
+                    }
+                    .p2 {
+                        font-size: 20px;
+                    }
+                    .p3 {
+                        font-size: 20px;
+                    }
+                    .p4 {
+                        font-size: 20px;
+                    }
+                    .p5 {
+                        font-size: 25px;
+                    }
+                    .p6 {
+                        font-size: 25px;
+                    }
+                }
+            }
+        }
+    }
     
 }
+
+@media (max-width: 900px) {
+    main {
+        .top-side {
+            // flex-direction: column;
+            .center-photo {
+
+                nav {
+                    .div-transsform-style {
+                    }
+                    .div-menu-btn {
+                    }
+                }
+                .div-laptop-item {
+
+                    .div-title {
+                        }
+                }
+            }
+            
+            .right-items {
+                .div-background-matn {
+                    .p1 {
+                    }
+                    .p2 {
+                    }
+                    .p3 {
+                    }
+                    .p4 {
+                    }
+                    .p5 {
+                    }
+                    .p6 {
+                    }
+                }
+            }
+        }
+    }
+}
+    
