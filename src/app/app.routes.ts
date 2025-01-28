@@ -13,6 +13,7 @@ import { TeacherComponent } from './components/teacher/teacher.component';
 import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
 import { UserEditComponent } from './components/user/user-edit/user-edit.component';
 import { AboutUsComponent } from './components/about-us/about-us.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 // import { MessagesComponent } from './components/messages/messages.component';
 // import { NoAccessComponent } from './components/errors/no-access/no-access.component';
 // import { NotFoundComponent } from './components/errors/not-found/not-found.component';
@@ -39,7 +40,8 @@ export const routes: Routes = [
             // { path: 'منشی', component: SecretaryComponent },
             // { path: 'معلم', component: TeacherComponent },
             // { path: 'user/user-edit', component: UserEditComponent },
-            { path: 'about', component: AboutUsComponent }
+            { path: 'about', component: AboutUsComponent },
+            { path: 'not-found', component: NotFoundComponent }
 
             // { path: 'no-access', component: NoAccessComponent }
         ]
