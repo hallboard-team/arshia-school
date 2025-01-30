@@ -6,12 +6,7 @@
 
     .div-items-mat-tab {    
         width: 100%;
-        // position: absolute;
-        // top: 100px;
-        // left: 0;
-        // background-color: rgba(0, 0, 0, 0.224);
         background-color: #e0e0e0;
-        // backdrop-filter: blur(2px);
 
         mat-tab-group {
             // color: rgb(255, 255, 255) !important;
@@ -24,6 +19,29 @@
                 justify-content: center;
                 align-items: center;
                 padding: 2rem;
+                gap: 1rem;
+
+                .div-left-photo {
+                    height: 250px;
+                    width: 250px;
+                    border-radius: 50%;
+                    // background: linear-gradient(145deg, #ff5c98, #e64d80);
+                    // box-shadow:  5px 5px 10px #662239,
+                    //     -5px -5px 10px #ff8ae3;
+                    // border-radius: 50px;
+                    background: linear-gradient(145deg, #ff006d, #e6005c);
+                    box-shadow:  5px 5px 10px #660029,
+                         -5px -5px 10px #ff00a3;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    overflow: hidden;
+
+                    img {
+                        height: 100%;
+                        width: 100%;
+                    }
+                }
 
                 .neumorphisem-back {
                     height: 100%;
@@ -266,6 +284,7 @@
                             .title {
                                 font-size: 17px;
                                 font-weight: 800;
+                                color: #ff00a3;
                             }
                             .discription {
                                 text-align: center;
@@ -298,12 +317,30 @@
                         }
                     }
                 }
+
+                .div-right-photo {
+                    height: 250px;
+                    width: 250px;
+                    border-radius: 50%;
+                    background: linear-gradient(145deg, #5dd5ff, #4eb3e6);
+                    box-shadow:  5px 5px 10px #235066,
+                        -5px -5px 10px #8bffff;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    overflow: hidden;
+
+                    img {
+                        height: 100%;
+                        width: 100%;
+                    }
+                }
             }
 
             .div-background2 {
-                background-color: rgba(0, 0, 0, 0.208);
-                backdrop-filter: blur(2px);
-                height: 100%;
+                // height: 100%;
+                height: 630px;
+                padding-top: 2rem;
                 display: flex;
                 flex-direction: column;
                 // flex-wrap: wrap;
@@ -326,6 +363,7 @@
                             width: 190px;
                             height: 254px;
                             transition: 200ms;
+                            // background-color: red;
                         }
                         
                         .container:active {
@@ -354,7 +392,10 @@
                             position: relative;
                             width: 100%;
                             height: 100%;
-                            // background-color: red;
+                            border-radius: 10px;
+                            background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                            box-shadow:  5px 5px 10px #5a5a5a,
+                                -5px -5px 10px #ffffff;
     
                             .photo {
                                 height: 100%;
@@ -392,10 +433,10 @@
                             width: 100%;
                             // padding-top: 20px;
                             // background: linear-gradient(45deg, #00ffaa, #00a2ff);
-                            background: #fff;
+                            background: black;
                             -webkit-background-clip: text;
                             -webkit-text-fill-color: transparent;
-                            filter: drop-shadow(0 0 15px rgba(0, 255, 170, 0.3));
+                            filter: drop-shadow(0 0 15px #00a2ff);
                             text-shadow:
                             0 0 10px rgba(92, 103, 255, 0.5),
                             0 0 20px rgba(92, 103, 255, 0.3);
@@ -439,7 +480,7 @@
                             border-radius: 50%;
                             background: radial-gradient(
                             circle at center,
-                            rgba(0, 255, 170, 0.3) 0%,
+                            rgba(17, 19, 19, 0.3) 0%,
                             rgba(0, 255, 170, 0) 70%
                             );
                             filter: blur(15px);
@@ -465,7 +506,8 @@
                             position: absolute;
                             width: 3px;
                             height: 3px;
-                            background: #00ffaa;
+                            // background: #00ffaa;
+                            background: red;
                             border-radius: 50%;
                             opacity: 0;
                             transition: opacity 0.3s ease;
@@ -972,6 +1014,10 @@
                         }
                     }
                 }
+            }
+
+            .div-background3 {
+                height: 520px;
             }
         }
     }
