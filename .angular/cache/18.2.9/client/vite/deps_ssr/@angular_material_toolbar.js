@@ -2,7 +2,7 @@ import { createRequire } from 'module';const require = createRequire(import.meta
 import {
   MatCommonModule,
   Platform
-} from "./chunk-A673Y25I.js";
+} from "./chunk-W5AWLLS5.js";
 import {
   DOCUMENT
 } from "./chunk-VZTX2A42.js";

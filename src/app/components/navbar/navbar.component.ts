@@ -46,4 +46,24 @@ export class NavbarComponent {
   logout(): void {
     this.accountService.logout();
   }
+
+  openMenu() {
+    // document.body.style.backgroundColor = color; 
+
+    const elements = document.querySelectorAll('.hamburger-menu'); 
+
+    elements.forEach((element) => { 
+      (element as HTMLElement).style.display = "block";
+      // (element as HTMLElement).style.left = "5%"; 
+    });
+  }
+
+  closeMenu() {
+    const elements = document.querySelectorAll('.hamburger-menu'); 
+
+    elements.forEach((element) => { 
+      // (element as HTMLElement).style.left = "-100%", 
+      (element as HTMLElement).style.display = "none";
+    });
+  }
 }
