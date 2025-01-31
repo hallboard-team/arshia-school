@@ -26,6 +26,26 @@ import { MatMenuModule } from '@angular/material/menu';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent{
+
+  openMenu() {
+    // document.body.style.backgroundColor = color; 
+
+    const elements = document.querySelectorAll('.hamburger-menu'); 
+
+    elements.forEach((element) => { 
+      (element as HTMLElement).style.display = "block";
+      // (element as HTMLElement).style.left = "5%"; 
+    });
+  }
+
+  closeMenu() {
+    const elements = document.querySelectorAll('.hamburger-menu'); 
+
+    elements.forEach((element) => { 
+      // (element as HTMLElement).style.left = "-100%", 
+      (element as HTMLElement).style.display = "none";
+    });
+  }
   // selectStepByIndex(index: number): void {
     //   this.selectedIndex = index;
     // }
