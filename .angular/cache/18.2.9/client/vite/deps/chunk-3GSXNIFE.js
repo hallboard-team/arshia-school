@@ -1,10 +1,9 @@
-import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   ArrayDataSource,
   _RecycleViewRepeaterStrategy,
   _VIEW_REPEATER_STRATEGY,
   isDataSource
-} from "./chunk-SDL6HVSQ.js";
+} from "./chunk-RZAD3Y3T.js";
 import {
   BidiModule,
   Directionality,
@@ -14,10 +13,10 @@ import {
   coerceNumberProperty,
   getRtlScrollAxisType,
   supportsScrollBehavior
-} from "./chunk-W5AWLLS5.js";
+} from "./chunk-UB2J6SZM.js";
 import {
   DOCUMENT
-} from "./chunk-VZTX2A42.js";
+} from "./chunk-BAOIP7IO.js";
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -43,7 +42,6 @@ import {
   booleanAttribute,
   forwardRef,
   inject,
-  require_operators,
   setClassMetadata,
   ɵɵInheritDefinitionFeature,
   ɵɵInputTransformsFeature,
@@ -68,17 +66,27 @@ import {
   ɵɵqueryRefresh,
   ɵɵstyleProp,
   ɵɵviewQuery
-} from "./chunk-Q3R2RZWL.js";
+} from "./chunk-KZE4DZCA.js";
 import {
-  require_cjs
-} from "./chunk-2H3L6IVL.js";
-import {
-  __toESM
-} from "./chunk-NQ4HTGF6.js";
+  Observable,
+  Subject,
+  Subscription,
+  animationFrameScheduler,
+  asapScheduler,
+  auditTime,
+  distinctUntilChanged,
+  filter,
+  fromEvent,
+  isObservable,
+  of,
+  pairwise,
+  shareReplay,
+  startWith,
+  switchMap,
+  takeUntil
+} from "./chunk-PF6LNL77.js";
 
 // node_modules/@angular/cdk/fesm2022/scrolling.mjs
-var import_rxjs = __toESM(require_cjs(), 1);
-var import_operators = __toESM(require_operators(), 1);
 var _c0 = ["contentWrapper"];
 var _c1 = ["*"];
 var VIRTUAL_SCROLL_STRATEGY = new InjectionToken("VIRTUAL_SCROLL_STRATEGY");
@@ -89,8 +97,8 @@ var FixedSizeVirtualScrollStrategy = class {
    * @param maxBufferPx The amount of buffer (in pixels) to render when rendering more.
    */
   constructor(itemSize, minBufferPx, maxBufferPx) {
-    this._scrolledIndexChange = new import_rxjs.Subject();
-    this.scrolledIndexChange = this._scrolledIndexChange.pipe((0, import_operators.distinctUntilChanged)());
+    this._scrolledIndexChange = new Subject();
+    this.scrolledIndexChange = this._scrolledIndexChange.pipe(distinctUntilChanged());
     this._viewport = null;
     this._itemSize = itemSize;
     this._minBufferPx = minBufferPx;
@@ -293,7 +301,7 @@ var ScrollDispatcher = class _ScrollDispatcher {
   constructor(_ngZone, _platform, document2) {
     this._ngZone = _ngZone;
     this._platform = _platform;
-    this._scrolled = new import_rxjs.Subject();
+    this._scrolled = new Subject();
     this._globalSubscription = null;
     this._scrolledCount = 0;
     this.scrollContainers = /* @__PURE__ */ new Map();
@@ -332,13 +340,13 @@ var ScrollDispatcher = class _ScrollDispatcher {
    */
   scrolled(auditTimeInMs = DEFAULT_SCROLL_TIME) {
     if (!this._platform.isBrowser) {
-      return (0, import_rxjs.of)();
+      return of();
     }
-    return new import_rxjs.Observable((observer) => {
+    return new Observable((observer) => {
       if (!this._globalSubscription) {
         this._addGlobalListener();
       }
-      const subscription = auditTimeInMs > 0 ? this._scrolled.pipe((0, import_operators.auditTime)(auditTimeInMs)).subscribe(observer) : this._scrolled.subscribe(observer);
+      const subscription = auditTimeInMs > 0 ? this._scrolled.pipe(auditTime(auditTimeInMs)).subscribe(observer) : this._scrolled.subscribe(observer);
       this._scrolledCount++;
       return () => {
         subscription.unsubscribe();
@@ -362,7 +370,7 @@ var ScrollDispatcher = class _ScrollDispatcher {
    */
   ancestorScrolled(elementOrElementRef, auditTimeInMs) {
     const ancestors = this.getAncestorScrollContainers(elementOrElementRef);
-    return this.scrolled(auditTimeInMs).pipe((0, import_operators.filter)((target) => {
+    return this.scrolled(auditTimeInMs).pipe(filter((target) => {
       return !target || ancestors.indexOf(target) > -1;
     }));
   }
@@ -395,7 +403,7 @@ var ScrollDispatcher = class _ScrollDispatcher {
   _addGlobalListener() {
     this._globalSubscription = this._ngZone.runOutsideAngular(() => {
       const window2 = this._getWindow();
-      return (0, import_rxjs.fromEvent)(window2.document, "scroll").subscribe(() => this._scrolled.next());
+      return fromEvent(window2.document, "scroll").subscribe(() => this._scrolled.next());
     });
   }
   /** Cleans up the global scroll listener. */
@@ -444,8 +452,8 @@ var CdkScrollable = class _CdkScrollable {
     this.scrollDispatcher = scrollDispatcher;
     this.ngZone = ngZone;
     this.dir = dir;
-    this._destroyed = new import_rxjs.Subject();
-    this._elementScrolled = new import_rxjs.Observable((observer) => this.ngZone.runOutsideAngular(() => (0, import_rxjs.fromEvent)(this.elementRef.nativeElement, "scroll").pipe((0, import_operators.takeUntil)(this._destroyed)).subscribe(observer)));
+    this._destroyed = new Subject();
+    this._elementScrolled = new Observable((observer) => this.ngZone.runOutsideAngular(() => fromEvent(this.elementRef.nativeElement, "scroll").pipe(takeUntil(this._destroyed)).subscribe(observer)));
   }
   ngOnInit() {
     this.scrollDispatcher.register(this);
@@ -594,7 +602,7 @@ var DEFAULT_RESIZE_TIME = 20;
 var ViewportRuler = class _ViewportRuler {
   constructor(_platform, ngZone, document2) {
     this._platform = _platform;
-    this._change = new import_rxjs.Subject();
+    this._change = new Subject();
     this._changeListener = (event) => {
       this._change.next(event);
     };
@@ -671,7 +679,7 @@ var ViewportRuler = class _ViewportRuler {
    * @param throttleTime Time in milliseconds to throttle the stream.
    */
   change(throttleTime = DEFAULT_RESIZE_TIME) {
-    return throttleTime > 0 ? this._change.pipe((0, import_operators.auditTime)(throttleTime)) : this._change;
+    return throttleTime > 0 ? this._change.pipe(auditTime(throttleTime)) : this._change;
   }
   /** Use defaultView of injected document if available or fallback to global window reference */
   _getWindow() {
@@ -766,7 +774,7 @@ var CdkVirtualScrollable = class _CdkVirtualScrollable extends CdkScrollable {
 function rangesEqual(r1, r2) {
   return r1.start == r2.start && r1.end == r2.end;
 }
-var SCROLL_SCHEDULER = typeof requestAnimationFrame !== "undefined" ? import_rxjs.animationFrameScheduler : import_rxjs.asapScheduler;
+var SCROLL_SCHEDULER = typeof requestAnimationFrame !== "undefined" ? animationFrameScheduler : asapScheduler;
 var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtualScrollable {
   /** The direction the viewport scrolls. */
   get orientation() {
@@ -785,11 +793,11 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
     this._scrollStrategy = _scrollStrategy;
     this.scrollable = scrollable;
     this._platform = inject(Platform);
-    this._detachedSubject = new import_rxjs.Subject();
-    this._renderedRangeSubject = new import_rxjs.Subject();
+    this._detachedSubject = new Subject();
+    this._renderedRangeSubject = new Subject();
     this._orientation = "vertical";
     this.appendOnly = false;
-    this.scrolledIndexChange = new import_rxjs.Observable((observer) => this._scrollStrategy.scrolledIndexChange.subscribe((index) => Promise.resolve().then(() => this.ngZone.run(() => observer.next(index)))));
+    this.scrolledIndexChange = new Observable((observer) => this._scrollStrategy.scrolledIndexChange.subscribe((index) => Promise.resolve().then(() => this.ngZone.run(() => observer.next(index)))));
     this.renderedRangeStream = this._renderedRangeSubject;
     this._totalContentSize = 0;
     this._totalContentWidth = "";
@@ -804,7 +812,7 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
     this._renderedContentOffsetNeedsRewrite = false;
     this._isChangeDetectionPending = false;
     this._runAfterChangeDetection = [];
-    this._viewportChanges = import_rxjs.Subscription.EMPTY;
+    this._viewportChanges = Subscription.EMPTY;
     this._injector = inject(Injector);
     this._isDestroyed = false;
     if (!_scrollStrategy && (typeof ngDevMode === "undefined" || ngDevMode)) {
@@ -830,15 +838,15 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
       this._scrollStrategy.attach(this);
       this.scrollable.elementScrolled().pipe(
         // Start off with a fake scroll event so we properly detect our initial position.
-        (0, import_operators.startWith)(null),
+        startWith(null),
         // Collect multiple events into one until the next animation frame. This way if
         // there are multiple scroll events in the same frame we only need to recheck
         // our layout once.
-        (0, import_operators.auditTime)(0, SCROLL_SCHEDULER),
+        auditTime(0, SCROLL_SCHEDULER),
         // Usually `elementScrolled` is completed when the scrollable is destroyed, but
         // that may not be the case if a `CdkVirtualScrollableElement` is used so we have
         // to unsubscribe here just in case.
-        (0, import_operators.takeUntil)(this._destroyed)
+        takeUntil(this._destroyed)
       ).subscribe(() => this._scrollStrategy.onContentScrolled());
       this._markChangeDetectionNeeded();
     }));
@@ -859,7 +867,7 @@ var CdkVirtualScrollViewport = class _CdkVirtualScrollViewport extends CdkVirtua
     }
     this.ngZone.runOutsideAngular(() => {
       this._forOf = forOf;
-      this._forOf.dataStream.pipe((0, import_operators.takeUntil)(this._detachedSubject)).subscribe((data) => {
+      this._forOf.dataStream.pipe(takeUntil(this._detachedSubject)).subscribe((data) => {
         const newLength = data.length;
         if (newLength !== this._dataLength) {
           this._dataLength = newLength;
@@ -1230,7 +1238,7 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
     if (isDataSource(value)) {
       this._dataSourceChanges.next(value);
     } else {
-      this._dataSourceChanges.next(new ArrayDataSource((0, import_rxjs.isObservable)(value) ? value : Array.from(value || [])));
+      this._dataSourceChanges.next(new ArrayDataSource(isObservable(value) ? value : Array.from(value || [])));
     }
   }
   /**
@@ -1267,28 +1275,28 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
     this._differs = _differs;
     this._viewRepeater = _viewRepeater;
     this._viewport = _viewport;
-    this.viewChange = new import_rxjs.Subject();
-    this._dataSourceChanges = new import_rxjs.Subject();
+    this.viewChange = new Subject();
+    this._dataSourceChanges = new Subject();
     this.dataStream = this._dataSourceChanges.pipe(
       // Start off with null `DataSource`.
-      (0, import_operators.startWith)(null),
+      startWith(null),
       // Bundle up the previous and current data sources so we can work with both.
-      (0, import_operators.pairwise)(),
+      pairwise(),
       // Use `_changeDataSource` to disconnect from the previous data source and connect to the
       // new one, passing back a stream of data changes which we run through `switchMap` to give
       // us a data stream that emits the latest data from whatever the current `DataSource` is.
-      (0, import_operators.switchMap)(([prev, cur]) => this._changeDataSource(prev, cur)),
+      switchMap(([prev, cur]) => this._changeDataSource(prev, cur)),
       // Replay the last emitted data when someone subscribes.
-      (0, import_operators.shareReplay)(1)
+      shareReplay(1)
     );
     this._differ = null;
     this._needsUpdate = false;
-    this._destroyed = new import_rxjs.Subject();
+    this._destroyed = new Subject();
     this.dataStream.subscribe((data) => {
       this._data = data;
       this._onRenderedDataChange();
     });
-    this._viewport.renderedRangeStream.pipe((0, import_operators.takeUntil)(this._destroyed)).subscribe((range) => {
+    this._viewport.renderedRangeStream.pipe(takeUntil(this._destroyed)).subscribe((range) => {
       this._renderedRange = range;
       if (this.viewChange.observers.length) {
         ngZone.run(() => this.viewChange.next(this._renderedRange));
@@ -1368,7 +1376,7 @@ var CdkVirtualForOf = class _CdkVirtualForOf {
       oldDs.disconnect(this);
     }
     this._needsUpdate = true;
-    return newDs ? newDs.connect(this) : (0, import_rxjs.of)();
+    return newDs ? newDs.connect(this) : of();
   }
   /** Update the `CdkVirtualForOfContext` for all views. */
   _updateContext() {
@@ -1546,7 +1554,7 @@ var CdkVirtualScrollableElement = class _CdkVirtualScrollableElement extends Cdk
 var CdkVirtualScrollableWindow = class _CdkVirtualScrollableWindow extends CdkVirtualScrollable {
   constructor(scrollDispatcher, ngZone, dir) {
     super(new ElementRef(document.documentElement), scrollDispatcher, ngZone, dir);
-    this._elementScrolled = new import_rxjs.Observable((observer) => this.ngZone.runOutsideAngular(() => (0, import_rxjs.fromEvent)(document, "scroll").pipe((0, import_operators.takeUntil)(this._destroyed)).subscribe(observer)));
+    this._elementScrolled = new Observable((observer) => this.ngZone.runOutsideAngular(() => fromEvent(document, "scroll").pipe(takeUntil(this._destroyed)).subscribe(observer)));
   }
   measureBoundingClientRectWithScrollOffset(from) {
     return this.getElementRef().nativeElement.getBoundingClientRect()[from];
@@ -1652,4 +1660,4 @@ export {
   CdkScrollableModule,
   ScrollingModule
 };
-//# sourceMappingURL=chunk-HNBJQ6O3.js.map
+//# sourceMappingURL=chunk-3GSXNIFE.js.map

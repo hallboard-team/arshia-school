@@ -1,21 +1,23 @@
+import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   Injectable,
   InjectionToken,
   setClassMetadata,
   ɵɵdefineInjectable
-} from "./chunk-KZE4DZCA.js";
+} from "./chunk-Q3R2RZWL.js";
 import {
-  ConnectableObservable,
-  Subject,
-  isObservable,
-  of
-} from "./chunk-PF6LNL77.js";
+  require_cjs
+} from "./chunk-2H3L6IVL.js";
+import {
+  __toESM
+} from "./chunk-NQ4HTGF6.js";
 
 // node_modules/@angular/cdk/fesm2022/collections.mjs
+var import_rxjs = __toESM(require_cjs(), 1);
 var DataSource = class {
 };
 function isDataSource(value) {
-  return value && typeof value.connect === "function" && !(value instanceof ConnectableObservable);
+  return value && typeof value.connect === "function" && !(value instanceof import_rxjs.ConnectableObservable);
 }
 var ArrayDataSource = class extends DataSource {
   constructor(_data) {
@@ -23,7 +25,7 @@ var ArrayDataSource = class extends DataSource {
     this._data = _data;
   }
   connect() {
-    return isObservable(this._data) ? this._data : of(this._data);
+    return (0, import_rxjs.isObservable)(this._data) ? this._data : (0, import_rxjs.of)(this._data);
   }
   disconnect() {
   }
@@ -36,6 +38,35 @@ var _ViewRepeaterOperation;
   _ViewRepeaterOperation2[_ViewRepeaterOperation2["REMOVED"] = 3] = "REMOVED";
 })(_ViewRepeaterOperation || (_ViewRepeaterOperation = {}));
 var _VIEW_REPEATER_STRATEGY = new InjectionToken("_ViewRepeater");
+var _DisposeViewRepeaterStrategy = class {
+  applyChanges(changes, viewContainerRef, itemContextFactory, itemValueResolver, itemViewChanged) {
+    changes.forEachOperation((record, adjustedPreviousIndex, currentIndex) => {
+      let view;
+      let operation;
+      if (record.previousIndex == null) {
+        const insertContext = itemContextFactory(record, adjustedPreviousIndex, currentIndex);
+        view = viewContainerRef.createEmbeddedView(insertContext.templateRef, insertContext.context, insertContext.index);
+        operation = _ViewRepeaterOperation.INSERTED;
+      } else if (currentIndex == null) {
+        viewContainerRef.remove(adjustedPreviousIndex);
+        operation = _ViewRepeaterOperation.REMOVED;
+      } else {
+        view = viewContainerRef.get(adjustedPreviousIndex);
+        viewContainerRef.move(view, currentIndex);
+        operation = _ViewRepeaterOperation.MOVED;
+      }
+      if (itemViewChanged) {
+        itemViewChanged({
+          context: view?.context,
+          operation,
+          record
+        });
+      }
+    });
+  }
+  detach() {
+  }
+};
 var _RecycleViewRepeaterStrategy = class {
   constructor() {
     this.viewCacheSize = 20;
@@ -137,7 +168,7 @@ var SelectionModel = class {
     this._selection = /* @__PURE__ */ new Set();
     this._deselectedToEmit = [];
     this._selectedToEmit = [];
-    this.changed = new Subject();
+    this.changed = new import_rxjs.Subject();
     if (initiallySelectedValues && initiallySelectedValues.length) {
       if (_multiple) {
         initiallySelectedValues.forEach((value) => this._markSelected(value));
@@ -372,11 +403,14 @@ var UniqueSelectionDispatcher = class _UniqueSelectionDispatcher {
 })();
 
 export {
+  DataSource,
   isDataSource,
   ArrayDataSource,
+  _ViewRepeaterOperation,
   _VIEW_REPEATER_STRATEGY,
+  _DisposeViewRepeaterStrategy,
   _RecycleViewRepeaterStrategy,
   SelectionModel,
   UniqueSelectionDispatcher
 };
-//# sourceMappingURL=chunk-FLZM3FJR.js.map
+//# sourceMappingURL=chunk-ABWFFBZY.js.map

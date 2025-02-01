@@ -27,22 +27,15 @@ import { LoggedInUser } from '../../models/logged-in-user.model';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent {
-  
-  accountService = inject(AccountService);
-
+  private accountService = inject(AccountService);
   loggedInUserSig: Signal<LoggedInUser | null> | undefined;
-  
-  linksWithAdmin: string[] = ['ادمین', 'دپارتمان ها', 'خدمات ما', 'کاربران سپنتا', 'درباره ما'];
-  linksWithManager: string[] = ['مدیر', 'دپارتمان ها', 'خدمات ما', 'کاربران سپنتا', 'درباره ما'];
-  linksWithTeacher: string[] = ['معلم', 'دپارتمان ها', 'خدمات ما', 'کاربران سپنتا', 'درباره ما'];
-  linksWithSecretary: string[] = ['منشی', 'دپارتمان ها', 'خدمات ما', 'کاربران سپنتا', 'درباره ما'];
-
-  links: string[] = ['پروفایل', 'دپارتمان ها', 'خدمات ما', 'کاربران سپنتا', 'درباره ما'];
 
   ngOnInit(): void {
     this.loggedInUserSig = this.accountService.loggedInUserSig;
-  }
 
+    console.log('THE LOGGED-IN USER:', this.loggedInUserSig()?.userName);
+  }
+  
   logout(): void {
     this.accountService.logout();
   }

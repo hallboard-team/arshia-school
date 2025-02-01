@@ -36,7 +36,7 @@ export const routes: Routes = [
             // { path: 'ادمین', component: AdminComponent },
             // { path: 'پروفایل', component: UserProfileComponent },
             // { path: 'add-discription', component: AddDiscriptionComponent },
-            // { path: 'مدیر', component: ManageerPannelComponent },
+            { path: 'manager-panell', component: ManageerPannelComponent },
             // { path: 'منشی', component: SecretaryComponent },
             // { path: 'معلم', component: TeacherComponent },
             // { path: 'user/user-edit', component: UserEditComponent },

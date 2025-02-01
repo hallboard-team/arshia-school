@@ -390,93 +390,68 @@ main {
                             align-items: center;
                             gap: 10px;
                             transform-style: preserve-3d;
-                            .btn1 {
-                                height: 35px;
-                                width: 80px;
-                                border-radius: 10px;
-                                box-shadow: inset 4px 4px 10px #bcbcbc, inset -4px -4px 10px #ffffff;
-                                color: #4d4d4d;
+
+                            .btn {
+                                // --color: #00A97F;
+                                // --color2: rgb(10, 25, 30);
+                                padding: 5px;
+                                background-color: transparent;
+                                border-radius: 6px;
+                                border: .3px solid var(--color);
+                                transition: .5s;
+                                position: relative;
+                                overflow: hidden;
                                 cursor: pointer;
-                                font-size: 13px;
-                                font-weight: bold;
-                                padding: 10px;
-                                border: 2px solid rgb(206, 206, 206);
-                                background-color: #e0e0e0;
-                                transition: transform 0.2s ease-in-out 0.4s, box-shadow 0.2s ease-in-out 0.4s;
-                            }
-                            .btn2 {
-                                height: 35px;
+                                z-index: 1;
+                                font-weight: 300;
+                                font-size: 15px;
+                                font-family: 'Roboto', 'Segoe UI', sans-serif;
+                                text-transform: uppercase;
+                                background: #e0e0e0;
+                                box-shadow: inset 5px 5px 10px #a6a6a6,
+                                    inset -5px -5px 10px #ffffff;
+                                height: 40px;
                                 width: 80px;
-                                border-radius: 10px;
-                                box-shadow: inset 4px 4px 10px #bcbcbc, inset -4px -4px 10px #ffffff;
-                                color: #4d4d4d;
-                                cursor: pointer;
-                                font-size: 13px;
-                                font-weight: bold;
-                                padding: 10px;
-                                border: 2px solid rgb(206, 206, 206);
-                                background-color: #e0e0e0;
-                                transition: transform 0.2s ease-in-out 0.6s, box-shadow 0.2s ease-in-out 0.6s;
-                            }              
-                            .btn3 {
-                                height: 35px;
-                                width: 80px;
-                                border-radius: 10px;
-                                box-shadow: inset 4px 4px 10px #bcbcbc, inset -4px -4px 10px #ffffff;
-                                color: #4d4d4d;
-                                cursor: pointer;
-                                font-size: 13px;
-                                font-weight: bold;
-                                padding: 10px;
-                                border: 2px solid rgb(206, 206, 206);
-                                background-color: #e0e0e0;
-                                transition: transform 0.2s ease-in-out 0.8s, box-shadow 0.2s ease-in-out 0.8s;
                             }
-                            .btn4 {
-                                height: 35px;
-                                width: 80px;
-                                border-radius: 10px;
-                                box-shadow: inset 4px 4px 10px #bcbcbc, inset -4px -4px 10px #ffffff;
-                                color: #4d4d4d;
-                                cursor: pointer;
-                                font-size: 13px;
-                                font-weight: bold;
-                                padding: 10px;
-                                border: 2px solid rgb(206, 206, 206);
-                                background-color: #e0e0e0;
-                                transition: transform 0.2s ease-in-out 0.9s, box-shadow 0.2s ease-in-out 0.9s;
+                            
+                            .btn::after, .btn::before {
+                                content: '';
+                                display: block;
+                                height: 100%;
+                                width: 100%;
+                                transform: skew(90deg) translate(-50%, -50%);
+                                position: absolute;
+                                inset: 50%;
+                                left: 25%;
+                                z-index: -1;
+                                transition: .5s ease-out;
+                                background-color: #02fee1;
                             }
-                            .btn5 {
-                                height: 35px;
-                                width: 80px;
-                                border-radius: 10px;
-                                box-shadow: inset 4px 4px 10px #bcbcbc, inset -4px -4px 10px #ffffff;
-                                color: #4d4d4d;
-                                cursor: pointer;
-                                font-size: 13px;
-                                font-weight: bold;
-                                padding: 10px;
-                                border: 2px solid rgb(206, 206, 206);
-                                background-color: #e0e0e0;
-                                transition: transform 0.2s ease-in-out 0.12s, box-shadow 0.2s ease-in-out 0.12s;
+                            
+                            .btn::before {
+                                top: -50%;
+                                left: -25%;
+                                transform: skew(90deg) rotate(180deg) translate(-50%, -50%);
                             }
-                        
-                            button:hover {
-                                transition: 0.2s ease;
-                                box-shadow: inset 2px 2px 5px #bcbcbc, inset -2px -2px 5px #ffffff, 2px 2px 5px #bcbcbc, -2px -2px 5px #ffffff;
+                            
+                            .btn:hover::before {
+                                transform: skew(45deg) rotate(180deg) translate(-50%, -50%);
                             }
-                            button:focus {
-                                outline: none;
-                                box-shadow: inset 2px 2px 5px #bcbcbc, inset -2px -2px 5px #ffffff, 2px 2px 5px #bcbcbc, -2px -2px 5px #ffffff;
+                            
+                            .btn:hover::after {
+                                transform: skew(45deg) translate(-50%, -50%);
                             }
+                            
+                            .btn:hover {
+                                color: #fff;
+                            }
+                            
+                            .btn:active {
+                                filter: brightness(.7);
+                                transform: scale(.98);
+                            }
+                            
                         }
-                    }
-                    .links:hover {
-                        transform: scale(1.08);
-                    }
-                    .links:hover button {
-                        transform: translate3d(0, 0, 50px);
-                        box-shadow: rgba(5, 71, 17, 0.2) -5px 20px 10px 0px;
                     }
                     
                     .div-menu-button {

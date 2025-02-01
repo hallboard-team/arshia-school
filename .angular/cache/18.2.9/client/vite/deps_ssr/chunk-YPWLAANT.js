@@ -1,10 +1,11 @@
+import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   FocusMonitor,
   MatCommonModule,
   MatRippleLoader,
   MatRippleModule,
   Platform
-} from "./chunk-U7XJZVRJ.js";
+} from "./chunk-2K6QWHF6.js";
 import {
   ANIMATION_MODULE_TYPE,
   ChangeDetectionStrategy,
@@ -39,11 +40,11 @@ import {
   ɵɵinvalidFactory,
   ɵɵprojection,
   ɵɵprojectionDef
-} from "./chunk-KZE4DZCA.js";
+} from "./chunk-Q3R2RZWL.js";
 import {
   __spreadProps,
   __spreadValues
-} from "./chunk-PF6LNL77.js";
+} from "./chunk-NQ4HTGF6.js";
 
 // node_modules/@angular/material/fesm2022/button.mjs
 var _c0 = ["mat-button", ""];
@@ -1214,4 +1215,4 @@ export {
   MatIconAnchor,
   MatButtonModule
 };
-//# sourceMappingURL=chunk-R75SQ6XI.js.map
+//# sourceMappingURL=chunk-YPWLAANT.js.map

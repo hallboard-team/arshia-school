@@ -15,6 +15,7 @@ import { NavbarComponent } from '../navbar/navbar.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { LoggedInUser } from '../../models/logged-in-user.model';
 import { AccountService } from '../../services/account.service';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +23,8 @@ import { AccountService } from '../../services/account.service';
   imports: [
     MatButtonModule, MatIconModule, 
     RouterModule, MatInputModule, MatDividerModule,
-    FormsModule, NavbarComponent, MatMenuModule
+    FormsModule, NavbarComponent, MatMenuModule,
+    MatToolbarModule
   ], 
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
