@@ -1,0 +1,177 @@
+#main-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .div-bg-into-mat-tab {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        form {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 2rem;
+            
+            .content {
+                width: 90%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+
+                border-radius: 10px;
+                background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                box-shadow:  5px 5px 10px #5a5a5a,
+                    -5px -5px 10px #ffffff;
+                // background-color: red;
+
+                .title {
+                    font-size: 20px;
+                    color: black;
+                    font-weight: 800;
+                }
+
+                .radio-inputs {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    max-width: 350px;
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                    
+                    
+                    .radio-input:checked + .radio-tile {
+                        border-color: #2260ff;
+                        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                        color: #2260ff;
+                    }
+                    
+                    .radio-input:checked + .radio-tile:before {
+                        transform: scale(1);
+                        opacity: 1;
+                        background-color: #2260ff;
+                        border-color: #2260ff;
+                    }
+                    
+                    .radio-input:checked + .radio-tile .radio-icon svg {
+                        fill: #2260ff;
+                    }
+                    
+                    .radio-input:checked + .radio-tile .radio-label {
+                        color: #2260ff;
+                    }
+                    
+                    .radio-input:focus + .radio-tile {
+                        border-color: #2260ff;
+                        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1), 0 0 0 4px #b5c9fc;
+                    }
+                    
+                    .radio-input:focus + .radio-tile:before {
+                        transform: scale(1);
+                        opacity: 1;
+                    }
+                    
+                    .radio-tile {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        width: 80px;
+                        min-height: 80px;
+                        border-radius: 0.5rem;
+                        border: 2px solid #b5bfd9;
+                        background-color: #fff;
+                        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                        transition: 0.15s ease;
+                        cursor: pointer;
+                        position: relative;
+                    }
+                    
+                    .radio-tile:before {
+                        content: "";
+                        position: absolute;
+                        display: block;
+                        width: 0.75rem;
+                        height: 0.75rem;
+                        border: 2px solid #b5bfd9;
+                        background-color: #fff;
+                        border-radius: 50%;
+                        top: 0.25rem;
+                        left: 0.25rem;
+                        opacity: 0;
+                        transform: scale(0);
+                        transition: 0.25s ease;
+                    }
+                    
+                    .radio-tile:hover {
+                        border-color: #2260ff;
+                    }
+                    
+                    .radio-tile:hover:before {
+                        transform: scale(1);
+                        opacity: 1;
+                    }
+                    
+                    .radio-icon img {
+                        width: 2rem;
+                        height: 2rem;
+                        fill: #494949;
+                    }
+                    
+                    .radio-label {
+                        color: #707070;
+                        transition: 0.375s ease;
+                        text-align: center;
+                        font-size: 13px;
+                    }
+                    
+                    .radio-input {
+                        clip: rect(0 0 0 0);
+                        -webkit-clip-path: inset(100%);
+                        clip-path: inset(100%);
+                        height: 1px;
+                        overflow: hidden;
+                        position: absolute;
+                        white-space: nowrap;
+                        width: 1px;
+                    }
+                }
+                .radio-inputs > * {
+                    margin: 6px;
+                }
+                
+
+                mat-form-field {
+                    border: none;
+                    width: 80%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    // background-color: yellow;
+
+                }
+                .input {
+                    height: 40px;
+                    width: 80%;
+                    border: none;
+                    border-radius: 10px;
+                    background: #e0e0e0;
+                    box-shadow: inset 5px 5px 10px #cecece,
+                                inset -5px -5px 10px #f2f2f2;
+                    direction: rtl;
+                    background: transparent;
+                    outline: none;
+
+                }
+            }
+        }
+
+    }
+}

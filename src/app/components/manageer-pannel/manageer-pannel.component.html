@@ -1,9 +1,87 @@
-<section  class="section-register">
+<header>
+  <nav>
+    <app-navbar />
+  </nav>
+</header>
+
+<section id="main-section">
+  <mat-tab-group>
+    <mat-tab label="ثبت نام منشی">
+      <div class="div-bg-into-mat-tab">
+        <form class="login-form">
+          <div class="content">
+            <span class="title">ثبت نام منشی</span>
+
+            <div class="radio-inputs">
+              <!-- <label>
+                <input class="radio-input" type="radio" name="engine">
+                  <span class="radio-tile">
+                    <span class="radio-icon">
+                      <img src="../assets/images/member.png" alt="">
+                    </span>
+                    <span class="radio-label">نامشخص</span>
+                  </span>
+              </label> -->
+
+              <label>
+                <input checked="" class="radio-input" type="radio" name="engine">
+                <span class="radio-tile">
+                  <span class="radio-icon">
+                    <img src="../assets/images/member.png" alt="">
+                  </span>
+                  <span class="radio-label">مرد</span>
+                </span>
+              </label>
+              
+              <label>
+                <input checked="" class="radio-input" type="radio" name="engine">
+                <span class="radio-tile">
+                  <span class="radio-icon">
+                    <img src="../assets/images/member.png" alt="">
+                  </span>
+                  <span class="radio-label">زن</span>
+                </span>
+              </label>
+
+            </div>
+
+            <mat-form-field appearance="outline">
+              <mat-label>EMialll</mat-label>
+              <input class="input" autoFocusDir type="email" formControlName="emailCtrl" label="email" placeHolder="ایمیل خود را وارد کنید" matInput>
+              @if (EmailSecCtrl.hasError('required')) {
+              <mat-error>!این فیلد خالی است</mat-error>
+              }
+              @else if (EmailSecCtrl.hasError('pattern')) {
+              <mat-error>در انتخاب فرمت ایمیل دقت کنید</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="ثبت نام معلم">
+      <div class="div-bg-into-mat-tab">
+        <span class="title">ثبت نام معلم</span>
+
+      </div>
+    </mat-tab>
+
+    <mat-tab label="ثبت نام دانش آموز">
+      <div class="div-bg-into-mat-tab">
+        <span class="title">ثبت نام دانش آموز</span>
+
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</section>
+
+<!-- <section  class="section-register">
   <mat-tab-group class="slider">
       <mat-tab label="ثبت نام دانشجو">
         <form [formGroup]="addStudentFg" (ngSubmit)="addStudentFg.valid && addStudent()">
           <div class="content">
-            <!-- Gender -->
+
             <div class="gender">
               <strong>I am a</strong>
               <mat-radio-group formControlName="genderStudentCtrl" aria-label="Select your gender" color="primary">
@@ -13,7 +91,6 @@
               </mat-radio-group>
             </div>
         
-            <!-- Email -->
             <mat-form-field appearance="outline">
               <mat-label>Email</mat-label>
               <input autoFocusDir type="email" formControlName="emailStudentCtrl" label="Email" placeHolder="Your email" matInput>
@@ -26,7 +103,6 @@
               }
             </mat-form-field>
         
-            <!-- UserName -->
             <mat-form-field appearance="outline">
               <mat-label>Username</mat-label>
               <input type="text" formControlName="userNameStudentCtrl" label="Username" placeHolder="Your username"
@@ -37,7 +113,6 @@
               }
             </mat-form-field>
         
-            <!-- Password -->
             <mat-form-field appearance="outline">
               <mat-label>Password</mat-label>
               <input type="password" formControlName="passwordStudentCtrl" label="Password" placeHolder="Your password" matInput>
@@ -52,7 +127,6 @@
               }
             </mat-form-field>
         
-            <!-- Confirm Password -->
             <mat-form-field appearance="outline">
               <mat-label>Confirm password</mat-label>
               <input type="password" formControlName="confirmPasswordStudentCtrl" label="Confirm Password"
@@ -69,7 +143,6 @@
               }
             </mat-form-field>
         
-            <!-- Name -->
             <mat-form-field appearance="outline">
               <mat-label>Name</mat-label>
               <input type="text" formControlName="nameStudentCtrl" label="Name" placeHolder="Enter your name." matInput>
@@ -84,7 +157,6 @@
               }
             </mat-form-field>
       
-            <!-- LastName -->
             <mat-form-field appearance="outline">
               <mat-label>Last Name</mat-label>
               <input type="text" formControlName="lastNameStudentCtrl" label="Last Name" placeHolder="Enter your lastName." matInput>
@@ -99,7 +171,6 @@
               }
             </mat-form-field>
         
-            <!-- Date of Birth -->
             <mat-form-field>
               <mat-label>Date of Birth</mat-label>
               <input formControlName="dateOfBirthStudentCtrl" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp3"
@@ -112,7 +183,6 @@
               }
             </mat-form-field>
         
-            <!-- PhoneNumber -->
             <mat-form-field appearance="outline">
               <mat-label>Phone Number</mat-label>
               <input type="text" formControlName="phoneNumStudentCtrl" label="Phone Number" placeHolder="Enter your phone PhoneNumber" matInput>
@@ -127,7 +197,6 @@
               }
             </mat-form-field>
       
-            <!-- Lesson -->
             <mat-form-field appearance="outline">
               <mat-label>Lesson</mat-label>
               <input type="text" formControlName="lessonStudentCtrl" label="Lesson" placeHolder="Enter lesson" matInput>
@@ -149,7 +218,7 @@
       <mat-tab label="ثبت نام استاد">
         <form [formGroup]="addTeacherFg" (ngSubmit)="addTeacherFg.valid && addTeacher()">
           <div class="content">
-            <!-- Gender -->
+
             <div class="gender">
               <strong>I am a</strong>
               <mat-radio-group formControlName="genderTeacherCtrl" aria-label="Select your gender" color="primary">
@@ -159,7 +228,6 @@
               </mat-radio-group>
             </div>
         
-            <!-- Email -->
             <mat-form-field appearance="outline">
               <mat-label>Email</mat-label>
               <input autoFocusDir type="email" formControlName="emailTeacherCtrl" label="Email" placeHolder="Your email" matInput>
@@ -172,7 +240,6 @@
               }
             </mat-form-field>
         
-            <!-- UserName -->
             <mat-form-field appearance="outline">
               <mat-label>Username</mat-label>
               <input type="text" formControlName="userNameTeacherCtrl" label="Username" placeHolder="Your username"
@@ -183,7 +250,6 @@
               }
             </mat-form-field>
         
-            <!-- Password -->
             <mat-form-field appearance="outline">
               <mat-label>Password</mat-label>
               <input type="password" formControlName="passwordTeacherCtrl" label="Password" placeHolder="Your password" matInput>
@@ -198,7 +264,6 @@
               }
             </mat-form-field>
         
-            <!-- Confirm Password -->
             <mat-form-field appearance="outline">
               <mat-label>Confirm password</mat-label>
               <input type="password" formControlName="confirmPasswordTeacherCtrl" label="Confirm Password"
@@ -215,7 +280,6 @@
               }
             </mat-form-field>
         
-            <!-- Name -->
             <mat-form-field appearance="outline">
               <mat-label>Name</mat-label>
               <input type="text" formControlName="nameTeacherCtrl" label="Name" placeHolder="Enter your name." matInput>
@@ -230,7 +294,6 @@
               }
             </mat-form-field>
       
-            <!-- LastName -->
             <mat-form-field appearance="outline">
               <mat-label>Last Name</mat-label>
               <input type="text" formControlName="lastNameTeacherCtrl" label="Last Name" placeHolder="Enter your lastName." matInput>
@@ -245,7 +308,6 @@
               }
             </mat-form-field>
         
-            <!-- Date of Birth -->
             <mat-form-field>
               <mat-label>Date of Birth</mat-label>
               <input formControlName="dateOfBirthTeacherCtrl" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp4"
@@ -258,7 +320,6 @@
               }
             </mat-form-field>
         
-            <!-- PhoneNumber -->
             <mat-form-field appearance="outline">
               <mat-label>Phone Number</mat-label>
               <input type="text" formControlName="phoneNumTeacherCtrl" label="Phone Number" placeHolder="Enter your phone PhoneNumber" matInput>
@@ -273,7 +334,6 @@
               }
             </mat-form-field>
       
-            <!-- Lesson -->
             <mat-form-field appearance="outline">
               <mat-label>Lesson</mat-label>
               <input type="text" formControlName="lessonTeacherCtrl" label="Lesson" placeHolder="Enter lesson" matInput>
@@ -295,7 +355,7 @@
       <mat-tab label="ثبت نام منشی">
         <form [formGroup]="addSecretaryFg" (ngSubmit)="addSecretaryFg.valid && addSecretary()">
           <div class="content">
-            <!-- Gender -->
+
             <div class="gender">
               <strong>I am a</strong>
               <mat-radio-group formControlName="genderSecCtrl" aria-label="Select your gender" color="primary">
@@ -305,7 +365,6 @@
               </mat-radio-group>
             </div>
         
-            <!-- Email -->
             <mat-form-field appearance="outline">
               <mat-label>Email</mat-label>
               <input autoFocusDir type="email" formControlName="emailSecCtrl" label="Email" placeHolder="Your email" matInput>
@@ -318,7 +377,6 @@
               }
             </mat-form-field>
         
-            <!-- UserName -->
             <mat-form-field appearance="outline">
               <mat-label>Username</mat-label>
               <input type="text" formControlName="userNameSecCtrl" label="Username" placeHolder="Your username"
@@ -329,7 +387,6 @@
               }
             </mat-form-field>
         
-            <!-- Password -->
             <mat-form-field appearance="outline">
               <mat-label>Password</mat-label>
               <input type="password" formControlName="passwordSecCtrl" label="Password" placeHolder="Your password" matInput>
@@ -344,7 +401,6 @@
               }
             </mat-form-field>
         
-            <!-- Confirm Password -->
             <mat-form-field appearance="outline">
               <mat-label>Confirm password</mat-label>
               <input type="password" formControlName="confirmPasswordSecCtrl" label="Confirm Password"
@@ -361,7 +417,6 @@
               }
             </mat-form-field>
         
-            <!-- Name -->
             <mat-form-field appearance="outline">
               <mat-label>Name</mat-label>
               <input type="text" formControlName="nameSecCtrl" label="Name" placeHolder="Enter your name." matInput>
@@ -375,8 +430,7 @@
               <mat-error>It's too long. Max: 30 characters.</mat-error>
               }
             </mat-form-field>
-      
-            <!-- LastName -->
+
             <mat-form-field appearance="outline">
               <mat-label>Last Name</mat-label>
               <input type="text" formControlName="lastNameSecCtrl" label="Last Name" placeHolder="Enter your lastName." matInput>
@@ -391,7 +445,6 @@
               }
             </mat-form-field>
         
-            <!-- Date of Birth -->
             <mat-form-field>
               <mat-label>Date of Birth</mat-label>
               <input formControlName="dateOfBirthSecCtrl" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp5"
@@ -406,7 +459,6 @@
               }
             </mat-form-field>
         
-            <!-- PhoneNumber -->
             <mat-form-field appearance="outline">
               <mat-label>Phone Number</mat-label>
               <input type="text" formControlName="phoneNumSecCtrl" label="Phone Number" placeHolder="Enter your phone PhoneNumber" matInput>
@@ -421,7 +473,6 @@
               }
             </mat-form-field>
       
-            <!-- Lesson -->
             <mat-form-field appearance="outline">
               <mat-label>Lesson</mat-label>
               <input type="text" formControlName="lessonSecCtrl" label="Lesson" placeHolder="Enter lesson" matInput>
@@ -439,104 +490,6 @@
           </div>
         </form>
       </mat-tab>
-
-      <mat-tab label="کاربران سپنتا">
-        <section class="content">
-          <div class="table">
-              @if(usersWithRoles) {
-              <table mat-table [dataSource]="usersWithRoles" class="mat-elevation-z8">
-                  <!-- Position Column -->
-                  <ng-container matColumnDef="no">
-                      <th mat-header-cell *matHeaderCellDef> # </th>
-                      <td mat-cell *matCellDef="let i = index"> {{i + 1}} </td>
-                  </ng-container>
       
-                  <!-- UserName Column -->
-                  <ng-container matColumnDef="username">
-                      <th mat-header-cell *matHeaderCellDef> Username </th>
-                      <td mat-cell *matCellDef="let element"> {{element.userName}} </td>
-                  </ng-container>
-      
-                  <!-- Roles Column -->
-                  <ng-container matColumnDef="active-roles">
-                      <th mat-header-cell *matHeaderCellDef> Active Role/s </th>
-                      <td mat-cell *matCellDef="let element"> {{element.roles}} </td>
-                  </ng-container>
-      
-                  <!-- Delete User Column -->
-                  <ng-container matColumnDef="delete-user">
-                      <th mat-header-cell *matHeaderCellDef> Delete User </th>
-                      <td mat-cell *matCellDef="let element; let i = index">
-                          <button mat-mini-fab>
-                              <mat-icon color="warn">delete</mat-icon>
-                          </button>
-                      </td>
-                  </ng-container>
-      
-                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-              </table>
-              }
-          </div>
-        </section>
-      </mat-tab>
-
-      <mat-tab label="ثبت شهریه دانش آموز">
-        <form [formGroup]="addCorseFg" (ngSubmit)="addCorseFg.valid && addCorse()">
-          <div class="content">
-            <!-- UserName -->
-            <mat-form-field appearance="outline">
-              <mat-label>Username</mat-label>
-              <input type="text" formControlName="userNameCtrl" label="Username" placeHolder="Your username"
-                matInput>
-              <mat-hint>Between 1 to 30 characters.</mat-hint>
-              @if (UserNameCtrl.hasError('required')) {
-              <mat-error>This field is required.</mat-error>
-              }
-            </mat-form-field>
-        
-            <!-- Lesson -->
-            <mat-form-field appearance="outline">
-              <mat-label>Dars</mat-label>
-              <input type="text" formControlName="darsCtrl" label="Dars" placeHolder="Enter Student Lesson" matInput>
-              @if (DarsCtrl.hasError('required')) {
-              <mat-error>This field is required.</mat-error>
-              }
-              @else if (DarsCtrl.hasError('minlength')) {
-              <mat-error>It's too short. Min: 2 characters.</mat-error>
-              }
-              @else if(DarsCtrl.hasError('maxlength')) {
-              <mat-error>It's too long. Max: 30 characters.</mat-error>
-              }
-            </mat-form-field>
-      
-            <!-- TedadeGhesdHa -->
-            <mat-form-field appearance="outline">
-              <mat-label>Ghesd</mat-label>
-              <input type="text" formControlName="tedadeKoleGhesdHaCtrl" label="Last Name" placeHolder="Enter Student Ghesd." matInput>
-              @if (TedadeKoleGhesdHaCtrl.hasError('required')) {
-              <mat-error>This field is required.</mat-error>
-              }
-              @else if (TedadeKoleGhesdHaCtrl.hasError('minlength')) {
-              <mat-error>It's too short. Min: 2 characters.</mat-error>
-              }
-              @else if(TedadeKoleGhesdHaCtrl.hasError('maxlength')) {
-              <mat-error>It's too long. Max: 30 characters.</mat-error>
-              }
-            </mat-form-field>
-        
-            <!-- Shahriye -->
-            <mat-form-field appearance="outline">
-              <mat-label>Shahriye</mat-label>
-              <input type="text" formControlName="shahriyeCtrl" label="Shahriye" placeHolder="Enter Student Shahriye" matInput>
-              @if (ShahriyeCtrl.hasError('required')) {
-              <mat-error>This field is required.</mat-error>
-              }
-            </mat-form-field>
-      
-            <button type="submit" [disabled]="addCorseFg.invalid" mat-raised-button color="primary">ثبت</button>
-          </div>
-        </form>
-      </mat-tab>
   </mat-tab-group>
-</section>
+</section> -->

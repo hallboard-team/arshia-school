@@ -23,6 +23,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { ApiResponse } from '../../models/helpers/apiResponse.model';
 import { AddCorse } from '../../models/add-corse.model';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-manageer-pannel',
@@ -32,7 +33,7 @@ import { AddCorse } from '../../models/add-corse.model';
     ReactiveFormsModule, MatFormFieldModule, MatInputModule, 
     MatButtonModule, MatSnackBarModule, MatRadioModule, 
     MatDatepickerModule, MatNativeDateModule, AutoFocusDirective,
-    MatTableModule, MatIconModule
+    MatTableModule, MatIconModule, NavbarComponent
   ],
   templateUrl: './manageer-pannel.component.html',
   styleUrl: './manageer-pannel.component.scss'
