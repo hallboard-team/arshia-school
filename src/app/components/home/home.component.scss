@@ -369,7 +369,7 @@ main {
                 nav {
                     display: flex;
                     flex-direction: row-reverse;
-                    justify-content: center;
+                    justify-content: space-between;
                     align-items: center;
                     height: 4.1rem;
                     width: 87.5%;
@@ -641,6 +641,39 @@ main {
                         display: flex;
                         justify-content: center;
                         align-items: center;
+
+                        .div-btn-log-out {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            button {
+                                height: 40px;
+                                width: 100px;
+                                font-weight: bold;
+                                font-size: 12px;
+                                color: black;
+                                padding: 10px;
+                                border: none;
+                                border-radius: 10px;
+                                position: relative;
+                                cursor: pointer;
+                                overflow: hidden;
+                                transition: all 0.2s ease;
+                                background: linear-gradient(225deg, #f0f0f0, #cacaca);
+                                box-shadow:  -5px 5px 10px #5a5a5a,
+                                    5px -5px 10px #ffffff;
+                            }
+                            button:active {
+                                will-change: transform;
+                                transform: perspective(80px) rotateX(5deg) rotateY(1deg) translateY(3px) scale(0.96);
+                                transition: all .1s ease-in-out 0s;
+                            }
+                            button:hover {
+                                transition: all 0.2s ease;
+                                scale: 1.05;
+                            }
+                        }
                 
                         .div-btns {
                             display: flex;

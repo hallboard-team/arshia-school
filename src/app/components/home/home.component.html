@@ -103,13 +103,22 @@
                     </div>
 
                     <section class="left">
-                        <div class="div-btns">
-                            <button class="btn1" routerLink="account/login">ورود اساتید</button>
-                
-                            <button class="btn2" routerLink="account/login">
-                                <span class="text">ورود دانشجویان</span>
-                            </button>
-                        </div>
+                        @if (loggedInUserSig && loggedInUserSig(); as user) {
+                            <div class="div-btn-log-out">
+                                <button (click)="logout()">
+                                    <span>خروج</span>
+                                </button>
+                            </div>
+                        }
+                        @else {
+                            <div class="div-btns">
+                                <button class="btn1" routerLink="/account/login">ورود اساتید</button>
+                    
+                                <button class="btn2" routerLink="/account/login">
+                                    <span class="text">ورود دانشجویان</span>
+                                </button>
+                            </div>
+                        }
                     </section>
                 </nav>
             </div>

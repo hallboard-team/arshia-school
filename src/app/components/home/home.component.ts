@@ -1,4 +1,4 @@
-import { Component, forwardRef, inject, NgModule, OnInit } from '@angular/core';
+import { Component, forwardRef, inject, NgModule, OnInit, Signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatStepHeader, MatStepperModule } from '@angular/material/stepper';
@@ -13,6 +13,8 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { LoggedInUser } from '../../models/logged-in-user.model';
+import { AccountService } from '../../services/account.service';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +27,19 @@ import { MatMenuModule } from '@angular/material/menu';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent{
+export class HomeComponent implements OnInit{
+  private accountService = inject(AccountService);
+  loggedInUserSig: Signal<LoggedInUser | null> | undefined;
+
+  ngOnInit(): void {
+    this.loggedInUserSig = this.accountService.loggedInUserSig;
+
+    console.log('THE LOGGED-IN USER:', this.loggedInUserSig()?.userName);
+  }
+  
+  logout(): void {
+    this.accountService.logout();
+  }
 
   openMenu() {
     // document.body.style.backgroundColor = color; 

@@ -11,6 +11,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AutoFocusDirective } from '../../../directives/auto-focus.directive';
 import { AccountService } from '../../../services/account.service';
 import { MatTabsModule } from '@angular/material/tabs';
+import { NavbarComponent } from '../../navbar/navbar.component';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,8 @@ import { MatTabsModule } from '@angular/material/tabs';
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule,
     MatFormFieldModule, MatInputModule, MatButtonModule,
-    MatSnackBarModule, AutoFocusDirective, MatTabsModule
+    MatSnackBarModule, AutoFocusDirective, MatTabsModule,
+    NavbarComponent
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
