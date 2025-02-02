@@ -1,8 +1,19 @@
-import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
-  DOCUMENT,
-  isPlatformBrowser
-} from "./chunk-VZTX2A42.js";
+  BidiModule,
+  Platform,
+  _getEventTarget,
+  _getFocusedElementPierceShadowDom,
+  _getShadowRoot,
+  _isTestEnvironment,
+  coerceArray,
+  coerceBooleanProperty,
+  coerceElement,
+  coerceNumberProperty,
+  normalizePassiveListenerOptions
+} from "./chunk-L432KXZJ.js";
+import {
+  DOCUMENT
+} from "./chunk-BAOIP7IO.js";
 import {
   ANIMATION_MODULE_TYPE,
   APP_ID,
@@ -23,7 +34,6 @@ import {
   NgZone,
   Optional,
   Output,
-  PLATFORM_ID,
   QueryList,
   Version,
   ViewChild,
@@ -33,7 +43,6 @@ import {
   effect,
   inject,
   isSignal,
-  require_operators,
   setClassMetadata,
   ɵɵInputTransformsFeature,
   ɵɵNgOnChangesFeature,
@@ -65,243 +74,28 @@ import {
   ɵɵtext,
   ɵɵtextInterpolate1,
   ɵɵviewQuery
-} from "./chunk-Q3R2RZWL.js";
+} from "./chunk-KZE4DZCA.js";
 import {
-  require_cjs
-} from "./chunk-2H3L6IVL.js";
-import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  Subscription,
   __spreadProps,
   __spreadValues,
-  __toESM
-} from "./chunk-NQ4HTGF6.js";
-
-// node_modules/@angular/cdk/fesm2022/platform.mjs
-var hasV8BreakIterator;
-try {
-  hasV8BreakIterator = typeof Intl !== "undefined" && Intl.v8BreakIterator;
-} catch {
-  hasV8BreakIterator = false;
-}
-var Platform = class _Platform {
-  constructor(_platformId) {
-    this._platformId = _platformId;
-    this.isBrowser = this._platformId ? isPlatformBrowser(this._platformId) : typeof document === "object" && !!document;
-    this.EDGE = this.isBrowser && /(edge)/i.test(navigator.userAgent);
-    this.TRIDENT = this.isBrowser && /(msie|trident)/i.test(navigator.userAgent);
-    this.BLINK = this.isBrowser && !!(window.chrome || hasV8BreakIterator) && typeof CSS !== "undefined" && !this.EDGE && !this.TRIDENT;
-    this.WEBKIT = this.isBrowser && /AppleWebKit/i.test(navigator.userAgent) && !this.BLINK && !this.EDGE && !this.TRIDENT;
-    this.IOS = this.isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent) && !("MSStream" in window);
-    this.FIREFOX = this.isBrowser && /(firefox|minefield)/i.test(navigator.userAgent);
-    this.ANDROID = this.isBrowser && /android/i.test(navigator.userAgent) && !this.TRIDENT;
-    this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
-  }
-  static {
-    this.ɵfac = function Platform_Factory(__ngFactoryType__) {
-      return new (__ngFactoryType__ || _Platform)(ɵɵinject(PLATFORM_ID));
-    };
-  }
-  static {
-    this.ɵprov = ɵɵdefineInjectable({
-      token: _Platform,
-      factory: _Platform.ɵfac,
-      providedIn: "root"
-    });
-  }
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(Platform, [{
-    type: Injectable,
-    args: [{
-      providedIn: "root"
-    }]
-  }], () => [{
-    type: Object,
-    decorators: [{
-      type: Inject,
-      args: [PLATFORM_ID]
-    }]
-  }], null);
-})();
-var PlatformModule = class _PlatformModule {
-  static {
-    this.ɵfac = function PlatformModule_Factory(__ngFactoryType__) {
-      return new (__ngFactoryType__ || _PlatformModule)();
-    };
-  }
-  static {
-    this.ɵmod = ɵɵdefineNgModule({
-      type: _PlatformModule
-    });
-  }
-  static {
-    this.ɵinj = ɵɵdefineInjector({});
-  }
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(PlatformModule, [{
-    type: NgModule,
-    args: [{}]
-  }], null, null);
-})();
-var supportedInputTypes;
-var candidateInputTypes = [
-  // `color` must come first. Chrome 56 shows a warning if we change the type to `color` after
-  // first changing it to something else:
-  // The specified value "" does not conform to the required format.
-  // The format is "#rrggbb" where rr, gg, bb are two-digit hexadecimal numbers.
-  "color",
-  "button",
-  "checkbox",
-  "date",
-  "datetime-local",
-  "email",
-  "file",
-  "hidden",
-  "image",
-  "month",
-  "number",
-  "password",
-  "radio",
-  "range",
-  "reset",
-  "search",
-  "submit",
-  "tel",
-  "text",
-  "time",
-  "url",
-  "week"
-];
-function getSupportedInputTypes() {
-  if (supportedInputTypes) {
-    return supportedInputTypes;
-  }
-  if (typeof document !== "object" || !document) {
-    supportedInputTypes = new Set(candidateInputTypes);
-    return supportedInputTypes;
-  }
-  let featureTestInput = document.createElement("input");
-  supportedInputTypes = new Set(candidateInputTypes.filter((value) => {
-    featureTestInput.setAttribute("type", value);
-    return featureTestInput.type === value;
-  }));
-  return supportedInputTypes;
-}
-var supportsPassiveEvents;
-function supportsPassiveEventListeners() {
-  if (supportsPassiveEvents == null && typeof window !== "undefined") {
-    try {
-      window.addEventListener("test", null, Object.defineProperty({}, "passive", {
-        get: () => supportsPassiveEvents = true
-      }));
-    } finally {
-      supportsPassiveEvents = supportsPassiveEvents || false;
-    }
-  }
-  return supportsPassiveEvents;
-}
-function normalizePassiveListenerOptions(options) {
-  return supportsPassiveEventListeners() ? options : !!options.capture;
-}
-var RtlScrollAxisType;
-(function(RtlScrollAxisType2) {
-  RtlScrollAxisType2[RtlScrollAxisType2["NORMAL"] = 0] = "NORMAL";
-  RtlScrollAxisType2[RtlScrollAxisType2["NEGATED"] = 1] = "NEGATED";
-  RtlScrollAxisType2[RtlScrollAxisType2["INVERTED"] = 2] = "INVERTED";
-})(RtlScrollAxisType || (RtlScrollAxisType = {}));
-var rtlScrollAxisType;
-var scrollBehaviorSupported;
-function supportsScrollBehavior() {
-  if (scrollBehaviorSupported == null) {
-    if (typeof document !== "object" || !document || typeof Element !== "function" || !Element) {
-      scrollBehaviorSupported = false;
-      return scrollBehaviorSupported;
-    }
-    if ("scrollBehavior" in document.documentElement.style) {
-      scrollBehaviorSupported = true;
-    } else {
-      const scrollToFunction = Element.prototype.scrollTo;
-      if (scrollToFunction) {
-        scrollBehaviorSupported = !/\{\s*\[native code\]\s*\}/.test(scrollToFunction.toString());
-      } else {
-        scrollBehaviorSupported = false;
-      }
-    }
-  }
-  return scrollBehaviorSupported;
-}
-function getRtlScrollAxisType() {
-  if (typeof document !== "object" || !document) {
-    return RtlScrollAxisType.NORMAL;
-  }
-  if (rtlScrollAxisType == null) {
-    const scrollContainer = document.createElement("div");
-    const containerStyle = scrollContainer.style;
-    scrollContainer.dir = "rtl";
-    containerStyle.width = "1px";
-    containerStyle.overflow = "auto";
-    containerStyle.visibility = "hidden";
-    containerStyle.pointerEvents = "none";
-    containerStyle.position = "absolute";
-    const content = document.createElement("div");
-    const contentStyle = content.style;
-    contentStyle.width = "2px";
-    contentStyle.height = "1px";
-    scrollContainer.appendChild(content);
-    document.body.appendChild(scrollContainer);
-    rtlScrollAxisType = RtlScrollAxisType.NORMAL;
-    if (scrollContainer.scrollLeft === 0) {
-      scrollContainer.scrollLeft = 1;
-      rtlScrollAxisType = scrollContainer.scrollLeft === 0 ? RtlScrollAxisType.NEGATED : RtlScrollAxisType.INVERTED;
-    }
-    scrollContainer.remove();
-  }
-  return rtlScrollAxisType;
-}
-var shadowDomIsSupported;
-function _supportsShadowDom() {
-  if (shadowDomIsSupported == null) {
-    const head = typeof document !== "undefined" ? document.head : null;
-    shadowDomIsSupported = !!(head && (head.createShadowRoot || head.attachShadow));
-  }
-  return shadowDomIsSupported;
-}
-function _getShadowRoot(element) {
-  if (_supportsShadowDom()) {
-    const rootNode = element.getRootNode ? element.getRootNode() : null;
-    if (typeof ShadowRoot !== "undefined" && ShadowRoot && rootNode instanceof ShadowRoot) {
-      return rootNode;
-    }
-  }
-  return null;
-}
-function _getFocusedElementPierceShadowDom() {
-  let activeElement = typeof document !== "undefined" && document ? document.activeElement : null;
-  while (activeElement && activeElement.shadowRoot) {
-    const newActiveElement = activeElement.shadowRoot.activeElement;
-    if (newActiveElement === activeElement) {
-      break;
-    } else {
-      activeElement = newActiveElement;
-    }
-  }
-  return activeElement;
-}
-function _getEventTarget(event) {
-  return event.composedPath ? event.composedPath()[0] : event.target;
-}
-function _isTestEnvironment() {
-  return (
-    // @ts-ignore
-    typeof __karma__ !== "undefined" && !!__karma__ || // @ts-ignore
-    typeof jasmine !== "undefined" && !!jasmine || // @ts-ignore
-    typeof jest !== "undefined" && !!jest || // @ts-ignore
-    typeof Mocha !== "undefined" && !!Mocha
-  );
-}
-
-// node_modules/@angular/cdk/fesm2022/a11y.mjs
-var import_rxjs4 = __toESM(require_cjs(), 1);
+  combineLatest,
+  concat,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  isObservable,
+  map,
+  of,
+  skip,
+  startWith,
+  take,
+  takeUntil,
+  tap
+} from "./chunk-PF6LNL77.js";
 
 // node_modules/@angular/cdk/fesm2022/keycodes.mjs
 var BACKSPACE = 8;
@@ -333,60 +127,15 @@ function hasModifierKey(event, ...modifiers) {
   return event.altKey || event.shiftKey || event.ctrlKey || event.metaKey;
 }
 
-// node_modules/@angular/cdk/fesm2022/a11y.mjs
-var import_operators3 = __toESM(require_operators(), 1);
-
 // node_modules/@angular/cdk/fesm2022/coercion/private.mjs
-var import_rxjs = __toESM(require_cjs(), 1);
 function coerceObservable(data) {
-  if (!(0, import_rxjs.isObservable)(data)) {
-    return (0, import_rxjs.of)(data);
+  if (!isObservable(data)) {
+    return of(data);
   }
   return data;
 }
 
-// node_modules/@angular/cdk/fesm2022/coercion.mjs
-function coerceBooleanProperty(value) {
-  return value != null && `${value}` !== "false";
-}
-function coerceNumberProperty(value, fallbackValue = 0) {
-  if (_isNumberValue(value)) {
-    return Number(value);
-  }
-  return arguments.length === 2 ? fallbackValue : 0;
-}
-function _isNumberValue(value) {
-  return !isNaN(parseFloat(value)) && !isNaN(Number(value));
-}
-function coerceArray(value) {
-  return Array.isArray(value) ? value : [value];
-}
-function coerceCssPixelValue(value) {
-  if (value == null) {
-    return "";
-  }
-  return typeof value === "string" ? value : `${value}px`;
-}
-function coerceElement(elementOrRef) {
-  return elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
-}
-function coerceStringArray(value, separator = /\s+/) {
-  const result = [];
-  if (value != null) {
-    const sourceValues = Array.isArray(value) ? value : `${value}`.split(separator);
-    for (const sourceValue of sourceValues) {
-      const trimmedString = `${sourceValue}`.trim();
-      if (trimmedString) {
-        result.push(trimmedString);
-      }
-    }
-  }
-  return result;
-}
-
 // node_modules/@angular/cdk/fesm2022/observers.mjs
-var import_rxjs2 = __toESM(require_cjs(), 1);
-var import_operators = __toESM(require_operators(), 1);
 function shouldIgnoreRecord(record) {
   if (record.type === "characterData" && record.target instanceof Comment) {
     return true;
@@ -442,9 +191,9 @@ var ContentObserver = class _ContentObserver {
   }
   observe(elementOrRef) {
     const element = coerceElement(elementOrRef);
-    return new import_rxjs2.Observable((observer) => {
+    return new Observable((observer) => {
       const stream = this._observeElement(element);
-      const subscription = stream.pipe((0, import_operators.map)((records) => records.filter((record) => !shouldIgnoreRecord(record))), (0, import_operators.filter)((records) => !!records.length)).subscribe((records) => {
+      const subscription = stream.pipe(map((records) => records.filter((record) => !shouldIgnoreRecord(record))), filter((records) => !!records.length)).subscribe((records) => {
         this._ngZone.run(() => {
           observer.next(records);
         });
@@ -462,7 +211,7 @@ var ContentObserver = class _ContentObserver {
   _observeElement(element) {
     return this._ngZone.runOutsideAngular(() => {
       if (!this._observedElements.has(element)) {
-        const stream = new import_rxjs2.Subject();
+        const stream = new Subject();
         const observer = this._mutationObserverFactory.create((mutations) => stream.next(mutations));
         if (observer) {
           observer.observe(element, {
@@ -569,7 +318,7 @@ var CdkObserveContent = class _CdkObserveContent {
   _subscribe() {
     this._unsubscribe();
     const stream = this._contentObserver.observe(this._elementRef);
-    this._currentSubscription = (this.debounce ? stream.pipe((0, import_operators.debounceTime)(this.debounce)) : stream).subscribe(this.event);
+    this._currentSubscription = (this.debounce ? stream.pipe(debounceTime(this.debounce)) : stream).subscribe(this.event);
   }
   _unsubscribe() {
     this._currentSubscription?.unsubscribe();
@@ -656,8 +405,6 @@ var ObserversModule = class _ObserversModule {
 })();
 
 // node_modules/@angular/cdk/fesm2022/layout.mjs
-var import_rxjs3 = __toESM(require_cjs(), 1);
-var import_operators2 = __toESM(require_operators(), 1);
 var LayoutModule = class _LayoutModule {
   static {
     this.ɵfac = function LayoutModule_Factory(__ngFactoryType__) {
@@ -770,7 +517,7 @@ var BreakpointObserver = class _BreakpointObserver {
     this._mediaMatcher = _mediaMatcher;
     this._zone = _zone;
     this._queries = /* @__PURE__ */ new Map();
-    this._destroySubject = new import_rxjs3.Subject();
+    this._destroySubject = new Subject();
   }
   /** Completes the active subject, signalling to all other observables to complete. */
   ngOnDestroy() {
@@ -795,9 +542,9 @@ var BreakpointObserver = class _BreakpointObserver {
   observe(value) {
     const queries = splitQueries(coerceArray(value));
     const observables = queries.map((query) => this._registerQuery(query).observable);
-    let stateObservable = (0, import_rxjs3.combineLatest)(observables);
-    stateObservable = (0, import_rxjs3.concat)(stateObservable.pipe((0, import_operators2.take)(1)), stateObservable.pipe((0, import_operators2.skip)(1), (0, import_operators2.debounceTime)(0)));
-    return stateObservable.pipe((0, import_operators2.map)((breakpointStates) => {
+    let stateObservable = combineLatest(observables);
+    stateObservable = concat(stateObservable.pipe(take(1)), stateObservable.pipe(skip(1), debounceTime(0)));
+    return stateObservable.pipe(map((breakpointStates) => {
       const response = {
         matches: false,
         breakpoints: {}
@@ -818,18 +565,18 @@ var BreakpointObserver = class _BreakpointObserver {
       return this._queries.get(query);
     }
     const mql = this._mediaMatcher.matchMedia(query);
-    const queryObservable = new import_rxjs3.Observable((observer) => {
+    const queryObservable = new Observable((observer) => {
       const handler = (e) => this._zone.run(() => observer.next(e));
       mql.addListener(handler);
       return () => {
         mql.removeListener(handler);
       };
-    }).pipe((0, import_operators2.startWith)(mql), (0, import_operators2.map)(({
+    }).pipe(startWith(mql), map(({
       matches
     }) => ({
       query,
       matches
-    })), (0, import_operators2.takeUntil)(this._destroySubject));
+    })), takeUntil(this._destroySubject));
     const output = {
       observable: queryObservable,
       mql
@@ -1098,11 +845,11 @@ function setMessageId(element, serviceId) {
 var DEFAULT_TYPEAHEAD_DEBOUNCE_INTERVAL_MS = 200;
 var Typeahead = class {
   constructor(initialItems, config) {
-    this._letterKeyStream = new import_rxjs4.Subject();
+    this._letterKeyStream = new Subject();
     this._items = [];
     this._selectedItemIndex = -1;
     this._pressedLetters = [];
-    this._selectedItem = new import_rxjs4.Subject();
+    this._selectedItem = new Subject();
     this.selectedItem = this._selectedItem;
     const typeAheadInterval = typeof config?.debounceInterval === "number" ? config.debounceInterval : DEFAULT_TYPEAHEAD_DEBOUNCE_INTERVAL_MS;
     if (config?.skipPredicate) {
@@ -1142,7 +889,7 @@ var Typeahead = class {
     this._pressedLetters = [];
   }
   _setupKeyHandler(typeAheadInterval) {
-    this._letterKeyStream.pipe((0, import_operators3.tap)((letter) => this._pressedLetters.push(letter)), (0, import_operators3.debounceTime)(typeAheadInterval), (0, import_operators3.filter)(() => this._pressedLetters.length > 0), (0, import_operators3.map)(() => this._pressedLetters.join("").toLocaleUpperCase())).subscribe((inputString) => {
+    this._letterKeyStream.pipe(tap((letter) => this._pressedLetters.push(letter)), debounceTime(typeAheadInterval), filter(() => this._pressedLetters.length > 0), map(() => this._pressedLetters.join("").toLocaleUpperCase())).subscribe((inputString) => {
       for (let i = 1; i < this._items.length + 1; i++) {
         const index = (this._selectedItemIndex + i) % this._items.length;
         const item = this._items[index];
@@ -1161,7 +908,7 @@ var ListKeyManager = class {
     this._activeItemIndex = -1;
     this._activeItem = null;
     this._wrap = false;
-    this._typeaheadSubscription = import_rxjs4.Subscription.EMPTY;
+    this._typeaheadSubscription = Subscription.EMPTY;
     this._vertical = true;
     this._allowedModifierKeys = [];
     this._homeAndEnd = false;
@@ -1170,8 +917,8 @@ var ListKeyManager = class {
       delta: 10
     };
     this._skipPredicateFn = (item) => item.disabled;
-    this.tabOut = new import_rxjs4.Subject();
-    this.change = new import_rxjs4.Subject();
+    this.tabOut = new Subject();
+    this.change = new Subject();
     if (_items instanceof QueryList) {
       this._itemChangesSubscription = _items.changes.subscribe((newItems) => this._itemsChanged(newItems.toArray()));
     } else if (isSignal(_items)) {
@@ -1538,9 +1285,9 @@ var TreeKeyManager = class {
     this._skipPredicateFn = (_item) => false;
     this._trackByFn = (item) => item;
     this._items = [];
-    this._typeaheadSubscription = import_rxjs4.Subscription.EMPTY;
+    this._typeaheadSubscription = Subscription.EMPTY;
     this._hasInitialFocused = false;
-    this.change = new import_rxjs4.Subject();
+    this.change = new Subject();
     if (items instanceof QueryList) {
       this._items = items.toArray();
       items.changes.subscribe((newItems) => {
@@ -1549,7 +1296,7 @@ var TreeKeyManager = class {
         this._updateActiveItemIndex(this._items);
         this._initializeFocus();
       });
-    } else if ((0, import_rxjs4.isObservable)(items)) {
+    } else if (isObservable(items)) {
       items.subscribe((newItems) => {
         this._items = newItems;
         this._typeahead?.setItems(newItems);
@@ -1734,7 +1481,7 @@ var TreeKeyManager = class {
     if (!this._isCurrentItemExpanded()) {
       this._activeItem.expand();
     } else {
-      coerceObservable(this._activeItem.getChildren()).pipe((0, import_operators3.take)(1)).subscribe((children) => {
+      coerceObservable(this._activeItem.getChildren()).pipe(take(1)).subscribe((children) => {
         const firstChild = children.find((child) => !this._skipPredicateFn(child));
         if (!firstChild) {
           return;
@@ -1760,11 +1507,11 @@ var TreeKeyManager = class {
     const parent = this._activeItem.getParent();
     let itemsToExpand;
     if (!parent) {
-      itemsToExpand = (0, import_rxjs4.of)(this._items.filter((item) => item.getParent() === null));
+      itemsToExpand = of(this._items.filter((item) => item.getParent() === null));
     } else {
       itemsToExpand = coerceObservable(parent.getChildren());
     }
-    itemsToExpand.pipe((0, import_operators3.take)(1)).subscribe((items) => {
+    itemsToExpand.pipe(take(1)).subscribe((items) => {
       for (const item of items) {
         item.expand();
       }
@@ -2544,7 +2291,7 @@ var InputModalityDetector = class _InputModalityDetector {
   constructor(_platform, ngZone, document2, options) {
     this._platform = _platform;
     this._mostRecentTarget = null;
-    this._modality = new import_rxjs4.BehaviorSubject(null);
+    this._modality = new BehaviorSubject(null);
     this._lastTouchMs = 0;
     this._onKeydown = (event) => {
       if (this._options?.ignoreKeys?.some((keyCode) => keyCode === event.keyCode)) {
@@ -2570,8 +2317,8 @@ var InputModalityDetector = class _InputModalityDetector {
       this._mostRecentTarget = _getEventTarget(event);
     };
     this._options = __spreadValues(__spreadValues({}, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS), options);
-    this.modalityDetected = this._modality.pipe((0, import_operators3.skip)(1));
-    this.modalityChanged = this.modalityDetected.pipe((0, import_operators3.distinctUntilChanged)());
+    this.modalityDetected = this._modality.pipe(skip(1));
+    this.modalityChanged = this.modalityDetected.pipe(distinctUntilChanged());
     if (_platform.isBrowser) {
       ngZone.runOutsideAngular(() => {
         document2.addEventListener("keydown", this._onKeydown, modalityEventListenerOptions);
@@ -2880,7 +2627,7 @@ var FocusMonitor = class _FocusMonitor {
       this._windowFocused = true;
       this._windowFocusTimeoutId = window.setTimeout(() => this._windowFocused = false);
     };
-    this._stopInputModalityDetector = new import_rxjs4.Subject();
+    this._stopInputModalityDetector = new Subject();
     this._rootNodeFocusAndBlurListener = (event) => {
       const target = _getEventTarget(event);
       for (let element = target; element; element = element.parentElement) {
@@ -2897,7 +2644,7 @@ var FocusMonitor = class _FocusMonitor {
   monitor(element, checkChildren = false) {
     const nativeElement = coerceElement(element);
     if (!this._platform.isBrowser || nativeElement.nodeType !== 1) {
-      return (0, import_rxjs4.of)();
+      return of();
     }
     const rootNode = _getShadowRoot(nativeElement) || this._getDocument();
     const cachedInfo = this._elementInfo.get(nativeElement);
@@ -2909,7 +2656,7 @@ var FocusMonitor = class _FocusMonitor {
     }
     const info = {
       checkChildren,
-      subject: new import_rxjs4.Subject(),
+      subject: new Subject(),
       rootNode
     };
     this._elementInfo.set(nativeElement, info);
@@ -3056,7 +2803,7 @@ var FocusMonitor = class _FocusMonitor {
         const window2 = this._getWindow();
         window2.addEventListener("focus", this._windowFocusListener);
       });
-      this._inputModalityDetector.modalityDetected.pipe((0, import_operators3.takeUntil)(this._stopInputModalityDetector)).subscribe((modality) => {
+      this._inputModalityDetector.modalityDetected.pipe(takeUntil(this._stopInputModalityDetector)).subscribe((modality) => {
         this._setOrigin(
           modality,
           true
@@ -3353,181 +3100,10 @@ var A11yModule = class _A11yModule {
   }], null);
 })();
 
-// node_modules/@angular/cdk/fesm2022/bidi.mjs
-var DIR_DOCUMENT = new InjectionToken("cdk-dir-doc", {
-  providedIn: "root",
-  factory: DIR_DOCUMENT_FACTORY
-});
-function DIR_DOCUMENT_FACTORY() {
-  return inject(DOCUMENT);
-}
-var RTL_LOCALE_PATTERN = /^(ar|ckb|dv|he|iw|fa|nqo|ps|sd|ug|ur|yi|.*[-_](Adlm|Arab|Hebr|Nkoo|Rohg|Thaa))(?!.*[-_](Latn|Cyrl)($|-|_))($|-|_)/i;
-function _resolveDirectionality(rawValue) {
-  const value = rawValue?.toLowerCase() || "";
-  if (value === "auto" && typeof navigator !== "undefined" && navigator?.language) {
-    return RTL_LOCALE_PATTERN.test(navigator.language) ? "rtl" : "ltr";
-  }
-  return value === "rtl" ? "rtl" : "ltr";
-}
-var Directionality = class _Directionality {
-  constructor(_document) {
-    this.value = "ltr";
-    this.change = new EventEmitter();
-    if (_document) {
-      const bodyDir = _document.body ? _document.body.dir : null;
-      const htmlDir = _document.documentElement ? _document.documentElement.dir : null;
-      this.value = _resolveDirectionality(bodyDir || htmlDir || "ltr");
-    }
-  }
-  ngOnDestroy() {
-    this.change.complete();
-  }
-  static {
-    this.ɵfac = function Directionality_Factory(__ngFactoryType__) {
-      return new (__ngFactoryType__ || _Directionality)(ɵɵinject(DIR_DOCUMENT, 8));
-    };
-  }
-  static {
-    this.ɵprov = ɵɵdefineInjectable({
-      token: _Directionality,
-      factory: _Directionality.ɵfac,
-      providedIn: "root"
-    });
-  }
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(Directionality, [{
-    type: Injectable,
-    args: [{
-      providedIn: "root"
-    }]
-  }], () => [{
-    type: void 0,
-    decorators: [{
-      type: Optional
-    }, {
-      type: Inject,
-      args: [DIR_DOCUMENT]
-    }]
-  }], null);
-})();
-var Dir = class _Dir {
-  constructor() {
-    this._dir = "ltr";
-    this._isInitialized = false;
-    this.change = new EventEmitter();
-  }
-  /** @docs-private */
-  get dir() {
-    return this._dir;
-  }
-  set dir(value) {
-    const previousValue = this._dir;
-    this._dir = _resolveDirectionality(value);
-    this._rawDir = value;
-    if (previousValue !== this._dir && this._isInitialized) {
-      this.change.emit(this._dir);
-    }
-  }
-  /** Current layout direction of the element. */
-  get value() {
-    return this.dir;
-  }
-  /** Initialize once default value has been set. */
-  ngAfterContentInit() {
-    this._isInitialized = true;
-  }
-  ngOnDestroy() {
-    this.change.complete();
-  }
-  static {
-    this.ɵfac = function Dir_Factory(__ngFactoryType__) {
-      return new (__ngFactoryType__ || _Dir)();
-    };
-  }
-  static {
-    this.ɵdir = ɵɵdefineDirective({
-      type: _Dir,
-      selectors: [["", "dir", ""]],
-      hostVars: 1,
-      hostBindings: function Dir_HostBindings(rf, ctx) {
-        if (rf & 2) {
-          ɵɵattribute("dir", ctx._rawDir);
-        }
-      },
-      inputs: {
-        dir: "dir"
-      },
-      outputs: {
-        change: "dirChange"
-      },
-      exportAs: ["dir"],
-      standalone: true,
-      features: [ɵɵProvidersFeature([{
-        provide: Directionality,
-        useExisting: _Dir
-      }])]
-    });
-  }
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(Dir, [{
-    type: Directive,
-    args: [{
-      selector: "[dir]",
-      providers: [{
-        provide: Directionality,
-        useExisting: Dir
-      }],
-      host: {
-        "[attr.dir]": "_rawDir"
-      },
-      exportAs: "dir",
-      standalone: true
-    }]
-  }], null, {
-    change: [{
-      type: Output,
-      args: ["dirChange"]
-    }],
-    dir: [{
-      type: Input
-    }]
-  });
-})();
-var BidiModule = class _BidiModule {
-  static {
-    this.ɵfac = function BidiModule_Factory(__ngFactoryType__) {
-      return new (__ngFactoryType__ || _BidiModule)();
-    };
-  }
-  static {
-    this.ɵmod = ɵɵdefineNgModule({
-      type: _BidiModule,
-      imports: [Dir],
-      exports: [Dir]
-    });
-  }
-  static {
-    this.ɵinj = ɵɵdefineInjector({});
-  }
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(BidiModule, [{
-    type: NgModule,
-    args: [{
-      imports: [Dir],
-      exports: [Dir]
-    }]
-  }], null, null);
-})();
-
 // node_modules/@angular/cdk/fesm2022/cdk.mjs
 var VERSION = new Version("18.2.9");
 
 // node_modules/@angular/material/fesm2022/core.mjs
-var import_rxjs5 = __toESM(require_cjs(), 1);
-var import_operators4 = __toESM(require_operators(), 1);
 var _c0 = ["*", [["mat-option"], ["ng-container"]]];
 var _c1 = ["*", "mat-option, ng-container"];
 var _c2 = ["text"];
@@ -3825,7 +3401,7 @@ function mixinInitialized(base) {
       super(...args);
       this._isInitialized = false;
       this._pendingSubscribers = [];
-      this.initialized = new import_rxjs5.Observable((subscriber) => {
+      this.initialized = new Observable((subscriber) => {
         if (this._isInitialized) {
           this._notifySubscriber(subscriber);
         } else {
@@ -3862,7 +3438,7 @@ function MAT_DATE_LOCALE_FACTORY() {
 }
 var DateAdapter = class {
   constructor() {
-    this._localeChanges = new import_rxjs5.Subject();
+    this._localeChanges = new Subject();
     this.localeChanges = this._localeChanges;
   }
   /**
@@ -4319,7 +3895,7 @@ var MatLine = class _MatLine {
   }], null, null);
 })();
 function setLines(lines, element, prefix = "mat") {
-  lines.changes.pipe((0, import_operators4.startWith)(lines)).subscribe(({
+  lines.changes.pipe(startWith(lines)).subscribe(({
     length
   }) => {
     setClass(element, `${prefix}-2-line`, false);
@@ -5152,7 +4728,7 @@ var MatOption = class _MatOption {
     this._mostRecentViewValue = "";
     this.id = `mat-option-${_uniqueIdCounter++}`;
     this.onSelectionChange = new EventEmitter();
-    this._stateChanges = new import_rxjs5.Subject();
+    this._stateChanges = new Subject();
   }
   /**
    * Whether or not the option is currently active and ready to be selected.
@@ -5710,15 +5286,6 @@ var _MatInternalFormField = class __MatInternalFormField {
 })();
 
 export {
-  Platform,
-  getSupportedInputTypes,
-  normalizePassiveListenerOptions,
-  RtlScrollAxisType,
-  supportsScrollBehavior,
-  getRtlScrollAxisType,
-  _getFocusedElementPierceShadowDom,
-  _getEventTarget,
-  _isTestEnvironment,
   BACKSPACE,
   ENTER,
   ESCAPE,
@@ -5733,13 +5300,6 @@ export {
   DOWN_ARROW,
   A,
   hasModifierKey,
-  coerceBooleanProperty,
-  coerceNumberProperty,
-  _isNumberValue,
-  coerceArray,
-  coerceCssPixelValue,
-  coerceElement,
-  coerceStringArray,
   CdkObserveContent,
   ObserversModule,
   BreakpointObserver,
@@ -5752,8 +5312,6 @@ export {
   FocusMonitor,
   CdkMonitorFocus,
   A11yModule,
-  Directionality,
-  BidiModule,
   VERSION2 as VERSION,
   AnimationCurves,
   AnimationDurations,
@@ -5800,4 +5358,4 @@ export {
   MatRippleLoader,
   _MatInternalFormField
 };
-//# sourceMappingURL=chunk-2K6QWHF6.js.map
+//# sourceMappingURL=chunk-OZIZ6WH2.js.map

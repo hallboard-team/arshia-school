@@ -10,51 +10,97 @@
       <div class="div-bg-into-mat-tab">
         <form class="login-form">
           <div class="content">
-            <span class="title">ثبت نام منشی</span>
 
-            <div class="radio-inputs">
-              <!-- <label>
-                <input class="radio-input" type="radio" name="engine">
+            <div class="div-title-radio-input">
+              <span class="title">ثبت نام منشی</span>
+  
+              <div class="radio-inputs">
+                <label>
+                  <input checked="" class="radio-input" type="radio" name="engine">
                   <span class="radio-tile">
                     <span class="radio-icon">
                       <img src="../assets/images/member.png" alt="">
                     </span>
-                    <span class="radio-label">نامشخص</span>
+                    <span class="radio-label">مرد</span>
                   </span>
-              </label> -->
-
-              <label>
-                <input checked="" class="radio-input" type="radio" name="engine">
-                <span class="radio-tile">
-                  <span class="radio-icon">
-                    <img src="../assets/images/member.png" alt="">
+                </label>
+                
+                <label>
+                  <input checked="" class="radio-input" type="radio" name="engine">
+                  <span class="radio-tile">
+                    <span class="radio-icon">
+                      <img src="../assets/images/member.png" alt="">
+                    </span>
+                    <span class="radio-label">زن</span>
                   </span>
-                  <span class="radio-label">مرد</span>
-                </span>
-              </label>
-              
-              <label>
-                <input checked="" class="radio-input" type="radio" name="engine">
-                <span class="radio-tile">
-                  <span class="radio-icon">
-                    <img src="../assets/images/member.png" alt="">
-                  </span>
-                  <span class="radio-label">زن</span>
-                </span>
-              </label>
-
+                </label>
+              </div>
             </div>
 
-            <mat-form-field appearance="outline">
-              <mat-label>EMialll</mat-label>
-              <input class="input" autoFocusDir type="email" formControlName="emailCtrl" label="email" placeHolder="ایمیل خود را وارد کنید" matInput>
+            <div class="div-form">
+              <!-- <label>ایمیل</label> -->
+              <input class="input" autoFocusDir type="email" label="email" placeholder="ایمل خودرا وارد کنید">
               @if (EmailSecCtrl.hasError('required')) {
-              <mat-error>!این فیلد خالی است</mat-error>
+              <span>!این فیلد خالی است</span>
               }
               @else if (EmailSecCtrl.hasError('pattern')) {
-              <mat-error>در انتخاب فرمت ایمیل دقت کنید</mat-error>
+              <span>در انتخاب فرمت ایمیل دقت کنید</span>
               }
-            </mat-form-field>
+            </div>
+
+            <div class="div-form">
+              <input class="input" autoFocusDir type="text" label="username" placeholder="نام کاربری">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <input class="input" autoFocusDir type="password" label="password" placeholder="رمز عبور">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <input class="input" autoFocusDir type="password" label="confirmPassword" placeholder="تکرار رمز عبور">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <input class="input" autoFocusDir type="text" label="name" placeholder="نام">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <input class="input" autoFocusDir type="text" label="lastName" placeholder="نام خانوادگی">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <input class="input" autoFocusDir type="number" label="phoneNumber" placeholder="نام کاربری">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <!-- <mat-label>Date of Birth</mat-label> -->
+              <input class="input" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp3"
+                placeholder="سال تولد ">
+              <!-- <mat-hint>Between {{minDate.getFullYear()}} to {{maxDate.getFullYear()}}</mat-hint> -->
+              <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
+              <mat-datepicker #dp3 touchUi disabled="false"></mat-datepicker>
+              <!-- @if (DateOfBirthSecCtrl.hasError('required')) {
+              <mat-error>This field is required</mat-error>
+              } -->
+            </div>
           </div>
         </form>
       </div>
@@ -62,15 +108,201 @@
 
     <mat-tab label="ثبت نام معلم">
       <div class="div-bg-into-mat-tab">
-        <span class="title">ثبت نام معلم</span>
+        <form class="login-form">
+          <div class="content">
 
+            <div class="div-title-radio-input">
+              <span class="title">ثبت نام معلم</span>
+  
+              <div class="radio-inputs">
+                <label>
+                  <input checked="" class="radio-input" type="radio" name="engine">
+                  <span class="radio-tile">
+                    <span class="radio-icon">
+                      <img src="../assets/images/member.png" alt="">
+                    </span>
+                    <span class="radio-label">مرد</span>
+                  </span>
+                </label>
+                
+                <label>
+                  <input checked="" class="radio-input" type="radio" name="engine">
+                  <span class="radio-tile">
+                    <span class="radio-icon">
+                      <img src="../assets/images/member.png" alt="">
+                    </span>
+                    <span class="radio-label">زن</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <div class="div-form">
+              <!-- <label>ایمیل</label> -->
+              <input class="input" autoFocusDir type="email" label="email" placeholder="ایمل خودرا وارد کنید">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+              @else if (EmailSecCtrl.hasError('pattern')) {
+              <span>در انتخاب فرمت ایمیل دقت کنید</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <input class="input" autoFocusDir type="text" label="username" placeholder="نام کاربری">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <input class="input" autoFocusDir type="password" label="password" placeholder="رمز عبور">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <input class="input" autoFocusDir type="password" label="confirmPassword" placeholder="تکرار رمز عبور">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <input class="input" autoFocusDir type="text" label="name" placeholder="نام">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <input class="input" autoFocusDir type="text" label="lastName" placeholder="نام خانوادگی">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <input class="input" autoFocusDir type="number" label="phoneNumber" placeholder="نام کاربری">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <!-- <mat-label>Date of Birth</mat-label> -->
+              <input class="input" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp3"
+                placeholder="Enter your date of birth">
+              <!-- <mat-hint>Between {{minDate.getFullYear()}} to {{maxDate.getFullYear()}}</mat-hint> -->
+              <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
+              <mat-datepicker #dp3 touchUi disabled="false"></mat-datepicker>
+              <!-- @if (DateOfBirthSecCtrl.hasError('required')) {
+              <mat-error>This field is required</mat-error>
+              } -->
+            </div>
+          </div>
+        </form>
       </div>
     </mat-tab>
 
     <mat-tab label="ثبت نام دانش آموز">
       <div class="div-bg-into-mat-tab">
-        <span class="title">ثبت نام دانش آموز</span>
+        <form class="login-form">
+          <div class="content">
+            
+            <div class="div-title-radio-input">
+              <span class="title">ثبت نام دانش آموز</span>
+  
+              <div class="radio-inputs">
+                <label>
+                  <input checked="" class="radio-input" type="radio" name="engine">
+                  <span class="radio-tile">
+                    <span class="radio-icon">
+                      <img src="../assets/images/member.png" alt="">
+                    </span>
+                    <span class="radio-label">مرد</span>
+                  </span>
+                </label>
+                
+                <label>
+                  <input checked="" class="radio-input" type="radio" name="engine">
+                  <span class="radio-tile">
+                    <span class="radio-icon">
+                      <img src="../assets/images/member.png" alt="">
+                    </span>
+                    <span class="radio-label">زن</span>
+                  </span>
+                </label>
+              </div>
+            </div>
 
+            <div class="div-form">
+              <!-- <label>ایمیل</label> -->
+              <input class="input" autoFocusDir type="email" label="email" placeholder="ایمل خودرا وارد کنید">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+              @else if (EmailSecCtrl.hasError('pattern')) {
+              <span>در انتخاب فرمت ایمیل دقت کنید</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <input class="input" autoFocusDir type="text" label="username" placeholder="نام کاربری">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <input class="input" autoFocusDir type="password" label="password" placeholder="رمز عبور">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <input class="input" autoFocusDir type="password" label="confirmPassword" placeholder="تکرار رمز عبور">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <input class="input" autoFocusDir type="text" label="name" placeholder="نام">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <input class="input" autoFocusDir type="text" label="lastName" placeholder="نام خانوادگی">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <input class="input" autoFocusDir type="number" label="phoneNumber" placeholder="نام کاربری">
+              @if (EmailSecCtrl.hasError('required')) {
+              <span>!این فیلد خالی است</span>
+              }
+            </div>
+
+            <div class="div-form">
+              <!-- <mat-label>Date of Birth</mat-label> -->
+              <input class="input" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp3"
+                placeholder="Enter your date of birth">
+              <!-- <mat-hint>Between {{minDate.getFullYear()}} to {{maxDate.getFullYear()}}</mat-hint> -->
+              <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
+              <mat-datepicker #dp3 touchUi disabled="false"></mat-datepicker>
+              <!-- @if (DateOfBirthSecCtrl.hasError('required')) {
+              <mat-error>This field is required</mat-error>
+              } -->
+            </div>
+          </div>
+        </form>
       </div>
     </mat-tab>
   </mat-tab-group>
