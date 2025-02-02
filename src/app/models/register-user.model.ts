@@ -8,5 +8,4 @@ export interface RegisterUser {
     name: string;
     lastName: string;
     gender: string;
-    lesson: string;
 }

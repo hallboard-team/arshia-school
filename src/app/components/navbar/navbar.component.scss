@@ -220,11 +220,11 @@ nav {
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 2rem;
+            gap: 1rem;
 
             button {
                 width: 90%;
-                height: 8%;
+                // height: 8%;
                 background: linear-gradient(145deg, #f0f0f0, #cacaca);
                 box-shadow:  5px 5px 10px #797979,
                     -5px -5px 10px #ffffff;

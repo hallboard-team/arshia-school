@@ -21,20 +21,6 @@ export class SecretaryService {
 
   loggedInUserSig = signal<LoggedInUser | null>(null);
 
-  registerSecretary(managerInput: RegisterUser): Observable<LoggedInUser | null> {
-    return this._http.post<LoggedInUser>(this._managerapiUrl + 'add-secretary', managerInput).pipe(
-      map(secretaryResponse => {
-        if (secretaryResponse) {
-          this.snackBar.open("منشی با موفقیت ثبت شد", "Close", { horizontalPosition: "center", verticalPosition: "bottom", duration: 7000 })
-
-          return secretaryResponse;
-        }
-
-        return null;
-      })
-    );
-  }
-
   addStudent(secretaryInput: RegisterUser): Observable<LoggedInUser | null> {
     return this._http.post<LoggedInUser>(this._secretaryapiUrl + 'add-student', secretaryInput).pipe(
       map(studentResponse => {

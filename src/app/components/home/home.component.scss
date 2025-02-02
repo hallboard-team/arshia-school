@@ -490,12 +490,12 @@ main {
                         position: absolute;
                         top: 33%;
                         left: 5%;
-                        // left: -100%;
                         z-index: 100;
                         border-radius: 10px;
-                        background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                        box-shadow:  5px 5px 10px #b1b1b1,
-                            -5px -5px 10px #ffffff;
+                        // background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                        // box-shadow:  5px 5px 10px #b1b1b1,
+                        //     -5px -5px 10px #ffffff;
+                        background-color: red;
                         display: none;
                 
                         .top {
@@ -582,7 +582,7 @@ main {
                 
                             button {
                                 width: 90%;
-                                height: 8%;
+                                // height: 8%;
                                 background: linear-gradient(145deg, #f0f0f0, #cacaca);
                                 box-shadow:  5px 5px 10px #797979,
                                     -5px -5px 10px #ffffff;

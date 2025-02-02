@@ -39,60 +39,60 @@
 
             <div class="div-form">
               <!-- <label>ایمیل</label> -->
-              <input class="input" autoFocusDir type="email" label="email" placeholder="ایمل خودرا وارد کنید">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="emailCtrl" type="email" label="Email" placeholder="ایمل خودرا وارد کنید">
+              @if (EmailCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
-              @else if (EmailSecCtrl.hasError('pattern')) {
+              @else if (EmailCtrl.hasError('pattern')) {
               <span>در انتخاب فرمت ایمیل دقت کنید</span>
               }
             </div>
 
             <div class="div-form">
-              <input class="input" autoFocusDir type="text" label="username" placeholder="نام کاربری">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="userNameCtrl" type="text" label="UserName" placeholder="نام کاربری">
+              @if (UserNameCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
             </div>
 
             <div class="div-form">
-              <input class="input" autoFocusDir type="password" label="password" placeholder="رمز عبور">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="passwordCtrl" type="password" label="Password" placeholder="رمز عبور">
+              @if (PasswordCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
             </div>
 
             <div class="div-form">
-              <input class="input" autoFocusDir type="password" label="confirmPassword" placeholder="تکرار رمز عبور">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="confirmPasswordCtrl" type="password" label="ConfirmPassword" placeholder="تکرار رمز عبور">
+              @if (ConfirmPasswordCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
             </div>
 
             <div class="div-form">
-              <input class="input" autoFocusDir type="text" label="name" placeholder="نام">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="nameCtrl" type="text" label="Name" placeholder="نام">
+              @if (NameCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
             </div>
 
             <div class="div-form">
-              <input class="input" autoFocusDir type="text" label="lastName" placeholder="نام خانوادگی">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="lastNameCtrl" type="text" label="LastName" placeholder="نام خانوادگی">
+              @if (LastNameCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
             </div>
 
             <div class="div-form">
-              <input class="input" autoFocusDir type="number" label="phoneNumber" placeholder="نام کاربری">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="phoneNumCtrl" type="number" label="PhoneNumber" placeholder="نام کاربری">
+              @if (PhoneNumCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
             </div>
 
             <div class="div-form">
               <!-- <mat-label>Date of Birth</mat-label> -->
-              <input class="input" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp3"
+              <input class="input" formControlName="dateOfBirthCtrl" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp3"
                 placeholder="سال تولد ">
               <!-- <mat-hint>Between {{minDate.getFullYear()}} to {{maxDate.getFullYear()}}</mat-hint> -->
               <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
@@ -139,61 +139,61 @@
 
             <div class="div-form">
               <!-- <label>ایمیل</label> -->
-              <input class="input" autoFocusDir type="email" label="email" placeholder="ایمل خودرا وارد کنید">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="emailCtrl" type="email" label="Email" placeholder="ایمل خودرا وارد کنید">
+              @if (EmailCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
-              @else if (EmailSecCtrl.hasError('pattern')) {
+              @else if (EmailCtrl.hasError('pattern')) {
               <span>در انتخاب فرمت ایمیل دقت کنید</span>
               }
             </div>
 
             <div class="div-form">
-              <input class="input" autoFocusDir type="text" label="username" placeholder="نام کاربری">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="userNameCtrl" type="text" label="UserName" placeholder="نام کاربری">
+              @if (UserNameCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
             </div>
 
             <div class="div-form">
-              <input class="input" autoFocusDir type="password" label="password" placeholder="رمز عبور">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="passwordCtrl" type="password" label="Password" placeholder="رمز عبور">
+              @if (PasswordCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
             </div>
 
             <div class="div-form">
-              <input class="input" autoFocusDir type="password" label="confirmPassword" placeholder="تکرار رمز عبور">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="confirmPasswordCtrl" type="password" label="ConfirmPassword" placeholder="تکرار رمز عبور">
+              @if (ConfirmPasswordCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
             </div>
 
             <div class="div-form">
-              <input class="input" autoFocusDir type="text" label="name" placeholder="نام">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="nameCtrl" type="text" label="Name" placeholder="نام">
+              @if (NameCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
             </div>
 
             <div class="div-form">
-              <input class="input" autoFocusDir type="text" label="lastName" placeholder="نام خانوادگی">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="lastNameCtrl" type="text" label="LastName" placeholder="نام خانوادگی">
+              @if (LastNameCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
             </div>
 
             <div class="div-form">
-              <input class="input" autoFocusDir type="number" label="phoneNumber" placeholder="نام کاربری">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="phoneNumCtrl" type="number" label="PhoneNumber" placeholder="نام کاربری">
+              @if (PhoneNumCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
             </div>
 
             <div class="div-form">
               <!-- <mat-label>Date of Birth</mat-label> -->
-              <input class="input" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp3"
-                placeholder="Enter your date of birth">
+              <input class="input" formControlName="dateOfBirthCtrl" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp3"
+                placeholder="سال تولد ">
               <!-- <mat-hint>Between {{minDate.getFullYear()}} to {{maxDate.getFullYear()}}</mat-hint> -->
               <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
               <mat-datepicker #dp3 touchUi disabled="false"></mat-datepicker>
@@ -210,7 +210,7 @@
       <div class="div-bg-into-mat-tab">
         <form class="login-form">
           <div class="content">
-            
+
             <div class="div-title-radio-input">
               <span class="title">ثبت نام دانش آموز</span>
   
@@ -239,61 +239,61 @@
 
             <div class="div-form">
               <!-- <label>ایمیل</label> -->
-              <input class="input" autoFocusDir type="email" label="email" placeholder="ایمل خودرا وارد کنید">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="emailCtrl" type="email" label="Email" placeholder="ایمل خودرا وارد کنید">
+              @if (EmailCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
-              @else if (EmailSecCtrl.hasError('pattern')) {
+              @else if (EmailCtrl.hasError('pattern')) {
               <span>در انتخاب فرمت ایمیل دقت کنید</span>
               }
             </div>
 
             <div class="div-form">
-              <input class="input" autoFocusDir type="text" label="username" placeholder="نام کاربری">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="userNameCtrl" type="text" label="UserName" placeholder="نام کاربری">
+              @if (UserNameCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
             </div>
 
             <div class="div-form">
-              <input class="input" autoFocusDir type="password" label="password" placeholder="رمز عبور">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="passwordCtrl" type="password" label="Password" placeholder="رمز عبور">
+              @if (PasswordCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
             </div>
 
             <div class="div-form">
-              <input class="input" autoFocusDir type="password" label="confirmPassword" placeholder="تکرار رمز عبور">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="confirmPasswordCtrl" type="password" label="ConfirmPassword" placeholder="تکرار رمز عبور">
+              @if (ConfirmPasswordCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
             </div>
 
             <div class="div-form">
-              <input class="input" autoFocusDir type="text" label="name" placeholder="نام">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="nameCtrl" type="text" label="Name" placeholder="نام">
+              @if (NameCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
             </div>
 
             <div class="div-form">
-              <input class="input" autoFocusDir type="text" label="lastName" placeholder="نام خانوادگی">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="lastNameCtrl" type="text" label="LastName" placeholder="نام خانوادگی">
+              @if (LastNameCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
             </div>
 
             <div class="div-form">
-              <input class="input" autoFocusDir type="number" label="phoneNumber" placeholder="نام کاربری">
-              @if (EmailSecCtrl.hasError('required')) {
+              <input class="input" autoFocusDir formControlName="phoneNumCtrl" type="number" label="PhoneNumber" placeholder="نام کاربری">
+              @if (PhoneNumCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
               }
             </div>
 
             <div class="div-form">
               <!-- <mat-label>Date of Birth</mat-label> -->
-              <input class="input" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp3"
-                placeholder="Enter your date of birth">
+              <input class="input" formControlName="dateOfBirthCtrl" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp3"
+                placeholder="سال تولد ">
               <!-- <mat-hint>Between {{minDate.getFullYear()}} to {{maxDate.getFullYear()}}</mat-hint> -->
               <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
               <mat-datepicker #dp3 touchUi disabled="false"></mat-datepicker>

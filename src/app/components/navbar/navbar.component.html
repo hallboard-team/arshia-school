@@ -55,7 +55,7 @@
         </div>
 
         <div class="bottom">
-            <button>
+            <!-- <button>
                 <span>درباره ما</span>
             </button>
 
@@ -69,7 +69,33 @@
 
             <button routerLink="">
                 <span>صفحه اصلی</span>
-            </button>
+            </button> -->
+            @if (loggedInUserSig && loggedInUserSig()) {
+                @if (loggedInUserSig()?.roles?.includes('manager')) {
+                    <button [routerLink]="['/' + 'manager-panell']" routerLinkActive #rla="routerLinkActive">پنل-مدیر</button>
+                }
+                @if (loggedInUserSig()?.roles?.includes('teacher')) {
+                    <button [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">پنل-معلم</button>
+                } 
+                <!-- @if (loggedInUserSig()?.roles?.includes('student')) { -->
+                    <!-- <button class="btn" [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive">خانه</button> -->
+                    <!-- <button class="btn" [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">پروفایل</button> -->
+                    <!-- <button class="btn" [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">دوره ها</button> -->
+                    <!-- <button class="btn" [routerLink]="['/' + 'about']" routerLinkActive #rla="routerLinkActive">درباره ما</button> -->
+                    <!-- <button class="btn" [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">تماس با ما</button> -->
+                @else {
+                    <button [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive">خانه</button>
+                    <button [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">پروفایل</button>
+                    <button [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">دوره ها</button>
+                    <button [routerLink]="['/' + 'about']" routerLinkActive #rla="routerLinkActive">درباره ما</button>
+                    <button [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">تماس با ما</button>
+                }
+            }@else {
+                <button [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive">خانه</button>
+                <button [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">دوره ها</button>
+                <button [routerLink]="['/' + 'about']" routerLinkActive #rla="routerLinkActive">درباره ما</button>
+                <button [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">تماس با ما</button>
+            } 
         </div>
     </div>
 

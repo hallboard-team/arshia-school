@@ -32,20 +32,6 @@ export class MemberService {
 
   loggedInUserSig = signal<LoggedInUser | null>(null);
 
-  registerStudent(managerInput: RegisterUser): Observable<LoggedInUser | null> {
-    return this._http.post<LoggedInUser>(this._apiUrl + 'add-student', managerInput).pipe(
-      map(secretaryResponse => {
-        if (secretaryResponse) {
-          this.snackBar.open("دانش آموز با موفقیت ثبت شد", "Close", { horizontalPosition: "center", verticalPosition: "bottom", duration: 7000 })
-
-          return secretaryResponse;
-        }
-
-        return null;
-      })
-    );
-  }
-
   // Observable / Promise
   getAll(memberParams: MemberParams): Observable<PaginatedResult<Member[]>> {
     let params = new HttpParams();

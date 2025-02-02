@@ -18,25 +18,9 @@ export class TeacherService {
   platformId = inject(PLATFORM_ID); 
   private snackBar = inject(MatSnackBar);
 
-
-  private readonly _managerApiUrl = environment.apiUrl + 'manager/';
   private readonly _teaherApiUrl = environment.apiUrl + 'teacher/';
 
   loggedInUserSig = signal<LoggedInUser | null>(null);
-
-  registerTeacher(managerInput: RegisterUser): Observable<LoggedInUser | null> {
-    return this._http.post<LoggedInUser>(this._managerApiUrl + 'add-teacher', managerInput).pipe(
-      map(teacherResponse => {
-        if (teacherResponse) {
-          this.snackBar.open("معلم با موفقیت ثبت شد", "Close", { horizontalPosition: "center", verticalPosition: "bottom", duration: 7000 })
-
-          return teacherResponse;
-        }
-
-        return null;
-      })
-    );
-  }
 
   addAttendence(teacherInput: AddAttendence): Observable<ApiResponse | null> {
     return this._http.post<ApiResponse>(this._teaherApiUrl + 'add-attendence', teacherInput)
