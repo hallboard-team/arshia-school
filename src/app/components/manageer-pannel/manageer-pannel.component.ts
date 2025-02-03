@@ -78,7 +78,7 @@ export class ManageerPannelComponent implements OnInit, OnDestroy{
     confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
     lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    phoneNumCtrl: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]],
+    phoneNumCtrl: ['', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
     dateOfBirthCtrl: ['', [Validators.required]],
     genderCtrl: ['female', [Validators.required]]
   })

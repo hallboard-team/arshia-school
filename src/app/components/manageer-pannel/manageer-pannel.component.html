@@ -8,15 +8,15 @@
   <mat-tab-group>
     <mat-tab label="ثبت نام منشی">
       <div class="div-bg-into-mat-tab">
-        <form class="login-form">
+        <form class="login-form" [formGroup]="addMemberFg" (ngSubmit)="addMemberFg.valid && addSecretary()">
           <div class="content">
 
             <div class="div-title-radio-input">
               <span class="title">ثبت نام منشی</span>
   
-              <div class="radio-inputs">
+              <div class="radio-inputs" formControlName="genderCtrl">
                 <label>
-                  <input checked="" class="radio-input" type="radio" name="engine">
+                  <input value="male" checked="" class="radio-input" type="radio" name="engine">
                   <span class="radio-tile">
                     <span class="radio-icon">
                       <img src="../assets/images/member.png" alt="">
@@ -26,7 +26,7 @@
                 </label>
                 
                 <label>
-                  <input checked="" class="radio-input" type="radio" name="engine">
+                  <input value="femail" checked="" class="radio-input" type="radio" name="engine">
                   <span class="radio-tile">
                     <span class="radio-icon">
                       <img src="../assets/images/member.png" alt="">
@@ -37,70 +37,110 @@
               </div>
             </div>
 
-            <div class="div-form">
-              <!-- <label>ایمیل</label> -->
-              <input class="input" autoFocusDir formControlName="emailCtrl" type="email" label="Email" placeholder="ایمل خودرا وارد کنید">
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input autoFocusDir type="email" formControlName="emailCtrl" label="Email" placeHolder="Your email" matInput>
+              <mat-hint>Enter a your email.</mat-hint>
               @if (EmailCtrl.hasError('required')) {
-              <span>!این فیلد خالی است</span>
+              <mat-error>This field is required.</mat-error>
               }
               @else if (EmailCtrl.hasError('pattern')) {
-              <span>در انتخاب فرمت ایمیل دقت کنید</span>
+              <mat-error>Enter a valid email.</mat-error>
               }
-            </div>
+            </mat-form-field>
 
-            <div class="div-form">
-              <input class="input" autoFocusDir formControlName="userNameCtrl" type="text" label="UserName" placeholder="نام کاربری">
-              @if (UserNameCtrl.hasError('required')) {
-              <span>!این فیلد خالی است</span>
+            <mat-form-field appearance="outline">
+              <mat-label>Username</mat-label>
+              <input type="text" formControlName="userNameCtrl" label="Username" placeHolder="Your username"
+                matInput>
+              <mat-hint>Between 1 to 30 characters.</mat-hint>
+              @if (EmailCtrl.hasError('required')) {
+              <mat-error>This field is required.</mat-error>
               }
-            </div>
+            </mat-form-field>
 
-            <div class="div-form">
-              <input class="input" autoFocusDir formControlName="passwordCtrl" type="password" label="Password" placeholder="رمز عبور">
+            <mat-form-field appearance="outline">
+              <mat-label>Password</mat-label>
+              <input type="password" formControlName="passwordCtrl" label="Password" placeHolder="Your password" matInput>
               @if (PasswordCtrl.hasError('required')) {
-              <span>!این فیلد خالی است</span>
+              <mat-error>This field is required.</mat-error>
               }
-            </div>
-
-            <div class="div-form">
-              <input class="input" autoFocusDir formControlName="confirmPasswordCtrl" type="password" label="ConfirmPassword" placeholder="تکرار رمز عبور">
+              @else if (PasswordCtrl.errors && PasswordCtrl.hasError('minlength')) {
+              <mat-error>It's too short. Min: {{PasswordCtrl.errors['minlength'].requiredLength}} is required.</mat-error>
+              }
+              @else if(PasswordCtrl.errors && PasswordCtrl.hasError('maxlength')) {
+              <mat-error>It's too long. Max: {{PasswordCtrl.errors['maxlength'].requiredLength}} characters.</mat-error>
+              }
+            </mat-form-field>
+        
+            <mat-form-field appearance="outline">
+              <mat-label>Confirm password</mat-label>
+              <input type="password" formControlName="confirmPasswordCtrl" label="Confirm Password"
+                placeHolder="Re-enter password" matInput>
               @if (ConfirmPasswordCtrl.hasError('required')) {
-              <span>!این فیلد خالی است</span>
+              <mat-error>This field is required.</mat-error>
               }
-            </div>
+              @else if (ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('minlength')) {
+              <mat-error>It's too short. Min: {{ConfirmPasswordCtrl.errors['minlength'].requiredLength}} is
+                required.</mat-error>
+              }
+              @else if(ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('maxlength')) {
+              <mat-error>It's too long. Max: {{ConfirmPasswordCtrl.errors['maxlength'].requiredLength}} characters.</mat-error>
+              }
+            </mat-form-field>
 
-            <div class="div-form">
-              <input class="input" autoFocusDir formControlName="nameCtrl" type="text" label="Name" placeholder="نام">
+            <mat-form-field appearance="outline">
+              <mat-label>Name</mat-label>
+              <input type="text" formControlName="nameCtrl" label="Name" placeHolder="Enter your desired name." matInput>
               @if (NameCtrl.hasError('required')) {
-              <span>!این فیلد خالی است</span>
+              <mat-error>This field is required.</mat-error>
               }
-            </div>
+              @else if (NameCtrl.hasError('minlength')) {
+              <mat-error>It's too short. Min: 2 characters.</mat-error>
+              }
+              @else if(NameCtrl.hasError('maxlength')) {
+              <mat-error>It's too long. Max: 30 characters.</mat-error>
+              }
+            </mat-form-field>
 
-            <div class="div-form">
-              <input class="input" autoFocusDir formControlName="lastNameCtrl" type="text" label="LastName" placeholder="نام خانوادگی">
+            <mat-form-field appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input type="text" formControlName="lastNameCtrl" label="Last Name" placeHolder="Enter your desired name." matInput>
               @if (LastNameCtrl.hasError('required')) {
-              <span>!این فیلد خالی است</span>
+              <mat-error>This field is required.</mat-error>
               }
-            </div>
-
-            <div class="div-form">
-              <input class="input" autoFocusDir formControlName="phoneNumCtrl" type="number" label="PhoneNumber" placeholder="نام کاربری">
-              @if (PhoneNumCtrl.hasError('required')) {
-              <span>!این فیلد خالی است</span>
+              @else if (LastNameCtrl.hasError('minlength')) {
+              <mat-error>It's too short. Min: 2 characters.</mat-error>
               }
-            </div>
+              @else if(LastNameCtrl.hasError('maxlength')) {
+              <mat-error>It's too long. Max: 30 characters.</mat-error>
+              }
+            </mat-form-field>
 
-            <div class="div-form">
-              <!-- <mat-label>Date of Birth</mat-label> -->
-              <input class="input" formControlName="dateOfBirthCtrl" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp3"
-                placeholder="سال تولد ">
-              <!-- <mat-hint>Between {{minDate.getFullYear()}} to {{maxDate.getFullYear()}}</mat-hint> -->
+            <mat-form-field appearance="outline">
+              <mat-label>Phone Number</mat-label>
+              <input type="text" formControlName="phoneNumCtrl" label="Phone Number" placeHolder="Enter your phone number." matInput>
+              @if (LastNameCtrl.hasError('required')) {
+              <mat-error>This field is required.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Date of Birth</mat-label>
+              <input formControlName="dateOfBirthCtrl" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp3"
+                placeholder="Enter your date of birth">
+              <!-- @if (DateOfBirthCtrl.invalid) { -->
+              <mat-hint>Between {{minDate.getFullYear()}} to {{maxDate.getFullYear()}}</mat-hint>
+              <!-- } -->
               <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
               <mat-datepicker #dp3 touchUi disabled="false"></mat-datepicker>
-              <!-- @if (DateOfBirthSecCtrl.hasError('required')) {
+              @if (DateOfBirthCtrl.hasError('required')) {
               <mat-error>This field is required</mat-error>
-              } -->
-            </div>
+              }
+            </mat-form-field>
+
+            <button type="submit" [disabled]="addMemberFg.invalid" mat-raised-button color="primary">Add</button>
+
           </div>
         </form>
       </div>
@@ -109,7 +149,7 @@
     <mat-tab label="ثبت نام معلم">
       <div class="div-bg-into-mat-tab">
         <form class="login-form">
-          <div class="content">
+          <!-- <div class="content">
 
             <div class="div-title-radio-input">
               <span class="title">ثبت نام معلم</span>
@@ -138,7 +178,6 @@
             </div>
 
             <div class="div-form">
-              <!-- <label>ایمیل</label> -->
               <input class="input" autoFocusDir formControlName="emailCtrl" type="email" label="Email" placeholder="ایمل خودرا وارد کنید">
               @if (EmailCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
@@ -191,17 +230,9 @@
             </div>
 
             <div class="div-form">
-              <!-- <mat-label>Date of Birth</mat-label> -->
-              <input class="input" formControlName="dateOfBirthCtrl" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp3"
-                placeholder="سال تولد ">
-              <!-- <mat-hint>Between {{minDate.getFullYear()}} to {{maxDate.getFullYear()}}</mat-hint> -->
-              <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
-              <mat-datepicker #dp3 touchUi disabled="false"></mat-datepicker>
-              <!-- @if (DateOfBirthSecCtrl.hasError('required')) {
-              <mat-error>This field is required</mat-error>
-              } -->
+              
             </div>
-          </div>
+          </div> -->
         </form>
       </div>
     </mat-tab>
@@ -209,7 +240,7 @@
     <mat-tab label="ثبت نام دانش آموز">
       <div class="div-bg-into-mat-tab">
         <form class="login-form">
-          <div class="content">
+          <!-- <div class="content">
 
             <div class="div-title-radio-input">
               <span class="title">ثبت نام دانش آموز</span>
@@ -238,7 +269,6 @@
             </div>
 
             <div class="div-form">
-              <!-- <label>ایمیل</label> -->
               <input class="input" autoFocusDir formControlName="emailCtrl" type="email" label="Email" placeholder="ایمل خودرا وارد کنید">
               @if (EmailCtrl.hasError('required')) {
               <span>!این فیلد خالی است</span>
@@ -291,17 +321,9 @@
             </div>
 
             <div class="div-form">
-              <!-- <mat-label>Date of Birth</mat-label> -->
-              <input class="input" formControlName="dateOfBirthCtrl" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp3"
-                placeholder="سال تولد ">
-              <!-- <mat-hint>Between {{minDate.getFullYear()}} to {{maxDate.getFullYear()}}</mat-hint> -->
-              <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
-              <mat-datepicker #dp3 touchUi disabled="false"></mat-datepicker>
-              <!-- @if (DateOfBirthSecCtrl.hasError('required')) {
-              <mat-error>This field is required</mat-error>
-              } -->
+              
             </div>
-          </div>
+          </div> -->
         </form>
       </div>
     </mat-tab>

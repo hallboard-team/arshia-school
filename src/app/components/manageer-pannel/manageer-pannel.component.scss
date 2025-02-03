@@ -225,6 +225,56 @@
     }
 }
 
+::ng-deep mat-form-field {
+    border: none;
+    background-color: pink;
+
+    .mat-mdc-text-field-wrapper {
+        background-color: blue;
+        border: none;
+        border-radius: 30px;
+        color: pink;
+
+        .mat-mdc-form-field-focus-overlay {
+            // background-color: greenyellow;
+            background-color: yellow;
+            border: none;
+            color: green;
+        }
+
+        .mat-mdc-form-field-flex {
+            background-color: orange;
+
+            .mat-mdc-form-field-infix {
+                background-color: black;
+
+                label {
+                    background-color: #2260ff;
+                    border: none;
+
+
+                    
+                }
+                .mat-mdc-input-element {
+                    background-color: purple;
+                    border: none;
+                    border-radius: 50px;
+
+                }
+            }
+        }
+    }
+    .mat-mdc-form-field-subscript-wrapper {
+        background-color: green;
+
+        .mat-mdc-form-field-error-wrapper {
+            background-color: brown;
+        }
+    }
+    
+    // background-color: red;
+}
+
 // ::ng-deep .mat-tab-body-wrapper,
 // ::ng-deep .mat-tab-body,
 // ::ng-deep .mat-tab-body-content {

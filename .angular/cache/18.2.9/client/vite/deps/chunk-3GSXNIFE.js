@@ -13,7 +13,7 @@ import {
   coerceNumberProperty,
   getRtlScrollAxisType,
   supportsScrollBehavior
-} from "./chunk-L432KXZJ.js";
+} from "./chunk-UB2J6SZM.js";
 import {
   DOCUMENT
 } from "./chunk-BAOIP7IO.js";
@@ -1654,22 +1654,10 @@ var ScrollingModule = class _ScrollingModule {
 })();
 
 export {
-  VIRTUAL_SCROLL_STRATEGY,
-  FixedSizeVirtualScrollStrategy,
-  _fixedSizeVirtualScrollStrategyFactory,
-  CdkFixedSizeVirtualScroll,
-  DEFAULT_SCROLL_TIME,
   ScrollDispatcher,
   CdkScrollable,
-  DEFAULT_RESIZE_TIME,
   ViewportRuler,
-  VIRTUAL_SCROLLABLE,
-  CdkVirtualScrollable,
-  CdkVirtualScrollViewport,
-  CdkVirtualForOf,
-  CdkVirtualScrollableElement,
-  CdkVirtualScrollableWindow,
   CdkScrollableModule,
   ScrollingModule
 };
-//# sourceMappingURL=chunk-KEPLIKLS.js.map
+//# sourceMappingURL=chunk-3GSXNIFE.js.map

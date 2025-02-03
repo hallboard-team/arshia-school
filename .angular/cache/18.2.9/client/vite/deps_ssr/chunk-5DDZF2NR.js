@@ -10,20 +10,18 @@ import {
   MatFormField,
   MatFormFieldControl,
   MatFormFieldModule
-} from "./chunk-KIJA6E7N.js";
+} from "./chunk-WQMWWJSV.js";
 import {
   ErrorStateMatcher,
   MatCommonModule,
-  _ErrorStateTracker
-} from "./chunk-LSAYP33R.js";
-import {
   Platform,
+  _ErrorStateTracker,
   coerceBooleanProperty,
   coerceElement,
   coerceNumberProperty,
   getSupportedInputTypes,
   normalizePassiveListenerOptions
-} from "./chunk-BNKM25UJ.js";
+} from "./chunk-2K6QWHF6.js";
 import {
   DOCUMENT
 } from "./chunk-VZTX2A42.js";
@@ -1006,4 +1004,4 @@ export {
   MatInput,
   MatInputModule
 };
-//# sourceMappingURL=chunk-2QIARUM2.js.map
+//# sourceMappingURL=chunk-5DDZF2NR.js.map

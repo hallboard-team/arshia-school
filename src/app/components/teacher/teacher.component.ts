@@ -31,52 +31,5 @@ import { AutoFocusDirective } from '../../directives/auto-focus.directive';
   styleUrl: './teacher.component.scss'
 })
 export class TeacherComponent {
-  teacherService = inject(TeacherService);
-  accountService = inject(AccountService);
-
-  fb = inject(FormBuilder);
-  loggedInUser: LoggedInUser | null | undefined;
-
-  constructor() {
-    this.loggedInUser = this.accountService.loggedInUserSig();
-  }
-
-  addAttendencFg = this.fb.group({
-    userNameCtrl: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(30)]],
-    daysOfWeekCtrl: ['', [Validators.required]],
-    dateCtrl: ['', [Validators.required]],
-    absentOrPresentCtrl: ['', [Validators.required]],
-  })
-
-  get UserNameCtrl(): FormControl {
-    return this.addAttendencFg.get('userNameCtrl') as FormControl;
-  }
-  get DaysOfWeekCtrl(): FormControl {
-    return this.addAttendencFg.get('daysOfWeekCtrl') as FormControl;
-  }
-  get DateCtrl(): FormControl {
-    return this.addAttendencFg.get('dateCtrl') as FormControl;
-  }
-  get AbsentOrPresentCtrl(): FormControl {
-    return this.addAttendencFg.get('absentOrPresentCtrl') as FormControl;
-  }
-
-  addAttendence(): void {
-    if (this.UserNameCtrl)
-    {
-      let addAttendence: AddAttendence = {
-        userName: this.UserNameCtrl.value,
-        daysOfWeek: this.DaysOfWeekCtrl.value,
-        date: this.DateCtrl.value,
-        absentOrPresent: this.AbsentOrPresentCtrl.value
-      }
-      this.teacherService.addAttendence(addAttendence).subscribe({
-        next: user => console.log(user),
-      });
-      
-    }
-    else {
-      return console.log("userName has error");
-    }
-  }
+  
 } 
