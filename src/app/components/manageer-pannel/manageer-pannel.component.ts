@@ -80,7 +80,7 @@ export class ManageerPannelComponent implements OnInit, OnDestroy{
     lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
     phoneNumCtrl: ['', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
     dateOfBirthCtrl: ['', [Validators.required]],
-    genderCtrl: ['female', [Validators.required]]
+    genderCtrl: ['', [Validators.required]]
   })
 
   get GenderCtrl(): FormControl {

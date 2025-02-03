@@ -38,6 +38,7 @@
                     justify-content: center;
                     align-items: center;
                     width: 100%;
+                    margin-top: 1rem;
 
                     .title {
                         font-size: 20px;
@@ -172,11 +173,38 @@
                         background: #e0e0e0;
                         box-shadow: inset 5px 5px 10px #cecece,
                             inset -5px -5px 10px #f2f2f2;
-                        direction: rtl;
+                        // direction: rtl;
                     }
-                    span {
+                    mat-label {
+                        font-size: 15px;
+                        font-weight: 800;
+                        color: black;
+                    } 
+                    mat-hint {
+                        font-size: 12px;
+                    }
+                    mat-error {
                         color: red;
                         font-size: 12px;
+                    }
+                }
+                
+                .div-btn-add {
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin-bottom: 1rem;
+
+                    button {
+                        border-radius: 10px;
+                        border: none;
+                        height: 40px;
+                        width: 120px;
+                        // background-color: red;
+                        // background: linear-gradient(145deg, #0084ff, #006fe6);
+                        // box-shadow:  5px 5px 10px #0057b5,
+                        //     -5px -5px 10px #009fff;
                     }
                 }
             }
@@ -226,63 +254,50 @@
 }
 
 ::ng-deep mat-form-field {
-    border: none;
-    background-color: pink;
+    // border: none;
+    // background-color: pink;
+    border-radius: 10px;
+    background: #e0e0e0;
+    box-shadow: inset 5px 5px 10px #9f9f9f,
+                inset -5px -5px 10px #ffffff;
 
-    .mat-mdc-text-field-wrapper {
-        background-color: blue;
-        border: none;
-        border-radius: 30px;
-        color: pink;
+    // .mat-mdc-text-field-wrapper {
+    //     background-color: blue;
+    //     border: none;
+    //     border-radius: 30px;
+    //     color: pink;
 
-        .mat-mdc-form-field-focus-overlay {
-            // background-color: greenyellow;
-            background-color: yellow;
-            border: none;
-            color: green;
-        }
+    //     .mat-mdc-form-field-focus-overlay {
+    //         // background-color: greenyellow;
+    //         background-color: yellow;
+    //         border: none;
+    //         color: green;
+    //     }
 
-        .mat-mdc-form-field-flex {
-            background-color: orange;
+    //     .mat-mdc-form-field-flex {
+    //         background-color: orange;
 
-            .mat-mdc-form-field-infix {
-                background-color: black;
+    //         .mat-mdc-form-field-infix {
+    //             background-color: black;
 
-                label {
-                    background-color: #2260ff;
-                    border: none;
+    //             label {
+    //                 background-color: #2260ff;
+    //                 border: none;
+    //             }
+    //             .mat-mdc-input-element {
+    //                 background-color: purple;
+    //                 border: none;
+    //                 border-radius: 50px;
 
+    //             }
+    //         }
+    //     }
+    // }
+    // .mat-mdc-form-field-subscript-wrapper {
+    //     background-color: green;
 
-                    
-                }
-                .mat-mdc-input-element {
-                    background-color: purple;
-                    border: none;
-                    border-radius: 50px;
-
-                }
-            }
-        }
-    }
-    .mat-mdc-form-field-subscript-wrapper {
-        background-color: green;
-
-        .mat-mdc-form-field-error-wrapper {
-            background-color: brown;
-        }
-    }
-    
-    // background-color: red;
+    //     .mat-mdc-form-field-error-wrapper {
+    //         background-color: brown;
+    //     }
+    // }
 }
-
-// ::ng-deep .mat-tab-body-wrapper,
-// ::ng-deep .mat-tab-body,
-// ::ng-deep .mat-tab-body-content {
-//     overflow: hidden !important;
-//     visibility: hidden;
-// }
-// ::ng-deep mat-tab-group {
-//     height: auto !important;
-//     background-color: blue !important;
-//     visibility: hidden;
-// }
