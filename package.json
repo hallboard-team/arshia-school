@@ -25,6 +25,7 @@
     "@angular/ssr": "^18.1.4",
     "express": "^4.18.2",
     "gulp": "^5.0.0",
+    "ngx-spinner": "^17.0.0",
     "rxjs": "~7.8.0",
     "tinycolor2": "^1.1.1",
     "tslib": "^2.3.0",

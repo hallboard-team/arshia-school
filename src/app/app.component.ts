@@ -4,12 +4,13 @@ import { FooterComponent } from './components/footer/footer.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { AccountService } from './services/account.service';
 import { isPlatformBrowser } from '@angular/common';
+import { NgxSpinnerModule } from "ngx-spinner";
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterModule, RouterOutlet,
+    RouterModule, RouterOutlet, NgxSpinnerModule,
     NavbarComponent, FooterComponent
   ],
   templateUrl: './app.component.html',
