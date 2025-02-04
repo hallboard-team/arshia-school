@@ -1519,6 +1519,7 @@ main {
         margin-top: 6rem;
         height: 85vh;
         position: relative;
+        overflow-x: clip;
 
         img {
             height: 100%;
@@ -1834,60 +1835,61 @@ main {
         }
     }
 
-    /* From Uiverse.io by MikeAndrewDesigner */ 
-    .e-card {
-        margin: 100px auto;
-        background: transparent;
-        box-shadow: 0px 8px 28px -9px rgba(0,0,0,0.45);
-        position: relative;
-        width: 240px;
-        height: 330px;
-        border-radius: 16px;
-        overflow: hidden;
-    }
+    .background-card {
+        background-color: red;
+        height: 85vh;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .card {
+            // margin: 100px auto;
+            background: transparent;
+            box-shadow: 0px 8px 28px -9px rgba(0,0,0,0.45);
+            position: relative;
+            width: 90%;
+            height: 85%;
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: blue;
+            
+            .wave {
+                position: absolute;
+                width: 340px;
+                height: 400px;
+                opacity: 0.6;
+                left: 0;
+                top: 0;
+                margin-left: -50%;
+                margin-top: -70%;
+                background: linear-gradient(744deg,#af40ff,#5b42f3 60%,#00ddeb);
+            }
+            .wave:nth-child(2),
+            .wave:nth-child(3) {
+                top: 210px;
+             }
+            .infotop {
+                text-align: center;
+                font-size: 20px;
+                position: absolute;
+                top: 5.6em;
+                left: 0;
+                right: 0;
+                color: rgb(255, 255, 255);
+                font-weight: 600;
     
-    .wave {
-        position: absolute;
-        width: 540px;
-        height: 700px;
-        opacity: 0.6;
-        left: 0;
-        top: 0;
-        margin-left: -50%;
-        margin-top: -70%;
-        background: linear-gradient(744deg,#af40ff,#5b42f3 60%,#00ddeb);
+                .name {
+                    font-size: 14px;
+                    font-weight: 100;
+                    position: relative;
+                    top: 1em;
+                    text-transform: lowercase;
+                }
+            }
+        }
     }
-    
-    .icon {
-        width: 3em;
-        margin-top: -1em;
-        padding-bottom: 1em;
-    }
-    
-    .infotop {
-        text-align: center;
-        font-size: 20px;
-        position: absolute;
-        top: 5.6em;
-        left: 0;
-        right: 0;
-        color: rgb(255, 255, 255);
-        font-weight: 600;
-    }
-    
-    .name {
-        font-size: 14px;
-        font-weight: 100;
-        position: relative;
-        top: 1em;
-        text-transform: lowercase;
-    }
-    
-    .wave:nth-child(2),
-    .wave:nth-child(3) {
-        top: 210px;
-    }
-    
+
     .playing .wave {
         border-radius: 40%;
         animation: wave 3000ms infinite linear;
