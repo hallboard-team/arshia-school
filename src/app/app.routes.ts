@@ -9,11 +9,11 @@ import { AddDiscriptionComponent } from './components/add-discription/add-discri
 import { AdminComponent } from './components/admin/admin.component';
 import { ManageerPannelComponent } from './components/manageer-pannel/manageer-pannel.component';
 import { SecretaryComponent } from './components/secretary/secretary.component';
-import { TeacherComponent } from './components/teacher/teacher.component';
 import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
 import { UserEditComponent } from './components/user/user-edit/user-edit.component';
 import { AboutUsComponent } from './components/about-us/about-us.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { TeacherPanelComponent } from './components/teacher-panel/teacher-panel.component';
 // import { MessagesComponent } from './components/messages/messages.component';
 // import { NoAccessComponent } from './components/errors/no-access/no-access.component';
 // import { NotFoundComponent } from './components/errors/not-found/not-found.component';
@@ -37,6 +37,7 @@ export const routes: Routes = [
             // { path: 'پروفایل', component: UserProfileComponent },
             // { path: 'add-discription', component: AddDiscriptionComponent },
             { path: 'manager-panell', component: ManageerPannelComponent },
+            { path: 'teacher-panel-new', component: TeacherPanelComponent },
             // { path: 'منشی', component: SecretaryComponent },
             // { path: 'معلم', component: TeacherComponent },
             // { path: 'user/user-edit', component: UserEditComponent },

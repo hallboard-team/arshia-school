@@ -9,9 +9,12 @@
                         <button class="btn" [routerLink]="['/' + 'manager-panell']" routerLinkActive #rla="routerLinkActive">پنل-مدیر</button>
                     }
                     @if (loggedInUserSig()?.roles?.includes('teacher')) {
-                        <!-- <button class="btn" [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive">خانه</button> -->
-                        <!-- <button class="btn" [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">دوره ها</button> -->
-                        <button class="btn" [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">پنل-معلم</button>
+                        <button class="btn" [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive">خانه</button>
+                        <button class="btn" [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">پروفایل</button>
+                        <button class="btn" [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">دوره ها</button>
+                        <button class="btn" [routerLink]="['/' + 'about']" routerLinkActive #rla="routerLinkActive">درباره ما</button>
+                        <button class="btn" [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">تماس با ما</button>
+                        <button class="btn" [routerLink]="['/' + 'teacher-panel']" routerLinkActive #rla="routerLinkActive">پنل-معلم</button>
                     } 
                     <!-- @if (loggedInUserSig()?.roles?.includes('student')) {
                         <button class="btn" [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive">خانه</button>
@@ -75,7 +78,7 @@
                     <button [routerLink]="['/' + 'manager-panell']" routerLinkActive #rla="routerLinkActive">پنل-مدیر</button>
                 }
                 @if (loggedInUserSig()?.roles?.includes('teacher')) {
-                    <button [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">پنل-معلم</button>
+                    <button [routerLink]="['/' + 'teacher-panel-new']" routerLinkActive #rla="routerLinkActive">پنل-معلم</button>
                 } 
                 <!-- @if (loggedInUserSig()?.roles?.includes('student')) { -->
                     <!-- <button class="btn" [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive">خانه</button> -->

@@ -8,6 +8,7 @@ import { LoggedInUser } from '../models/logged-in-user.model';
 import { RegisterUser } from '../models/register-user.model';
 import { AddAttendence } from '../models/add-attendence.model';
 import { ApiResponse } from '../models/helpers/apiResponse.model';
+import { Course } from '../models/course.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,10 @@ export class TeacherService {
   private readonly _teaherApiUrl = environment.apiUrl + 'teacher/';
 
   loggedInUserSig = signal<LoggedInUser | null>(null);
+
+  getCourse(): Observable<Course[] | undefined> {
+    return this._http.get<Course[]>(this._teaherApiUrl + 'get-course/');
+  }
 
   addAttendence(teacherInput: AddAttendence): Observable<ApiResponse | null> {
     return this._http.post<ApiResponse>(this._teaherApiUrl + 'add-attendence', teacherInput)
