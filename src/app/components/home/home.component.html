@@ -91,60 +91,20 @@
                         </div>
                     </div>
 
-                    <div class="div-menu-button">
-                        <button class="menu-button" (click)="openMenu()">
-                            <mat-icon>menu</mat-icon>
-                        </button>
-                    </div>
-
-                    <div class="hamburger-menu">
-                        <div class="top">
-                            <button class="Btn" (click)="closeMenu()">
-                                <div class="sign">
-                                    <svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg>
-                                </div>
-                        
-                                <div class="text">خروج</div>
-                            </button>
-                        </div>
-                
-                        <div class="bottom">
-                            @if (loggedInUserSig && loggedInUserSig()) {
-                                @if (loggedInUserSig()?.roles?.includes('manager')) {
-                                    <button [routerLink]="['/' + 'manager-panell']" routerLinkActive #rla="routerLinkActive">پنل-مدیر</button>
-                                }
-                                @if (loggedInUserSig()?.roles?.includes('teacher')) {
-                                    <button [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">پنل-معلم</button>
-                                } 
-                                <!-- @if (loggedInUserSig()?.roles?.includes('student')) { -->
-                                    <!-- <button class="btn" [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive">خانه</button> -->
-                                    <!-- <button class="btn" [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">پروفایل</button> -->
-                                    <!-- <button class="btn" [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">دوره ها</button> -->
-                                    <!-- <button class="btn" [routerLink]="['/' + 'about']" routerLinkActive #rla="routerLinkActive">درباره ما</button> -->
-                                    <!-- <button class="btn" [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">تماس با ما</button> -->
-                                @else {
-                                    <button [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive">خانه</button>
-                                    <button [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">پروفایل</button>
-                                    <button [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">دوره ها</button>
-                                    <button [routerLink]="['/' + 'about']" routerLinkActive #rla="routerLinkActive">درباره ما</button>
-                                    <button [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">تماس با ما</button>
-                                }
-                            }@else {
-                                <button [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive">خانه</button>
-                                <button [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">دوره ها</button>
-                                <button [routerLink]="['/' + 'about']" routerLinkActive #rla="routerLinkActive">درباره ما</button>
-                                <button [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">تماس با ما</button>
-                            } 
-                        </div>
-                    </div>
-
-                    <section class="left">
+                    <div class="left">
                         @if (loggedInUserSig && loggedInUserSig(); as user) {
                             <div class="div-btn-log-out">
-                                <button (click)="logout()">
+                                <!-- <button (click)="logout()">
                                     <span>خروج</span>
+                                </button> -->
+                                <button class="exit">
+                                    <span class="circle" aria-hidden="true">
+                                    <span class="icon arrow"></span>
+                                    </span>
+                                    <span class="button-text">خروج</span>
                                 </button>
                             </div>
+
                         }
                         @else {
                             <div class="div-btns">
@@ -155,7 +115,7 @@
                                 </button>
                             </div>
                         }
-                    </section>
+                    </div>
                 </nav>
             </div>
         </div>
@@ -309,6 +269,13 @@
                 <span class="p5">از مبتدی تا</span>
                 <span class="p6">پیشرفته</span>
             </div>
+
+            <div class="div-background-matn-tablet">
+                <span class="p1"> آموزش برنامه نویسی</span>
+                <span class="p2">و</span>
+                <span class="p3">طراحی وبسایت</span>
+                <span class="p4">از مبتدی تا پیشرفته</span>
+            </div>
             
             <div class="wave"></div>
             <div class="wave"></div>
@@ -316,10 +283,63 @@
         </div>
     </div>
 
-    <!-- <div class="right-items">
-        <img src="../assets/images/phonePhoto.png" alt="">
-        <img class="background" src="../assets/images/homePicture1.jpeg" alt="">
-        <img class="background" src="../assets/images/cloudAiPhoto3.jpg" alt="">
-    </div> -->
+    <div class="div-items-matn-cube">
+        <div class="div-background-neum">
+            <span>چرا مارو انتخاب کنید؟</span>
 
+            <div class="div-images">
+                <div class="neu-style">
+                    <img src="../assets/images/homeImage1NoB.png" alt="">
+                </div>
+                <div class="neu-style">
+                    <img src="../assets/images/homeImage4NoB.png" alt="">
+                </div>
+            </div>
+        </div>
+
+        <div class="cube-loader">
+            <div class="cube-top">
+            </div>
+            <div class="cube-wrapper">
+            <span style="--i:0" class="cube-span">
+                <img src="../assets/images/angularIcon.png" alt="">
+            </span>
+            <span style="--i:1" class="cube-span">
+                <img src="../assets/images/typeScriptIcon.png" alt="">
+            </span>
+            <span style="--i:2" class="cube-span">
+                <img src="../assets/images/cSharpIcon.png" alt="">
+            </span>
+            <span style="--i:3" class="cube-span">
+                <img src="../assets/images/cSharpIcon.png" alt="">
+            </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="div-cards">
+        <div class="card">
+            <span>ورود سریع به بازار  کار</span>
+            <div class="div-photo">
+                <img src="../assets/images/cardHomePic1.png" alt="">
+            </div>
+            <button>شروع کن</button>
+        </div>
+
+        <div class="card">
+            <span>پروژه های تخصصی</span>
+            <div class="div-photo">
+                <img src="../assets/images/cardHomePic2.png" alt="">
+            </div>
+            <button>شروع کن</button>
+        </div>
+
+        <div class="card">
+            <span>شروع از صفر</span>
+            <div class="div-photo">
+                <img src="../assets/images/cardHomePic3.png" alt="">
+            </div>
+            <button>شروع کن</button>
+        </div>
+    </div>
 </section>
