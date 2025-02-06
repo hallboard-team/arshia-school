@@ -94,10 +94,7 @@
                     <div class="left">
                         @if (loggedInUserSig && loggedInUserSig(); as user) {
                             <div class="div-btn-log-out">
-                                <!-- <button (click)="logout()">
-                                    <span>خروج</span>
-                                </button> -->
-                                <button class="exit">
+                                <button class="exit" (click)="logout()">
                                     <span class="circle" aria-hidden="true">
                                     <span class="icon arrow"></span>
                                     </span>
