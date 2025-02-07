@@ -14,7 +14,8 @@ import { UserEditComponent } from './components/user/user-edit/user-edit.compone
 import { AboutUsComponent } from './components/about-us/about-us.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { TeacherComponent } from './components/teacher/teacher.component';
-import { StudentsComponent } from './components/students/students.component';
+import { StudentCardComponent } from './components/students/student-card/student-card.component';
+import { StudentListComponent } from './components/students/student-list/student-list.component';
 // import { MessagesComponent } from './components/messages/messages.component';
 // import { NoAccessComponent } from './components/errors/no-access/no-access.component';
 // import { NotFoundComponent } from './components/errors/not-found/not-found.component';
@@ -39,7 +40,7 @@ export const routes: Routes = [
             // { path: 'add-discription', component: AddDiscriptionComponent },
             { path: 'manager-panell', component: ManageerPannelComponent },
             { path: 'teacher-panel', component: TeacherComponent},
-            { path: 'students/:courseId', component: StudentsComponent},
+            { path: 'students-card/:courseTitle', component: StudentListComponent},
 
             // { path: 'منشی', component: SecretaryComponent },
             // { path: 'معلم', component: TeacherComponent },

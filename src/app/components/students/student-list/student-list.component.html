@@ -1,0 +1,24 @@
+<p>student-list works!</p>
+
+<section class="students-container">
+    <h1>Students</h1>
+    <div class="students">
+        @for (student of students; track $index) {
+        <app-student-card [studentInput]="student"></app-student-card>
+        }
+    </div>
+    @if (pagination && memberParams) {
+    <mat-paginator #paginator (page)="handlePageEvent($event)" 
+        [length]="pagination.totalItems"
+        [pageSize]="memberParams.pageSize" 
+        [disabled]="false" 
+        [showFirstLastButtons]="true"
+        [pageSizeOptions]="true ? pageSizeOptions : []" 
+        [hidePageSize]="false"
+        [pageIndex]="memberParams.pageNumber - 1" 
+        aria-label="Select page" 
+        class="paginator">
+        <!-- pageIndex must start from 0 -->
+    </mat-paginator>
+    }
+</section>

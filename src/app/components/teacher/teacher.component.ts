@@ -50,13 +50,13 @@ export class TeacherComponent implements OnInit, OnDestroy{
     });
   }
 
-  getStudentsByCourseId(courseId: string): void {
-    this.selectedCourse = courseId;
-    this.teacherService.getStudents(courseId).subscribe({
-      next: (res: Member[]) => {
-        this.students = res;
-      },
-      error: (err) => console.error('خطا در دریافت دانش‌آموزان:', err)
-    });
-  }
+  // getStudentsByCourseId(courseId: string): void {
+  //   this.selectedCourse = courseId;
+  //   this.teacherService.getStudents(courseId).subscribe({
+  //     next: (res: Member[]) => {
+  //       this.students = res;
+  //     },
+  //     error: (err) => console.error('خطا در دریافت دانش‌آموزان:', err)
+  //   });
+  // }
 }

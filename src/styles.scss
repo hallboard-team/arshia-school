@@ -1,31 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-/* Neumorphism effect for cards */
-.neumorph {
-    box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.1), -8px -8px 15px rgba(255, 255, 255, 0.7);
-    background: #e0e5ec;
-    border-radius: 20px;
-}
-
-/* Neumorphism effect for buttons */
-.neumorph-btn {
-    box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1), -4px -4px 6px rgba(255, 255, 255, 0.7);
-    background: #e0e5ec;
-    border-radius: 12px;
-    transition: all 0.3s ease-in-out;
-}
-
-.neumorph-btn:hover {
-    box-shadow: inset 4px 4px 6px rgba(0, 0, 0, 0.1), inset -4px -4px 6px rgba(255, 255, 255, 0.7);
-}
-
 body {
-    
+    width: 100%;
     background-color: #e0e0e0;
-    
+}
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 // html, body { height: 100%; }
 // body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

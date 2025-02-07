@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -10,6 +10,9 @@ import { AddAttendence } from '../models/add-attendence.model';
 import { ApiResponse } from '../models/helpers/apiResponse.model';
 import { Course } from '../models/course.model';
 import { Member } from '../models/member.model';
+import { MemberParams } from '../models/helpers/member-params';
+import { PaginatedResult } from '../models/helpers/paginatedResult';
+import { PaginationHandler } from '../extensions/paginationHandler';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +24,7 @@ export class TeacherService {
   private snackBar = inject(MatSnackBar);
 
   private readonly _teaherApiUrl = environment.apiUrl + 'teacher/';
+  private paginationHandler = new PaginationHandler();
 
   loggedInUserSig = signal<LoggedInUser | null>(null);
 
@@ -28,8 +32,16 @@ export class TeacherService {
     return this._http.get<Course[]>(this._teaherApiUrl + 'get-course');
   }
 
-  getStudents(courseId: string): Observable<Member[]> {
-    return this._http.get<Member[]>(this._teaherApiUrl + 'get-student/' + courseId);
+  getStudents(memberParams: MemberParams, targetTitle: string): Observable<PaginatedResult<Member[]>> {
+    let params = new HttpParams();
+
+    if (memberParams) {
+      params = params.append('pageNumber', memberParams.pageNumber);
+      params = params.append('pageSize', memberParams.pageSize);
+    }
+
+    // Use this generic method and make it reusable for all components.
+    return this.paginationHandler.getPaginatedResult<Member[]>(this._teaherApiUrl + 'get-student/' + targetTitle, params);
   }
 
   addAttendence(teacherInput: AddAttendence): Observable<ApiResponse | null> {
