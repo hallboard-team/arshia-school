@@ -1,4 +1,31 @@
-<h1 class="text-3xl font-bold text-blue-500">سلام، این یک تست از Tailwind در Angular است!</h1>
+<section class="min-h-screen bg-gray-200 p-6 flex flex-col items-center">
+    <header class="flex justify-between items-center bg-white shadow-2xl p-4 rounded-3xl w-full max-w-4xl mb-6 neumorph">
+        <h1 class="text-2xl font-semibold text-gray-700">پنل معلم</h1>
+        <button class="bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg neumorph-btn hover:bg-red-600 transition">
+            خروج
+        </button>
+    </header>
+
+    <div class="mt-6 text-center">
+        <h2 class="text-3xl font-bold text-gray-800">درس‌های شما</h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8 w-full max-w-6xl">
+        <div *ngFor="let course of courses" class="bg-white shadow-xl rounded-3xl p-6 text-center transform hover:scale-105 transition duration-300 neumorph">
+            <h3 class="text-xl font-semibold text-indigo-600">{{ course.title }}</h3>
+            <p class="text-gray-700 mt-2">🕒 مدت دوره: {{ course.hours }} ساعت</p>
+            <p class="text-gray-700">📅 روزهای دوره: {{ course.days }}</p>
+            <p class="text-gray-700">⏳ ساعت به ازای هر کلاس: {{ course.hoursPerClass }}</p>
+            <span class="block mt-2 font-bold text-green-500" *ngIf="course.isStarted">در حال اجرا ✅</span>
+            <span class="block mt-2 font-bold text-red-500" *ngIf="!course.isStarted">هنوز شروع نشده ❌</span>
+
+            <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg neumorph-btn hover:bg-blue-600 transition">
+                مشاهده دانش‌آموزان 📚
+            </button>
+        </div>
+    </div>
+</section>
+
 <!-- <section class="main-section">
     <header>
         <nav>

@@ -4,23 +4,28 @@ import { Course } from '../../models/course.model';
 import { TeacherService } from '../../services/teacher.service';
 import { response } from 'express';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { Member } from '../../models/member.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-teacher',
   standalone: true,
   imports: [
-    NavbarComponent
+    NavbarComponent, CommonModule
   ],
   templateUrl: './teacher.component.html',
   styleUrl: './teacher.component.scss'
 })
 export class TeacherComponent implements OnInit, OnDestroy{
   teacherService = inject(TeacherService);
+
   courses$: Observable<Course[] | null> | undefined;
   courses: Course[] | undefined;
+
   subscribed: Subscription | undefined;
 
-  // private platformId = inject(PLATFORM_ID);
+  students: Member[] = []; 
+  selectedCourse: string | null = null;
   
   ngOnInit(): void {
     this.getAllCourses();
@@ -41,6 +46,16 @@ export class TeacherComponent implements OnInit, OnDestroy{
         error: (err) => {
             console.error('Error fetching courses:', err);
         }
+    });
+  }
+
+  getStudentsByCourseId(courseId: string): void {
+    this.selectedCourse = courseId;
+    this.teacherService.getStudents(courseId).subscribe({
+      next: (res: Member[]) => {
+        this.students = res;
+      },
+      error: (err) => console.error('خطا در دریافت دانش‌آموزان:', err)
     });
   }
 }

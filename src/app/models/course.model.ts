@@ -1,5 +1,5 @@
 export interface Course {
-    // id: string;
+    id: string;
     title: string;
     // List<ObjectId> ProfessorsIds, //132342344
     // int Tuition, //6_000_000t

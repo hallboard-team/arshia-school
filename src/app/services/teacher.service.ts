@@ -9,6 +9,7 @@ import { RegisterUser } from '../models/register-user.model';
 import { AddAttendence } from '../models/add-attendence.model';
 import { ApiResponse } from '../models/helpers/apiResponse.model';
 import { Course } from '../models/course.model';
+import { Member } from '../models/member.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +26,10 @@ export class TeacherService {
 
   getCourse(): Observable<Course[]> {
     return this._http.get<Course[]>(this._teaherApiUrl + 'get-course');
+  }
+
+  getStudents(courseId: string): Observable<Member[]> {
+    return this._http.get<Member[]>(this._teaherApiUrl + 'get-student/' + courseId);
   }
 
   addAttendence(teacherInput: AddAttendence): Observable<ApiResponse | null> {
