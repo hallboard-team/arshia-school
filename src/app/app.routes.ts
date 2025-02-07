@@ -13,7 +13,7 @@ import { UserProfileComponent } from './components/user/user-profile/user-profil
 import { UserEditComponent } from './components/user/user-edit/user-edit.component';
 import { AboutUsComponent } from './components/about-us/about-us.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { TeacherPanelComponent } from './components/teacher-panel/teacher-panel.component';
+import { TeacherComponent } from './components/teacher/teacher.component';
 // import { MessagesComponent } from './components/messages/messages.component';
 // import { NoAccessComponent } from './components/errors/no-access/no-access.component';
 // import { NotFoundComponent } from './components/errors/not-found/not-found.component';
@@ -37,7 +37,7 @@ export const routes: Routes = [
             // { path: 'پروفایل', component: UserProfileComponent },
             // { path: 'add-discription', component: AddDiscriptionComponent },
             { path: 'manager-panell', component: ManageerPannelComponent },
-            { path: 'teacher-panel-new', component: TeacherPanelComponent },
+            { path: 'teacher-panel', component:  TeacherComponent},
             // { path: 'منشی', component: SecretaryComponent },
             // { path: 'معلم', component: TeacherComponent },
             // { path: 'user/user-edit', component: UserEditComponent },

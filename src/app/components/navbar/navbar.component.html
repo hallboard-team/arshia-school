@@ -78,7 +78,12 @@
                     <button [routerLink]="['/' + 'manager-panell']" routerLinkActive #rla="routerLinkActive">پنل-مدیر</button>
                 }
                 @if (loggedInUserSig()?.roles?.includes('teacher')) {
-                    <button [routerLink]="['/' + 'teacher-panel-new']" routerLinkActive #rla="routerLinkActive">پنل-معلم</button>
+                    <button [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive">خانه</button>
+                    <button [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">پروفایل</button>
+                    <button [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">دوره ها</button>
+                    <button [routerLink]="['/' + 'about']" routerLinkActive #rla="routerLinkActive">درباره ما</button>
+                    <button [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">تماس با ما</button>
+                    <button [routerLink]="['/' + 'teacher-panel']" routerLinkActive #rla="routerLinkActive">پنل-معلم</button>
                 } 
                 <!-- @if (loggedInUserSig()?.roles?.includes('student')) { -->
                     <!-- <button class="btn" [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive">خانه</button> -->

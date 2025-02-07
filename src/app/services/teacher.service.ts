@@ -23,8 +23,8 @@ export class TeacherService {
 
   loggedInUserSig = signal<LoggedInUser | null>(null);
 
-  getCourse(): Observable<Course[] | undefined> {
-    return this._http.get<Course[]>(this._teaherApiUrl + 'get-course/');
+  getCourse(): Observable<Course[]> {
+    return this._http.get<Course[]>(this._teaherApiUrl + 'get-course');
   }
 
   addAttendence(teacherInput: AddAttendence): Observable<ApiResponse | null> {
