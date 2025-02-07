@@ -6,12 +6,13 @@ import { response } from 'express';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { Member } from '../../models/member.model';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-teacher',
   standalone: true,
   imports: [
-    NavbarComponent, CommonModule
+    NavbarComponent, CommonModule, RouterModule
   ],
   templateUrl: './teacher.component.html',
   styleUrl: './teacher.component.scss'
