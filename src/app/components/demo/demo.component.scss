@@ -32,3 +32,23 @@
     }
   }
   
+.container {
+  background-color: red;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+.container1 {
+  background-color: rgba(0, 128, 0, 0.603);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+
+  .row {
+    background-color: red;
+  }
+}

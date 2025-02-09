@@ -4,3 +4,9 @@ export interface AddAttendence {
     date: string;
     absentOrPresent: string;
 }
+
+export interface AddAttendenceDemo {
+    userName: string;
+    time: string;
+    absentOrPresent: string;
+}

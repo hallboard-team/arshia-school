@@ -6,6 +6,10 @@ import {
 } from "./chunk-P3QTZYXF.js";
 import "./chunk-4OOAO73B.js";
 import {
+  MatButton,
+  MatButtonModule
+} from "./chunk-X3SRJTXG.js";
+import {
   BasePortalOutlet,
   CdkPortalOutlet,
   ComponentPortal,
@@ -20,10 +24,6 @@ import {
   trigger
 } from "./chunk-RHNKJY7L.js";
 import "./chunk-OQMZNAO6.js";
-import {
-  MatButton,
-  MatButtonModule
-} from "./chunk-X3SRJTXG.js";
 import {
   BreakpointObserver,
   Breakpoints,

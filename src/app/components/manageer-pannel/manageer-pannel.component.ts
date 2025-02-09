@@ -82,7 +82,7 @@ export class ManageerPannelComponent implements OnInit, OnDestroy{
     dateOfBirthCtrl: ['', [Validators.required]],
     genderCtrl: ['', [Validators.required]]
   })
-
+  
   get GenderCtrl(): FormControl {
     return this.addMemberFg.get('genderCtrl') as FormControl;
   }
