@@ -5,7 +5,6 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { AccountService } from './services/account.service';
 import { isPlatformBrowser } from '@angular/common';
 import { NgxSpinnerModule } from "ngx-spinner";
-
 @Component({
   selector: 'app-root',
   standalone: true,

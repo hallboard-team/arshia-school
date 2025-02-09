@@ -1,8 +1,8 @@
 import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   Title
-} from "./chunk-WAOLF6IJ.js";
-import "./chunk-P5GWU64E.js";
+} from "./chunk-HTY7NTQM.js";
+import "./chunk-AUVTLKCH.js";
 import {
   DOCUMENT,
   HashLocationStrategy,
@@ -11,7 +11,7 @@ import {
   LocationStrategy,
   PathLocationStrategy,
   ViewportScroller
-} from "./chunk-VZTX2A42.js";
+} from "./chunk-423NJ3L7.js";
 import {
   APP_BOOTSTRAP_LISTENER,
   APP_INITIALIZER,
@@ -79,7 +79,7 @@ import {
   ɵɵloadQuery,
   ɵɵqueryRefresh,
   ɵɵsanitizeUrlOrResourceUrl
-} from "./chunk-Q3R2RZWL.js";
+} from "./chunk-LMIDRGFX.js";
 import {
   require_cjs
 } from "./chunk-2H3L6IVL.js";
@@ -5583,7 +5583,7 @@ function mapToCanDeactivate(providers) {
 function mapToResolve(provider) {
   return (...params) => inject(provider).resolve(...params);
 }
-var VERSION = new Version("18.2.8");
+var VERSION = new Version("18.2.13");
 export {
   ActivatedRoute,
   ActivatedRouteSnapshot,
@@ -5667,7 +5667,7 @@ export {
 
 @angular/router/fesm2022/router.mjs:
   (**
-   * @license Angular v18.2.8
+   * @license Angular v18.2.13
    * (c) 2010-2024 Google LLC. https://angular.io/
    * License: MIT
    *)

@@ -27,41 +27,31 @@ import { HashedUserId } from '../../../models/helpers/hashed-user-id.model';
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss'
 })
-export class UserProfileComponent implements OnInit{
-  private memberService = inject(MemberService);
-  private fb = inject(FormBuilder);
-  private matSnak = inject(MatSnackBar);
-  private platfromId = inject(PLATFORM_ID);
+export class UserProfileComponent{
+  // private memberService = inject(MemberService);
+  // private fb = inject(FormBuilder);
+  // private matSnak = inject(MatSnackBar);
+  // private platfromId = inject(PLATFORM_ID);
 
-  subscribedMember: Subscription | undefined;
-  user: UserProfile | undefined;
-  hashedUserId: HashedUserId | undefined;
+  // subscribedMember: Subscription | undefined;
+  // user: UserProfile | undefined;
+  // hashedUserId: HashedUserId | undefined;
 
-  ngOnInit(): void {
-    this.hashedUserId;
+  // ngOnInit(): void {
+  //   this.hashedUserId;
 
-    this.getUser();
-  }
+  //   this.getUser();
+  // }
 
-  getUser(): void {
-    if (this.hashedUserId) {
-      this.subscribedMember = this.memberService.getProfile(this.hashedUserId).pipe(take(1))
-      .subscribe(user => {
-        next: (user: UserProfile) => {
-            this.user;
-        }
-      });
-      // const loggedInUserStr: string | null = localStorage.getItem('loggedInUser');
-
-      // if (loggedInUserStr) {
-      //   const loggedInUser: LoggedInUser = JSON.parse(loggedInUserStr);
-
-      //   this.memberService.getProfile(loggedInUser)?.pipe(take(1)).subscribe(user => {
-      //     if (user?.userName) {
-      //       this.user;
-      //     }
-      //   });
-      // }
-    }
-  }
+  // getUser(): void {
+  //   if (this.hashedUserId) {
+  //     this.subscribedMember = this.memberService.getProfile(this.hashedUserId).pipe(take(1))
+  //     .subscribe(user => {
+  //       next: (user: UserProfile) => {
+  //           this.user;
+  //       }
+  //     });
+      
+  //   }
+  // }
 }

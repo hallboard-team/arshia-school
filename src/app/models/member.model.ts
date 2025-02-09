@@ -7,5 +7,5 @@ export interface Member {
     lesson: string;
     gender: string;
     age: number;
-    password: string;
+    // password: string;
 }

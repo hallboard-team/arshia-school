@@ -1,21 +1,36 @@
 import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   MAT_INPUT_VALUE_ACCESSOR
-} from "./chunk-CQW3F7EV.js";
+} from "./chunk-ATNLUGPS.js";
 import {
   MAT_FORM_FIELD,
   MatFormFieldControl
-} from "./chunk-4LKSJBKY.js";
-import "./chunk-BQUFB27J.js";
+} from "./chunk-H23QDK7F.js";
+import "./chunk-UBT3PZJ3.js";
 import {
   FlexibleConnectedPositionStrategy,
   Overlay,
   OverlayConfig,
   OverlayModule
-} from "./chunk-SBLNJO3K.js";
+} from "./chunk-P3QTZYXF.js";
 import {
   CdkScrollableModule
-} from "./chunk-FM2DL2M2.js";
+} from "./chunk-4OOAO73B.js";
+import {
+  CdkPortalOutlet,
+  ComponentPortal,
+  PortalModule,
+  TemplatePortal
+} from "./chunk-CCHJBDE4.js";
+import {
+  animate,
+  keyframes,
+  state,
+  style,
+  transition,
+  trigger
+} from "./chunk-RHNKJY7L.js";
+import "./chunk-OQMZNAO6.js";
 import {
   ControlContainer,
   FormGroupDirective,
@@ -24,27 +39,12 @@ import {
   NgControl,
   NgForm,
   Validators
-} from "./chunk-TEB2G7K2.js";
+} from "./chunk-BU2IDENW.js";
 import {
   MatButton,
   MatButtonModule,
   MatIconButton
-} from "./chunk-C3NUCA2F.js";
-import {
-  CdkPortalOutlet,
-  ComponentPortal,
-  PortalModule,
-  TemplatePortal
-} from "./chunk-3P6RZJJM.js";
-import {
-  animate,
-  keyframes,
-  state,
-  style,
-  transition,
-  trigger
-} from "./chunk-IB6FHE64.js";
-import "./chunk-ABWFFBZY.js";
+} from "./chunk-X3SRJTXG.js";
 import {
   A11yModule,
   BACKSPACE,
@@ -72,12 +72,12 @@ import {
   coerceStringArray,
   hasModifierKey,
   normalizePassiveListenerOptions
-} from "./chunk-ZMO4X5CP.js";
+} from "./chunk-B6XRR2J7.js";
 import {
   CommonModule,
   DOCUMENT,
   NgClass
-} from "./chunk-VZTX2A42.js";
+} from "./chunk-423NJ3L7.js";
 import {
   Attribute,
   ChangeDetectionStrategy,
@@ -159,7 +159,7 @@ import {
   ɵɵtwoWayListener,
   ɵɵtwoWayProperty,
   ɵɵviewQuery
-} from "./chunk-Q3R2RZWL.js";
+} from "./chunk-LMIDRGFX.js";
 import {
   require_cjs
 } from "./chunk-2H3L6IVL.js";
@@ -2710,9 +2710,9 @@ var MatCalendarHeader = class _MatCalendarHeader {
       standalone: true,
       features: [ɵɵStandaloneFeature],
       ngContentSelectors: _c1,
-      decls: 13,
+      decls: 17,
       vars: 11,
-      consts: [[1, "mat-calendar-header"], [1, "mat-calendar-controls"], ["aria-live", "polite", 1, "cdk-visually-hidden", 3, "id"], ["mat-button", "", "type", "button", 1, "mat-calendar-period-button", 3, "click"], ["aria-hidden", "true"], ["viewBox", "0 0 10 5", "focusable", "false", "aria-hidden", "true", 1, "mat-calendar-arrow"], ["points", "0,0 5,5 10,0"], [1, "mat-calendar-spacer"], ["mat-icon-button", "", "type", "button", 1, "mat-calendar-previous-button", 3, "click", "disabled"], ["mat-icon-button", "", "type", "button", 1, "mat-calendar-next-button", 3, "click", "disabled"]],
+      consts: [[1, "mat-calendar-header"], [1, "mat-calendar-controls"], ["aria-live", "polite", 1, "cdk-visually-hidden", 3, "id"], ["mat-button", "", "type", "button", 1, "mat-calendar-period-button", 3, "click"], ["aria-hidden", "true"], ["viewBox", "0 0 10 5", "focusable", "false", "aria-hidden", "true", 1, "mat-calendar-arrow"], ["points", "0,0 5,5 10,0"], [1, "mat-calendar-spacer"], ["mat-icon-button", "", "type", "button", 1, "mat-calendar-previous-button", 3, "click", "disabled"], ["viewBox", "0 0 24 24", "focusable", "false", "aria-hidden", "true"], ["d", "M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"], ["mat-icon-button", "", "type", "button", 1, "mat-calendar-next-button", 3, "click", "disabled"], ["d", "M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"]],
       template: function MatCalendarHeader_Template(rf, ctx) {
         if (rf & 1) {
           ɵɵprojectionDef();
@@ -2737,12 +2737,19 @@ var MatCalendarHeader = class _MatCalendarHeader {
           ɵɵlistener("click", function MatCalendarHeader_Template_button_click_11_listener() {
             return ctx.previousClicked();
           });
-          ɵɵelementEnd();
-          ɵɵelementStart(12, "button", 9);
-          ɵɵlistener("click", function MatCalendarHeader_Template_button_click_12_listener() {
+          ɵɵnamespaceSVG();
+          ɵɵelementStart(12, "svg", 9);
+          ɵɵelement(13, "path", 10);
+          ɵɵelementEnd()();
+          ɵɵnamespaceHTML();
+          ɵɵelementStart(14, "button", 11);
+          ɵɵlistener("click", function MatCalendarHeader_Template_button_click_14_listener() {
             return ctx.nextClicked();
           });
-          ɵɵelementEnd()()();
+          ɵɵnamespaceSVG();
+          ɵɵelementStart(15, "svg", 9);
+          ɵɵelement(16, "path", 12);
+          ɵɵelementEnd()()()();
         }
         if (rf & 2) {
           ɵɵadvance(2);
@@ -2758,7 +2765,7 @@ var MatCalendarHeader = class _MatCalendarHeader {
           ɵɵadvance(4);
           ɵɵproperty("disabled", !ctx.previousEnabled());
           ɵɵattribute("aria-label", ctx.prevButtonLabel);
-          ɵɵadvance();
+          ɵɵadvance(3);
           ɵɵproperty("disabled", !ctx.nextEnabled());
           ɵɵattribute("aria-label", ctx.nextButtonLabel);
         }
@@ -2802,11 +2809,17 @@ var MatCalendarHeader = class _MatCalendarHeader {
     <button mat-icon-button type="button" class="mat-calendar-previous-button"
             [disabled]="!previousEnabled()" (click)="previousClicked()"
             [attr.aria-label]="prevButtonLabel">
+      <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+       </svg>
     </button>
 
     <button mat-icon-button type="button" class="mat-calendar-next-button"
             [disabled]="!nextEnabled()" (click)="nextClicked()"
             [attr.aria-label]="nextButtonLabel">
+      <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+      </svg>
     </button>
   </div>
 </div>
@@ -3065,7 +3078,7 @@ var MatCalendar = class _MatCalendar {
         }
       },
       dependencies: [CdkPortalOutlet, CdkMonitorFocus, MatMonthView, MatYearView, MatMultiYearView],
-      styles: ['.mat-calendar{display:block;line-height:normal;font-family:var(--mat-datepicker-calendar-text-font, var(--mat-app-body-medium-font));font-size:var(--mat-datepicker-calendar-text-size, var(--mat-app-body-medium-size))}.mat-calendar-header{padding:8px 8px 0 8px}.mat-calendar-content{padding:0 8px 8px 8px;outline:none}.mat-calendar-controls{display:flex;align-items:center;margin:5% calc(4.7142857143% - 16px)}.mat-calendar-spacer{flex:1 1 auto}.mat-calendar-period-button{min-width:0;margin:0 8px;font-size:var(--mat-datepicker-calendar-period-button-text-size, var(--mat-app-title-small-size));font-weight:var(--mat-datepicker-calendar-period-button-text-weight, var(--mat-app-title-small-weight));--mdc-text-button-label-text-color:var(--mat-datepicker-calendar-period-button-text-color, var(--mat-app-on-surface-variant))}.mat-calendar-arrow{display:inline-block;width:10px;height:5px;margin:0 0 0 5px;vertical-align:middle;fill:var(--mat-datepicker-calendar-period-button-icon-color, var(--mat-app-on-surface-variant))}.mat-calendar-arrow.mat-calendar-invert{transform:rotate(180deg)}[dir=rtl] .mat-calendar-arrow{margin:0 5px 0 0}.cdk-high-contrast-active .mat-calendar-arrow{fill:CanvasText}.mat-calendar-previous-button,.mat-calendar-next-button{position:relative}.mat-datepicker-content .mat-calendar-previous-button:not(.mat-mdc-button-disabled),.mat-datepicker-content .mat-calendar-next-button:not(.mat-mdc-button-disabled){color:var(--mat-datepicker-calendar-navigation-button-icon-color, var(--mat-app-on-surface-variant))}.mat-calendar-previous-button::after,.mat-calendar-next-button::after{top:0;left:0;right:0;bottom:0;position:absolute;content:"";margin:15.5px;border:0 solid currentColor;border-top-width:2px}[dir=rtl] .mat-calendar-previous-button,[dir=rtl] .mat-calendar-next-button{transform:rotate(180deg)}.mat-calendar-previous-button::after{border-left-width:2px;transform:translateX(2px) rotate(-45deg)}.mat-calendar-next-button::after{border-right-width:2px;transform:translateX(-2px) rotate(45deg)}.mat-calendar-table{border-spacing:0;border-collapse:collapse;width:100%}.mat-calendar-table-header th{text-align:center;padding:0 0 8px 0;color:var(--mat-datepicker-calendar-header-text-color, var(--mat-app-on-surface-variant));font-size:var(--mat-datepicker-calendar-header-text-size, var(--mat-app-title-small-size));font-weight:var(--mat-datepicker-calendar-header-text-weight, var(--mat-app-title-small-weight))}.mat-calendar-table-header-divider{position:relative;height:1px}.mat-calendar-table-header-divider::after{content:"";position:absolute;top:0;left:-8px;right:-8px;height:1px;background:var(--mat-datepicker-calendar-header-divider-color)}.mat-calendar-body-cell-content::before{margin:calc(calc(var(--mat-focus-indicator-border-width, 3px) + 3px)*-1)}.mat-calendar-body-cell:focus .mat-focus-indicator::before{content:""}'],
+      styles: ['.mat-calendar{display:block;line-height:normal;font-family:var(--mat-datepicker-calendar-text-font, var(--mat-app-body-medium-font));font-size:var(--mat-datepicker-calendar-text-size, var(--mat-app-body-medium-size))}.mat-calendar-header{padding:8px 8px 0 8px}.mat-calendar-content{padding:0 8px 8px 8px;outline:none}.mat-calendar-controls{display:flex;align-items:center;margin:5% calc(4.7142857143% - 16px)}.mat-calendar-spacer{flex:1 1 auto}.mat-calendar-period-button{min-width:0;margin:0 8px;font-size:var(--mat-datepicker-calendar-period-button-text-size, var(--mat-app-title-small-size));font-weight:var(--mat-datepicker-calendar-period-button-text-weight, var(--mat-app-title-small-weight));--mdc-text-button-label-text-color:var(--mat-datepicker-calendar-period-button-text-color, var(--mat-app-on-surface-variant))}.mat-calendar-arrow{display:inline-block;width:10px;height:5px;margin:0 0 0 5px;vertical-align:middle;fill:var(--mat-datepicker-calendar-period-button-icon-color, var(--mat-app-on-surface-variant))}.mat-calendar-arrow.mat-calendar-invert{transform:rotate(180deg)}[dir=rtl] .mat-calendar-arrow{margin:0 5px 0 0}.cdk-high-contrast-active .mat-calendar-arrow{fill:CanvasText}.mat-datepicker-content .mat-calendar-previous-button:not(.mat-mdc-button-disabled),.mat-datepicker-content .mat-calendar-next-button:not(.mat-mdc-button-disabled){color:var(--mat-datepicker-calendar-navigation-button-icon-color, var(--mat-app-on-surface-variant))}[dir=rtl] .mat-calendar-previous-button,[dir=rtl] .mat-calendar-next-button{transform:rotate(180deg)}.mat-calendar-table{border-spacing:0;border-collapse:collapse;width:100%}.mat-calendar-table-header th{text-align:center;padding:0 0 8px 0;color:var(--mat-datepicker-calendar-header-text-color, var(--mat-app-on-surface-variant));font-size:var(--mat-datepicker-calendar-header-text-size, var(--mat-app-title-small-size));font-weight:var(--mat-datepicker-calendar-header-text-weight, var(--mat-app-title-small-weight))}.mat-calendar-table-header-divider{position:relative;height:1px}.mat-calendar-table-header-divider::after{content:"";position:absolute;top:0;left:-8px;right:-8px;height:1px;background:var(--mat-datepicker-calendar-header-divider-color)}.mat-calendar-body-cell-content::before{margin:calc(calc(var(--mat-focus-indicator-border-width, 3px) + 3px)*-1)}.mat-calendar-body-cell:focus .mat-focus-indicator::before{content:""}'],
       encapsulation: 2,
       changeDetection: 0
     });
@@ -3133,7 +3146,7 @@ var MatCalendar = class _MatCalendar {
   }
 </div>
 `,
-      styles: ['.mat-calendar{display:block;line-height:normal;font-family:var(--mat-datepicker-calendar-text-font, var(--mat-app-body-medium-font));font-size:var(--mat-datepicker-calendar-text-size, var(--mat-app-body-medium-size))}.mat-calendar-header{padding:8px 8px 0 8px}.mat-calendar-content{padding:0 8px 8px 8px;outline:none}.mat-calendar-controls{display:flex;align-items:center;margin:5% calc(4.7142857143% - 16px)}.mat-calendar-spacer{flex:1 1 auto}.mat-calendar-period-button{min-width:0;margin:0 8px;font-size:var(--mat-datepicker-calendar-period-button-text-size, var(--mat-app-title-small-size));font-weight:var(--mat-datepicker-calendar-period-button-text-weight, var(--mat-app-title-small-weight));--mdc-text-button-label-text-color:var(--mat-datepicker-calendar-period-button-text-color, var(--mat-app-on-surface-variant))}.mat-calendar-arrow{display:inline-block;width:10px;height:5px;margin:0 0 0 5px;vertical-align:middle;fill:var(--mat-datepicker-calendar-period-button-icon-color, var(--mat-app-on-surface-variant))}.mat-calendar-arrow.mat-calendar-invert{transform:rotate(180deg)}[dir=rtl] .mat-calendar-arrow{margin:0 5px 0 0}.cdk-high-contrast-active .mat-calendar-arrow{fill:CanvasText}.mat-calendar-previous-button,.mat-calendar-next-button{position:relative}.mat-datepicker-content .mat-calendar-previous-button:not(.mat-mdc-button-disabled),.mat-datepicker-content .mat-calendar-next-button:not(.mat-mdc-button-disabled){color:var(--mat-datepicker-calendar-navigation-button-icon-color, var(--mat-app-on-surface-variant))}.mat-calendar-previous-button::after,.mat-calendar-next-button::after{top:0;left:0;right:0;bottom:0;position:absolute;content:"";margin:15.5px;border:0 solid currentColor;border-top-width:2px}[dir=rtl] .mat-calendar-previous-button,[dir=rtl] .mat-calendar-next-button{transform:rotate(180deg)}.mat-calendar-previous-button::after{border-left-width:2px;transform:translateX(2px) rotate(-45deg)}.mat-calendar-next-button::after{border-right-width:2px;transform:translateX(-2px) rotate(45deg)}.mat-calendar-table{border-spacing:0;border-collapse:collapse;width:100%}.mat-calendar-table-header th{text-align:center;padding:0 0 8px 0;color:var(--mat-datepicker-calendar-header-text-color, var(--mat-app-on-surface-variant));font-size:var(--mat-datepicker-calendar-header-text-size, var(--mat-app-title-small-size));font-weight:var(--mat-datepicker-calendar-header-text-weight, var(--mat-app-title-small-weight))}.mat-calendar-table-header-divider{position:relative;height:1px}.mat-calendar-table-header-divider::after{content:"";position:absolute;top:0;left:-8px;right:-8px;height:1px;background:var(--mat-datepicker-calendar-header-divider-color)}.mat-calendar-body-cell-content::before{margin:calc(calc(var(--mat-focus-indicator-border-width, 3px) + 3px)*-1)}.mat-calendar-body-cell:focus .mat-focus-indicator::before{content:""}']
+      styles: ['.mat-calendar{display:block;line-height:normal;font-family:var(--mat-datepicker-calendar-text-font, var(--mat-app-body-medium-font));font-size:var(--mat-datepicker-calendar-text-size, var(--mat-app-body-medium-size))}.mat-calendar-header{padding:8px 8px 0 8px}.mat-calendar-content{padding:0 8px 8px 8px;outline:none}.mat-calendar-controls{display:flex;align-items:center;margin:5% calc(4.7142857143% - 16px)}.mat-calendar-spacer{flex:1 1 auto}.mat-calendar-period-button{min-width:0;margin:0 8px;font-size:var(--mat-datepicker-calendar-period-button-text-size, var(--mat-app-title-small-size));font-weight:var(--mat-datepicker-calendar-period-button-text-weight, var(--mat-app-title-small-weight));--mdc-text-button-label-text-color:var(--mat-datepicker-calendar-period-button-text-color, var(--mat-app-on-surface-variant))}.mat-calendar-arrow{display:inline-block;width:10px;height:5px;margin:0 0 0 5px;vertical-align:middle;fill:var(--mat-datepicker-calendar-period-button-icon-color, var(--mat-app-on-surface-variant))}.mat-calendar-arrow.mat-calendar-invert{transform:rotate(180deg)}[dir=rtl] .mat-calendar-arrow{margin:0 5px 0 0}.cdk-high-contrast-active .mat-calendar-arrow{fill:CanvasText}.mat-datepicker-content .mat-calendar-previous-button:not(.mat-mdc-button-disabled),.mat-datepicker-content .mat-calendar-next-button:not(.mat-mdc-button-disabled){color:var(--mat-datepicker-calendar-navigation-button-icon-color, var(--mat-app-on-surface-variant))}[dir=rtl] .mat-calendar-previous-button,[dir=rtl] .mat-calendar-next-button{transform:rotate(180deg)}.mat-calendar-table{border-spacing:0;border-collapse:collapse;width:100%}.mat-calendar-table-header th{text-align:center;padding:0 0 8px 0;color:var(--mat-datepicker-calendar-header-text-color, var(--mat-app-on-surface-variant));font-size:var(--mat-datepicker-calendar-header-text-size, var(--mat-app-title-small-size));font-weight:var(--mat-datepicker-calendar-header-text-weight, var(--mat-app-title-small-weight))}.mat-calendar-table-header-divider{position:relative;height:1px}.mat-calendar-table-header-divider::after{content:"";position:absolute;top:0;left:-8px;right:-8px;height:1px;background:var(--mat-datepicker-calendar-header-divider-color)}.mat-calendar-body-cell-content::before{margin:calc(calc(var(--mat-focus-indicator-border-width, 3px) + 3px)*-1)}.mat-calendar-body-cell:focus .mat-focus-indicator::before{content:""}']
     }]
   }], () => [{
     type: MatDatepickerIntl

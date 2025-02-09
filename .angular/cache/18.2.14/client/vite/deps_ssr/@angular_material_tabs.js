@@ -1,24 +1,24 @@
 import { createRequire } from 'module';const require = createRequire(import.meta.url);
 import {
   SharedResizeObserver
-} from "./chunk-BQUFB27J.js";
+} from "./chunk-UBT3PZJ3.js";
 import {
   CdkScrollable,
   ViewportRuler
-} from "./chunk-FM2DL2M2.js";
+} from "./chunk-4OOAO73B.js";
 import {
   CdkPortal,
   CdkPortalOutlet,
   TemplatePortal
-} from "./chunk-3P6RZJJM.js";
+} from "./chunk-CCHJBDE4.js";
 import {
   animate,
   state,
   style,
   transition,
   trigger
-} from "./chunk-IB6FHE64.js";
-import "./chunk-ABWFFBZY.js";
+} from "./chunk-RHNKJY7L.js";
+import "./chunk-OQMZNAO6.js";
 import {
   CdkMonitorFocus,
   CdkObserveContent,
@@ -33,10 +33,10 @@ import {
   SPACE,
   hasModifierKey,
   normalizePassiveListenerOptions
-} from "./chunk-ZMO4X5CP.js";
+} from "./chunk-B6XRR2J7.js";
 import {
   DOCUMENT
-} from "./chunk-VZTX2A42.js";
+} from "./chunk-423NJ3L7.js";
 import {
   ANIMATION_MODULE_TYPE,
   Attribute,
@@ -110,7 +110,7 @@ import {
   ɵɵtext,
   ɵɵtextInterpolate,
   ɵɵviewQuery
-} from "./chunk-Q3R2RZWL.js";
+} from "./chunk-LMIDRGFX.js";
 import {
   require_cjs
 } from "./chunk-2H3L6IVL.js";
@@ -1539,9 +1539,7 @@ var MatTabBody = class _MatTabBody {
         changeDetectorRef.markForCheck();
       });
     }
-    this._translateTabComplete.pipe((0, import_operators.distinctUntilChanged)((x, y) => {
-      return x.fromState === y.fromState && x.toState === y.toState;
-    })).subscribe((event) => {
+    this._translateTabComplete.subscribe((event) => {
       if (this._isCenterPosition(event.toState) && this._isCenterPosition(this._position)) {
         this._onCentered.emit();
       }

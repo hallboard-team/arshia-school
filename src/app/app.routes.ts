@@ -16,6 +16,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { TeacherComponent } from './components/teacher/teacher.component';
 import { StudentCardComponent } from './components/students/student-card/student-card.component';
 import { StudentListComponent } from './components/students/student-list/student-list.component';
+import { DemoComponent } from './components/demo/demo.component';
 // import { MessagesComponent } from './components/messages/messages.component';
 // import { NoAccessComponent } from './components/errors/no-access/no-access.component';
 // import { NotFoundComponent } from './components/errors/not-found/not-found.component';
@@ -41,6 +42,7 @@ export const routes: Routes = [
             { path: 'manager-panell', component: ManageerPannelComponent },
             { path: 'teacher-panel', component: TeacherComponent},
             { path: 'students-card/:courseTitle', component: StudentListComponent},
+            { path: 'demo', component: DemoComponent},
 
             // { path: 'منشی', component: SecretaryComponent },
             // { path: 'معلم', component: TeacherComponent },

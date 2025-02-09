@@ -10,14 +10,14 @@ import { Member } from '../../../models/member.model';
 import { TeacherService } from '../../../services/teacher.service';
 import { MemberCardComponent } from '../../members/member-card/member-card.component';
 import { StudentCardComponent } from '../student-card/student-card.component';
+import { NavbarComponent } from '../../navbar/navbar.component';
 
 @Component({
   selector: 'app-student-list',
   standalone: true,
   imports: [
     CommonModule,
-    StudentCardComponent,
-    MatPaginatorModule
+    StudentCardComponent, MatPaginatorModule, NavbarComponent
   ],
   templateUrl: './student-list.component.html',
   styleUrl: './student-list.component.scss'

@@ -1,7 +1,7 @@
 import {
   ScrollingModule,
   ViewportRuler
-} from "./chunk-HP7NYYD7.js";
+} from "./chunk-J5JDKTCD.js";
 import {
   DataSource,
   _DisposeViewRepeaterStrategy,
@@ -9,16 +9,16 @@ import {
   _VIEW_REPEATER_STRATEGY,
   _ViewRepeaterOperation,
   isDataSource
-} from "./chunk-RZAD3Y3T.js";
+} from "./chunk-NO4N3EKB.js";
 import {
   Directionality,
   MatCommonModule,
   Platform,
   _isNumberValue
-} from "./chunk-AFWDAS5F.js";
+} from "./chunk-KYN5JPSI.js";
 import {
   DOCUMENT
-} from "./chunk-BAOIP7IO.js";
+} from "./chunk-PQJJLTHC.js";
 import {
   Attribute,
   ChangeDetectionStrategy,
@@ -81,7 +81,7 @@ import {
   ɵɵtext,
   ɵɵtextInterpolate1,
   ɵɵviewQuery
-} from "./chunk-KZE4DZCA.js";
+} from "./chunk-RCUTAREH.js";
 import {
   BehaviorSubject,
   Subject,
@@ -91,7 +91,7 @@ import {
   merge,
   of,
   takeUntil
-} from "./chunk-PF6LNL77.js";
+} from "./chunk-RJESQQYW.js";
 
 // node_modules/@angular/cdk/fesm2022/table.mjs
 var _c0 = [[["caption"]], [["colgroup"], ["col"]], "*"];
@@ -1074,6 +1074,10 @@ var StickyStyler = class {
     this._isBrowser = _isBrowser;
     this._needsPositionStickyOnElement = _needsPositionStickyOnElement;
     this._positionListener = _positionListener;
+    this._elemSizeCache = /* @__PURE__ */ new WeakMap();
+    this._resizeObserver = globalThis?.ResizeObserver ? new globalThis.ResizeObserver((entries) => this._updateCachedSizes(entries)) : null;
+    this._updatedStickyColumnsParamsToReplay = [];
+    this._stickyColumnsReplayTimeout = null;
     this._cachedCellWidths = [];
     this._borderCellCss = {
       "top": `${_stickCellCss}-border-elem-top`,
@@ -1089,6 +1093,9 @@ var StickyStyler = class {
    * @param stickyDirections The directions that should no longer be set as sticky on the rows.
    */
   clearStickyPositioning(rows, stickyDirections) {
+    if (stickyDirections.includes("left") || stickyDirections.includes("right")) {
+      this._removeFromStickyColumnReplayQueue(rows);
+    }
     const elementsToClear = [];
     for (const row of rows) {
       if (row.nodeType !== row.ELEMENT_NODE) {
@@ -1115,8 +1122,16 @@ var StickyStyler = class {
    *     in this index position should be stuck to the end of the row.
    * @param recalculateCellWidths Whether the sticky styler should recalculate the width of each
    *     column cell. If `false` cached widths will be used instead.
+   * @param replay Whether to enqueue this call for replay after a ResizeObserver update.
    */
-  updateStickyColumns(rows, stickyStartStates, stickyEndStates, recalculateCellWidths = true) {
+  updateStickyColumns(rows, stickyStartStates, stickyEndStates, recalculateCellWidths = true, replay = true) {
+    if (replay) {
+      this._updateStickyColumnReplayQueue({
+        rows: [...rows],
+        stickyStartStates: [...stickyStartStates],
+        stickyEndStates: [...stickyEndStates]
+      });
+    }
     if (!rows.length || !this._isBrowser || !(stickyStartStates.some((state) => state) || stickyEndStates.some((state) => state))) {
       if (this._positionListener) {
         this._positionListener.stickyColumnsUpdated({
@@ -1188,7 +1203,7 @@ var StickyStyler = class {
         stickyOffsets[rowIndex] = stickyOffset;
         const row = rows[rowIndex];
         elementsToStick[rowIndex] = this._isNativeHtmlTable ? Array.from(row.children) : [row];
-        const height = row.getBoundingClientRect().height;
+        const height = this._retrieveElementSize(row).height;
         stickyOffset += height;
         stickyCellHeights[rowIndex] = height;
       }
@@ -1310,8 +1325,8 @@ var StickyStyler = class {
     const cellWidths = [];
     const firstRowCells = row.children;
     for (let i = 0; i < firstRowCells.length; i++) {
-      let cell = firstRowCells[i];
-      cellWidths.push(cell.getBoundingClientRect().width);
+      const cell = firstRowCells[i];
+      cellWidths.push(this._retrieveElementSize(cell).width);
     }
     this._cachedCellWidths = cellWidths;
     return cellWidths;
@@ -1348,7 +1363,81 @@ var StickyStyler = class {
     }
     return positions;
   }
+  /**
+   * Retreives the most recently observed size of the specified element from the cache, or
+   * meaures it directly if not yet cached.
+   */
+  _retrieveElementSize(element) {
+    const cachedSize = this._elemSizeCache.get(element);
+    if (cachedSize) {
+      return cachedSize;
+    }
+    const clientRect = element.getBoundingClientRect();
+    const size = {
+      width: clientRect.width,
+      height: clientRect.height
+    };
+    if (!this._resizeObserver) {
+      return size;
+    }
+    this._elemSizeCache.set(element, size);
+    this._resizeObserver.observe(element, {
+      box: "border-box"
+    });
+    return size;
+  }
+  /**
+   * Conditionally enqueue the requested sticky update and clear previously queued updates
+   * for the same rows.
+   */
+  _updateStickyColumnReplayQueue(params) {
+    this._removeFromStickyColumnReplayQueue(params.rows);
+    if (this._stickyColumnsReplayTimeout) {
+      return;
+    }
+    this._updatedStickyColumnsParamsToReplay.push(params);
+  }
+  /** Remove updates for the specified rows from the queue. */
+  _removeFromStickyColumnReplayQueue(rows) {
+    const rowsSet = new Set(rows);
+    for (const update of this._updatedStickyColumnsParamsToReplay) {
+      update.rows = update.rows.filter((row) => !rowsSet.has(row));
+    }
+    this._updatedStickyColumnsParamsToReplay = this._updatedStickyColumnsParamsToReplay.filter((update) => !!update.rows.length);
+  }
+  /** Update _elemSizeCache with the observed sizes. */
+  _updateCachedSizes(entries) {
+    let needsColumnUpdate = false;
+    for (const entry of entries) {
+      const newEntry = entry.borderBoxSize?.length ? {
+        width: entry.borderBoxSize[0].inlineSize,
+        height: entry.borderBoxSize[0].blockSize
+      } : {
+        width: entry.contentRect.width,
+        height: entry.contentRect.height
+      };
+      if (newEntry.width !== this._elemSizeCache.get(entry.target)?.width && isCell(entry.target)) {
+        needsColumnUpdate = true;
+      }
+      this._elemSizeCache.set(entry.target, newEntry);
+    }
+    if (needsColumnUpdate && this._updatedStickyColumnsParamsToReplay.length) {
+      if (this._stickyColumnsReplayTimeout) {
+        clearTimeout(this._stickyColumnsReplayTimeout);
+      }
+      this._stickyColumnsReplayTimeout = setTimeout(() => {
+        for (const update of this._updatedStickyColumnsParamsToReplay) {
+          this.updateStickyColumns(update.rows, update.stickyStartStates, update.stickyEndStates, true, false);
+        }
+        this._updatedStickyColumnsParamsToReplay = [];
+        this._stickyColumnsReplayTimeout = null;
+      }, 0);
+    }
+  }
 };
+function isCell(element) {
+  return ["cdk-cell", "cdk-header-cell", "cdk-footer-cell"].some((klass) => element.classList.contains(klass));
+}
 function getTableUnknownColumnError(id) {
   return Error(`Could not find column with id "${id}".`);
 }
@@ -1579,9 +1668,8 @@ var CdkTable = class _CdkTable {
   /** Aria role to apply to the table's cells based on the table's own role. */
   _getCellRole() {
     if (this._cellRoleInternal === void 0) {
-      const role = this._elementRef.nativeElement.getAttribute("role");
-      const cellRole = role === "grid" || role === "treegrid" ? "gridcell" : "cell";
-      this._cellRoleInternal = this._isNativeHtmlTable && cellRole === "cell" ? null : cellRole;
+      const tableRole = this._elementRef.nativeElement.getAttribute("role");
+      return tableRole === "grid" || tableRole === "treegrid" ? "gridcell" : "cell";
     }
     return this._cellRoleInternal;
   }
@@ -1995,7 +2083,10 @@ var CdkTable = class _CdkTable {
    * re-render that section.
    */
   _renderUpdatedColumns() {
-    const columnsDiffReducer = (acc, def) => acc || !!def.getColumnsDiff();
+    const columnsDiffReducer = (acc, def) => {
+      const diff = !!def.getColumnsDiff();
+      return acc || diff;
+    };
     const dataColumnsChanged = this._rowDefs.reduce(columnsDiffReducer, false);
     if (dataColumnsChanged) {
       this._forceRenderDataRows();

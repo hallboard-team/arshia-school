@@ -1,23 +1,23 @@
 import {
   SharedResizeObserver
-} from "./chunk-IAVF5655.js";
+} from "./chunk-23DGOJPQ.js";
 import {
   CdkScrollable,
   ViewportRuler
-} from "./chunk-HP7NYYD7.js";
+} from "./chunk-J5JDKTCD.js";
 import {
   CdkPortal,
   CdkPortalOutlet,
   TemplatePortal
-} from "./chunk-PVPURSDA.js";
+} from "./chunk-3FXA6A3I.js";
 import {
   animate,
   state,
   style,
   transition,
   trigger
-} from "./chunk-MA5LLDOO.js";
-import "./chunk-RZAD3Y3T.js";
+} from "./chunk-K34BHD7Z.js";
+import "./chunk-NO4N3EKB.js";
 import {
   CdkMonitorFocus,
   CdkObserveContent,
@@ -32,10 +32,10 @@ import {
   SPACE,
   hasModifierKey,
   normalizePassiveListenerOptions
-} from "./chunk-AFWDAS5F.js";
+} from "./chunk-KYN5JPSI.js";
 import {
   DOCUMENT
-} from "./chunk-BAOIP7IO.js";
+} from "./chunk-PQJJLTHC.js";
 import {
   ANIMATION_MODULE_TYPE,
   Attribute,
@@ -108,7 +108,7 @@ import {
   ɵɵtext,
   ɵɵtextInterpolate,
   ɵɵviewQuery
-} from "./chunk-KZE4DZCA.js";
+} from "./chunk-RCUTAREH.js";
 import {
   BehaviorSubject,
   EMPTY,
@@ -116,7 +116,6 @@ import {
   Subject,
   Subscription,
   debounceTime,
-  distinctUntilChanged,
   filter,
   fromEvent,
   merge,
@@ -126,7 +125,7 @@ import {
   switchMap,
   takeUntil,
   timer
-} from "./chunk-PF6LNL77.js";
+} from "./chunk-RJESQQYW.js";
 
 // node_modules/@angular/material/fesm2022/tabs.mjs
 var _c0 = ["*"];
@@ -1547,9 +1546,7 @@ var MatTabBody = class _MatTabBody {
         changeDetectorRef.markForCheck();
       });
     }
-    this._translateTabComplete.pipe(distinctUntilChanged((x, y) => {
-      return x.fromState === y.fromState && x.toState === y.toState;
-    })).subscribe((event) => {
+    this._translateTabComplete.subscribe((event) => {
       if (this._isCenterPosition(event.toState) && this._isCenterPosition(this._position)) {
         this._onCentered.emit();
       }

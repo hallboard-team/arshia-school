@@ -2,19 +2,19 @@ import { createRequire } from 'module';const require = createRequire(import.meta
 import {
   NoopAnimationsModule,
   provideNoopAnimations
-} from "./chunk-2X5J27XQ.js";
-import "./chunk-XZQLVYQA.js";
-import "./chunk-IB6FHE64.js";
+} from "./chunk-WWITQK7N.js";
+import "./chunk-HBTLFSFU.js";
 import {
   BrowserDomAdapter,
   BrowserModule,
   EVENT_MANAGER_PLUGINS,
   EventManagerPlugin
-} from "./chunk-WAOLF6IJ.js";
+} from "./chunk-HTY7NTQM.js";
 import {
   HTTP_ROOT_INTERCEPTOR_FNS,
   HttpClientModule
-} from "./chunk-P5GWU64E.js";
+} from "./chunk-AUVTLKCH.js";
+import "./chunk-RHNKJY7L.js";
 import {
   DOCUMENT,
   NullViewportScroller,
@@ -24,7 +24,7 @@ import {
   XhrFactory,
   getDOM,
   setRootDomAdapter
-} from "./chunk-VZTX2A42.js";
+} from "./chunk-423NJ3L7.js";
 import {
   ALLOW_MULTIPLE_PLATFORMS,
   APP_ID,
@@ -57,7 +57,7 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
-} from "./chunk-Q3R2RZWL.js";
+} from "./chunk-LMIDRGFX.js";
 import {
   require_cjs
 } from "./chunk-2H3L6IVL.js";
@@ -16934,7 +16934,7 @@ function renderApplication(bootstrap, options) {
     }));
   });
 }
-var VERSION = new Version("18.2.8");
+var VERSION = new Version("18.2.13");
 export {
   BEFORE_APP_SERIALIZED,
   INITIAL_CONFIG,
@@ -16955,7 +16955,7 @@ export {
 
 @angular/platform-server/fesm2022/platform-server.mjs:
   (**
-   * @license Angular v18.2.8
+   * @license Angular v18.2.13
    * (c) 2010-2024 Google LLC. https://angular.io/
    * License: MIT
    *)

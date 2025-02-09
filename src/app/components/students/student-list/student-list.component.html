@@ -1,8 +1,13 @@
-<p>student-list works!</p>
+<header>
+    <nav>
+      <app-navbar />
+    </nav>
+</header>
 
 <section class="students-container">
-    <h1>Students</h1>
-    <div class="students">
+    <span class="title">دانش آموزان کلاس</span>
+
+    <div class="div-cards-student">
         @for (student of students; track $index) {
         <app-student-card [studentInput]="student"></app-student-card>
         }
