@@ -31,55 +31,55 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   styleUrl: './demo.component.scss'
 })
 export class DemoComponent {
-  fb = inject(FormBuilder);
-  teacherService = inject(TeacherService);
-  selectedDate: string = "";
-  // selectedDate = new FormControl(new Date().valueOf());
-  // dateValue = new FormControl(new Date().valueOf());
+  // fb = inject(FormBuilder);
+  // teacherService = inject(TeacherService);
+  // selectedDate: string = "";
+  // // selectedDate = new FormControl(new Date().valueOf());
+  // // dateValue = new FormControl(new Date().valueOf());
 
-  uiIsVisible: boolean = true;
-  uiTheme: IDatepickerTheme = defaultTheme;
-  uiYearView: boolean = true;
-  uiMonthView: boolean = true;
-  uiHideAfterSelectDate: boolean = false;
-  uiHideOnOutsideClick: boolean = false;
-  uiTodayBtnEnable: boolean = true;
+  // uiIsVisible: boolean = true;
+  // uiTheme: IDatepickerTheme = defaultTheme;
+  // uiYearView: boolean = true;
+  // uiMonthView: boolean = true;
+  // uiHideAfterSelectDate: boolean = false;
+  // uiHideOnOutsideClick: boolean = false;
+  // uiTodayBtnEnable: boolean = true;
 
-  addAttendenceFg = this.fb.group({
-    userNameCtrl: ['', ],
-    timeCtrl: ['', ],
-    absentOrPresentCtrl: ['', ]
-  })
+  // addAttendenceFg = this.fb.group({
+  //   userNameCtrl: ['', ],
+  //   timeCtrl: ['', ],
+  //   absentOrPresentCtrl: ['', ]
+  // })
 
-  get UserNameCtrl(): FormControl {
-    return this.addAttendenceFg.get('userNameCtrl') as FormControl;
-  }
-  get TimeCtrl(): FormControl {
-    return this.addAttendenceFg.get('timeCtrl') as FormControl;
-  }
-  get AbsentOrPresentCtrl(): FormControl {
-    return this.addAttendenceFg.get('absentOrPresentCtrl') as FormControl;
-  }
+  // get UserNameCtrl(): FormControl {
+  //   return this.addAttendenceFg.get('userNameCtrl') as FormControl;
+  // }
+  // get TimeCtrl(): FormControl {
+  //   return this.addAttendenceFg.get('timeCtrl') as FormControl;
+  // }
+  // get AbsentOrPresentCtrl(): FormControl {
+  //   return this.addAttendenceFg.get('absentOrPresentCtrl') as FormControl;
+  // }
 
-  addAttendence(): void {
-    //  const dob: string | undefined = this.getDateOnly(this.DateOfBirthCtrl.value);
+  // addAttendence(): void {
+  //   //  const dob: string | undefined = this.getDateOnly(this.DateOfBirthCtrl.value);
   
-    let attendenceDemo: AddAttendenceDemo = {
-      userName: this.UserNameCtrl.value,
-      time: this.TimeCtrl.value,
-      absentOrPresent: this.AbsentOrPresentCtrl.value
-    }
+  //   let attendenceDemo: AddAttendenceDemo = {
+  //     userName: this.UserNameCtrl.value,
+  //     time: this.TimeCtrl.value,
+  //     absentOrPresent: this.AbsentOrPresentCtrl.value
+  //   }
   
-    this.teacherService.addAttendenceDemo(attendenceDemo).subscribe({
-      next: user => console.log(user)
-    });
-  }
+  //   this.teacherService.addAttendenceDemo(attendenceDemo).subscribe({
+  //     next: user => console.log(user)
+  //   });
+  // }
 
-  onSelect(date: IActiveDate) {
-    // console.log(date);
-    const selectedDate = date.shamsi;
-    console.log("Selected Date:", selectedDate);
+  // onSelect(date: IActiveDate) {
+  //   // console.log(date);
+  //   const selectedDate = date.shamsi;
+  //   console.log("Selected Date:", selectedDate);
 
-    this.TimeCtrl.setValue(selectedDate);
-  }
+  //   this.TimeCtrl.setValue(selectedDate);
+  // }
 }
