@@ -22,7 +22,9 @@ import { TeacherService } from '../../../services/teacher.service';
 })
 export class StudentCardComponent {
   @Input('studentInput') studentIn: Member | undefined; 
+
   private _teacherService = inject(TeacherService);
+  private _snack = inject(MatSnackBar);
 
   isExpanded: boolean = false;
 
@@ -43,10 +45,20 @@ export class StudentCardComponent {
     this._teacherService.addAttendence(attendanceData).subscribe({
       next: response => {
         console.log("✅ حضور و غیاب ثبت شد:", response);
-        alert("حضور و غیاب ثبت شد.");
+        // alert("حضور و غیاب ثبت شد.");
+        this._snack.open("حضور و غیاب ثبت شد.", 'close', {
+          duration: 7000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        })
       },
       error: err => {
-        alert("❌ خطا در ثبت حضور و غیاب!");
+        this._snack.open("خطا در ثبت حضور و غیاب!", 'close', {
+          duration: 7000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
+        // alert("❌ خطا در ثبت حضور و غیاب!");
         console.error(err);
       }
     });
