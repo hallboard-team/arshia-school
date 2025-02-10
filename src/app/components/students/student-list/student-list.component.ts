@@ -23,7 +23,7 @@ import { NavbarComponent } from '../../navbar/navbar.component';
   styleUrl: './student-list.component.scss'
 })
 export class StudentListComponent {
-  private teacherService = inject(TeacherService);
+  private _teacherService = inject(TeacherService);
   
   students: Member[] | undefined;
   students$: Observable<Member[] | null> | undefined;
@@ -53,7 +53,7 @@ export class StudentListComponent {
     const courseTitle: string | null = this._route.snapshot.paramMap.get('courseTitle');
 
     if (this.memberParams && courseTitle)
-      this.subscribed = this.teacherService.getStudents(this.memberParams, courseTitle).subscribe({
+      this.subscribed = this._teacherService.getStudents(this.memberParams, courseTitle).subscribe({
         next: (response: PaginatedResult<Member[]>) => {
           if (response.body && response.pagination) {
             this.students = response.body;

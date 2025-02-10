@@ -6,7 +6,7 @@ import { Observable, map } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { LoggedInUser } from '../models/logged-in-user.model';
 import { RegisterUser } from '../models/register-user.model';
-import { AddAttendence, AddAttendenceDemo } from '../models/add-attendence.model';
+import { AddAttendence } from '../models/add-attendence.model';
 import { ApiResponse } from '../models/helpers/apiResponse.model';
 import { Course } from '../models/course.model';
 import { Member } from '../models/member.model';
@@ -44,33 +44,37 @@ export class TeacherService {
     return this.paginationHandler.getPaginatedResult<Member[]>(this._teaherApiUrl + 'get-student/' + targetTitle, params);
   }
 
-  addAttendence(teacherInput: AddAttendence): Observable<ApiResponse | null> {
-    return this._http.post<ApiResponse>(this._teaherApiUrl + 'add-attendence', teacherInput)
-    .pipe(
-      map(teacherResponse => {
-        if (teacherResponse) {
-          this.snackBar.open("add-attendence Done", "Close", { horizontalPosition: "center", verticalPosition: "bottom", duration: 7000 })
+  // addAttendence(teacherInput: AddAttendence): Observable<ApiResponse | null> {
+  //   return this._http.post<ApiResponse>(this._teaherApiUrl + 'add-attendence', teacherInput)
+  //   .pipe(
+  //     map(teacherResponse => {
+  //       if (teacherResponse) {
+  //         this.snackBar.open("add-attendence Done", "Close", { horizontalPosition: "center", verticalPosition: "bottom", duration: 7000 })
           
-          return teacherResponse;
-        }
+  //         return teacherResponse;
+  //       }
         
-        return null;
-      })
-    );
+  //       return null;
+  //     })
+  //   );
+  // }
+
+  addAttendence(attendanceData: { userName: string, isPresent: boolean }) {
+    return this._http.post<AddAttendence>(this._teaherApiUrl + 'add-attendence', attendanceData);
   }
 
-  addAttendenceDemo(teacherInput: AddAttendenceDemo): Observable<ApiResponse | null> {
-    return this._http.post<ApiResponse>(this._teaherApiUrl + 'add-attendence-demo', teacherInput)
-    .pipe(
-      map(teacherResponse => {
-        if (teacherResponse) {
-          this.snackBar.open("add-attendence Done", "Close", { horizontalPosition: "center", verticalPosition: "bottom", duration: 7000 })
+  // addAttendenceDemo(teacherInput: AddAttendenceDemo): Observable<ApiResponse | null> {
+  //   return this._http.post<ApiResponse>(this._teaherApiUrl + 'add-attendence-demo', teacherInput)
+  //   .pipe(
+  //     map(teacherResponse => {
+  //       if (teacherResponse) {
+  //         this.snackBar.open("add-attendence Done", "Close", { horizontalPosition: "center", verticalPosition: "bottom", duration: 7000 })
           
-          return teacherResponse;
-        }
+  //         return teacherResponse;
+  //       }
         
-        return null;
-      })
-    );
-  }
+  //       return null;
+  //     })
+  //   );
+  // }
 }

@@ -8,6 +8,7 @@ import { environment } from '../../../../environments/environment.development';
 import { Member } from '../../../models/member.model';
 import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
 import { FormsModule } from '@angular/forms';
+import { TeacherService } from '../../../services/teacher.service';
 @Component({
   selector: 'app-student-card',
   standalone: true,
@@ -20,27 +21,34 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './student-card.component.scss'
 })
 export class StudentCardComponent {
-  @Input('studentInput') studentIn: Member | undefined; // memberInput is a contract
-  // @Output('unfollowUsernameOut') unfollowUsernameOut = new EventEmitter<string>();
-  apiUrl = environment.apiUrl;
+  @Input('studentInput') studentIn: Member | undefined; 
+  private _teacherService = inject(TeacherService);
 
   isExpanded: boolean = false;
-  selectedDate: string = '';
-  // attendanceRecords: { date: string, status: string }[] = [];
 
-  onDateSelected(date: string | undefined) {
-    if (date) {
-      this.selectedDate = date;
-      console.log("Selected Date: ", this.selectedDate)
-    }
-  }
+  // مقدار پیش‌فرض برای تاریخ، زمان فعلی (UTC)
+  selectedDate: string = new Date().toISOString().split("T")[0]; 
 
   markAttendance(status: string) {
-    console.log(`Attendece for ${this.selectedDate}: ${status}`);
-    // if (this.selectedDate) {
-    //   this.attendanceRecords.push({ date: this.selectedDate, status});
-    //   this.selectedDate = '';
-    // }
-  }
+    if (!this.studentIn?.userName) {
+      alert("خطا: نام کاربری یافت نشد!");
+      return;
+    }
 
+    const attendanceData = {
+      userName: this.studentIn.userName,  
+      isPresent: status === 'حاضر' // تبدیل "حاضر" به true و "غایب" به false
+    };
+
+    this._teacherService.addAttendence(attendanceData).subscribe({
+      next: response => {
+        console.log("✅ حضور و غیاب ثبت شد:", response);
+        alert("حضور و غیاب ثبت شد.");
+      },
+      error: err => {
+        alert("❌ خطا در ثبت حضور و غیاب!");
+        console.error(err);
+      }
+    });
+  }
 }

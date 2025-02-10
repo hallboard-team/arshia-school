@@ -26,13 +26,11 @@
             }
             <span class="student-phone">📞شماره تلفن: {{ studentIn.phoneNum }}</span>
     
-            <!-- بخش انتخاب تاریخ و وضعیت حضور و غیاب -->
             <span class="title-absent-present-student">حضور و غیاب دانشجو</span>
             <div class="attendance-section">
                
                 <!-- نمایش مقدار انتخاب‌شده -->
                 <span class="selected-date">📅 تاریخ انتخاب‌شده: {{ selectedDate }}</span>
-            
                 <div class="attendance-buttons">
                     <button (click)="markAttendance('حاضر')" class="present-btn">✅ حاضر</button>
                     <button (click)="markAttendance('غایب')" class="absent-btn">❌ غایب</button>
@@ -51,29 +49,3 @@
         </div>
     </div>
 }
-<!-- @if (studentIn) {
-    <div class="student-card" [class.expanded]="isExpanded" (click)="isExpanded = !isExpanded">
-        <div class="student-header">
-            @if (studentIn.gender == 'male') {
-                <img src="../assets/images/boyPhoto2prev.png" class="student-image">
-            }
-            @else {
-                <img src="../assets/images/girlPhoto5prevNew.png" class="student-image">
-            }
-            <div class="student-info">
-                @if (studentIn.gender == 'male') {
-                    <span class="student-name-for-men">{{ studentIn.name }} {{ studentIn.lastName }}</span>
-                }
-                @else {
-                    <span class="student-name-for-women">{{ studentIn.name }} {{ studentIn.lastName }}</span>
-                }
-                <span class="student-age">سن: {{ studentIn.age }}</span>
-            </div>
-        </div>
-    
-        <div class="student-details">
-            <span class="student-gender">جنسیت: {{ studentIn.gender }}</span>
-            <span class="student-phone">📞 {{ studentIn.phoneNum }}</span>
-        </div>
-    </div>
-} -->

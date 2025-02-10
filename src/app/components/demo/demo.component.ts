@@ -13,7 +13,6 @@ import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators 
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
-import { AddAttendenceDemo } from '../../models/add-attendence.model';
 import { TeacherService } from '../../services/teacher.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 // import { IDatepickerTheme } from '../../../../projects/ng-persian-datepicker/src/public-api';

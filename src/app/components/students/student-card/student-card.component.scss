@@ -79,8 +79,8 @@ $red: #e74c3c;
         padding: 0;
 
         .title-absent-present-student {
-            font-size: 15px;
-            color: rgba(0, 0, 0, 0.685);
+            font-size: 17px;
+            color: rgba(0, 0, 0, 0.972);
         }
     }
 
@@ -96,23 +96,9 @@ $red: #e74c3c;
         align-items: center;
         margin-top: 10px;
 
-        .date-picker {
-            background: $bg-color;
-            border: none;
-            border-radius: 10px;
-            padding: 5px 10px;
-            box-shadow: inset 4px 4px 6px $shadow-dark, inset -4px -4px 6px $shadow-light;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        ng-persian-datepicker {
-            width: 100%;
-            max-width: 300px;
-            background-color: #f0f0f0;
-            border-radius: 10px;
-            padding: 10px;
-
+        .selected-date {
+            font-size: 15px;
+            color: rgba(0, 0, 0, 0.652);
         }
 
         .attendance-buttons {
