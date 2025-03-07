@@ -1,0 +1,216 @@
+@use "sass:math";
+
+.datepicker-outer-container {
+  vertical-align: top;
+  min-width: 200px;
+  font-size: 12px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  user-select: none;
+  text-align: center;
+  border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+
+  &[dir="rtl"] {
+    .datepicker-inner-container {
+      .navigation-container {
+        flex-direction: row;
+      }
+    }
+  }
+
+  &[dir="ltr"] {
+    .datepicker-inner-container {
+      .navigation-container {
+        flex-direction: row-reverse;
+      }
+    }
+  }
+
+  &.hide {
+    display: none;
+  }
+
+  &.manual-position {
+    width: 100%;
+  }
+
+  .datepicker-inner-container {
+
+    .horizontal-padding {
+      padding-right: 5px;
+      padding-left: 5px;
+    }
+
+    .no-margin-bottom {
+      margin-bottom: 0 !important;
+    }
+
+    .dp-btn {
+      border-radius: 5px;
+    }
+
+    .content-container {
+      margin-bottom: 8px;
+    }
+
+    .navigation-container {
+      display: flex;
+
+      .go-forward, .switch-view, .go-back {
+        display: inline-block;
+        vertical-align: top;
+        height: 24px;
+        cursor: pointer;
+      }
+
+      .go-forward, .go-back {
+        width: 15%;
+        position: relative;
+        svg {
+          width: 12px;
+          height: 12px;
+          position: absolute;
+          top: calc(50% - 6px);
+          right: calc(50% - 6px);
+        }
+      }
+
+      .switch-view {
+        width: 66%;
+        margin: 0 2%;
+        font-weight: bold;
+        span {
+          vertical-align: sub;
+        }
+      }
+    }
+
+    .days-container {
+      .day-col {
+        display: inline-block;
+        vertical-align: top;
+        width: math.div(100%, 7);
+        padding: 1px;
+
+        .dp-btn {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          min-height: 24px;
+        }
+      }
+
+      .week-days {
+        .day-col {
+          font-weight: bold;
+        }
+      }
+
+      .month-days {
+        .day-col {
+          cursor: pointer;
+        }
+      }
+    }
+
+    .three-col-per-row {
+      display: inline-block;
+      vertical-align: top;
+      width: math.div(100%, 3);
+      padding: 1px;
+      cursor: pointer;
+
+      .dp-btn {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+        min-height: 36px;
+      }
+    }
+
+    .time-container {
+      border-top-width: 1px;
+      border-top-style: solid;
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      height: 82px;
+      direction: ltr;
+
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-content: center;
+
+      .time-col {
+        flex: 1;
+        height: 100%;
+        overflow: auto;
+
+        &:not(.meridian-col) {
+          .item {
+            &:first-of-type {
+              border-bottom-width: 1px;
+              border-bottom-style: solid;
+              cursor: auto;
+            }
+
+            &:last-of-type {
+              border-top-width: 1px;
+              border-top-style: solid;
+              cursor: auto;
+            }
+          }
+        }
+
+        .item {
+          padding: 1px;
+          cursor: pointer;
+
+          &:first-of-type {
+            padding-top: 3px;
+          }
+
+          &:last-of-type {
+            padding-bottom: 3px;
+          }
+
+          .dp-btn {
+            min-height: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-content: center;
+          }
+        }
+
+        &.meridian-col {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+      }
+    }
+
+    .the-toolbox {
+      display: flex;
+      .the-item {
+        display: inline-block;
+        vertical-align: top;
+        min-width: 40px;
+        cursor: pointer;
+        font-weight: bold;
+        padding: 3px 5px;
+        margin-left: 5px;
+        text-align: center;
+
+        &:last-child {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+}

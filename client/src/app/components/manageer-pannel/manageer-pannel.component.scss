@@ -1,0 +1,168 @@
+#main-section {
+    width: 100%;
+
+    .register-form {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        
+        .content {
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+
+            border-radius: 10px;
+            background: linear-gradient(145deg, #f0f0f0, #cacaca);
+            box-shadow:  5px 5px 10px #5a5a5a,
+                -5px -5px 10px #ffffff;
+
+            .div-title-radio-input {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                margin-top: 1rem;
+                gap: 1rem;
+
+                .title {
+                    font-size: 20px;
+                    color: black;
+                    font-weight: 800;
+                }
+
+                .radio-group {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 1rem;
+
+                    .radio-button {
+                        height: 60px;
+                        width: 100px;
+
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        border-radius: 10px;
+                        background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                        box-shadow:  5px 5px 10px #5a5a5a,
+                            -5px -5px 10px #ffffff;
+                    }
+                }
+            }
+            
+            mat-form-field {
+                width: 80%;
+
+                .input {
+                    height: 54px;
+                    width: 100%;
+                    border: none;
+                    border-radius: 10px;
+                    background: #e0e0e0;
+                    box-shadow: inset 5px 5px 10px #cecece,
+                        inset -5px -5px 10px #f2f2f2;
+                }
+                mat-label {
+                    font-size: 15px;
+                    font-weight: 800;
+                    color: black;
+                } 
+                mat-hint {
+                    font-size: 12px;
+                }
+                mat-error {
+                    color: red;
+                    font-size: 12px;
+                }
+            }
+            
+            .div-btn-add {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-bottom: 1rem;
+
+                button {
+                    border-radius: 10px;
+                    border: none;
+                    height: 40px;
+                    width: 120px;
+                    // background-color: red;
+                    // background: linear-gradient(145deg, #0084ff, #006fe6);
+                    // box-shadow:  5px 5px 10px #0057b5,
+                    //     -5px -5px 10px #009fff;
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 768px) {
+    #main-section {
+        mat-tab-group {
+            width: 100%;
+        }
+
+        .register-form {
+            width: 100%;
+
+            .content {
+                width: 90%;
+                flex-direction: row;
+                flex-wrap: wrap;
+
+                mat-form-field {
+                    width: 45%;
+                }
+            }
+        }
+    }
+}
+@media (min-width: 1200px) {
+    #main-section {
+        mat-tab-group {
+            width: 100%;
+        }
+
+        .register-form {
+            width: 100%;
+
+            .content {
+                width: 60%;
+
+                mat-form-field {
+                    width: 30%;
+                }
+            }
+        }
+    }
+}
+
+::ng-deep mat-tab-group {
+    margin-top: 5rem;
+}
+
+::ng-deep mat-form-field{
+    height: 40px !important;
+    // mat-label {
+    //     direction: rtl;
+    //     text-align: right;
+    // }
+    .mat-mdc-text-field-wrapper {
+        padding: 0px !important;
+    }
+    .mat-mdc-form-field-infix {
+        text-align: right;
+        padding: 0px !important;
+    }
+}

@@ -1,0 +1,42 @@
+<header>
+  <nav>
+    <app-navbar />
+  </nav>
+</header>
+
+@if (enrolledCourse) {
+  <section class="section-enrolled-course">
+    <div class="div-top">
+      <span class="title-course">{{ enrolledCourse.courseTitle }}</span>
+      <span>هزینه دوره: {{ enrolledCourse.courseTuition }} تومان</span>
+      <span>تعداد پرداخت‌ها: {{ enrolledCourse.numberOfPayments }}</span>
+      <span>مقدار باقی‌مانده: <span class="value">{{ enrolledCourse.tuitionRemainder }} تومان</span></span>
+    </div>
+
+    <div class="div-title-payments">
+      <span>پرداخت های شما</span>
+    </div>
+
+    <div class="div-background-card-payments">
+      @for (payment of enrolledCourse.payments; track $index) {
+      
+        <div class="div-card-payment">
+          <span>مبلغ پرداخت: <span class="value">{{payment.amount}} تومان</span></span>
+          <span>تاریخ پرداخت: <span>{{payment.paidOn}}</span></span>
+          <span>نوع پرداخت: <span>{{payment.method}}</span></span>
+
+          <div class="div-text-and-img">
+            <div class="div-text">
+              <span>عکس رسید پرداخت:</span>
+            </div>
+            @if (payment.photo) {
+              <div class="div-background-photo-of-payment">
+                <img src="{{_apiPhotoUrl + payment.photo.url_165}}" alt="">
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+}

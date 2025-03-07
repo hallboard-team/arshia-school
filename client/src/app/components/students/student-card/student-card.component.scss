@@ -1,0 +1,312 @@
+$bg-color: #e0e5ec;
+$shadow-light: #ffffff;
+$shadow-dark: #b8c6db;
+$text-color: #333;
+$green: #4caf50;
+$red: #e74c3c;
+
+.background {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+
+    .toggler {
+        // width: ;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 5px;
+        margin: 40px auto;
+
+        .selected-date {
+            direction: rtl;
+            font-size: 15px;
+            color: rgba(0, 0, 0, 0.652);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 150px;
+        }
+    }
+    
+    .toggler input {
+        display: none;
+    }
+    
+    .toggler label {
+        display: block;
+        position: relative;
+        width: 72px;
+        height: 36px;
+        border: 1px solid #d6d6d6;
+        border-radius: 36px;
+        cursor: pointer;
+        background: #e0e0e0;
+        box-shadow: inset 5px 5px 10px #c3c3c3,
+            inset -5px -5px 10px #fdfdfd;
+    }
+    
+    .toggler label::after {
+        display: block;
+        border-radius: 100%;
+        background-color: #50ac5d;
+        content: '';
+        animation-name: toggler-size;
+        animation-duration: 0.15s;
+        animation-timing-function: ease-out;
+        animation-direction: forwards;
+        animation-iteration-count: 1;
+        animation-play-state: running;
+    }
+    
+    .toggler label::after, .toggler label .toggler-on, .toggler label .toggler-off {
+        position: absolute;
+        top: 50%;
+        left: 25%;
+        width: 26px;
+        height: 26px;
+        transform: translateY(-50%) translateX(-50%);
+        transition: left 0.15s ease-in-out, background-color 0.2s ease-out, width 0.15s ease-in-out, height 0.15s ease-in-out, opacity 0.15s ease-in-out;
+    }
+    
+    .toggler input:checked + label::after, .toggler input:checked + label .toggler-on, .toggler input:checked + label .toggler-off {
+        left: 75%;
+    }
+    
+    .toggler input:checked + label::after {
+        background-color: #d7062a;
+        animation-name: toggler-size2;
+    }
+    
+    .toggler .toggler-on, .toggler .toggler-off {
+        opacity: 1;
+        z-index: 2;
+    }
+    
+    .toggler input:checked + label .toggler-off, .toggler input:not(:checked) + label .toggler-on {
+        width: 0;
+        height: 0;
+        opacity: 0;
+    }
+    
+    .toggler .path {
+        fill: none;
+        stroke: #fefefe;
+        stroke-width: 7px;
+        stroke-linecap: round;
+        stroke-miterlimit: 10;
+    }
+    
+    @keyframes toggler-size {
+        0%, 100% {
+        width: 26px;
+        height: 26px;
+        }
+    
+        50% {
+        width: 20px;
+        height: 20px;
+        }
+    }
+    
+    @keyframes toggler-size2 {
+        0%, 100% {
+        width: 26px;
+        height: 26px;
+        }
+    
+        50% {
+        width: 20px;
+        height: 20px;
+        }
+    }
+
+    .student-card {
+        background: $bg-color;
+        width: 90%;
+        max-width: 320px;
+        margin: 20px auto;
+        padding: 15px;
+        border-radius: 15px;
+        box-shadow: 6px 6px 12px $shadow-dark, -6px -6px 12px $shadow-light;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+    
+        &.expanded {
+            box-shadow: inset 6px 6px 12px $shadow-dark, inset -6px -6px 12px $shadow-light;
+            .student-details {
+                max-height: 250px;
+                opacity: 1;
+                padding: 10px;
+            }
+        }
+    
+        .student-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+        }
+    
+        .student-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            box-shadow: 3px 3px 6px $shadow-dark, -3px -3px 6px $shadow-light;
+        }
+    
+        .student-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    
+        .student-name-for-men {
+            font-size: 18px;
+            font-weight: bold;
+            color: #00c4ad;
+        }
+    
+        .student-name-for-women {
+            font-size: 18px;
+            font-weight: bold;
+            color: hsl(345deg 100% 47%);
+        }
+    
+        .student-age {
+            font-size: 14px;
+            color: darken($text-color, 10%);
+        }
+    
+        .student-details {
+            width: 100%;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding: 0;
+    
+            .title-absent-present-student {
+                font-size: 17px;
+                color: rgba(0, 0, 0, 0.972);
+            }
+        }
+    
+        .student-gender,
+        .student-userName,
+        .student-phone {
+            direction: rtl;
+            font-size: 14px;
+            color: lighten($text-color, 10%);
+        }
+    
+        .attendance-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+
+            .attendance-buttons {
+                display: flex;
+                gap: 10px;
+    
+                button {
+                    border: none;
+                    padding: 8px 15px;
+                    border-radius: 10px;
+                    font-size: 14px;
+                    cursor: pointer;
+                    box-shadow: 4px 4px 8px $shadow-dark, -4px -4px 8px $shadow-light;
+                    transition: all 0.2s ease-in-out;
+    
+                    &:active {
+                        box-shadow: inset 4px 4px 8px $shadow-dark, inset -4px -4px 8px $shadow-light;
+                    }
+                }
+    
+                .present-btn {
+                    background: #00c4ad;
+                    color: white;
+                }
+    
+                .absent-btn {
+                    background: hsl(345deg 100% 47%);
+                    color: white;
+                }
+            }
+        }
+    
+        .attendance-list {
+            margin-top: 10px;
+            width: 100%;
+            text-align: center;
+    
+            h4 {
+                font-size: 16px;
+                margin-bottom: 5px;
+            }
+    
+            ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+    
+                li {
+                    background: $bg-color;
+                    padding: 5px;
+                    border-radius: 10px;
+                    margin-bottom: 5px;
+                    box-shadow: inset 2px 2px 5px $shadow-dark, inset -2px -2px 5px $shadow-light;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}
+
+
+.card-classmate {
+    // height: 200px;
+    // width: 300px;
+    padding: 1.5rem;
+    border-radius: 10px;
+    background: linear-gradient(315deg, #f0f0f0, #cacaca);
+    box-shadow:  -5px -5px 10px #afafaf,
+        5px 5px 10px #ffffff;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    .photo-profile {
+        height: 70px;
+        width: 70px;
+        border-radius: 50%;
+    }
+
+    .name-last-name-p {
+        font-size: 17px;
+        color: rgba(0, 0, 0, 0.63);
+        direction: rtl;
+    }
+
+    .gender-p {
+        color: rgba(0, 0, 0, 0.63);
+        direction: rtl;
+        font-size: 15px;
+    }
+}

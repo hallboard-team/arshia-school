@@ -1,0 +1,607 @@
+.container {
+    width: 100%;
+    // margin: 50px auto;
+    margin-top: 6rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    position: relative;
+
+    .div-title-profile {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .title-profile {
+            font-size: 30px;
+            color: black;
+        }
+    }
+
+    .div-title-course {
+        width: 100%;
+        display: none;
+        justify-content: center;
+        align-items: center;
+
+        .title-course {
+            font-size: 30px;
+            color: black;
+        }
+    }
+
+    .div-edit-profile {
+        position: absolute;
+        top: -2px;
+        left: 0;
+        width: 100%;
+        height: 90vh;
+        z-index: 2;
+        // padding: 2rem;
+
+        display: none;
+        // justify-content: center;
+        // align-items: center;
+
+        .update-member-form {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            background-color: #e0e0e0;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+
+            .div-btn-exit-edit-page {
+                width: 100%;
+    
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                margin-right: 10px;
+                margin-top: 2rem;
+    
+                button {
+                    margin-right: 10px;
+                    height: 40px;
+                    // width: 35px;
+                    border-radius: 10px;
+                    border: none;
+                    background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                    box-shadow:  5px 5px 10px #c3c3c3,
+                        -5px -5px 10px #fdfdfd;
+                    display: flex;
+                    flex-direction: row-reverse;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 1rem;
+                    padding: 5px;
+                    transition: 0.3s;
+
+                    span {
+                        font-size: 13px;
+                        color: red;
+                        font-weight: 600;
+                    }
+                    svg {
+                        height: 25px;
+                        width: 25px;
+                        fill: red;
+
+                    }
+                }
+
+                button:hover {
+                    cursor: pointer;
+                    transform: scale(1.03);
+                    transition: 0.3s;
+                }
+
+                button:active {
+                    background: #e0e0e0;
+                    box-shadow: inset 5px 5px 10px #c3c3c3,
+                        inset -5px -5px 10px #fdfdfd;
+                    transition: 0.3s;
+                }
+            }
+
+            .div-title {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .title {
+                    color: black;
+                    font-size: 15px;
+                    font-weight: 800;
+                }
+            }
+
+            .content {
+                // height: 100%;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 2rem;
+
+                mat-form-field {
+                    border: none;
+                    width: 80%;
+                    // height: 60px;
+                    // display: flex;
+                    // justify-content: center;
+                    // align-items: center;
+
+                    mat-label {
+                        border: none;
+                    }
+
+                    .input {
+                        height: 54px;
+                        width: 100%;
+                        border: none;
+                        // border-radius: 20px;
+                        background: #e0e0e0;
+                        box-shadow: inset 5px 5px 10px #cecece,
+                            inset -5px -5px 10px #f2f2f2;
+                        // direction: rtl;
+                    }
+                }
+            }
+
+            .div-button-submit {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-bottom: 2rem;
+
+                .button-edit-profile {
+                    width: 30%;
+                    height: 35px;
+                    border-radius: 10px;
+                    background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                    box-shadow:  5px 5px 10px #5a5a5a,
+                        -5px -5px 10px #ffffff;
+                    color: black;
+                    font-size: 13px;
+                    font-weight: bold;
+                }
+
+                .button-edit-profile:active {
+                    background: #e0e0e0;
+                    box-shadow: inset 5px 5px 10px #c3c3c3,
+                        inset -5px -5px 10px #fdfdfd;
+                    transition: 0.3s;
+                }
+            }
+        }
+    }
+}
+
+.profile-card {
+    width: 80%;
+    background: #e0e5ec;
+    border-radius: 20px;
+    box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.1), -8px -8px 15px rgba(255, 255, 255, 0.7);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+
+    &:hover {
+        box-shadow: 12px 12px 20px rgba(0, 0, 0, 0.15), -12px -12px 20px rgba(255, 255, 255, 0.8);
+    }
+
+    .profile-image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+
+        img {
+            height: 100%;
+            width: 100%;
+            border-radius: 50%;
+        }
+    }
+
+    .profile-info {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+
+        .description {
+            color: rgba(0, 0, 0, 0.603);
+            direction: rtl;
+            font-size: 17px;
+        }
+        .gender-men-span {
+            color: #00c4ad;
+            direction: rtl;
+            font-size: 15px;
+        }
+        .gender-women-span {
+            color: hsl(345deg 100% 47%);
+            direction: rtl;
+            font-size: 15px;
+        }
+    }
+    
+    .div-button-edit-profile {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .edit-btn {
+            height: 40px;
+            width: 200px;
+            border: none;
+            border-radius: 15px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(145deg, #f0f0f0, #cacaca);
+            box-shadow:  5px 5px 10px #989898,
+                -5px -5px 10px #ffffff;
+    
+            &:hover {
+                box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.15), -6px -6px 15px rgba(255, 255, 255, 0.8);
+            }
+        }
+        .edit-btn:active{
+            transition: all .1s ease-in-out 0s;
+            background: #e0e0e0;
+            box-shadow: inset 5px 5px 10px #989898,
+                inset -5px -5px 10px #ffffff;
+        }
+    }
+
+    .div-click-button-show-course {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        button {
+            height: 40px;
+            width: 200px;
+            border: none;
+            border-radius: 15px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(145deg, #f0f0f0, #cacaca);
+            box-shadow:  5px 5px 10px #989898,
+                -5px -5px 10px #ffffff;
+    
+            &:hover {
+                box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.15), -6px -6px 15px rgba(255, 255, 255, 0.8);
+            }
+        }
+        button:active{
+            transition: all .1s ease-in-out 0s;
+            background: #e0e0e0;
+            box-shadow: inset 5px 5px 10px #989898,
+                inset -5px -5px 10px #ffffff;
+        }
+    }
+
+    .div-btn-exit-course-list {
+        width: 100%;
+
+        display: none;
+        justify-content: center;
+        align-items: center;
+
+        button {
+            margin-right: 10px;
+            height: 40px;
+            // width: 35px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(145deg, #f0f0f0, #cacaca);
+            box-shadow:  5px 5px 10px #c3c3c3,
+                -5px -5px 10px #fdfdfd;
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            padding: 5px;
+            transition: 0.3s;
+
+            span {
+                font-size: 13px;
+                color: red;
+                font-weight: 600;
+            }
+            svg {
+                height: 25px;
+                width: 25px;
+                fill: red;
+
+            }
+        }
+
+        button:hover {
+            cursor: pointer;
+            transform: scale(1.03);
+            transition: 0.3s;
+        }
+
+        button:active {
+            background: #e0e0e0;
+            box-shadow: inset 5px 5px 10px #c3c3c3,
+                inset -5px -5px 10px #fdfdfd;
+            transition: 0.3s;
+        }
+    }
+}
+
+.course-container {
+    width: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+
+    .course-list {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        padding: 1rem;
+
+        .course-card {
+            width: 80%;
+            background: #e0e5ec;
+            border-radius: 15px;
+            box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.1), -8px -8px 15px rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            transition: all 0.3s ease;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+    
+            &:hover {
+                box-shadow: 12px 12px 20px rgba(0, 0, 0, 0.15), -12px -12px 20px rgba(255, 255, 255, 0.8);
+            }
+
+            .name-of-course-men {
+                font-size: 30px;
+                font-weight: 600;
+                color: #00c4ad;
+            }
+            .name-of-course-women {
+                font-size: 30px;
+                font-weight: 600;
+                color: hsl(345deg 100% 47%);
+            }
+
+            .tozihat-course {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+
+                .text {
+                    color: rgba(0, 0, 0, 0.722);
+                    font-size: 16px;
+                    direction: rtl;
+
+                    .red-text {
+                        font-size: 16px;
+                        color: red;
+                    }
+                    .green-text {
+                        font-size: 16px;
+                        color: #00c4ad;
+                    }
+                }
+            }
+
+            .div-button-show-classmate {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: 1rem;
+                align-items: center;
+                width: 100%;
+
+                button {
+                    height: 40px;
+                    width: 200px;
+                    padding: 10px;
+                    border: none;
+                    border-radius: 10px;
+                    background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                    box-shadow:  5px 5px 10px #bcbcbc,
+                        -5px -5px 10px #ffffff;
+                    transition: 0.3s;
+                }
+                button:hover {
+                    transform: scale(1.03);
+                    transition: 0.3s;
+                    cursor: pointer;
+                }
+                button:active {
+                    background: #e0e0e0;
+                    box-shadow: inset 5px 5px 10px #bcbcbc,
+                        inset -5px -5px 10px #ffffff;
+                    transition: 0.2s;
+                }
+            }
+        }
+    }
+
+    .no-courses {
+        width: 100%;
+        text-align: center;
+        color: red;
+    }
+    .loading {
+        display: none;
+        width: 100%;
+        text-align: center;
+        color: black;
+        direction: rtl;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        .profile-card {
+            width: 70%;
+            // flex-direction: row;
+            // gap: 2rem;
+            .profile-info {
+                flex-direction: row;
+                flex-wrap: wrap;
+                // column-gap: 3rem;
+                direction: rtl;
+                justify-content: space-evenly;
+            }
+        }
+
+        .div-edit-profile {
+            height: 80vh;
+
+            .update-member-form {
+                .content {
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    gap: 3rem;
+
+                    mat-form-field {
+                        width: 40%;
+                    }
+                }
+
+                .div-btn-exit-edit-page {
+                    margin-top: 1rem;
+                }
+
+                .div-button-submit {
+                    margin-top: 2rem;
+                }
+            }
+        }
+
+        .course-container {
+            .course-list {
+                .course-card {
+                    width: 50%;
+                }
+            }
+
+        }
+    }
+}
+
+@media (min-width: 1100px) {
+    .container {
+        .profile-card {
+            width: 50%;
+
+            .profile-info {
+                justify-content: center;
+                width: 70%;
+                gap: 1rem;
+            }
+        }
+
+        .div-edit-profile {
+            height: 100vh;
+
+            .update-member-form {
+                width: 100%;
+                height: 100%;
+                border-radius: 10px;
+                background-color: #e0e0e0;
+    
+                .div-button-submit {
+                    .button-edit-profile {
+                        width: 200px;
+                    }
+                }
+
+                .div-title {
+                    .title {
+                        font-size: 20px;
+                    }
+                }
+
+                .div-btn-exit-edit-page {
+                    margin-top: 2rem;
+                }
+    
+                .content {
+                    height: 100%;
+                    width: 80%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    // gap: 1rem;
+    
+                    mat-form-field {
+                        border: none;
+                        width: 40%;
+                    }
+                }
+            }
+        }
+
+        .course-container {
+            .course-list {
+                flex-direction: row;
+
+                .course-card {
+                    width: 25%;
+                }
+            }
+
+        }
+    }
+}
+
+::ng-deep mat-form-field{
+    height: 40px !important;
+    // mat-label {
+    //     direction: rtl;
+    //     text-align: right;
+    // }
+    .mat-mdc-text-field-wrapper {
+        padding: 0px !important;
+    }
+    .mat-mdc-form-field-infix {
+        text-align: right;
+        padding: 0px !important;
+    }
+}

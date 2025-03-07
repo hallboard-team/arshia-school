@@ -1,0 +1,33 @@
+@if (loggedInUserSig && loggedInUserSig()) {
+    @if (loggedInUserSig()?.roles?.includes('manager')) {
+        @if (memberIn) {
+            <div class="member-card">
+                @if (memberIn.gender == 'femaile') {
+                    <img class="profile" src="../assets/images/femial-profilePhoto1.png" alt="">
+                } @else {
+                    <img class="profile" src="../assets/images/menProfilePhoto1.png" alt="">
+                }
+                <span>نام کاربری: {{memberIn.userName}}</span>
+                <span>نام: {{memberIn.name}}</span>
+                <span>نام خانوادگی: {{memberIn.lastName}}</span>
+                <span>ایمیل: {{memberIn.email}}</span>
+                <span>شماره تلفن: {{memberIn.phoneNum}}</span>
+                <span>سن: {{memberIn.age}}</span>
+                @if (memberIn.gender == 'femaile') {
+                    <span>جنسیت: زن</span>
+                } @else {
+                    <span>جنسیت: مرد</span>
+                }
+                <div class="div-btns">
+                    <button [routerLink]="['/' + 'edit-member/' + memberIn.email]" routerLinkActive #rla="routerLinkActive" class="button-edit-member">
+                        <span>ویرایش</span>
+                    </button>
+
+                    <button [routerLink]="['/' + 'enrolled-course/' + memberIn.userName]" routerLinkActive #rla="routerLinkActive" class="button-add-enrolledCourse">
+                        <span>اضافه کردن دوره</span>
+                    </button>
+                </div>
+            </div>
+        }
+    }
+}

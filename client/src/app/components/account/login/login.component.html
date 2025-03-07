@@ -1,0 +1,140 @@
+<header>
+  <nav>
+    <app-navbar />
+  </nav>
+</header>
+
+<section id="section-main">
+  <div class="div-background">
+    <!-- <div class="div-photo"> -->
+      <img class="left-side-img" src="../assets/images/homePicture1.jpeg" alt="">
+      <!-- <img class="left-side-img" src="../assets/images/homePic1.png" alt=""> -->
+      <!-- <img class="left-side-img" src="../assets/images/homePic1.jpg" alt=""> -->
+
+    <!-- </div> -->
+
+    <form class="login-form" [formGroup]="loginFg" (ngSubmit)="loginFg.valid && login()">
+      <div class="content">
+        <span class="title">به آکادمی طلوع فناوری خوش آمدید</span>
+        <!-- <p class="matn-sepanta">به سپتابپیوندید و با متد های آمریکایی بیاموزید</p> -->
+    
+        <mat-form-field appearance="outline">
+          <mat-label>ایمیل</mat-label>
+          <input autoFocusDir type="email" formControlName="emailCtrl" label="email" placeHolder="ایمیل خود را وارد کنید" matInput>
+          @if (EmailCtrl.hasError('required')) {
+          <mat-error>!این فیلد خالی است</mat-error>
+          }
+          @else if (EmailCtrl.hasError('pattern')) {
+          <mat-error>در انتخاب فرمت ایمیل دقت کنید</mat-error>
+          }
+        </mat-form-field>
+    
+        <mat-form-field appearance="outline">
+          <mat-label>رمز عبور</mat-label>
+          <input type="password" formControlName="passwordCtrl" label="password" placeHolder="پسوورد" matInput>
+          @if (PasswordCtrl.hasError('required')) {
+          <mat-error>!این فیلد خالی است</mat-error>
+          }
+          @else if (PasswordCtrl.errors && PasswordCtrl.hasError('minlength')) {
+          <mat-error>
+          حداقل این مقدار باید باشد {{PasswordCtrl.errors['minlength'].requiredLength}} خیلی کوتاه است.
+          .شما این مقدار وارد کردین {{PasswordCtrl.errors['minlength'].actualLength}} 
+          </mat-error>
+          }
+          @else if(PasswordCtrl.errors && PasswordCtrl.hasError('maxlength')) {
+          <mat-error>It's too long. Max: {{PasswordCtrl.errors['maxlength'].requiredLength}} characters.</mat-error>
+          }
+        </mat-form-field>
+    
+        <button class="button-login" type="submit" [disabled]="loginFg.invalid" mat-raised-button color="primary">ورود</button>
+        <div class="div-signUp">
+          <span>ثبت نام نکرده اید؟</span>
+          <a href="">ثبت نام</a>
+        </div>
+        <div class="div-forgot-pass">
+          <span>رمز عبور خودرا فراموش کردید؟</span>
+          <a href="">بازیابی رمزعبور</a>
+        </div>
+        
+    
+        <mat-error>{{wrongUsernameOrPassword}}.</mat-error>
+      </div>
+    </form>
+  </div>  
+</section>
+<!-- <section class="section-login-page">
+    <div class="div-photo-login-page">
+        <img class="photo1" src="../assets/images/login-page-photo.svg" alt="">
+    </div>
+
+    <section id="section-slider-login">
+      <mat-tab-group class="slider-login">
+
+        <mat-tab label="ورود دانشپذیر">
+          <form class="login-form" [formGroup]="loginFg" (ngSubmit)="loginFg.valid && login()">
+            <div class="content">
+              <h1>!خوش آمدید</h1>
+              <p class="matn-sepanta">به سپتابپیوندید و با متد های آمریکایی بیاموزید</p>
+          
+              <mat-form-field appearance="outline">
+                <mat-label>ایمیل</mat-label>
+                <input class="input" autoFocusDir type="email" formControlName="emailCtrl" label="Email" placeHolder="Your email" matInput>
+                @if (EmailCtrl.hasError('required')) {
+                <mat-error>!این فیلد خالی است</mat-error>
+                }
+                @else if (EmailCtrl.hasError('pattern')) {
+                <mat-error>در انتخاب فرمت ایمیل دقت کنید</mat-error>
+                }
+              </mat-form-field>
+          
+              <mat-form-field appearance="outline">
+                <mat-label>رمز عبور</mat-label>
+                <input type="password" formControlName="passwordCtrl" label="Password" placeHolder="Your password" matInput>
+                @if (PasswordCtrl.hasError('required')) {
+                <mat-error>!این فیلد خالی است</mat-error>
+                }
+                @else if (PasswordCtrl.errors && PasswordCtrl.hasError('minlength')) {
+                <mat-error>
+                حداقل این مقدار باید باشد {{PasswordCtrl.errors['minlength'].requiredLength}} خیلی کوتاه است.
+                .شما این مقدار وارد کردین {{PasswordCtrl.errors['minlength'].actualLength}} 
+                </mat-error>
+                }
+                @else if(PasswordCtrl.errors && PasswordCtrl.hasError('maxlength')) {
+                <mat-error>It's too long. Max: {{PasswordCtrl.errors['maxlength'].requiredLength}} characters.</mat-error>
+                }
+              </mat-form-field>
+          
+              <button type="submit" [disabled]="loginFg.invalid" mat-raised-button color="primary">ورود</button>
+          
+              <mat-error>{{wrongUsernameOrPassword}}.</mat-error>
+            </div>
+          </form>
+        </mat-tab>
+
+        <mat-tab label="ورود اساتید">
+          <form class="login-form">
+            <div class="content">
+              <h1>!خوش آمدید</h1>
+              <p class="matn-sepanta">به سپتابپیوندید و با متد های آمریکایی بیاموزید</p>
+          
+              <mat-form-field appearance="outline">
+                <mat-label>ایمیل</mat-label>
+                <input class="input" autoFocusDir type="email" label="Email" placeHolder="Your email" matInput>
+                
+              </mat-form-field>
+          
+              <mat-form-field appearance="outline">
+                <mat-label>رمز عبور</mat-label>
+                <input type="password" label="Password" placeHolder="Your password" matInput>
+                
+              </mat-form-field>
+          
+              <button mat-raised-button color="primary">ورود</button>
+          
+              <mat-error>{{wrongUsernameOrPassword}}.</mat-error>
+            </div>
+          </form>
+        </mat-tab>
+      </mat-tab-group>
+    </section>
+</section> -->

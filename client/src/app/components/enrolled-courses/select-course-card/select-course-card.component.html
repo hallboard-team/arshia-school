@@ -1,0 +1,14 @@
+@if (courseIn) {
+    <div class="card-items">
+        <span class="course-title">{{ courseIn.title }}</span>
+        <!-- <span class="text">🕒 مدت دوره: {{ courseIn.hours }} ساعت</span> -->
+        <!-- <span class="text">📅 روزهای دوره: {{ courseIn.days }}</span> -->
+        <!-- <span class="text">⏳ ساعت به ازای هر کلاس: {{ courseIn.hoursPerClass }}</span> -->
+        <!-- <span class="teachers-name">اسم اساتید: {{courseIn.professorNames}}</span> -->
+        @if (courseIn.isStarted == 'true') {
+            <span class="text-isStarted-true">در حال اجرا ✅</span>
+        }@else {
+            <span class="text-isStarted-false">هنوز شروع نشده ❌</span>
+        }
+    </div>
+}

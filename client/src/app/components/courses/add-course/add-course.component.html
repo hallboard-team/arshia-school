@@ -1,0 +1,66 @@
+<header>
+    <nav>
+      <app-navbar />
+    </nav>
+</header>
+
+<div class="background">
+    <form class="course-form" [formGroup]="addCourseFg" (ngSubmit)="addCourseFg.valid && add()">
+        <div class="div-title">
+            <span>اضافه کردن دوره جدید</span>
+        </div>
+
+        <div class="content">
+            <mat-form-field appearance="outline">
+                <mat-label>اسم دوره</mat-label>
+                <input class="input" autoFocusDir type="text" formControlName="titleCtrl" label="Title" placeHolder="" matInput>
+                <mat-hint>اسم دوره جدید را وارد کنید</mat-hint>
+                @if (TitleCtrl.hasError('required')) {
+                    <mat-error>فرم رو پرکنید</mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>شهریه </mat-label>
+                <input class="input" autoFocusDir type="number" formControlName="tuitionCtrl" label="Tuition" placeHolder="" matInput>
+                <mat-hint>شهریه دوره را وارد کنید</mat-hint>
+                @if (TuitionCtrl.hasError('required')) {
+                    <mat-error>فرم رو پرکنید</mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>ساعت دوره</mat-label>
+                <input class="input" autoFocusDir type="number" formControlName="hourseCtrl" label="Hourse" placeHolder="" matInput>
+                <mat-hint>ساعت کل دوره را وارد کنید</mat-hint>
+                @if (HourseCtrl.hasError('required')) {
+                    <mat-error>فرم رو پرکنید</mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>ساعت هر کلاس</mat-label>
+                <input class="input" autoFocusDir type="number" formControlName="hoursePerClassCtrl" label="Hourse Per Class" placeHolder="" matInput>
+                <mat-hint>ساعت هر کلاس را وارد کنید</mat-hint>
+                @if (HoursePerClassCtrl.hasError('required')) {
+                    <mat-error>فرم رو پرکنید</mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>تاریخ شروع دوره</mat-label>
+                <input class="input" formControlName="startCtrl" matInput [matDatepicker]="dp3" matInput>
+
+                <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
+                <mat-datepicker #dp3 touchUi disabled="false"></mat-datepicker>
+                @if (StartCtrl.hasError('required')) {
+                <mat-error>فرم رو پرکنید</mat-error>
+                }
+            </mat-form-field>
+
+            <div class="div-btn-add">
+                <button type="submit" [disabled]="addCourseFg.invalid" mat-raised-button color="warn">ثبت دوره جدید</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,12 @@
+@if (attendenceIn) {
+    <div class="background-attendences-div">
+        <div class="attendence-item">
+            <span class="span-date">تاریخ: {{attendenceIn.date}}</span>
+            <span class="span-absent">نوع حضور و غیاب: <span class="absent">غایب</span></span>
+        </div>
+    </div>
+}@else {
+    <div class="div-background-no-absent">
+        <span>شما هیچ تاریخی غیبت نداشته اید</span>
+    </div>
+}

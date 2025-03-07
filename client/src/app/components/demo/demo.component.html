@@ -1,0 +1,35 @@
+<!-- <h1>Demo cm work</h1>
+<form class="container1" [formGroup]="addAttendenceFg" (ngSubmit)="addAttendenceFg.valid && addAttendence()">
+    <div>
+      <input type="text" formControlName="userNameCtrl" label="User Name" placeHolder="Enter UserName">
+    </div>
+
+    <div class="row">
+      <div class="col offset-l2 l4 offset-m3 m6 offset-s2 s8">
+        <div class="datepicker-wrapper">
+          <ng-persian-datepicker 
+            (dateOnSelect)="onSelect($event)"
+            [dateFormat]="'YYYY/MM/DD'"
+            [dateGregorianFormat]="'YYYY-MM-DD'"
+            [(uiIsVisible)]="uiIsVisible"
+            [uiTheme]="uiTheme"
+            [uiYearView]="uiYearView"
+            [uiMonthView]="uiMonthView"
+            [uiHideAfterSelectDate]="uiHideAfterSelectDate"
+            [uiHideOnOutsideClick]="uiHideOnOutsideClick"
+            [uiTodayBtnEnable]="uiTodayBtnEnable">
+
+            <div class="input-field">
+              <input type="text" formControlName="timeCtrl" aria-label="Datepicker Input" />
+            </div>
+          </ng-persian-datepicker>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <input type="text" formControlName="absentOrPresentCtrl" label="Absent Or Present" placeHolder="Enter Status">
+    </div>
+
+    <button type="submit" [disabled]="addAttendenceFg.invalid">add</button>
+</form> -->

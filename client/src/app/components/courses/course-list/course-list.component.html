@@ -1,0 +1,38 @@
+<section class="courses-container">
+    <header>
+        <nav>
+          <app-navbar />
+        </nav>
+    </header>
+
+    <div class="div-title-course">
+        <span>دوره های آموزشگاه</span>
+    </div>
+    
+    @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
+        <div class="div-btn-add-course">
+            <button [routerLink]="['/' + 'add-course']" routerLinkActive #rla="routerLinkActive">
+                <a class="btn2"><span class="spn2">اضافه کردن دوره جدید</span></a>
+            </button>
+        </div>
+    }
+
+    <div class="courses">
+        @for (course of showCourses; track $index) {
+        <app-course-card [courseInput]="course"></app-course-card>
+        }
+    </div>
+    @if (pagination && courseParams) {
+    <mat-paginator #paginator (page)="handlePageEvent($event)" 
+        [length]="pagination.totalItems"
+        [pageSize]="courseParams.pageSize" 
+        [disabled]="false" 
+        [showFirstLastButtons]="true"
+        [pageSizeOptions]="true ? pageSizeOptions : []" 
+        [hidePageSize]="false"
+        [pageIndex]="courseParams.pageNumber - 1" 
+        aria-label="Select page" 
+        class="paginator">
+    </mat-paginator>
+    }
+</section>

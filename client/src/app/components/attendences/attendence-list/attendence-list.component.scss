@@ -1,0 +1,71 @@
+.attendences-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+
+    .div-title-course {
+        margin-top: 5rem;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .attendences-card {
+        width: 90%;
+    }
+
+    .paginator {
+        position: absolute;
+        bottom: 10px;
+        left: 5%;
+
+        width: 90%;
+        border-radius: 10px;
+        background: linear-gradient(145deg, #f0f0f0, #cacaca);
+        box-shadow:  5px 5px 10px #b1b1b1,
+            -5px -5px 10px #ffffff;
+    }
+}
+
+@media (min-width: 768px) {
+    .attendences-container {
+        .div-title-course {
+            span {
+                font-size: 20px;
+                color: black;
+            }
+        }
+    
+        .attendences-card {
+            width: 70%;
+        }
+    
+        .paginator {
+            width: 70%;
+            left: 15%;
+        }
+    }
+}
+
+@media (min-width: 1100px) {
+    .attendences-container {
+        .div-title-course {
+            span {
+                font-size: 30px;
+                font-weight: 800;
+            }
+        }
+    
+        .attendences-card {
+            width: 50%;
+        }
+    
+        .paginator {
+            width: 50%;
+            left: 25%;
+        }
+    }
+}

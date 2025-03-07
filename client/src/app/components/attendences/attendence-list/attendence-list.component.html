@@ -1,0 +1,30 @@
+<section class="attendences-container">
+    <header>
+        <nav>
+          <app-navbar />
+        </nav>
+    </header>
+
+    <div class="div-title-course">
+        <span>حضور و غیاب شما</span>
+    </div>
+
+    <div class="attendences-card">
+        @for (attendence of attendences; track $index) {
+        <app-attendence-card [attendenceInput]="attendence"></app-attendence-card>
+        }
+    </div>
+    @if (pagination && attendenceParams) {
+    <mat-paginator #paginator (page)="handlePageEvent($event)" 
+        [length]="pagination.totalItems"
+        [pageSize]="attendenceParams.pageSize" 
+        [disabled]="false" 
+        [showFirstLastButtons]="true"
+        [pageSizeOptions]="true ? pageSizeOptions : []" 
+        [hidePageSize]="false"
+        [pageIndex]="attendenceParams.pageNumber - 1" 
+        aria-label="Select page" 
+        class="paginator">
+    </mat-paginator>
+    }
+</section>

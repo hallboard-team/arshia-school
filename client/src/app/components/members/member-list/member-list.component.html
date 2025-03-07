@@ -1,0 +1,32 @@
+<header>
+    <nav>
+      <app-navbar />
+    </nav>
+</header>
+
+<section class="members-container">
+    <div class="div-title">
+        <span class="title">کاربران آموزشگاه</span>
+    </div>
+
+    <div class="div-cards-member">
+        @for (member of members; track $index) {
+        <app-member-card [memberInput]="member"></app-member-card>
+        }
+    </div>
+
+    @if (pagination && memberParams) {
+    <mat-paginator #paginator (page)="handlePageEvent($event)" 
+        [length]="pagination.totalItems"
+        [pageSize]="memberParams.pageSize" 
+        [disabled]="false" 
+        [showFirstLastButtons]="true"
+        [pageSizeOptions]="true ? pageSizeOptions : []" 
+        [hidePageSize]="false"
+        [pageIndex]="memberParams.pageNumber - 1" 
+        aria-label="Select page" 
+        class="paginator">
+        <!-- pageIndex must start from 0 -->
+    </mat-paginator>
+    }
+</section>

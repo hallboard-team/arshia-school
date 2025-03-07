@@ -1,0 +1,120 @@
+<header>
+    <nav>
+      <app-navbar />
+    </nav>
+</header>
+
+<div class="div-edit-course">
+    <form class="update-course-form" [formGroup]="courseEditFg" (ngSubmit)="courseEditFg.valid && updateCourse()">
+
+        <div class="div-title">
+            <span class="title">تغییر در دوره موردنظر</span>
+        </div>
+
+        <div class="content">
+            <mat-form-field appearance="outline">
+                <mat-label>نام دوره</mat-label>
+                <input class="input" autoFocusDir type="text" formControlName="titleCtrl" label="Title" placeHolder="" matInput>
+            </mat-form-field>
+        
+            <!-- <mat-form-field appearance="outline">
+                <mat-label>مدرس ها</mat-label>
+                <input class="input" type="text" formControlName="professorUserNameCtrl" label="Professor UserName" placeHolder="" matInput> 
+            </mat-form-field> -->
+
+            <mat-form-field appearance="outline">
+                <mat-label>شهریه </mat-label>
+                <input class="input" type="number" formControlName="tuitionCtrl" label="Tuition" placeHolder="" matInput>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>ساعت دوره</mat-label>
+                <input class="input" type="number" formControlName="hoursCtrl" label="Hours" placeHolder="" matInput>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>ساعت هرکلاس</mat-label>
+                <input class="input" type="number" formControlName="hoursPerClassCtrl" label="Hours Per Class" placeHolder="" matInput>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>تاریخ شروع</mat-label>
+                <input class="input" type="date" formControlName="startCtrl" label="Start" placeHolder="" matInput>
+            </mat-form-field>
+
+            <!-- <mat-form-field appearance="outline">
+                <mat-label>شروع شده است؟</mat-label>
+                <input class="input" type="text" formControlName="isStartedCtrl" label="Is Started" placeHolder="" matInput>
+            </mat-form-field> -->
+            <div class="div-isStarted">
+                <span>دوره شروع شده است؟</span>
+
+                <mat-radio-group class="radio-group" aria-label="Select an option" formControlName="isStartedCtrl">
+                    <!-- @if () {} -->
+                    <mat-radio-button class="radio-button" value="false">خیر</mat-radio-button>
+                    <mat-radio-button class="radio-button" value="true">بله</mat-radio-button>
+                </mat-radio-group>
+            </div>
+        </div>
+
+        <div class="div-button-submit">
+            <button class="button-edit-course" type="submit" [disabled]="courseEditFg.invalid">ثبت تغییرات</button>
+        </div>
+    </form>
+
+    <div class="div-btn-get-teachers">
+        <button (click)="openDivTeachers()">مشاهده اساتید آموزشگاه</button>
+    </div>
+
+    <div class="div-get-all-teachers">
+        <!-- <div *ngIf="isLoading" class="loading">در حال بارگذاری...</div> -->
+        <div class="div-top-for-exit">
+            <button class="btn" (click)="closeDivTeachers()">
+                <div class="sign">
+                    <svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg>
+                </div>
+        
+                <div class="text">بستن صفحه</div>
+            </button>
+        </div>
+
+        @if (teachers.length > 0) {
+            <div class="background-teacher-card">
+                <div class="div-title">
+                    <span>مشاهده مدرس ها</span>
+                </div>
+
+                @for (teacher of teachers; track $index) {
+                    <div class="teacher-card">
+                        @if (teacher.gender == 'male') {
+                            <img class="profile" src="../assets/images/teacherProfileMenPhoto.png" alt="">
+                        } @else {
+                            <img class="profile" src="../assets/images/teacherProfileWomenPhoto.png" alt="">
+                            <!-- <span>نام کاربری: <span class="information-women">{{teacher.userName}}</span></span>
+                            <span>نام: <span class="information-women">{{teacher.name}}</span></span>
+                            <span>نام خانوادگی: <span class="information-women">{{teacher.lastName}}</span></span>
+                            <span>شماره تلفن: <span class="information-women">{{teacher.phoneNum}}</span></span>
+                            <span>جنسیت: <span class="information-women">زن</span></span> -->
+                        }
+                        <span>نام کاربری: <span class="information">{{teacher.userName}}</span></span>
+                        <span>نام: <span class="information">{{teacher.name}}</span></span>
+                        <span>نام خانوادگی: <span class="information">{{teacher.lastName}}</span></span>
+                        <span>شماره تلفن: <span class="information">{{teacher.phoneNum}}</span></span>
+                        <span>جنسیت: <span class="information">مرد</span></span>
+
+                        <div class="div-add-or-remove-teacher-btn">
+                            <button class="button add-professor" (click)="addProfessor(teacher)">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                            <button class="button delete-professor" (click)="removeProfessor(teacher)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        }@else {
+            <span>هیچ مدرسی وجود ندارد</span>
+        }
+    </div>
+</div>
