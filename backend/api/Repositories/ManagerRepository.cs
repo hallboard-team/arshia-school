@@ -353,57 +353,57 @@ public class ManagerRepository : IManagerRepository
         return updateResult.ModifiedCount > 0;
     }
 
-    public async Task<Photo?> AddPhotoAsync(IFormFile file, ObjectId targetPaymentId, CancellationToken cancellationToken)
-    {
-        AppUser? appUser = await _collectionAppUser
-            .Find(doc => doc.EnrolledCourses.Any(ec => ec.Payments.Any(p => p.Id == targetPaymentId)))
-            .FirstOrDefaultAsync(cancellationToken);
+    // public async Task<Photo?> AddPhotoAsync(IFormFile file, ObjectId targetPaymentId, CancellationToken cancellationToken)
+    // {
+    //     AppUser? appUser = await _collectionAppUser
+    //         .Find(doc => doc.EnrolledCourses.Any(ec => ec.Payments.Any(p => p.Id == targetPaymentId)))
+    //         .FirstOrDefaultAsync(cancellationToken);
 
-        if (appUser is null)
-            return null; 
+    //     if (appUser is null)
+    //         return null; 
 
-        EnrolledCourse? enrolledCourse = appUser.EnrolledCourses
-            .FirstOrDefault(ec => ec.Payments.Any(p => p.Id == targetPaymentId));
+    //     EnrolledCourse? enrolledCourse = appUser.EnrolledCourses
+    //         .FirstOrDefault(ec => ec.Payments.Any(p => p.Id == targetPaymentId));
 
-        if (enrolledCourse is null)
-            return null; 
+    //     if (enrolledCourse is null)
+    //         return null; 
 
-        Payment? payment = enrolledCourse.Payments.FirstOrDefault(p => p.Id == targetPaymentId);
+    //     Payment? payment = enrolledCourse.Payments.FirstOrDefault(p => p.Id == targetPaymentId);
 
-        if (payment is null)
-            return null;
+    //     if (payment is null)
+    //         return null;
 
-        IEnumerable<string> imageUrls = await _photoService.AddPhotoToDiskAsync(file, targetPaymentId);
+    //     IEnumerable<string> imageUrls = await _photoService.AddPhotoToDiskAsync(file, targetPaymentId);
 
-        if (imageUrls is null)
-            throw new ArgumentNullException("Saving photo has failed. Error from PhotoService.");
+    //     if (imageUrls is null)
+    //         throw new ArgumentNullException("Saving photo has failed. Error from PhotoService.");
 
-        Photo photo = Mappers.ConvertPhotoUrlsToPhoto(imageUrls.ToArray(), isMain: true); // فرض می‌کنیم این متد عکس رو به Photo تبدیل می‌کند
+    //     Photo photo = Mappers.ConvertPhotoUrlsToPhoto(imageUrls.ToArray(), isMain: true); // فرض می‌کنیم این متد عکس رو به Photo تبدیل می‌کند
 
-        Payment updatedPayment = payment with { Photo = photo };
+    //     Payment updatedPayment = payment with { Photo = photo };
 
-        var filter = Builders<AppUser>.Filter.Eq(u => u.Id, appUser.Id);
-        var update = Builders<AppUser>.Update
-            .Set("EnrolledCourses.$[ec].Payments.$[p]", updatedPayment);
+    //     var filter = Builders<AppUser>.Filter.Eq(u => u.Id, appUser.Id);
+    //     var update = Builders<AppUser>.Update
+    //         .Set("EnrolledCourses.$[ec].Payments.$[p]", updatedPayment);
 
-        var arrayFilters = new List<ArrayFilterDefinition>
-        {
-            new BsonDocumentArrayFilterDefinition<BsonDocument>(
-                new BsonDocument("ec.CourseTitle", enrolledCourse.CourseTitle)
-            ),
-            new BsonDocumentArrayFilterDefinition<BsonDocument>(
-                new BsonDocument("p._id", updatedPayment.Id)
-            )
-        };
+    //     var arrayFilters = new List<ArrayFilterDefinition>
+    //     {
+    //         new BsonDocumentArrayFilterDefinition<BsonDocument>(
+    //             new BsonDocument("ec.CourseTitle", enrolledCourse.CourseTitle)
+    //         ),
+    //         new BsonDocumentArrayFilterDefinition<BsonDocument>(
+    //             new BsonDocument("p._id", updatedPayment.Id)
+    //         )
+    //     };
 
-        UpdateResult result = await _collectionAppUser.UpdateOneAsync(
-            filter,
-            update,
-            new UpdateOptions { ArrayFilters = arrayFilters },
-            cancellationToken);
+    //     UpdateResult result = await _collectionAppUser.Up`dateOneAsync(
+    //         filter,
+    //         update,
+    //         new UpdateOptions { ArrayFilters = arrayFilters },
+    //         cancellationToken);
 
-        return result.ModifiedCount > 0 ? photo : null;
-    }
+    //     return result.ModifiedCount > 0 ? photo : null;
+    // }
 
     public async Task<bool> DeletePhotoAsync(ObjectId targetPaymentId, CancellationToken cancellationToken)
     {

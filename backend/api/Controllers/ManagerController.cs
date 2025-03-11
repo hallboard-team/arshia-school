@@ -205,19 +205,19 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         return Ok();
     }
 
-    [HttpPost("add-photo/{targetPaymentId}")]
-    public async Task<ActionResult<Photo>> AddPhoto(
-            [AllowedFileExtensions, FileSize(500 * 500, 2000 * 2000)]
-            IFormFile file, ObjectId targetPaymentId, CancellationToken cancellationToken
-        )
-    { 
-        if (file is null) 
-        return BadRequest("No file is selected with this request.");
+    // [HttpPost("add-photo/{targetPaymentId}")]
+    // public async Task<ActionResult<Photo>> AddPhoto(
+    //         [AllowedFileExtensions, FileSize(500 * 500, 2000 * 2000)]
+    //         IFormFile file, ObjectId targetPaymentId, CancellationToken cancellationToken
+    //     )
+    // { 
+    //     if (file is null) 
+    //     return BadRequest("No file is selected with this request.");
 
-        Photo? photo = await _managerRepository.AddPhotoAsync(file, targetPaymentId, cancellationToken);
+    //     Photo? photo = await _managerRepository.AddPhotoAsync(file, targetPaymentId, cancellationToken);
 
-        return photo is null ? NotFound("No product with this ID found") : photo;
-    }
+    //     return photo is null ? NotFound("No product with this ID found") : photo;
+    // }
 
     [HttpDelete("delete-photo/{targetPaymentId}")]
     public async Task<ActionResult> DeletePhoto(ObjectId targetPaymentId, CancellationToken cancellationToken)

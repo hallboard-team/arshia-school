@@ -26,6 +26,7 @@ import { MemberCardComponent } from './components/members/member-card/member-car
 import { EditMemberComponent } from './components/members/edit-member/edit-member.component';
 import { EnrolledCourseComponent } from './components/enrolled-courses/enrolled-course/enrolled-course.component';
 import { MemberEnrolledCourseComponent } from './components/enrolled-courses/member-enrolled-course/member-enrolled-course.component';
+import { ContactUsComponent } from './components/contact-us/contact-us.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -58,6 +59,7 @@ export const routes: Routes = [
             // { path: 'معلم', component: TeacherComponent },
             // { path: 'user/user-edit', component: UserEditComponent },
             { path: 'about', component: AboutUsComponent },
+            { path: 'contact-us', component: ContactUsComponent },
             { path: 'not-found', component: NotFoundComponent }
 
             // { path: 'no-access', component: NoAccessComponent }
