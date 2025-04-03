@@ -26,6 +26,30 @@ public class ManagerRepository : IManagerRepository
     }
     #endregion Vars and Constructor
 
+    private IMongoQueryable<AppUser> CreateQuery(MemberParams memberParams)
+    {
+        DateOnly minDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-memberParams.MaxAge - 1));
+        DateOnly maxDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-memberParams.MinAge));
+        
+        IMongoQueryable<AppUser> query = _collectionAppUser.AsQueryable();
+
+        if (!string.IsNullOrEmpty(memberParams.Search))
+        {
+            memberParams.Search = memberParams.Search.ToUpper();
+
+            query = query.Where(u =>
+            u.Name.ToUpper().Contains(memberParams.Search)
+            || u.NormalizedUserName.Contains(memberParams.Search.ToUpper())
+            || u.LastName.ToUpper().Contains(memberParams.Search));
+        }
+
+        query = query.Where(u => !(u.NormalizedUserName!.Equals("ADMIN") || u.NormalizedUserName == "MANAGER"));
+        query = query.Where(u => u.Id != memberParams.UserId);
+        query = query.Where(u => u.DateOfBirth >= minDob && u.DateOfBirth <= maxDob);
+        
+        return query;
+    }
+
     public async Task<LoggedInDto?> CreateSecretaryAsync(RegisterDto registerDto, CancellationToken cancellationToken)
     {
         LoggedInDto loggedInDto = new();
@@ -160,11 +184,12 @@ public class ManagerRepository : IManagerRepository
         return ValidationsExtensions.ValidateObjectId(userId);
     }
 
-    public async Task<PagedList<AppUser>> GetAllAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
+    public async Task<PagedList<AppUser>> GetAllAsync(MemberParams memberParams, CancellationToken cancellationToken)
     {
-        IMongoQueryable<AppUser> query = _collectionAppUser.AsQueryable();
+        PagedList<AppUser> appUsers = await PagedList<AppUser>.CreatePagedListAsync(
+            CreateQuery(memberParams), memberParams.PageNumber, memberParams.PageSize, cancellationToken);
 
-        return await PagedList<AppUser>.CreatePagedListAsync(query, paginationParams.PageNumber, paginationParams.PageSize, cancellationToken);
+        return appUsers;
     }
 
     public async Task<IEnumerable<UserWithRoleDto>> GetUsersWithRolesAsync()
@@ -315,6 +340,19 @@ public class ManagerRepository : IManagerRepository
         MemberDto memberDto = Mappers.ConvertAppUserToMemberDto(appUser, isAbsent: false);
         
         return memberDto;
+    }
+
+    public async Task<ProfileDto?> GetMemberByUserNameAsync(string targetUserName, CancellationToken cancellationToken)
+    {
+        AppUser? appUser = await _collectionAppUser.Find<AppUser>(appUser => appUser.NormalizedUserName == targetUserName.ToUpper())
+            .FirstOrDefaultAsync(cancellationToken);
+        
+        if (appUser is null)
+            return null;
+
+        ProfileDto profileDto = Mappers.ConvertAppUserToProfileDto(appUser);
+        
+        return profileDto;
     }
 
     public async Task<bool> UpdateMemberAsync(string targetMemberEmail, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken)

@@ -48,13 +48,8 @@ export class MemberService {
   }
 
   getAllMembers(memberParams: MemberParams): Observable<PaginatedResult<Member[]>> {
-    let params = new HttpParams();
-  
-    if (memberParams) {
-      params = params.append('pageNumber', memberParams.pageNumber);
-      params = params.append('pageSize', memberParams.pageSize);
-    }
-  
+    const params = this.getHttpParams(memberParams);
+
     return this.paginationHandler.getPaginatedResult<Member[]>(this._apiUrl, params);
   }
 
@@ -85,7 +80,18 @@ export class MemberService {
 
     return this._http.get<EnrolledCourse>(this._baseApiUrl + 'get-enrolled-course/' + courseTitle);
   } 
-  // getByUserName(userName: string): Observable<Member | null> {
-  //   return this._http.get<Member>(this._baseApiUrl + 'get-by-userName/' + userName);
-  // }
+  
+  private getHttpParams(memberParams: MemberParams): HttpParams {
+    let params = new HttpParams();
+
+    if (memberParams) {
+      params = params.append('search', memberParams.search);
+      params = params.append('pageSize', memberParams.pageSize);
+      params = params.append('pageNumber', memberParams.pageNumber);
+      params = params.append('minAge', memberParams.minAge);
+      params = params.append('maxAge', memberParams.maxAge);
+    }
+
+    return params;
+  }
 }

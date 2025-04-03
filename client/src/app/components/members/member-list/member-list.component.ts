@@ -10,13 +10,21 @@ import { MemberParams } from '../../../models/helpers/member-params';
 import { PaginatedResult } from '../../../models/helpers/paginatedResult';
 import { ActivatedRoute } from '@angular/router';
 import { NavbarComponent } from '../../navbar/navbar.component';
+import { AbstractControl, FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
 
 @Component({
   selector: 'app-member-list',
   standalone: true,
   imports: [
     CommonModule, MemberCardComponent, MatPaginatorModule,
-    NavbarComponent
+    NavbarComponent, MatFormFieldModule, MatInputModule, 
+    MatSelectModule, MatButtonModule,MatSliderModule,
+    FormsModule, ReactiveFormsModule,
   ],
   templateUrl: './member-list.component.html',
   styleUrl: './member-list.component.scss'
@@ -33,45 +41,81 @@ export class MemberListComponent {
   
   pageSizeOptions = [5, 10, 25];
   pageEvent: PageEvent | undefined;
+
+  // orderOptions: string[] = ['lastActive', 'created', 'age'];
+  // orderOptionsView: string[] = ['Last Active', 'Created', 'Age'];
+  readonly minAge: number = 18;
+  readonly maxAge: number = 99;
     
   private _route = inject(ActivatedRoute);
+  private _fB = inject(FormBuilder);
+
+  filterFg = this._fB.group({
+    searchCtrl: ['', []],
+    minAgeCtrl: [this.minAge, []], // magic nubmers
+    maxAgeCtrl: [this.maxAge, []]
+  });
+
+  // Angular Change Detection
+
+  get SearchCtrl(): FormControl {
+    return this.filterFg.get('searchCtrl') as FormControl;
+  }
+
+  get MinAgeCtrl(): AbstractControl {
+    return this.filterFg.get('minAgeCtrl') as FormControl;
+  }
+
+  get MaxAgeCtrl(): AbstractControl {
+    return this.filterFg.get('maxAgeCtrl') as FormControl;
+  }
     
   ngOnInit(): void {
     this.memberParams = new MemberParams();
   
-    this.getAllMembers();
+    this.getAll();
   }
   
   ngOnDestroy(): void {
     this.subscribed?.unsubscribe();
   }
   
-  getAllMembers(): void {
+  getAll(): void {
     if (this.memberParams)
       this.subscribed = this._memberService.getAllMembers(this.memberParams).subscribe({
         next: (response: PaginatedResult<Member[]>) => {
           if (response.body && response.pagination) {
             this.members = response.body;
             this.pagination = response.pagination;
-  
-            this.members.forEach(member => {
-              member.isAbsent = member.isAbsent ?? false;
-            });
           }
         }
       });
   }
-  
+
   handlePageEvent(e: PageEvent) {
     if (this.memberParams) {
       if (e.pageSize !== this.memberParams.pageSize)
         e.pageIndex = 0;
-  
+
       this.pageEvent = e;
       this.memberParams.pageSize = e.pageSize;
       this.memberParams.pageNumber = e.pageIndex + 1;
-  
-      this.getAllMembers();
+
+      this.getAll();
     }
+  }
+
+  updateMemberParams(): void {
+    if (this.memberParams) {
+      this.memberParams.search = this.SearchCtrl.value;
+      this.memberParams.minAge = this.MinAgeCtrl.value;
+      this.memberParams.maxAge = this.MaxAgeCtrl.value;
+    }
+  }
+
+  reset(): void {
+    this.SearchCtrl.reset();
+    this.MinAgeCtrl.setValue(this.minAge);
+    this.MaxAgeCtrl.setValue(this.maxAge);
   }
 }

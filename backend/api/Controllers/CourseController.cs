@@ -48,7 +48,7 @@ public class CourseController(ICourseRepository _courseRepository) : BaseApiCont
             {
                 Id = course.Id.ToString(),
                 Title = course.Title,
-                ProfessorNames = professorNames, // اضافه کردن لیست اسامی مدرسین
+                ProfessorNames = professorNames, 
                 Tuition = course.Tuition,
                 Hours = course.Hours,
                 HoursPerClass = course.HoursPerClass,

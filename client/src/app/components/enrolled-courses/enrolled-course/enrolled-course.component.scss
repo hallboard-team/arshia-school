@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 6rem;
+    margin-top: 5rem;
 
     mat-tab-group {
         width: 100%;
@@ -221,5 +221,16 @@
     .mat-mdc-form-field-infix {
         text-align: right;
         padding: 0px !important;
+    }
+}
+
+::ng-deep mat-select{
+    height: 55px;
+
+    .mat-mdc-select-value {
+        height: 55px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 }

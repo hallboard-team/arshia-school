@@ -23,6 +23,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTabsModule } from '@angular/material/tabs';
 import { UpdateEnrolledCourse } from '../../../models/update-enrolled-course.model';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-enrolled-course',
@@ -32,7 +33,7 @@ import { MatRadioModule } from '@angular/material/radio';
     NavbarComponent, RouterModule, MatFormFieldModule,
     SelectCourseCardComponent, MatSnackBarModule,
     MatInputModule, MatButtonModule, MatTabsModule,
-    MatRadioModule
+    MatRadioModule, MatSelectModule
 ],
   templateUrl: './enrolled-course.component.html',
   styleUrl: './enrolled-course.component.scss'
@@ -58,6 +59,7 @@ export class EnrolledCourseComponent {
   
   loggedInUserSig: Signal<LoggedInUser | null> | undefined;
   fb = inject(FormBuilder);
+  memberUserName: string | null = this._route.snapshot.paramMap.get('memberUserName');
   
   ngOnInit(): void {
     this.courseParams = new CourseParams();

@@ -1,0 +1,141 @@
+.section-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    .background-gradient {
+        margin-top: 1rem;
+        width: 90%;
+        border-radius: 10px;
+        // height: 500px;
+        background: rgb(60,68,97);
+        background: linear-gradient(90deg, rgba(60,68,97,1) 0%, rgba(0,159,255,1) 100%);
+        border-radius: 50px;
+        // background: linear-gradient(145deg, #f0f0f0, #cacaca);
+        box-shadow:  5px 5px 10px #707070,
+            -5px -5px 10px #ffffff;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        
+        .div-items {
+            border-radius: 20px;
+            background: linear-gradient(225deg, #f0f0f0, #cacaca);
+            box-shadow:  -5px 5px 10px #707070,
+                5px -5px 10px #ffffff;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+
+            .div-profile-title {
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+                width: 100%;
+
+                .div-background-img-neu {
+                    border-radius: 50%;
+                    height: 130px;
+                    width: 130px;
+                    border-radius: 50%;
+                    background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                    box-shadow:  5px 5px 10px #5a5a5a,
+                        -5px -5px 10px #ffffff;
+    
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+    
+                    .div-img-gradient {
+                        height: 90%;
+                        width: 90%;
+                        border-radius: 50%;
+                        background: rgb(60,68,97);
+                        background: linear-gradient(90deg, rgba(60,68,97,1) 0%, rgba(0,159,255,1) 100%);
+                    }
+                }
+
+                .title {
+                    font-size: 25px;
+                    color: black;
+                    font-weight: 500;
+                }
+            }
+
+            .description1 {
+                width: 90%;
+                height: 4rem;
+                border-radius: 20px;
+                background: rgb(60,68,97);
+                background: linear-gradient(90deg, rgba(60,68,97,1) 0%, rgba(0,159,255,1) 100%);
+                box-shadow:  5px 5px 10px #5a5a5a,
+                    -5px -5px 10px #ffffff;                
+            }
+
+            .description2 {
+                width: 90%;
+                height: 4rem;
+                border-radius: 20px;
+                background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                box-shadow:  5px 5px 10px #5a5a5a,
+                    -5px -5px 10px #ffffff;
+            }
+
+            .div-social-media {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 1rem;
+
+                .div-icon {
+                    border-radius: 50%;
+                    height: 50px;
+                    width: 50px;
+                    background: rgb(60,68,97);
+                    background: linear-gradient(90deg, rgba(60,68,97,1) 0%, rgba(0,159,255,1) 100%);
+                    box-shadow:  5px 5px 10px #5a5a5a,
+                        -5px -5px 10px #ffffff;
+                    padding: 5px;
+                    transition: 0.2s;
+
+                    img {
+                        height: 100%;
+                        width: 100%;
+                    }
+                }
+                .div-icon:hover {
+                    cursor: pointer; 
+                    transition: 0.2s;
+                    transform: scale(1.02);
+                }
+            }
+
+            .div-address {
+                border-radius: 15px;
+                background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                box-shadow:  5px 5px 10px #5a5a5a,
+                    -5px -5px 10px #ffffff;
+                width: 90%;
+                padding: 10px;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: row-reverse;
+
+                .span-address {
+                    font-size: 15px;
+                    color: black;
+                    direction: rtl;
+                }
+            }
+        }
+    }
+}

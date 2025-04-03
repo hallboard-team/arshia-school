@@ -46,14 +46,6 @@ public class CourseRepository : ICourseRepository
         return null;
     }
 
-    // public async Task<PagedList<Course>> GetAllAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
-    // {
-    //     IMongoQueryable<Course> query = _collectionCourse.AsQueryable();
-
-    //     return await PagedList<Course>.CreatePagedListAsync(query, paginationParams.PageNumber,
-    //         paginationParams.PageSize, cancellationToken);
-    // }
-
     public async Task<PagedList<Course>> GetAllAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
     {
         IMongoQueryable<Course> query = _collectionCourse.AsQueryable();

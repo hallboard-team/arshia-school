@@ -5,6 +5,10 @@
 </header>
 
 <section class="courses-container">
+    <div>
+        <span>{{memberUserName}}</span>
+    </div>
+
     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
         <mat-tab label="اضافه کردن دوره">
             <div class="div-enrolled-course">
@@ -12,12 +16,14 @@
                     <div class="content">
                         <mat-form-field appearance="outline">
                             <mat-label>اسم دوره</mat-label>
-                            <input autoFocusDir type="text" formControlName="titleCourseCtrl" label="title course" matInput>
-                            @if (TitleCourseCtrl.hasError('required')) {
-                            <mat-error>!این فیلد خالی است</mat-error>
-                            }
+                            <mat-select formControlName="titleCourseCtrl">
+                              <mat-option *ngFor="let course of showCourses" [value]="course.title">
+                                {{ course.title }}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="TitleCourseCtrl.hasError('required')">!این فیلد خالی است</mat-error>
                         </mat-form-field>
-        
+                          
                         <mat-form-field appearance="outline">
                             <mat-label>تعداد اقساط</mat-label>
                             <input autoFocusDir type="number" formControlName="numberOfPaymentsCtrl" label="number of payments" matInput>
@@ -46,10 +52,12 @@
                     <div class="content">
                         <mat-form-field appearance="outline">
                             <mat-label>اسم دوره</mat-label>
-                            <input autoFocusDir type="text" formControlName="titleCourseUpdateCtrl" label="title course" matInput>
-                            @if (TitleCourseCtrl.hasError('required')) {
-                            <mat-error>!این فیلد خالی است</mat-error>
-                            }
+                            <mat-select formControlName="titleCourseCtrl">
+                              <mat-option *ngFor="let course of showCourses" [value]="course.title">
+                                {{ course.title }}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="TitleCourseCtrl.hasError('required')">!این فیلد خالی است</mat-error>
                         </mat-form-field>
         
                         <mat-form-field appearance="outline">
@@ -90,7 +98,7 @@
         </mat-tab>
     </mat-tab-group>
 
-    <div class="div-select-course">
+    <!-- <div class="div-select-course">
         <div class="courses">
             @for (course of showCourses; track $index) {
             <app-select-course-card [selectCourseInput]="course"></app-select-course-card>
@@ -109,5 +117,5 @@
             class="paginator">
         </mat-paginator>
         }
-    </div>
+    </div> -->
 </section>

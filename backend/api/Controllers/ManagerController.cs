@@ -52,9 +52,9 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MemberDto>>> GetAll([FromQuery] PaginationParams paginationParams, CancellationToken cancellationToken)
+    public async Task<ActionResult<IEnumerable<MemberDto>>> GetAll([FromQuery] MemberParams memberParams, CancellationToken cancellationToken)
     {
-        PagedList<AppUser> pagedAppUsers = await _managerRepository.GetAllAsync(paginationParams, cancellationToken);
+        PagedList<AppUser> pagedAppUsers = await _managerRepository.GetAllAsync(memberParams, cancellationToken);
 
         if (pagedAppUsers.Count == 0)
             return NoContent();
@@ -189,6 +189,24 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         }
 
         return Ok(memberDto);
+    }
+
+    [HttpGet("get-member-by-userName/{targetUserName}")]
+    public async Task<ActionResult<ProfileDto>> GetMemberByUserName(string targetUserName, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrEmpty(targetUserName))
+        {
+            return BadRequest("userName is required.");
+        }
+
+        ProfileDto? profileDto = await _managerRepository.GetMemberByUserNameAsync(targetUserName, cancellationToken);
+
+        if (profileDto == null)
+        {
+            return NotFound("User not found.");
+        }
+
+        return Ok(profileDto);
     }
 
     [HttpPut("update-member/{targetMemberEmail}")]

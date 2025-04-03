@@ -6,12 +6,13 @@ import { RouterModule } from '@angular/router';
 import { ShowCourse } from '../../../models/course.model';
 import { LoggedInUser } from '../../../models/logged-in-user.model';
 import { AccountService } from '../../../services/account.service';
+import { MatDivider, MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-select-course-card',
   standalone: true,
   imports: [
-    CommonModule, RouterModule,
+    CommonModule, RouterModule, MatDividerModule,
     MatCardModule, MatIconModule
   ],
   templateUrl: './select-course-card.component.html',

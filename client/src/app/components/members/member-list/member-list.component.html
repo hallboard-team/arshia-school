@@ -4,6 +4,35 @@
     </nav>
 </header>
 
+<form [formGroup]="filterFg" class="form-filters">
+  <div class="filter">
+    <span class="title">جست و جو کاربران</span>
+    <span class="filter-by">نام/نام خانوادگی/نام کاربری</span>
+    <mat-form-field>
+      <input formControlName="searchCtrl" matInput placeholder="" type="text">
+    </mat-form-field>
+  </div>
+
+  <div class="age">
+    <span>فیلتر با سن کاربر</span>
+    <div class="slider">
+      <mat-slider discrete max="{{maxAge}}" min="{{minAge}}">
+        <input formControlName="minAgeCtrl" matSliderStartThumb>
+        <input formControlName="maxAgeCtrl" matSliderEndThumb>
+      </mat-slider>
+    </div>
+  </div>
+
+  <div class="btns">
+    <button (click)="updateMemberParams(); getAll();" color="primary" mat-stroked-button>
+      ثبت تغیرات
+    </button>
+    <button (click)="reset()" mat-stroked-button color="warn">
+      حذف تغییرات
+    </button>
+  </div>
+</form>
+
 <section class="members-container">
     <div class="div-title">
         <span class="title">کاربران آموزشگاه</span>
