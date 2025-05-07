@@ -10,6 +10,8 @@ ssl/
 storage/
 obj/
 
+node_modules/
+
 # User-specific files
 *.rsuser
 *.suo

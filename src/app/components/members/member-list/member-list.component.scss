@@ -1,0 +1,19 @@
+.members {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.members-container {
+    position: relative;
+    min-height: 70dvh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .paginator {
+        position: absolute;
+        bottom: 1rem;
+    }
+}

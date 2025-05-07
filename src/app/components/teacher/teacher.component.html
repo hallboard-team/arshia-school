@@ -1,0 +1,52 @@
+<section class="main-section">
+    <header>
+        <nav>
+          <app-navbar />
+        </nav>
+    </header>
+
+    <div class="div-title">
+        <span class="title">درس‌های شما</span>
+    </div>
+
+    <div class="background-card">
+        <div *ngFor="let course of courses" class="card-items">
+            <span class="course-title">{{ course.title }}</span>
+            <span class="text">🕒 مدت دوره: {{ course.hours }} ساعت</span>
+            <span class="text">📅 روزهای دوره: {{ course.days }}</span>
+            <span class="text">⏳ ساعت به ازای هر کلاس: {{ course.hoursPerClass }}</span>
+            <span class="text-isStarted-true" *ngIf="course.isStarted">در حال اجرا ✅</span>
+            <span class="text-isStarted-false" *ngIf="!course.isStarted">هنوز شروع نشده ❌</span>
+
+            <button 
+                class="btn-click-student-show" [routerLink]="['/students-card/' + course.title]">
+                مشاهده دانش‌آموزان 📚
+            </button>
+        </div>
+    </div>
+
+</section>
+
+<!-- <section class="main-section">
+    <header>
+        <nav>
+          <app-navbar />
+        </nav>
+    </header>
+
+    <span class="title">درس های شما</span>
+    <div class="background-cards">
+        @for (course of courses; track $index) {
+            @if (course) {
+                <div class="card">
+                    <span>{{course.title}}</span>
+                    <span>{{course.hours}}</span>
+                    <span>{{course.days}}</span>
+                    <span>{{course.hoursPerClass}}</span>
+                    <span>{{course.start}}</span>
+                    <span>{{course.isStarted}}</span>
+                </div>
+            }
+        }
+    </div>
+</section> -->

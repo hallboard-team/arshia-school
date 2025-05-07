@@ -1,21 +1,20 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-    
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach",
-            "requireExactSource": false
-        },        
-        {
-            "name": "Angular Client",
-            "request": "launch",
-            "type": "chrome",
-            "url": "https://localhost:4200/",
-            "webRoot": "${workspaceFolder}/client",
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Core Attach",
+      "type": "coreclr",
+      "request": "attach",
+      "requireExactSource": false
+    },
+    {
+      "name": "Angular Client",
+      "request": "launch",
+      "type": "chrome",
+      "url": "https://localhost:4200/",
+      "webRoot": "${workspaceFolder}/client",
+    }
+  ]
 }
 // {
 //     // Use IntelliSense to learn about possible attributes.
@@ -28,7 +27,6 @@
 //             "type": "coreclr",
 //             "request": "attach"
 //         },
-        
 //         {
 //             "type": "chrome",
 //             "request": "launch",

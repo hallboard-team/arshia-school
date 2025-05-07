@@ -1,0 +1,296 @@
+<header>
+    <nav>
+        <app-navbar />
+    </nav>
+</header>
+
+<div class="container">
+    <div class="div-profile">
+        <div class="profile-card">
+            <div class="profile-image">
+                @if (targetUserPofile?.gender == 'male') {
+                <img src="../assets/images/menProfilePhoto.png" alt="Profile">
+                }@else {
+                <img src="../assets/images/womenProfilePhoto.png" alt="Profile">
+                }
+            </div>
+
+            <div class="profile-info">
+                <span class="description">ایمیل: {{targetUserPofile?.email}}</span>
+                <span class="description">نام: {{targetUserPofile?.name}}</span>
+                <span class="description">نام خانوادگی: {{targetUserPofile?.lastName}}</span>
+                <span class="description">تاریخ تولد: {{targetUserPofile?.age}}</span>
+                <span class="description">شماره تلفن: {{targetUserPofile?.phoneNum}}</span>
+                <span class="description">نام کاربری: {{targetUserPofile?.userName}}</span>
+
+                @if (targetUserPofile?.gender == 'male') {
+                <span class="gender-men-span">جنسیت: مرد</span>
+                }@else {
+                <span class="gender-women-span">جنسیت: زن</span>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="div-tabs">
+        <mat-tab-group (selectedTabChange)="onTabChange($event)">
+            <mat-tab label="ادیت پروفایل">
+                <div class="div-edit-profile">
+                    <form class="update-member-form" [formGroup]="targetMemberEditFg"
+                        (ngSubmit)="targetMemberEditFg.valid && updateTargetMember()">
+                        <div class="div-radio-input">
+                            <mat-radio-group class="radio-group" aria-label="Select an option"
+                                formControlName="targetGenderCtrl">
+                                <mat-radio-button class="radio-button" value="male">مرد</mat-radio-button>
+                                <mat-radio-button class="radio-button" value="femaile">زن</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>ایمیل</mat-label>
+                            <input class="input" autoFocusDir type="email" formControlName="targetEmailCtrl"
+                                label="Email" placeHolder="Your email" matInput>
+                            <mat-hint>ایمیل را وارد کنید</mat-hint>
+                            @if (TargetEmailCtrl.hasError('required')) {
+                            <mat-error>فرم رو پرکنید</mat-error>
+                            }
+                            @else if (TargetEmailCtrl.hasError('pattern')) {
+                            <mat-error>ایمیل رو به درستی وارد کنید</mat-error>
+                            }
+                        </mat-form-field>
+
+                        <!-- <mat-form-field appearance="outline">
+                            <mat-label>نام کاربری</mat-label>
+                            <input class="input" type="text" formControlName="userNameCtrl" label="Username" placeHolder="Your username"
+                            matInput>
+                            <mat-hint>بین ۱ تا ۳۰ حرف</mat-hint>
+                            @if (EmailCtrl.hasError('required')) {
+                            <mat-error>فرم رو پرکنید</mat-error>
+                            }
+                        </mat-form-field> -->
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>نام</mat-label>
+                            <input class="input" type="text" formControlName="targetNameCtrl" label="Name"
+                                placeHolder="Enter your desired name." matInput>
+                            @if (TargetNameCtrl.hasError('required')) {
+                            <mat-error>فرم رو پرکنید</mat-error>
+                            }
+                            @else if (TargetNameCtrl.hasError('minlength')) {
+                            <mat-error>خیلی کوتاهه حداقل :۲ حرف</mat-error>
+                            }
+                            @else if(TargetNameCtrl.hasError('maxlength')) {
+                            <mat-error>خیلی بلنده حداقل: ۳۰ حرف</mat-error>
+                            }
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>نام خانوادگی</mat-label>
+                            <input class="input" type="text" formControlName="targetLastNameCtrl" label="Last Name"
+                                placeHolder="Enter your desired name." matInput>
+                            @if (TargetLastNameCtrl.hasError('required')) {
+                            <mat-error>فرم رو پرکنید</mat-error>
+                            }
+                            @else if (TargetLastNameCtrl.hasError('minlength')) {
+                            <mat-error>خیلی کوتاهه حداقل :۲ حرف‍</mat-error>
+                            }
+                            @else if(TargetLastNameCtrl.hasError('maxlength')) {
+                            <mat-error>خیلی بلنده حداقل: ۳۰ حرف</mat-error>
+                            }
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>شماره تلفن</mat-label>
+                            <input class="input" type="text" formControlName="targetPhoneNumCtrl" label="Phone Number"
+                                placeHolder="Enter your phone number." matInput>
+                            @if (TargetPhoneNumCtrl.hasError('required')) {
+                            <mat-error>فرم رو پرکنید</mat-error>
+                            }
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>تاریخ تولد</mat-label>
+                            <input class="input" formControlName="targetDateOfBirthCtrl" [min]="minDate" [max]="maxDate"
+                                matInput [matDatepicker]="dp3" matInput>
+                            <mat-hint>بین {{minDate.getFullYear()}} تا {{maxDate.getFullYear()}}</mat-hint>
+                            <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
+                            <mat-datepicker #dp3 touchUi disabled="false"></mat-datepicker>
+                            @if (TargetDateOfBirthCtrl.hasError('required')) {
+                            <mat-error>فرم رو پرکنید</mat-error>
+                            }
+                        </mat-form-field>
+
+                        <div class="div-btn-add">
+                            <button type="submit" [disabled]="targetMemberEditFg.invalid">
+                                <span>ثبت تغییرات</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </mat-tab>
+
+            @if (courses && targetUserPofile) {
+            <mat-tab label="دوره ها">
+                <div class="div-courses">
+                    <!-- <div class="div-title-course">
+                            <span class="title-course">دوره‌های شما</span>
+                        </div> -->
+
+                    @if (!loading) {
+                    <div class="course-container">
+                        @if (error) {
+                        <div class="error-message">
+                            {{ error }}
+                        </div>
+                        }
+
+                        @if (courses.length > 0) {
+                        <div class="course-list">
+                            @for (course of courses; track $index) {
+                            <div class="course-card">
+                                @if (targetUserPofile.gender == 'male') {
+                                <span class="name-of-course-men">{{ course.title }}</span>
+                                }@else {
+                                <span class="name-of-course-women">{{ course.title }}</span>
+                                }
+                                <div class="tozihat-course">
+                                    <span class="text">شهریه: {{ course.tuition | currency:'IRR' }}</span>
+                                    <span class="text">مدت زمان کلاس: <span class="red-text">{{ course.hours }}</span>
+                                        ساعت</span>
+                                    <span class="text">تاریخ شروع: {{ course.start | date:'yyyy/MM/dd' }}</span>
+                                    @if (course.isStarted == 'true') {
+                                    <span class="text">آغاز شده: <span class="green-text">بله</span></span>
+                                    }@else {
+                                    <span class="text">آغاز شده: <span class="red-text">خیر</span></span>
+                                    }
+                                </div>
+
+                                <div class="div-button-show-classmate">
+                                    <button [routerLink]="['/students-card/' + course.title]">مشاهده دانشجویان</button>
+                                    <button [routerLink]="['/attendences-card/' + course.title]">
+                                        دیدن حضور و غیاب
+                                    </button>
+                                    <button
+                                        [routerLink]="['/' + 'target-member-enrolled-course/' + targetUserPofile.userName + '/' + course.title]">
+                                        مشاهده پرداخت ها
+                                    </button>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        }
+                        @if (courses.length === 0) {
+                        <div class="no-courses">
+                            <span>
+                                هیچ دوره‌ای ثبت‌نام نکرده‌اید.
+                            </span>
+                        </div>
+                        }
+                    </div>
+                    }
+                    @else {
+                    <div class="loading">در حال بارگذاری...</div>
+                    }
+                </div>
+            </mat-tab>
+            }
+
+            <mat-tab label="اضافه کردن دوره">
+                <div class="div-enrolled-course">
+                    <form class="enrolled-form" [formGroup]="addEnrolledCourseFg"
+                        (ngSubmit)="addEnrolledCourseFg.valid && addEnrolledCourse()">
+                        <div class="content">
+                            <mat-form-field appearance="outline">
+                                <mat-label>اسم دوره</mat-label>
+                                <mat-select formControlName="titleCourseCtrl">
+                                    <mat-option *ngFor="let course of showCourses" [value]="course.title">
+                                        {{ course.title }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="TitleCourseCtrl.hasError('required')">!این فیلد خالی است</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>تعداد اقساط</mat-label>
+                                <input autoFocusDir type="number" formControlName="numberOfPaymentsCtrl"
+                                    label="number of payments" matInput>
+                                @if (NumberOfPaymentsCtrl.hasError('required')) {
+                                <mat-error>!این فیلد خالی است</mat-error>
+                                }
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>مبلغ پرداختی</mat-label>
+                                <input type="number" formControlName="paidAmountCtrl" label="paid amount" matInput>
+                                @if (PaidAmountCtrl.hasError('required')) {
+                                <mat-error>!این فیلد خالی است</mat-error>
+                                }
+                            </mat-form-field>
+
+                            <button class="button-enrolled" type="submit" [disabled]="addEnrolledCourseFg.invalid">ثبت
+                                اطلاعات</button>
+                        </div>
+                    </form>
+                </div>
+            </mat-tab>
+
+            @if (courseTitles) {
+            <mat-tab label="پرداخت شهریه">
+                <div class="div-enrolled-course">
+                    <form class="enrolled-form" [formGroup]="updateEnrolledCourseFg"
+                        (ngSubmit)="updateEnrolledCourseFg.valid && updateEnrolledCourse()">
+                        <div class="content">
+                            <mat-form-field appearance="outline">
+                                <mat-label>اسم دوره</mat-label>
+                                <mat-select formControlName="titleCourseUpdateCtrl">
+                                    <mat-option *ngFor="let title of courseTitles" [value]="title">
+                                        {{ title }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="TitleCourseCtrl.hasError('required')">!این فیلد خالی است</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>مبلغ پرداختی</mat-label>
+                                <input type="number" formControlName="paidAmountUpdateCtrl" label="paid amount"
+                                    matInput>
+                                @if (PaidAmountCtrl.hasError('required')) {
+                                <mat-error>!این فیلد خالی است</mat-error>
+                                }
+                            </mat-form-field>
+
+                            <div class="radio-inputs">
+                                <mat-radio-group class="radio-group" aria-label="Select an option"
+                                    formControlName="methodCtrl">
+                                    <mat-radio-button class="radio-button" [value]="2">
+                                        <div class="div-radio-items">
+                                            <span>کارت خوان</span>
+                                            <img src="../assets/images/iconKartKhon.png" alt="">
+                                        </div>
+                                    </mat-radio-button>
+                                    <mat-radio-button class="radio-button" [value]="1">
+                                        <div class="div-radio-items">
+                                            <span>نقدی</span>
+                                            <img src="../assets/images/iconNaghdi.png" alt="">
+                                        </div>
+                                    </mat-radio-button>
+                                    <mat-radio-button class="radio-button" [value]="0">
+                                        <div class="div-radio-items">
+                                            <span>کارت به کارت</span>
+                                            <img src="../assets/images/iconKartBeKart.png" alt="">
+                                        </div>
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+
+                            <button class="button-enrolled" type="submit" [disabled]="updateEnrolledCourseFg.invalid">
+                                ثبت اطلاعات
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </mat-tab>
+            }
+        </mat-tab-group>
+    </div>
+</div>

@@ -1,0 +1,42 @@
+@if (memberIn) {
+    <mat-card class="card">
+        <div class="card-img-wrapper">
+            <img src="../assets/images/member.png" width="128" height="128" alt="{{memberIn.name}} photo" mat-card-image>
+    
+            <ul class="user-icons">
+                <li>
+                    <button mat-mini-fab>
+                        <mat-icon color="warn">favorite</mat-icon>
+                    </button>
+                </li>
+                <li>
+                    <button mat-mini-fab>
+                        <mat-icon color="accent">mail</mat-icon>
+                    </button>
+                </li>
+                <li>
+                    <button [routerLink]="['/add-discription/' + memberIn.userName]">
+                        <mat-icon color="warn">add_circle</mat-icon>
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <mat-card-header>
+            <div class="title">
+                @switch (memberIn.gender) {
+                @case ('male') {
+                <mat-icon color="primary">boy</mat-icon>
+                }
+                @case ('female') {
+                <mat-icon color="primary">girl</mat-icon>
+                }
+                @default {
+                <mat-icon color="primary">group_add</mat-icon>
+                }
+                }
+                <mat-card-title>{{memberIn.userName | titlecase}}, {{memberIn.age}}</mat-card-title>
+            </div>
+            <mat-card-subtitle>{{memberIn.gender| titlecase}}</mat-card-subtitle>
+        </mat-card-header>
+    </mat-card>
+}
