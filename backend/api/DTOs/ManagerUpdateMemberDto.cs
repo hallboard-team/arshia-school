@@ -1,6 +1,6 @@
 public record ManagerUpdateMemberDto(
     string Email,
-    string UserName,
+    // string UserName,
     string Name,
     string LastName,
     string? PhoneNum,

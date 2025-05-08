@@ -1,3 +1,11 @@
+.mat-elevation-z8 {
+    border-radius: 10px;
+    background: linear-gradient(145deg, #f0f0f0, #cacaca);
+    box-shadow:  5px 5px 10px #a4a4a4,
+        -5px -5px 10px #ffffff;
+    // direction: rtl;
+}
+
 .background-attendences-div {
     width: 100%;
     display: flex;
@@ -11,34 +19,34 @@
     box-shadow:  5px 5px 10px #c5c5c5,
         -5px -5px 10px #fbfbfb;
 
-    .attendence-item {
-        width: 100%;
+    // .attendence-item {
+    //     width: 100%;
 
-        display: flex;
-        justify-content: space-evenly;
-        align-items: center;
-        flex-direction: row-reverse;
+    //     display: flex;
+    //     justify-content: space-evenly;
+    //     align-items: center;
+    //     flex-direction: row-reverse;
 
-        .span-date {
-            font-size: 16px;
-            color: black;
-        }
-        .span-absent {
-            font-size: 16px;
-            color: black;
+    //     .span-date {
+    //         font-size: 16px;
+    //         color: black;
+    //     }
+    //     .span-absent {
+    //         font-size: 16px;
+    //         color: black;
 
-            .absent {
-                font-size: 16px;
-                color: red;
-            }
-        }
-    }
+    //         .absent {
+    //             font-size: 16px;
+    //             color: red;
+    //         }
+    //     }
+    // }
 
 }
 
 .div-background-no-absent {
     height: 85vh;
-    background-color: red;
+    // background-color: red;
     margin-top: 5rem;
 
     display: flex;

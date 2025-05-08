@@ -19,13 +19,18 @@
             font-size: 20px;
             color: black;
         }
+
         .filter-by {
             font-size: 13px;
             color: rgba(0, 0, 0, 0.404);
         }
 
         mat-form-filed {
-            height: 40px!important;
+            height: 40px !important;
+        }
+
+        .input-search {
+            direction: rtl;
         }
     }
 
@@ -48,7 +53,7 @@
         button {
             border-radius: 50px;
             background: linear-gradient(145deg, #f0f0f0, #cacaca);
-            box-shadow:  5px 5px 10px #a1a1a1,
+            box-shadow: 5px 5px 10px #a1a1a1,
                 -5px -5px 10px #ffffff;
             border: none;
             height: 35px;
@@ -95,7 +100,7 @@
         width: 90%;
         border-radius: 10px;
         background: linear-gradient(145deg, #f0f0f0, #cacaca);
-        box-shadow:  5px 5px 10px #747474,
+        box-shadow: 5px 5px 10px #747474,
             -5px -5px 10px #ffffff;
     }
 }

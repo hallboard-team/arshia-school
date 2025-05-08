@@ -26,6 +26,10 @@
                     <button [routerLink]="['/' + 'enrolled-course/' + memberIn.userName]" routerLinkActive #rla="routerLinkActive" class="button-add-enrolledCourse">
                         <span>اضافه کردن دوره</span>
                     </button>
+
+                    <button [routerLink]="['/' + 'target-user-profile/' + memberIn.userName]" routerLinkActive #rla="routerLinkActive" class="button-view">
+                        <span>مشاهده</span>
+                    </button>
                 </div>
             </div>
         }

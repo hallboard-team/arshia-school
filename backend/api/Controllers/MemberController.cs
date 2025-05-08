@@ -7,7 +7,8 @@ public class MemberController
     (IMemberRepository _memberRepository, ITokenService _tokenService) : BaseApiController
 {
     [HttpGet("get-profile")]
-    public async Task<ActionResult<ProfileDto>> GetProfile(CancellationToken cancellationToken)
+    public async Task<ActionResult<ProfileDto>> 
+    GetProfile(CancellationToken cancellationToken)
     {
         string? HashedUserId = User.GetHashedUserId();
         if (string.IsNullOrEmpty(HashedUserId))
@@ -30,7 +31,7 @@ public class MemberController
         
         attendenceParams.UserId = userId;
 
-        PagedList<Attendence> pagedAttendences = await _memberRepository.GetAllAttendenceAsync(attendenceParams, targetCourseTitle, cancellationToken);
+        PagedList<Attendence> pagedAttendences = await _memberRepository.GetAllAttendenceAsync(attendenceParams, userId, targetCourseTitle, cancellationToken);
 
         if (pagedAttendences.Count == 0)
             return NoContent();
@@ -74,21 +75,12 @@ public class MemberController
     [HttpGet("get-course")]
     public async Task<ActionResult<List<Course>>> GetCourse(CancellationToken cancellationToken)
     {
-        string? token = null; 
-        
-        bool isTokenValid = HttpContext.Request.Headers.TryGetValue("Authorization", out var authHeader);
+        string? HashedUserId = User.GetHashedUserId();
 
-        if (isTokenValid)
-            token = authHeader.ToString().Split(' ').Last();
+        if (string.IsNullOrEmpty(HashedUserId))
+            return BadRequest("No user was found with this userId.");
 
-        if (string.IsNullOrEmpty(token))
-            return Unauthorized("Token is expired or invalid. Login again.");
-
-        string? hashedUserId = User.GetHashedUserId();
-        if (string.IsNullOrEmpty(hashedUserId))
-            return BadRequest("No user was found with this user Id.");
-
-        List<Course>? courses = await _memberRepository.GetCourseAsync(hashedUserId, cancellationToken);
+        List<Course>? courses = await _memberRepository.GetCourseAsync(HashedUserId, cancellationToken);
 
         if (courses is null || !courses.Any())
         {
@@ -101,36 +93,15 @@ public class MemberController
     [HttpGet("get-enrolled-course/{courseTitle}")]
     public async Task<ActionResult<EnrolledCourse>> GetEnrolledCourse(string courseTitle, CancellationToken cancellationToken)
     {
-        string? hashedUserId = User.GetHashedUserId();
+        string? HashedUserId = User.GetHashedUserId();
 
-        if (string.IsNullOrEmpty(hashedUserId))
-            return Unauthorized("The user is not logged in");
+        if (string.IsNullOrEmpty(HashedUserId))
+            return BadRequest("No user was found with this userId.");
 
-        EnrolledCourse? enrolledCourse = await _memberRepository.GetEnrolledCourseByUserIdAndCourseTitle(hashedUserId, courseTitle, cancellationToken);
+        EnrolledCourse? enrolledCourse = await _memberRepository.GetEnrolledCourseAsync(HashedUserId, courseTitle, cancellationToken);
 
         if (enrolledCourse == null)
             return NotFound("دوره مورد نظر یافت نشد");
-
-        // var result = new
-        // {
-        //     CourseTitle = enrolledCourse.CourseTitle,
-        //     CourseTuition = enrolledCourse.CourseTuition,
-        //     NumberOfPayments = enrolledCourse.Payments.Count,
-        //     NumberOfPaymentsLeft = enrolledCourse.NumberOfPaymentsLeft,
-        //     PaidNumber = enrolledCourse.PaidNumber,
-        //     TuitionRemainder = enrolledCourse.TuitionRemainder,
-        //     Payments = enrolledCourse.Payments.Select(p => new
-        //     {
-        //         p.Id,
-        //         p.Amount,
-        //         p.PaidOn,
-        //         p.Method,
-        //         Photo = p.Photo != null ? new { p.Photo.Url_165, p.Photo.Url_256, p.Photo.Url_enlarged } : null
-        //     })
-        // };
-        // EnrolledCourse enrolledCourse = new {
-
-        // }
 
         return enrolledCourse;
     }

@@ -43,6 +43,20 @@ public static class Mappers
         );
     }
 
+    public static TargetMemberDto ConvertAppUserToTargetMemberDto(AppUser appUser)
+    {
+        return new TargetMemberDto(
+            Email: appUser.Email,
+            UserName: appUser.NormalizedUserName!,
+            Name: appUser.Name,
+            LastName: appUser.LastName,
+            PhoneNum: appUser.PhoneNum,
+            Gender: appUser.Gender,
+            Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth),
+            EnrolledCourses: appUser.EnrolledCourses
+        );
+    }
+
     public static TeacherDto ConvertAppUserToTeacherDto(AppUser appUser)
     {
         return new TeacherDto(
@@ -63,8 +77,8 @@ public static class Mappers
             LastName: appUser.LastName,
             PhoneNum: appUser.PhoneNum,
             Gender: appUser.Gender,
-            Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth),
-            EnrolledCourses: appUser.EnrolledCourses
+            Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth)
+            // EnrolledCourses: appUser.EnrolledCourses
         );
     }
     

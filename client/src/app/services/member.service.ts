@@ -61,7 +61,7 @@ export class MemberService {
     return this._http.get<UserProfile>(this._baseApiUrl + 'get-profile', { headers })
   }
 
-  getCourses(): Observable<Course[]> {
+  getCourses(): Observable<Course[] | null> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     });
@@ -74,11 +74,11 @@ export class MemberService {
   }
 
   getEnrolledCourse(courseTitle: string):Observable<EnrolledCourse> {
-    // const headers = new HttpHeaders({
-    //   'Authorization': `Bearer ${localStorage.getItem('token')}`
-    // });
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    });
 
-    return this._http.get<EnrolledCourse>(this._baseApiUrl + 'get-enrolled-course/' + courseTitle);
+    return this._http.get<EnrolledCourse>(this._baseApiUrl + 'get-enrolled-course/' + courseTitle, {headers});
   } 
   
   private getHttpParams(memberParams: MemberParams): HttpParams {

@@ -13,6 +13,8 @@ import { FormsModule } from '@angular/forms';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { AccountService } from '../../services/account.service';
 import { LoggedInUser } from '../../models/logged-in-user.model';
+import { MemberService } from '../../services/member.service';
+import { UserProfile } from '../../models/user-profile.model';
 
 @Component({
   selector: 'app-navbar',
@@ -27,14 +29,31 @@ import { LoggedInUser } from '../../models/logged-in-user.model';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent {
-  private accountService = inject(AccountService);
+  public accountService = inject(AccountService);
+  public memberService = inject(MemberService);
   loggedInUserSig: Signal<LoggedInUser | null> | undefined;
+
+  profile: UserProfile | null = null;
+  error: string | null = null;
 
   ngOnInit(): void {
     this.loggedInUserSig = this.accountService.loggedInUserSig;
 
     console.log('THE LOGGED-IN USER:', this.loggedInUserSig()?.userName);
+
+    // this.getLoggedInProfile();
   }
+
+  // getLoggedInProfile(): void {
+  //   this.memberService.getProfile().subscribe({
+  //     next: (data) => {
+  //       this.profile = data;
+  //     },
+  //     error: (err) => {
+  //       this.error = 'خطا در گرفتن یوزرنیم';
+  //     }
+  //   })
+  // }
   
   logout(): void {
     this.accountService.logout();

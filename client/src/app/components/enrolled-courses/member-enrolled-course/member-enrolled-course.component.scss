@@ -15,22 +15,23 @@
         align-items: center;
         border-radius: 10px;
         background: linear-gradient(145deg, #f0f0f0, #cacaca);
-        box-shadow:  5px 5px 10px #a4a4a4,
+        box-shadow: 5px 5px 10px #a4a4a4,
             -5px -5px 10px #ffffff;
         gap: 1rem;
         margin-top: 1rem;
         padding: 1rem;
-        
+
         span {
             direction: rtl;
             font-size: 15px;
             color: black;
-            
+
             .value {
                 font-weight: bold;
                 color: red;
             }
-        } 
+        }
+
         .title-course {
             font-size: 30px;
             color: black;
@@ -44,7 +45,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        
+
         span {
             font-size: 25px;
             color: black;
@@ -109,10 +110,10 @@
                     width: 70px;
                     border-radius: 5px;
                     background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                    box-shadow:  5px 5px 10px #a4a4a4,
+                    box-shadow: 5px 5px 10px #a4a4a4,
                         -5px -5px 10px #ffffff;
                     padding: 5px;
-    
+
                     img {
                         height: 100%;
                         width: 100%;
@@ -120,6 +121,116 @@
                 }
             }
 
+        }
+    }
+
+    .mat-elevation-z8 {
+        border-radius: 10px;
+        background: linear-gradient(145deg, #f0f0f0, #cacaca);
+        box-shadow: 5px 5px 10px #a4a4a4,
+            -5px -5px 10px #ffffff;
+
+        .photo-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .photo-wrapper {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 10px;
+
+                .photo {
+                    height: 50px;
+                    width: 70px;
+                    border-radius: 2px;
+                }
+
+                .photo-actions {
+                    margin-top: 8px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+
+                    .btn-upload {
+                        border-radius: 50%;
+                        background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                        box-shadow: 5px 5px 10px #a4a4a4,
+                            -5px -5px 10px #ffffff;
+                        border: none;
+                        transition: 0.3s;
+                        color: blue;
+                    }
+
+                    .btn-upload:hover {
+                        cursor: pointer;
+                        transform: scale(1.3);
+                        transition: 0.3s;
+                    }
+
+                    .btn-delete {
+                        border-radius: 50%;
+                        background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                        box-shadow: 5px 5px 10px #a4a4a4,
+                            -5px -5px 10px #ffffff;
+                        border: none;
+                        transition: 0.3s;
+                        color: red;
+                    }
+
+                    .btn-delete:hover {
+                        cursor: pointer;
+                        transform: scale(1.3);
+                        transition: 0.3s;
+                    }
+                }
+            }
+        }
+
+        // .gallery {
+        //     display: flex;
+        //     justify-content: center;
+        //     align-items: center;
+
+        //     img {
+        //         height: 70px;
+        //         width: 100px;
+        //         border-radius: 2px;
+        //     }
+        // }
+        .gallery {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .gallery img {
+            width: 64px;
+            height: 64px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+            cursor: pointer;
+        }
+
+        .gallery mat-icon {
+            font-size: 20px;
+            margin-right: 4px;
+            color: #1976d2;
+            cursor: pointer;
+        }
+
+        .no-photo {
+            color: red;
+            direction: rtl;
         }
     }
 }

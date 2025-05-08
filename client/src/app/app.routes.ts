@@ -27,20 +27,22 @@ import { EditMemberComponent } from './components/members/edit-member/edit-membe
 import { EnrolledCourseComponent } from './components/enrolled-courses/enrolled-course/enrolled-course.component';
 import { MemberEnrolledCourseComponent } from './components/enrolled-courses/member-enrolled-course/member-enrolled-course.component';
 import { ContactUsComponent } from './components/contact-us/contact-us.component';
+import { TargetUserProfileComponent } from './components/target-user-profile/target-user-profile.component';
+import { TargetMemberEnrolledCourseComponent } from './components/enrolled-courses/target-member-enrolled-course/target-member-enrolled-course.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'home', component: HomeComponent },
     {
         path: '',
-        runGuardsAndResolvers: 'always', 
+        runGuardsAndResolvers: 'always',
         canActivate: [authGuard],
         children: [
             { path: 'manager-panel', component: ManageerPannelComponent },
-            { path: 'teacher-panel', component: TeacherComponent},
-            { path: 'students-card/:courseTitle', component: StudentListComponent},
-            { path: 'demo', component: DemoComponent},
-            { path: 'profile', component: UserProfileComponent},
+            { path: 'teacher-panel', component: TeacherComponent },
+            { path: 'students-card/:courseTitle', component: StudentListComponent },
+            { path: 'demo', component: DemoComponent },
+            { path: 'profile', component: UserProfileComponent },
             { path: 'courses', component: CourseListComponent },
             { path: 'course-card', component: CourseCardComponent },
             { path: 'update-course/:courseTitle', component: CourseUpdateComponent },
@@ -50,11 +52,13 @@ export const routes: Routes = [
             { path: 'members', component: MemberListComponent },
             { path: 'member-card', component: MemberCardComponent },
             { path: 'edit-member/:memberEmail', component: EditMemberComponent },
+            { path: 'target-user-profile/:memberUserName', component: TargetUserProfileComponent },
             // { path: 'select-courses/:memberUserName', component: SelectCourseListComponent },
             // { path: 'select-course-card', component: SelectCourseCardComponent },
             // { path: 'select-courses/:memberUserName', component: SelectCourseListComponent },
             { path: 'enrolled-course/:memberUserName', component: EnrolledCourseComponent },
             { path: 'member-enrolled-course/:courseTitle', component: MemberEnrolledCourseComponent },
+            { path: 'target-member-enrolled-course/:memberUserName/:courseTitle', component: TargetMemberEnrolledCourseComponent },
             // { path: 'منشی', component: SecretaryComponent },
             // { path: 'معلم', component: TeacherComponent },
             // { path: 'user/user-edit', component: UserEditComponent },

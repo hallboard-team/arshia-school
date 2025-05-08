@@ -1,13 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
+@font-face {
+    font-family: 'Vazir';
+    src: url('assets/fonts/Vazir.woff2') format('woff2'),
+        url('assets/fonts/Vazir.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
 
 body {
     width: 100%;
     background-color: #e0e0e0;
+    font-family: 'Vazir', sans-serif;
 }
+
 *,
 *::before,
 *::after {
     box-sizing: border-box;
 }
+
 // html, body { height: 100%; }
 // body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -2,7 +2,7 @@ import { CommonModule, isPlatformBrowser, NgOptimizedImage } from '@angular/comm
 import { Component, inject, OnInit, PLATFORM_ID, Signal } from '@angular/core';
 import { MemberService } from '../../../services/member.service';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subscription, take } from 'rxjs';
 import { Member, ShowMember } from '../../../models/member.model';
 import { UserProfile } from '../../../models/user-profile.model';
@@ -11,16 +11,25 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatTabsModule } from '@angular/material/tabs';
-import { jwtInterceptor } from '../../../interceptors/jwt.interceptor';
-import { HashedUserId } from '../../../models/helpers/hashed-user-id.model';
-import { Course } from '../../../models/course.model';
+import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
+import { Course, ShowCourse } from '../../../models/course.model';
 import { NavbarComponent } from '../../navbar/navbar.component';
 import { MemberUpdate } from '../../../models/member-update.model';
 import { ApiResponse } from '../../../models/helpers/apiResponse.model';
 import { AutoFocusDirective } from '../../../directives/auto-focus.directive';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { AccountService } from '../../../services/account.service';
+import { ManagerService } from '../../../services/manager.service';
+import { ManagerUpdateMemberDto } from '../../../models/manager-update-member.model';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { AddEnrolledCourse } from '../../../models/add-enrolled-course.model';
+import { MatSelectModule } from '@angular/material/select';
+import { CourseParams } from '../../../models/helpers/course-params';
+import { CourseService } from '../../../services/course.service';
+import { PaginatedResult } from '../../../models/helpers/paginatedResult';
+import { Pagination } from '../../../models/helpers/pagination';
 
 @Component({
   selector: 'app-user-profile',
@@ -29,7 +38,9 @@ import { AccountService } from '../../../services/account.service';
     CommonModule, FormsModule, ReactiveFormsModule,
     MatCardModule, MatFormFieldModule, AutoFocusDirective,
     MatInputModule, MatButtonModule, NavbarComponent,
-    RouterModule
+    RouterModule, MatTabsModule, MatNativeDateModule,
+    MatRadioModule, MatSnackBarModule, MatDatepickerModule,
+    MatSelectModule
   ],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss'
@@ -37,47 +48,56 @@ import { AccountService } from '../../../services/account.service';
 export class UserProfileComponent implements OnInit{
   private _accountService = inject(AccountService);
   private _memberService = inject(MemberService);
+  private _courseService = inject(CourseService);
+  private _managerService = inject(ManagerService);
   private _matSnackBar = inject(MatSnackBar);
   private _platformId = inject(PLATFORM_ID);
   private _fb = inject(FormBuilder);
+  private _route = inject(ActivatedRoute);
 
   loggedInUserSig: Signal<LoggedInUser | null> | undefined;
 
   profile: UserProfile | null = null;
-  courses: Course[] = [];
+  courses: Course[] | null = [];
   loading: boolean = true;
   error: string | null = null;
-  // member: ShowMember | undefined;
+  subscribed: Subscription | undefined;
+  courseParams: CourseParams | undefined;
+  pagination: Pagination | undefined;
+  
+  member: Member | undefined;
+  showCourses: ShowCourse[] | undefined;
+   
+  minDate = new Date();
+  maxDate = new Date();
+
+  courseLoaded = false;
 
   ngOnInit(): void {
     this.loggedInUserSig = this._accountService.loggedInUserSig;
+    this.courseParams = new CourseParams();
 
     this.getProfile();
+    // this.getLoggedInProfile();
     // this.getCourse();
-
-    // this.memberEditFg = this._fb.group({
-    //   emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
-    //   userNameCtrl: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(30)]],
-    //   currentPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
-    //   passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
-    //   confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]]
-    // });
+    // this.getAllCours();
   }
 
   memberEditFg: FormGroup = this._fb.group({
     emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
-    userNameCtrl: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(30)]],
+    // userNameCtrl: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(30)]],
     currentPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]]
   });
-
+  
+  //geter for members
   get EmailCtrl(): AbstractControl {
     return this.memberEditFg.get('emailCtrl') as FormControl;
   }
-  get UserNameCtrl(): AbstractControl {
-    return this.memberEditFg.get('userNameCtrl') as FormControl;
-  }
+  // get UserNameCtrl(): AbstractControl {
+  //   return this.memberEditFg.get('userNameCtrl') as FormControl;
+  // }
   get CurrentPasswordCtrl(): AbstractControl {
     return this.memberEditFg.get('currentPasswordCtrl') as FormControl;
   }
@@ -89,26 +109,28 @@ export class UserProfileComponent implements OnInit{
   }
 
   getProfile(): void {
-    this._memberService.getProfile().subscribe({
-      next: (data) => {
-        this.profile = data;  // ذخیره داده‌ها در متغیر پروفایل
-        this.loading = false;  // پایان لود
+    // const memberUserName: string | null = this._route.snapshot.paramMap.get('memberUserName');
 
-        // if(this.profile) {
-        //   this.memberEditFg.patchValue({
-        //     emailCtrl: this.profile.email || '',
-        //     userNameCtrl: this.profile.userName || '',
-        //     currentPasswordCtrl: '',
-        //     passwordCtrl: '',
-        //     confirmPasswordCtrl: ''
-        //   })
-        // }
-      },
-      error: (err) => {
-        this.error = 'خطا در بارگذاری پروفایل. لطفاً دوباره تلاش کنید.';  // خطا در صورت مشکل
-        this.loading = false;  // پایان لود
-      }
-    });
+      this._memberService.getProfile().subscribe({
+        next: (data) => {
+          this.profile = data;  // ذخیره داده‌ها در متغیر پروفایل
+          this.loading = false;  // پایان لود
+  
+          // if(this.profile) {
+          //   this.memberEditFg.patchValue({
+          //     emailCtrl: this.profile.email || '',
+          //     userNameCtrl: this.profile.userName || '',
+          //     currentPasswordCtrl: '',
+          //     passwordCtrl: '',
+          //     confirmPasswordCtrl: ''
+          //   })
+          // }
+        },
+        error: (err) => {
+          this.error = 'خطا در بارگذاری پروفایل. لطفاً دوباره تلاش کنید.';  // خطا در صورت مشکل
+          this.loading = false;  // پایان لود
+        }
+      });
   }
 
   getCourse(): void {
@@ -126,7 +148,7 @@ export class UserProfileComponent implements OnInit{
 
   initControllersValues(showMember: ShowMember) {
     this.EmailCtrl.setValue(showMember.email);
-    this.UserNameCtrl.setValue(showMember.userName);
+    // this.UserNameCtrl.setValue(showMember.userName);
     this.CurrentPasswordCtrl.setValue(showMember.currentPassword);
     this.PasswordCtrl.setValue(showMember.password);
     this.ConfirmPasswordCtrl.setValue(showMember.confirmPasword);
@@ -136,7 +158,7 @@ export class UserProfileComponent implements OnInit{
     if (this.profile) {
       let updatedMember: MemberUpdate = {
         email: this.EmailCtrl.value,
-        userName: this.UserNameCtrl.value,
+        // userName: this.UserNameCtrl.value,
         currentPassword: this.CurrentPasswordCtrl.value,
         password: this.PasswordCtrl.value,
         confirmPassword: this.ConfirmPasswordCtrl.value
@@ -153,144 +175,27 @@ export class UserProfileComponent implements OnInit{
                 duration: 10000
               });
             }
-            // if (this.profile) {
-            //   let userProfile: UserProfile = {
-            //     email: this.profile?.email,
-            //     userName: this.profile.userName,
-            //     phoneNum: this.profile.phoneNum,
-            //     name: this.profile.name,
-            //     lastName: this.profile.lastName,
-            //     age: this.profile.age,
-            //     gender: this.profile.gender,
-            //     enrolledCourses: this.profile.enrolledCourses
-            //   }
-
-            //   this.profile = userProfile;
-            // }
           }
         });
-
-      // this.memberEditFg.markAsPristine();
     }
   }
 
-  openEditProfile() {
-    const elements = document.querySelectorAll('.div-edit-profile'); 
-
-    elements.forEach((element) => { 
-      (element as HTMLElement).style.display = "flex";
-    });
-
-    const courseContainer = document.querySelectorAll('.course-container'); 
-
-    courseContainer.forEach((element) => { 
-      (element as HTMLElement).style.display = "none";
-    });
-
-    const title = document.querySelectorAll('.div-title-course'); 
-
-    title.forEach((element) => { 
-      (element as HTMLElement).style.display = "none";
-    });
-
-
-    const loading = document.querySelectorAll('.loading'); 
-
-    loading.forEach((element) => { 
-      (element as HTMLElement).style.display = "none";
-    });
+  getAllCours(): void {
+    if (this.courseParams)
+      this.subscribed = this._courseService.getAll(this.courseParams).subscribe({
+        next: (response: PaginatedResult<ShowCourse[]>) => {
+          if (response.body && response.pagination) {
+            this.showCourses = response.body;
+            this.pagination = response.pagination;
+          }
+        }
+      });
   }
 
-  closeEditProfile() {
-    const elements = document.querySelectorAll('.div-edit-profile'); 
-
-    elements.forEach((element) => { 
-      (element as HTMLElement).style.display = "none";
-    });
-
-    const courseContainer = document.querySelectorAll('.course-container'); 
-
-    courseContainer.forEach((element) => { 
-      (element as HTMLElement).style.display = "flex";
-    });
-
-    const title = document.querySelectorAll('.div-title-course'); 
-
-    title.forEach((element) => { 
-      (element as HTMLElement).style.display = "flex";
-    });
-
-
-    const loading = document.querySelectorAll('.loading'); 
-
-    loading.forEach((element) => { 
-      (element as HTMLElement).style.display = "flex";
-    });
-  }
-
-  openCourseList() {
-    this.getCourse();
-
-    const titleCourse = document.querySelectorAll('.div-title-course'); 
-
-    titleCourse.forEach((element) => { 
-      (element as HTMLElement).style.display = "flex";
-    });
-
-    const courseContainer = document.querySelectorAll('.course-container'); 
-
-    courseContainer.forEach((element) => { 
-      (element as HTMLElement).style.display = "flex";
-    });
-
-    const loadingCourse = document.querySelectorAll('.loading'); 
-
-    loadingCourse.forEach((element) => { 
-      (element as HTMLElement).style.display = "flex";
-    });
-
-    const openCourseListButton = document.querySelectorAll('.div-click-button-show-course'); 
-
-    openCourseListButton.forEach((element) => { 
-      (element as HTMLElement).style.display = "none";
-    });
-
-    const closeCourseListButton = document.querySelectorAll('.div-btn-exit-course-list'); 
-
-    closeCourseListButton.forEach((element) => { 
-      (element as HTMLElement).style.display = "flex";
-    });
-  }
-
-  closeCourseList() {
-    const titleCourse = document.querySelectorAll('.div-title-course'); 
-
-    titleCourse.forEach((element) => { 
-      (element as HTMLElement).style.display = "none";
-    });
-
-    const courseContainer = document.querySelectorAll('.course-container'); 
-
-    courseContainer.forEach((element) => { 
-      (element as HTMLElement).style.display = "none";
-    });
-
-    const loadingCourse = document.querySelectorAll('.loading'); 
-
-    loadingCourse.forEach((element) => { 
-      (element as HTMLElement).style.display = "none";
-    });
-
-    const openCourseListButton = document.querySelectorAll('.div-click-button-show-course'); 
-
-    openCourseListButton.forEach((element) => { 
-      (element as HTMLElement).style.display = "flex";
-    });
-
-    const closeCourseListButton = document.querySelectorAll('.div-btn-exit-course-list'); 
-
-    closeCourseListButton.forEach((element) => { 
-      (element as HTMLElement).style.display = "none";
-    });
+  onTabChange(event: MatTabChangeEvent): void {
+    if (event.index === 1 && !this.courseLoaded && this.loggedInUserSig?.()?.roles?.includes('student')) {
+      this.getCourse();
+      this.courseLoaded = true;
+    }
   }
 }

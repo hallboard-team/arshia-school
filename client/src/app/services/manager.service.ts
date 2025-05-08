@@ -14,6 +14,10 @@ import { Teacher } from '../models/teacher.model';
 import { ManagerUpdateMemberDto } from '../models/manager-update-member.model';
 import { AddEnrolledCourse } from '../models/add-enrolled-course.model';
 import { UpdateEnrolledCourse } from '../models/update-enrolled-course.model';
+import { UserProfile } from '../models/user-profile.model';
+import { TargetUserProfile } from '../models/target-user-profile.model';
+import { Course } from '../models/course.model';
+import { EnrolledCourse } from '../models/helpers/enrolled-course.model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,10 +32,10 @@ export class ManagerService {
       map(teacherResponse => {
         if (teacherResponse) {
           this.snackBar.open("معلم با موفقیت ثبت شد", "Close", { horizontalPosition: "center", verticalPosition: "bottom", duration: 7000 })
-  
+
           return teacherResponse;
         }
-  
+
         return null;
       })
     );
@@ -56,33 +60,49 @@ export class ManagerService {
       map(secretaryResponse => {
         if (secretaryResponse) {
           this.snackBar.open("دانش آموز با موفقیت ثبت شد", "Close", { horizontalPosition: "center", verticalPosition: "bottom", duration: 7000 })
-  
+
           return secretaryResponse;
         }
-  
+
         return null;
       })
     );
   }
 
-  getTeachers():Observable<Teacher[]> {
+  getTeachers(): Observable<Teacher[]> {
     return this._http.get<Teacher[]>(this._apiUrl + 'teachers');
   }
 
-  getMemberByEmail(targetMemberEmail: string):Observable<Member> {
+  getMemberByEmail(targetMemberEmail: string): Observable<Member> {
     return this._http.get<Member>(this._apiUrl + 'get-target-member/' + targetMemberEmail)
   }
 
-  updateMember(managerUpdateInput: ManagerUpdateMemberDto, targetMemberEmail: string):Observable<any> {
+  getMemberByUserName(targetMemberUserName: string | null): Observable<TargetUserProfile> {
+    return this._http.get<TargetUserProfile>(this._apiUrl + 'get-member-by-userName/' + targetMemberUserName)
+  }
+
+  getTargetUserCourses(targetMemberUserName: string | null): Observable<Course[] | null> {
+    return this._http.get<Course[]>(this._apiUrl + 'get-target-member-course/' + targetMemberUserName)
+  }
+
+  getTargetCourseTitles(targetMemberUserName: string | null): Observable<string[] | null> {
+    return this._http.get<string[]>(this._apiUrl + 'get-target-courseTitle/' + targetMemberUserName)
+  }
+
+  getTargetUserEnrolledCourse(targetMemberUserName: string | null, courseTitle: string): Observable<EnrolledCourse> {
+    return this._http.get<EnrolledCourse>(this._apiUrl + 'get-target-member-enrolled-course/' + targetMemberUserName + '/' + courseTitle);
+  }
+
+  updateMember(managerUpdateInput: ManagerUpdateMemberDto, targetMemberEmail: string): Observable<any> {
     return this._http.put(this._apiUrl + 'update-member/' + targetMemberEmail, managerUpdateInput)
   }
 
   addEnrolledCourse(targetUserName: string, addEnrolledCourse: AddEnrolledCourse) {
-    return this._http.post(this._apiUrl + 'add-enrolledCourse/' + targetUserName , addEnrolledCourse)
+    return this._http.post(this._apiUrl + 'add-enrolledCourse/' + targetUserName, addEnrolledCourse)
   }
 
   updateEnrolledCourse(targetUserName: string, updateEnrolledCourse: UpdateEnrolledCourse) {
-    return this._http.put(this._apiUrl + 'update-enrolledCourse/' + targetUserName , updateEnrolledCourse)
+    return this._http.put(this._apiUrl + 'update-enrolledCourse/' + targetUserName, updateEnrolledCourse)
   }
 
   // getUsersWithRoles(): Observable<UserWithRole[]> {

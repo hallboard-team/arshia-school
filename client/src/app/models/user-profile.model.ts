@@ -7,5 +7,5 @@ export interface UserProfile {
     age: number;
     gender: string;
     // password: string;
-    enrolledCourses: string[];
+    // enrolledCourses: string[];
 }

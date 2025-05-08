@@ -1,3 +1,5 @@
+using api.Controllers.Enums;
+
 namespace api.DTOs;
 
 public record AddEnrolledCourseDto(
@@ -23,5 +25,5 @@ public class ShowEnrolledCourseDto
 public class UpdateEnrolledDto{
     public string TitleCourse { get; init; } = string.Empty;
     public int PaidAmount { get; init; }
-    public string Method { get; init; } = string.Empty;
+    public PaymentMethod Method { get; init; }
 }

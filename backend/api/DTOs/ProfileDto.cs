@@ -7,6 +7,6 @@ public record ProfileDto(
     string LastName,
     string? PhoneNum,
     string Gender,
-    int Age,
-    List<EnrolledCourse> EnrolledCourses
+    int Age
+    // List<EnrolledCourse> EnrolledCourses
 );

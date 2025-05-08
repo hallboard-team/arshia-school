@@ -76,7 +76,7 @@ public class SeedController : BaseApiController
         };
 
         await _userManager.CreateAsync(manager, "Aaaaaaaa/");
-        await _userManager.AddToRolesAsync(manager, ["manager", "student"]);
+        await _userManager.AddToRolesAsync(manager, ["manager"]);
 
         #endregion Create Admin and Moderator
 

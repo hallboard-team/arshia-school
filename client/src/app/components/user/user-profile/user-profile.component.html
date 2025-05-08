@@ -5,152 +5,135 @@
 </header>
 
 <div class="container">
-    <!-- پروفایل دانشجو -->
-    <div class="div-title-profile">
-        <span class="title-profile">پروفایل شما</span>
-    </div>
-
-    <div class="profile-card">
-        <div class="profile-image">
-            @if (profile?.gender == 'male') {
-                <img src="../assets/images/menProfilePhoto.png" alt="Profile">
-            }@else {
-                <img src="../assets/images/womenProfilePhoto.png" alt="Profile">
-            }
-        </div>
-
-        <div class="profile-info">
-            <span class="description">ایمیل: {{profile?.email}}</span>
-            <span class="description">نام: {{profile?.name}}</span>
-            <span class="description">نام خانوادگی: {{profile?.lastName}}</span>
-            <span class="description">تاریخ تولد: {{profile?.age}}</span>
-            <span class="description">شماره تلفن: {{profile?.phoneNum}}</span>
-            <span class="description">نام کاربری: {{profile?.userName}}</span>
-            <!-- <span class="description">رمز اکانت شما: {{profile?.password}}</span> -->
-            
-            @if (profile?.gender == 'male') {
-                <span class="gender-men-span">جنسیت: مرد</span>
-            }@else {
-                <span class="gender-women-span">جنسیت: زن</span>
-            }
-        </div>
-
-        <div class="div-button-edit-profile">
-            <button class="edit-btn" (click)="openEditProfile()">ویرایش پروفایل</button>
-        </div>
-
-        @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('student')) {
-            <div class="div-click-button-show-course">
-                <button (click)="openCourseList()">مشاهده درس ها</button>
-            </div>
-
-            <div class="div-btn-exit-course-list">
-                <button (click)="closeCourseList()">
-                    <svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg>
-                    <span>بستن درس ها</span>
-                </button>
-            </div>
-        }
-    </div>
-
-    <div class="div-edit-profile">
-        <form class="update-member-form" [formGroup]="memberEditFg" (ngSubmit)="memberEditFg.valid && updateMember()">
-            <div class="div-btn-exit-edit-page">
-                <button (click)="closeEditProfile()">
-                    <svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg>
-                    <!-- <span>خارج شدن</span> -->
-                </button>
-            </div>
-
-            <div class="div-title">
-                <span class="title">تغییر در پروفایل خود</span>
-            </div>
-
-            <div class="content">
-                <mat-form-field appearance="outline">
-                    <mat-label>ایمیل</mat-label>
-                    <input class="input" autoFocusDir type="email" formControlName="emailCtrl" label="Email" placeHolder="ایمیل جدید را وارد کنید" matInput>
-                </mat-form-field>
-            
-                <mat-form-field appearance="outline">
-                    <mat-label>نام کاربری</mat-label>
-                    <input class="input" type="userName" formControlName="userNameCtrl" label="UserName" placeHolder="نام کاربری جدید خودرا وارد کنید" matInput> 
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                    <mat-label>رمز قدیمی</mat-label>
-                    <input class="input" type="password" formControlName="currentPasswordCtrl" label="Current Password" placeHolder="رمز قدیمی خودرا واردکنید" matInput>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                    <mat-label>رمز جدید</mat-label>
-                    <input class="input" type="password" formControlName="passwordCtrl" label="Password" placeHolder="رمز جدید خودرا وارد کنید" matInput>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                    <mat-label>تکرار رمز جدید</mat-label>
-                    <input class="input" type="password" formControlName="confirmPasswordCtrl" label="Confirm Password" placeHolder="تکرار رمز جدید" matInput>
-                </mat-form-field>
-            </div>
-
-            <div class="div-button-submit">
-                <button class="button-edit-profile" type="submit" [disabled]="memberEditFg.invalid" mat-raised-button color="primary">ثبت اطلاعات</button>
-            </div>
-        </form>
-    </div>
-
-    @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('student')) {
-        <!-- لیست دوره‌ها -->
-        <div class="div-title-course">
-            <span class="title-course">دوره‌های شما</span>
-        </div>
-        
-        @if (!loading) {
-            <div class="course-container">
-                @if (error) {
-                    <div class="error-message">
-                      {{ error }}
-                    </div>
+    <div class="div-profile">
+        <div class="profile-card">
+            <div class="profile-image">
+                @if (profile?.gender == 'male') {
+                    <img src="../assets/images/menProfilePhoto.png" alt="Profile">
+                }@else {
+                    <img src="../assets/images/womenProfilePhoto.png" alt="Profile">
                 }
-        
-                @if (courses.length > 0) {
-                    <div class="course-list">
-                        @for (course of courses; track $index) {
-                            <div class="course-card">
-                                @if (profile?.gender == 'male') {
-                                    <span class="name-of-course-men">{{ course.title }}</span>
-                                }@else {
-                                    <span class="name-of-course-women">{{ course.title }}</span>
-                                }
-                                <div class="tozihat-course">
-                                    <span class="text">شهریه: {{ course.tuition | currency:'IRR' }}</span>
-                                    <span class="text">مدت زمان کلاس: <span class="red-text">{{ course.hours }}</span> ساعت</span>
-                                    <span class="text">تاریخ شروع: {{ course.start | date:'yyyy/MM/dd' }}</span>
-                                    @if (course.isStarted == 'true') {
-                                        <span class="text">آغاز شده: <span class="green-text">بله</span></span>
-                                    }@else {
-                                        <span class="text">آغاز شده: <span class="red-text">خیر</span></span>
-                                    }
-                                </div>
+            </div>
     
-                                <div class="div-button-show-classmate">
-                                    <button [routerLink]="['/students-card/' + course.title]">مشاهده دانشجویان</button>
-                                    <button [routerLink]="['/attendences-card/' + course.title]">دیدن حضور و غیاب</button>
-                                    <button [routerLink]="['/' + 'member-enrolled-course/' + course.title]">مشاهده پرداخت ها</button>
-                                </div>
+            <div class="profile-info">
+                <span class="description">ایمیل: {{profile?.email}}</span>
+                <span class="description">نام: {{profile?.name}}</span>
+                <span class="description">نام خانوادگی: {{profile?.lastName}}</span>
+                <span class="description">تاریخ تولد: {{profile?.age}}</span>
+                <span class="description">شماره تلفن: {{profile?.phoneNum}}</span>
+                <span class="description">نام کاربری: {{profile?.userName}}</span>
+                
+                @if (profile?.gender == 'male') {
+                    <span class="gender-men-span">جنسیت: مرد</span>
+                }@else {
+                    <span class="gender-women-span">جنسیت: زن</span>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="div-tabs">
+        <mat-tab-group (selectedTabChange)="onTabChange($event)">
+            <mat-tab label="ادیت پروفایل">
+                <div class="div-edit-profile">
+                    <form class="update-member-form" [formGroup]="memberEditFg" (ngSubmit)="memberEditFg.valid && updateMember()">
+                        <div class="div-title">
+                            <span class="title">تغییر در پروفایل خود</span>
+                        </div>
+                    
+                        <div class="content">
+                            <mat-form-field appearance="outline">
+                                <mat-label>ایمیل</mat-label>
+                                <input class="input" autoFocusDir type="email" formControlName="emailCtrl" label="Email" placeHolder="ایمیل جدید را وارد کنید" matInput>
+                            </mat-form-field>
+                        
+                            <!-- <mat-form-field appearance="outline">
+                                <mat-label>نام کاربری</mat-label>
+                                <input class="input" type="userName" formControlName="userNameCtrl" label="UserName" placeHolder="نام کاربری جدید خودرا وارد کنید" matInput> 
+                            </mat-form-field> -->
+                    
+                            <mat-form-field appearance="outline">
+                                <mat-label>رمز قدیمی</mat-label>
+                                <input class="input" type="password" formControlName="currentPasswordCtrl" label="Current Password" placeHolder="رمز قدیمی خودرا واردکنید" matInput>
+                            </mat-form-field>
+                    
+                            <mat-form-field appearance="outline">
+                                <mat-label>رمز جدید</mat-label>
+                                <input class="input" type="password" formControlName="passwordCtrl" label="Password" placeHolder="رمز جدید خودرا وارد کنید" matInput>
+                            </mat-form-field>
+                    
+                            <mat-form-field appearance="outline">
+                                <mat-label>تکرار رمز جدید</mat-label>
+                                <input class="input" type="password" formControlName="confirmPasswordCtrl" label="Confirm Password" placeHolder="تکرار رمز جدید" matInput>
+                            </mat-form-field>
+                        </div>
+                    
+                        <div class="div-button-submit">
+                            <button class="button-edit-profile" type="submit" [disabled]="memberEditFg.invalid" mat-raised-button color="primary">ثبت اطلاعات</button>
+                        </div>
+                    </form>
+                </div>
+            </mat-tab>
+
+            @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('student') && courses) {
+                <mat-tab label="دوره ها">
+                    <div class="div-courses">
+                        <div class="div-title-course">
+                            <span class="title-course">دوره‌های شما</span>
+                        </div>
+
+                        @if (!loading) {
+                            <div class="course-container">
+                                @if (error) {
+                                    <div class="error-message">
+                                    {{ error }}
+                                    </div>
+                                }
+                        
+                                @if (courses.length > 0) {
+                                    <div class="course-list">
+                                        @for (course of courses; track $index) {
+                                            <div class="course-card">
+                                                @if (profile?.gender == 'male') {
+                                                    <span class="name-of-course-men">{{ course.title }}</span>
+                                                }@else {
+                                                    <span class="name-of-course-women">{{ course.title }}</span>
+                                                }
+                                                <div class="tozihat-course">
+                                                    <span class="text">شهریه: {{ course.tuition | currency:'IRR' }}</span>
+                                                    <span class="text">مدت زمان کلاس: <span class="red-text">{{ course.hours }}</span> ساعت</span>
+                                                    <span class="text">تاریخ شروع: {{ course.start | date:'yyyy/MM/dd' }}</span>
+                                                    @if (course.isStarted == 'true') {
+                                                        <span class="text">آغاز شده: <span class="green-text">بله</span></span>
+                                                    }@else {
+                                                        <span class="text">آغاز شده: <span class="red-text">خیر</span></span>
+                                                    }
+                                                </div>
+                    
+                                                <div class="div-button-show-classmate">
+                                                    <button [routerLink]="['/students-card/' + course.title]">مشاهده دانشجویان</button>
+                                                    <button [routerLink]="['/attendences-card/' + course.title]">دیدن حضور و غیاب</button>
+                                                    <button [routerLink]="['/' + 'member-enrolled-course/' + course.title]">مشاهده پرداخت ها</button>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                                @if (courses.length === 0) {
+                                    <div class="no-courses">
+                                        <span>
+                                            هیچ دوره‌ای ثبت‌نام نکرده‌اید.
+                                        </span>
+                                    </div>
+                                }
                             </div>
                         }
-                    </div>
-                }
-                @if (courses.length === 0) {
-                    <div class="no-courses">
-                      هیچ دوره‌ای ثبت‌نام نکرده‌اید.
-                    </div>
-                }
-            </div>
-        }
-        @else {
-            <div class="loading">در حال بارگذاری...</div>
-        }
-    }
+                        @else {
+                            <div class="loading">در حال بارگذاری...</div>
+                        }       
+                    </div>                 
+                </mat-tab>
+            }
+        </mat-tab-group>
+    </div>
 </div>

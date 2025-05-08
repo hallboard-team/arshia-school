@@ -1,10 +1,10 @@
-<header>
+<!-- <header>
     <nav>
       <app-navbar />
     </nav>
-</header>
+</header> -->
 
-<form class="member-form" [formGroup]="memberEditFg" (ngSubmit)="memberEditFg.valid && updateUser()">
+<!-- <form class="member-form" [formGroup]="memberEditFg" (ngSubmit)="memberEditFg.valid && updateUser()">
     <div class="content">
         <div class="div-radio-input">
             <mat-radio-group class="radio-group" aria-label="Select an option" formControlName="genderCtrl">
@@ -74,9 +74,7 @@
         <mat-form-field appearance="outline">
             <mat-label>تاریخ تولد</mat-label>
             <input class="input" formControlName="dateOfBirthCtrl" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp3" matInput>
-            <!-- @if (DateOfBirthCtrl.invalid) { -->
             <mat-hint>بین {{minDate.getFullYear()}} تا {{maxDate.getFullYear()}}</mat-hint>
-            <!-- } -->
             <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
             <mat-datepicker #dp3 touchUi disabled="false"></mat-datepicker>
             @if (DateOfBirthCtrl.hasError('required')) {
@@ -90,4 +88,4 @@
             </button>
         </div>
     </div>
-</form>
+</form> -->

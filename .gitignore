@@ -12,6 +12,9 @@ obj/
 
 node_modules/
 
+.angular/
+.vscode/
+
 # User-specific files
 *.rsuser
 *.suo

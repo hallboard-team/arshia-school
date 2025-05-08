@@ -1,7 +1,7 @@
 <header>
-    <nav>
-      <app-navbar />
-    </nav>
+  <nav>
+    <app-navbar />
+  </nav>
 </header>
 
 <form [formGroup]="filterFg" class="form-filters">
@@ -9,7 +9,7 @@
     <span class="title">جست و جو کاربران</span>
     <span class="filter-by">نام/نام خانوادگی/نام کاربری</span>
     <mat-form-field>
-      <input formControlName="searchCtrl" matInput placeholder="" type="text">
+      <input class="input-search" formControlName="searchCtrl" matInput placeholder="جست و جو کاربر" type="text">
     </mat-form-field>
   </div>
 
@@ -34,28 +34,22 @@
 </form>
 
 <section class="members-container">
-    <div class="div-title">
-        <span class="title">کاربران آموزشگاه</span>
-    </div>
+  <div class="div-title">
+    <span class="title">کاربران آموزشگاه</span>
+  </div>
 
-    <div class="div-cards-member">
-        @for (member of members; track $index) {
-        <app-member-card [memberInput]="member"></app-member-card>
-        }
-    </div>
-
-    @if (pagination && memberParams) {
-    <mat-paginator #paginator (page)="handlePageEvent($event)" 
-        [length]="pagination.totalItems"
-        [pageSize]="memberParams.pageSize" 
-        [disabled]="false" 
-        [showFirstLastButtons]="true"
-        [pageSizeOptions]="true ? pageSizeOptions : []" 
-        [hidePageSize]="false"
-        [pageIndex]="memberParams.pageNumber - 1" 
-        aria-label="Select page" 
-        class="paginator">
-        <!-- pageIndex must start from 0 -->
-    </mat-paginator>
+  <div class="div-cards-member">
+    @for (member of members; track $index) {
+    <app-member-card [memberInput]="member"></app-member-card>
     }
+  </div>
+
+  @if (pagination && memberParams) {
+  <mat-paginator #paginator (page)="handlePageEvent($event)" [length]="pagination.totalItems"
+    [pageSize]="memberParams.pageSize" [disabled]="false" [showFirstLastButtons]="true"
+    [pageSizeOptions]="true ? pageSizeOptions : []" [hidePageSize]="false" [pageIndex]="memberParams.pageNumber - 1"
+    aria-label="Select page" class="paginator">
+    <!-- pageIndex must start from 0 -->
+  </mat-paginator>
+  }
 </section>

@@ -1,22 +1,48 @@
+<header>
+    <nav>
+        <app-navbar />
+    </nav>
+</header>
+
 <main>
+    <div class="div-matn-top">
+        <div class="div-takhfif">
+            <button>جشنواره تخفیف!
+                <img src="../assets/images/icon-discount.png" alt="">
+            </button>
+            <span>به زودی:)</span>
+        </div>
+
+        <div class="div-title">
+            <span>
+                داستان برنامه‌نویس شدنت
+                از اینجا شروع میشه!
+            </span>
+        </div>
+
+        <span class="span-description">یادگیری برنامه‌نویسی آرزو نیست، فقط نیاز هست که تلاش و تمرین داشته باشید، بقیه‌اش
+            با طلوع فناوری</span>
+
+        <div class="div-button-start">
+            <button class="button-start">شروع یادگیری برنامه نویسی</button>
+        </div>
+    </div>
+
+    <div class="div-photo">
+        <img src="../assets/images/mainPhotoPersone.png" alt="">
+    </div>
+
+</main>
+
+<!-- <main>
     <section class="top-side">
         <div class="left-items">
-            <!-- <div class="container">
-                <div class="loader"></div>
-                <div class="loader"></div>
-                <div class="loader"></div>
-            </div> -->
             <div class="div-background-neum">
                 <span>چرا مارو انتخاب کنید؟</span>
                 <div class="div-image">
                     <img src="../assets/images/homeImage1NoB.png" alt="">
-                    <!-- <img src="../assets/images/homeImage3.jpg" alt=""> -->
-                    <!-- <img src="../assets/images/homeImage5.jpeg" alt=""> -->
-                    <!-- <img src="../assets/images/homeImage6.jpeg" alt=""> -->
                 </div>
                 <div class="div-image">
-                    <!-- <img src="../assets/images/homeImage2.jpg" alt=""> -->
-                    <!-- <img src="../assets/images/homeImage4.jpg" alt=""> -->
                     <img src="../assets/images/homeImage4NoB.png" alt="">
                 </div>
             </div>
@@ -25,32 +51,26 @@
         <div class="center-photo">
             <div class="div-laptop-item">
                 <img class="monitor" src="../assets/images/laptop1.png" alt="">
-                <!-- <img class="into-laptop" src="../assets/images/sky1.avif" alt=""> -->
-                <!-- <img class="into-laptop" src="../assets/images/sky3.webp" alt=""> -->
-                <!-- <img class="into-laptop" src="../assets/images/sky4.webp" alt=""> -->
-                <!-- <img class="into-laptop" src="../assets/images/programmingPhoto2.jpeg" alt=""> -->
-                <!-- <img class="into-laptop" src="../assets/images/programmingPhoto3.jpeg" alt=""> -->
-                <!-- <img class="into-laptop" src="../assets/images/homePicture1.jpeg" alt=""> -->
-                <!-- <img class="into-laptop" src="../assets/images/cloudAiPhoto.jpg" alt=""> -->
-                <!-- <img class="into-laptop" src="../assets/images/cloudAiPhoto1.jpg" alt=""> -->
                 <img class="into-laptop" src="../assets/images/cloudAiPhoto3.jpg" alt="">
 
                 <div class="div-title">
                     <span class="title1">آکادمی طلوع فناوری</span>
-                    
+
                     <div class="div-buttons">
-                        <button class="btn-yadgiri" [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">
+                        <button class="btn-yadgiri" [routerLink]="['/' + 'not-found']" routerLinkActive
+                            #rla="routerLinkActive">
                             <span class="shadow"></span>
                             <span class="edge"></span>
                             <span class="front text">
                                 شروع یادگیری
                             </span>
                         </button>
-                        <button class="btn-dore" [routerLink]="['/' + 'courses']" routerLinkActive #rla="routerLinkActive">
+                        <button class="btn-dore" [routerLink]="['/' + 'courses']" routerLinkActive
+                            #rla="routerLinkActive">
                             <span class="shadow"></span>
                             <span class="edge"></span>
                             <span class="front text">
-                                 دوره ها
+                                دوره ها
                             </span>
                         </button>
                     </div>
@@ -71,71 +91,72 @@
 
                     <div class="left">
                         @if (loggedInUserSig && loggedInUserSig(); as user) {
-                            <div class="div-btn-log-out">
-                                <button class="exit" (click)="logout()">
-                                    <span class="circle" aria-hidden="true">
+                        <div class="div-btn-log-out">
+                            <button class="exit" (click)="logout()">
+                                <span class="circle" aria-hidden="true">
                                     <span class="icon arrow"></span>
-                                    </span>
-                                    <span class="button-text">خروج</span>
-                                </button>
-                            </div>
+                                </span>
+                                <span class="button-text">خروج</span>
+                            </button>
+                        </div>
                         }
                         @else {
-                            <div class="div-btns">
-                                <button class="btn1" routerLink="/account/login">ورود اساتید</button>
-                    
-                                <button class="btn2" routerLink="/account/login">
-                                    <span class="text">ورود دانشجویان</span>
-                                </button>
-                            </div>
+                        <div class="div-btns">
+                            <button class="btn1" routerLink="/account/login">ورود اساتید</button>
+
+                            <button class="btn2" routerLink="/account/login">
+                                <span class="text">ورود دانشجویان</span>
+                            </button>
+                        </div>
                         }
                     </div>
                 </nav>
 
                 <div class="hamburger-menu">
-                    <!-- <div class="top">
-                        <button class="Btn" (click)="closeMenuDesctop()">
-                            <div class="sign">
-                                <svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg>
-                            </div>
-                    
-                            <div class="text">خروج</div>
-                        </button>
-                    </div> -->
-            
                     <div class="bottom">
                         @if (loggedInUserSig && loggedInUserSig()) {
-                            @if (loggedInUserSig()?.roles?.includes('manager')) {
-                                <button class="btn" [routerLink]="['/' + 'manager-panel']" routerLinkActive #rla="routerLinkActive">پنل-مدیر</button>
-                                <button class="btn" [routerLink]="['/' + 'members']" routerLinkActive #rla="routerLinkActive">کاربران</button>
-                            }
-                            @if (loggedInUserSig()?.roles?.includes('teacher')) {
-                                <button class="btn" [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive">خانه</button>
-                                <button class="btn" [routerLink]="['/' + 'profile']" routerLinkActive #rla="routerLinkActive">پروفایل</button>
-                                <button class="btn" [routerLink]="['/' + 'courses']" routerLinkActive #rla="routerLinkActive">دوره ها</button>
-                                <button class="btn" [routerLink]="['/' + 'about']" routerLinkActive #rla="routerLinkActive">درباره ما</button>
-                                <button class="btn" [routerLink]="['/' + 'contact-us']" routerLinkActive #rla="routerLinkActive">تماس با ما</button>
-                                <button class="btn" [routerLink]="['/' + 'teacher-panel']" routerLinkActive #rla="routerLinkActive">پنل-معلم</button>
-                            } 
-                            <!-- @if (loggedInUserSig()?.roles?.includes('student')) { -->
-                                <!-- <button class="btn" [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive">خانه</button> -->
-                                <!-- <button class="btn" [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">پروفایل</button> -->
-                                <!-- <button class="btn" [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">دوره ها</button> -->
-                                <!-- <button class="btn" [routerLink]="['/' + 'about']" routerLinkActive #rla="routerLinkActive">درباره ما</button> -->
-                                <!-- <button class="btn" [routerLink]="['/' + 'not-found']" routerLinkActive #rla="routerLinkActive">تماس با ما</button> -->
-                            @else {
-                                <button class="btn" [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive">خانه</button>
-                                <button class="btn" [routerLink]="['/' + 'profile']" routerLinkActive #rla="routerLinkActive">پروفایل</button>
-                                <button class="btn" [routerLink]="['/' + 'courses']" routerLinkActive #rla="routerLinkActive">دوره ها</button>
-                                <button class="btn" [routerLink]="['/' + 'about']" routerLinkActive #rla="routerLinkActive">درباره ما</button>
-                                <button class="btn" [routerLink]="['/' + 'contact-us']" routerLinkActive #rla="routerLinkActive">تماس با ما</button>
-                            }
+                        @if (loggedInUserSig()?.roles?.includes('manager')) {
+                        <button class="btn" [routerLink]="['/' + 'manager-panel']" routerLinkActive
+                            #rla="routerLinkActive">پنل-مدیر</button>
+                        <button class="btn" [routerLink]="['/' + 'members']" routerLinkActive
+                            #rla="routerLinkActive">کاربران</button>
+                        }
+                        @if (loggedInUserSig()?.roles?.includes('teacher')) {
+                        <button class="btn" [routerLink]="['/' + 'home']" routerLinkActive
+                            #rla="routerLinkActive">خانه</button>
+                        <button class="btn" [routerLink]="['/' + 'profile']" routerLinkActive
+                            #rla="routerLinkActive">پروفایل</button>
+                        <button class="btn" [routerLink]="['/' + 'courses']" routerLinkActive
+                            #rla="routerLinkActive">دوره ها</button>
+                        <button class="btn" [routerLink]="['/' + 'about']" routerLinkActive
+                            #rla="routerLinkActive">درباره ما</button>
+                        <button class="btn" [routerLink]="['/' + 'contact-us']" routerLinkActive
+                            #rla="routerLinkActive">تماس با ما</button>
+                        <button class="btn" [routerLink]="['/' + 'teacher-panel']" routerLinkActive
+                            #rla="routerLinkActive">پنل-معلم</button>
+                        }
+                        @else {
+                        <button class="btn" [routerLink]="['/' + 'home']" routerLinkActive
+                            #rla="routerLinkActive">خانه</button>
+                        <button class="btn" [routerLink]="['/' + 'profile']" routerLinkActive
+                            #rla="routerLinkActive">پروفایل</button>
+                        <button class="btn" [routerLink]="['/' + 'courses']" routerLinkActive
+                            #rla="routerLinkActive">دوره ها</button>
+                        <button class="btn" [routerLink]="['/' + 'about']" routerLinkActive
+                            #rla="routerLinkActive">درباره ما</button>
+                        <button class="btn" [routerLink]="['/' + 'contact-us']" routerLinkActive
+                            #rla="routerLinkActive">تماس با ما</button>
+                        }
                         }@else {
-                            <button class="btn" [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive">خانه</button>
-                            <button class="btn" [routerLink]="['/' + 'courses']" routerLinkActive #rla="routerLinkActive">دوره ها</button>
-                            <button class="btn" [routerLink]="['/' + 'about']" routerLinkActive #rla="routerLinkActive">درباره ما</button>
-                            <button class="btn" [routerLink]="['/' + 'contact-us']" routerLinkActive #rla="routerLinkActive">تماس با ما</button>
-                        } 
+                        <button class="btn" [routerLink]="['/' + 'home']" routerLinkActive
+                            #rla="routerLinkActive">خانه</button>
+                        <button class="btn" [routerLink]="['/' + 'courses']" routerLinkActive
+                            #rla="routerLinkActive">دوره ها</button>
+                        <button class="btn" [routerLink]="['/' + 'about']" routerLinkActive
+                            #rla="routerLinkActive">درباره ما</button>
+                        <button class="btn" [routerLink]="['/' + 'contact-us']" routerLinkActive
+                            #rla="routerLinkActive">تماس با ما</button>
+                        }
                     </div>
                 </div>
             </div>
@@ -143,7 +164,6 @@
 
         <div class="right-items">
             <img src="../assets/images/phonePhoto.png" alt="">
-            <!-- <img class="background" src="../assets/images/homePicture1.jpeg" alt=""> -->
             <img class="background" src="../assets/images/cloudAiPhoto3.jpg" alt="">
             <div class="div-background-matn">
                 <span class="p1">مهارت</span>
@@ -161,13 +181,8 @@
             <span>چرا مارو انتخاب کنید؟</span>
             <div class="div-image">
                 <img src="../assets/images/homeImage1NoB.png" alt="">
-                <!-- <img src="../assets/images/homeImage3.jpg" alt=""> -->
-                <!-- <img src="../assets/images/homeImage5.jpeg" alt=""> -->
-                <!-- <img src="../assets/images/homeImage6.jpeg" alt=""> -->
             </div>
             <div class="div-image">
-                <!-- <img src="../assets/images/homeImage2.jpg" alt=""> -->
-                <!-- <img src="../assets/images/homeImage4.jpg" alt=""> -->
                 <img src="../assets/images/homeImage4NoB.png" alt="">
             </div>
         </div>
@@ -176,47 +191,42 @@
             <div class="cube-top">
             </div>
             <div class="cube-wrapper">
-            <span style="--i:0" class="cube-span">
-                <img src="../assets/images/angularIcon.png" alt="">
-            </span>
-            <span style="--i:1" class="cube-span">
-                <img src="../assets/images/typeScriptIcon.png" alt="">
-            </span>
-            <span style="--i:2" class="cube-span">
-                <img src="../assets/images/cSharpIcon.png" alt="">
-            </span>
-            <span style="--i:3" class="cube-span">
-                <img src="../assets/images/cSharpIcon.png" alt="">
-            </span>
+                <span style="--i:0" class="cube-span">
+                    <img src="../assets/images/angularIcon.png" alt="">
+                </span>
+                <span style="--i:1" class="cube-span">
+                    <img src="../assets/images/typeScriptIcon.png" alt="">
+                </span>
+                <span style="--i:2" class="cube-span">
+                    <img src="../assets/images/cSharpIcon.png" alt="">
+                </span>
+                <span style="--i:3" class="cube-span">
+                    <img src="../assets/images/cSharpIcon.png" alt="">
+                </span>
             </div>
         </div>
     </div>
 
     <section class="bottom-side">
         <div class="cube-loader">
-            <div class="cube-top">
-                <!-- <div class="div-background-black">
-                    <span>console.log</span>
-                </div> -->
-            </div>
             <div class="cube-wrapper">
-            <span style="--i:0" class="cube-span">
-                <img src="../assets/images/angularIcon.png" alt="">
-            </span>
-            <span style="--i:1" class="cube-span">
-                <img src="../assets/images/typeScriptIcon.png" alt="">
-            </span>
-            <span style="--i:2" class="cube-span">
-                <img src="../assets/images/cSharpIcon.png" alt="">
-            </span>
-            <span style="--i:3" class="cube-span">
-                <img src="../assets/images/brainIcon.png" alt="">
-            </span>
+                <span style="--i:0" class="cube-span">
+                    <img src="../assets/images/angularIcon.png" alt="">
+                </span>
+                <span style="--i:1" class="cube-span">
+                    <img src="../assets/images/typeScriptIcon.png" alt="">
+                </span>
+                <span style="--i:2" class="cube-span">
+                    <img src="../assets/images/cSharpIcon.png" alt="">
+                </span>
+                <span style="--i:3" class="cube-span">
+                    <img src="../assets/images/brainIcon.png" alt="">
+                </span>
             </div>
         </div>
 
         <div class="cards">
-            <span>ورود سریع به بازار  کار</span>
+            <span>ورود سریع به بازار کار</span>
             <div class="div-photo">
                 <img src="../assets/images/cardHomePic1.png" alt="">
             </div>
@@ -244,7 +254,7 @@
 <section id="section-page-mobile">
     <header>
         <nav>
-          <app-navbar />
+            <app-navbar />
         </nav>
     </header>
 
@@ -269,7 +279,7 @@
                     <span class="shadow"></span>
                     <span class="edge"></span>
                     <span class="front text">
-                         دوره ها
+                        دوره ها
                     </span>
                 </button>
             </div>
@@ -297,7 +307,7 @@
                 <span class="p3">طراحی وبسایت</span>
                 <span class="p4">از مبتدی تا پیشرفته</span>
             </div>
-            
+
             <div class="wave"></div>
             <div class="wave"></div>
             <div class="wave"></div>
@@ -322,25 +332,25 @@
             <div class="cube-top">
             </div>
             <div class="cube-wrapper">
-            <span style="--i:0" class="cube-span">
-                <img src="../assets/images/angularIcon.png" alt="">
-            </span>
-            <span style="--i:1" class="cube-span">
-                <img src="../assets/images/typeScriptIcon.png" alt="">
-            </span>
-            <span style="--i:2" class="cube-span">
-                <img src="../assets/images/cSharpIcon.png" alt="">
-            </span>
-            <span style="--i:3" class="cube-span">
-                <img src="../assets/images/cSharpIcon.png" alt="">
-            </span>
+                <span style="--i:0" class="cube-span">
+                    <img src="../assets/images/angularIcon.png" alt="">
+                </span>
+                <span style="--i:1" class="cube-span">
+                    <img src="../assets/images/typeScriptIcon.png" alt="">
+                </span>
+                <span style="--i:2" class="cube-span">
+                    <img src="../assets/images/cSharpIcon.png" alt="">
+                </span>
+                <span style="--i:3" class="cube-span">
+                    <img src="../assets/images/cSharpIcon.png" alt="">
+                </span>
             </div>
         </div>
     </div>
 
     <div class="div-cards">
         <div class="card">
-            <span>ورود سریع به بازار  کار</span>
+            <span>ورود سریع به بازار کار</span>
             <div class="div-photo">
                 <img src="../assets/images/cardHomePic1.png" alt="">
             </div>
@@ -363,4 +373,4 @@
             <button>شروع کن</button>
         </div>
     </div>
-</section>
+</section> -->

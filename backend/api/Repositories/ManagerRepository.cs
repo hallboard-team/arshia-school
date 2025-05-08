@@ -11,7 +11,7 @@ public class ManagerRepository : IManagerRepository
     private readonly IPhotoService _photoService;
 
     public ManagerRepository(
-        IMongoClient client, ITokenService tokenService, 
+        IMongoClient client, ITokenService tokenService,
         IMyMongoDbSettings dbSettings, UserManager<AppUser> userManager,
         IPhotoService photoService)
     {
@@ -30,7 +30,7 @@ public class ManagerRepository : IManagerRepository
     {
         DateOnly minDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-memberParams.MaxAge - 1));
         DateOnly maxDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-memberParams.MinAge));
-        
+
         IMongoQueryable<AppUser> query = _collectionAppUser.AsQueryable();
 
         if (!string.IsNullOrEmpty(memberParams.Search))
@@ -46,7 +46,7 @@ public class ManagerRepository : IManagerRepository
         query = query.Where(u => !(u.NormalizedUserName!.Equals("ADMIN") || u.NormalizedUserName == "MANAGER"));
         query = query.Where(u => u.Id != memberParams.UserId);
         query = query.Where(u => u.DateOfBirth >= minDob && u.DateOfBirth <= maxDob);
-        
+
         return query;
     }
 
@@ -173,7 +173,7 @@ public class ManagerRepository : IManagerRepository
 
         return appUser;
     }
-   
+
     public async Task<ObjectId?> GetObjectIdByUserNameAsync(string userName, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _collectionAppUser.AsQueryable<AppUser>()
@@ -214,7 +214,7 @@ public class ManagerRepository : IManagerRepository
     }
 
     public async Task<EnrolledCourse?> AddEnrolledCourseAsync(
-        AddEnrolledCourseDto addEnrolledCourseDto, string targetUserName, 
+        AddEnrolledCourseDto addEnrolledCourseDto, string targetUserName,
         CancellationToken cancellationToken)
     {
         AppUser appUser = await _collectionAppUser
@@ -237,7 +237,7 @@ public class ManagerRepository : IManagerRepository
 
         int tuitionReminderCalc = course.Tuition - addEnrolledCourseDto.PaidAmount; // 1200
         int paymentPerMonthCalc = course.Tuition / addEnrolledCourseDto.NumberOfPayments; // => numberOfPayments = 4 / payment PerMonth = 300
-        
+
         EnrolledCourse enrolledCourse = Mappers.ConvertAddEnrolledCourseDtoToEnrolledCourse(
             addEnrolledCourseDto, course, paymentPerMonthCalc, tuitionReminderCalc);
 
@@ -245,7 +245,7 @@ public class ManagerRepository : IManagerRepository
             return null;
 
         UpdateDefinition<AppUser> update = Builders<AppUser>.Update.AddToSet(doc => doc.EnrolledCourses, enrolledCourse);
-        
+
         UpdateResult result = await _collectionAppUser.UpdateOneAsync(
             doc => doc.Id == appUser.Id, update, cancellationToken: cancellationToken);
 
@@ -253,8 +253,8 @@ public class ManagerRepository : IManagerRepository
     }
 
     public async Task<UpdateResult?> UpdateEnrolledCourseAsync(
-        UpdateEnrolledDto updateEnrolledDto, string targetUserName, 
-        IFormFile file, CancellationToken cancellationToken)
+        UpdateEnrolledDto updateEnrolledDto, string targetUserName,
+        CancellationToken cancellationToken)
     {
         AppUser? appUser = await _collectionAppUser
             .Find(doc => doc.NormalizedUserName == targetUserName.ToUpper())
@@ -282,19 +282,19 @@ public class ManagerRepository : IManagerRepository
             CourseTitle: updateEnrolledDto.TitleCourse.ToUpper(),
             Amount: updateEnrolledDto.PaidAmount,
             PaidOn: DateTime.UtcNow,
-            Method: updateEnrolledDto.Method.ToUpper(),
+            Method: updateEnrolledDto.Method,
             Photo: null
         );
 
-        if (file is not null) {
-            IEnumerable<string>? imageUrls = await _photoService.AddPhotoToDiskAsync(file, newPayment.Id);
+        // if (file is not null) {
+        //     IEnumerable<string>? imageUrls = await _photoService.AddPhotoToDiskAsync(file, newPayment.Id);
 
-            if (imageUrls is null)
-                throw new ArgumentNullException("Saving photo has failed. Error from PhotoService.");
+        //     if (imageUrls is null)
+        //         throw new ArgumentNullException("Saving photo has failed. Error from PhotoService.");
 
-            Photo photo = Mappers.ConvertPhotoUrlsToPhoto(imageUrls.ToArray(), isMain: true);
-            newPayment = newPayment with { Photo = photo };
-        }
+        //     Photo photo = Mappers.ConvertPhotoUrlsToPhoto(imageUrls.ToArray(), isMain: true);
+        //     newPayment = newPayment with { Photo = photo };
+        // }
 
         FilterDefinition<AppUser> filter = Builders<AppUser>.Filter.And(
             Builders<AppUser>.Filter.Eq(u => u.Id, appUser.Id),
@@ -338,30 +338,32 @@ public class ManagerRepository : IManagerRepository
         AppUser? appUser = await _userManager.FindByEmailAsync(targetMemberEmail);
 
         MemberDto memberDto = Mappers.ConvertAppUserToMemberDto(appUser, isAbsent: false);
-        
+
         return memberDto;
     }
 
-    public async Task<ProfileDto?> GetMemberByUserNameAsync(string targetUserName, CancellationToken cancellationToken)
+    public async Task<TargetMemberDto?> GetMemberByUserNameAsync(string targetUserName, CancellationToken cancellationToken)
     {
         AppUser? appUser = await _collectionAppUser.Find<AppUser>(appUser => appUser.NormalizedUserName == targetUserName.ToUpper())
             .FirstOrDefaultAsync(cancellationToken);
-        
+
         if (appUser is null)
             return null;
 
-        ProfileDto profileDto = Mappers.ConvertAppUserToProfileDto(appUser);
-        
-        return profileDto;
+        TargetMemberDto targetMemberDto = Mappers.ConvertAppUserToTargetMemberDto(appUser);
+
+        return targetMemberDto;
     }
 
-    public async Task<bool> UpdateMemberAsync(string targetMemberEmail, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken)
+    public async Task<bool> UpdateMemberAsync(string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken)
     {
-        AppUser? targetAppUser = await _userManager.FindByEmailAsync(targetMemberEmail);
+        AppUser? targetAppUser = await _collectionAppUser.Find<AppUser>(doc =>
+            doc.NormalizedUserName == memberUserName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+
         if (targetAppUser == null) return false;
 
         bool emailChanged = !string.Equals(targetAppUser.Email, updatedMember.Email, StringComparison.OrdinalIgnoreCase);
-        bool userNameChanged = !string.Equals(targetAppUser.UserName, updatedMember.UserName, StringComparison.OrdinalIgnoreCase);
+        // bool userNameChanged = !string.Equals(targetAppUser.UserName, updatedMember.UserName, StringComparison.OrdinalIgnoreCase);
 
         if (emailChanged)
         {
@@ -369,11 +371,11 @@ public class ManagerRepository : IManagerRepository
             targetAppUser.NormalizedEmail = updatedMember.Email.ToUpper();
         }
 
-        if (userNameChanged)
-        {
-            targetAppUser.UserName = updatedMember.UserName;
-            targetAppUser.NormalizedUserName = updatedMember.UserName.ToUpper();
-        }
+        // if (userNameChanged)
+        // {
+        //     targetAppUser.UserName = updatedMember.UserName;
+        //     targetAppUser.NormalizedUserName = updatedMember.UserName.ToUpper();
+        // }
 
         IdentityResult result = await _userManager.UpdateAsync(targetAppUser);
         if (!result.Succeeded) return false;
@@ -391,57 +393,57 @@ public class ManagerRepository : IManagerRepository
         return updateResult.ModifiedCount > 0;
     }
 
-    // public async Task<Photo?> AddPhotoAsync(IFormFile file, ObjectId targetPaymentId, CancellationToken cancellationToken)
-    // {
-    //     AppUser? appUser = await _collectionAppUser
-    //         .Find(doc => doc.EnrolledCourses.Any(ec => ec.Payments.Any(p => p.Id == targetPaymentId)))
-    //         .FirstOrDefaultAsync(cancellationToken);
+    public async Task<Photo?> AddPhotoAsync(IFormFile file, ObjectId targetPaymentId, CancellationToken cancellationToken)
+    {
+        AppUser? appUser = await _collectionAppUser
+            .Find(doc => doc.EnrolledCourses.Any(ec => ec.Payments.Any(p => p.Id == targetPaymentId)))
+            .FirstOrDefaultAsync(cancellationToken);
 
-    //     if (appUser is null)
-    //         return null; 
+        if (appUser is null)
+            return null;
 
-    //     EnrolledCourse? enrolledCourse = appUser.EnrolledCourses
-    //         .FirstOrDefault(ec => ec.Payments.Any(p => p.Id == targetPaymentId));
+        EnrolledCourse? enrolledCourse = appUser.EnrolledCourses
+            .FirstOrDefault(ec => ec.Payments.Any(p => p.Id == targetPaymentId));
 
-    //     if (enrolledCourse is null)
-    //         return null; 
+        if (enrolledCourse is null)
+            return null;
 
-    //     Payment? payment = enrolledCourse.Payments.FirstOrDefault(p => p.Id == targetPaymentId);
+        Payment? payment = enrolledCourse.Payments.FirstOrDefault(p => p.Id == targetPaymentId);
 
-    //     if (payment is null)
-    //         return null;
+        if (payment is null)
+            return null;
 
-    //     IEnumerable<string> imageUrls = await _photoService.AddPhotoToDiskAsync(file, targetPaymentId);
+        IEnumerable<string> imageUrls = await _photoService.AddPhotoToDiskAsync(file, targetPaymentId);
 
-    //     if (imageUrls is null)
-    //         throw new ArgumentNullException("Saving photo has failed. Error from PhotoService.");
+        if (imageUrls is null)
+            throw new ArgumentNullException("Saving photo has failed. Error from PhotoService.");
 
-    //     Photo photo = Mappers.ConvertPhotoUrlsToPhoto(imageUrls.ToArray(), isMain: true); // فرض می‌کنیم این متد عکس رو به Photo تبدیل می‌کند
+        Photo photo = Mappers.ConvertPhotoUrlsToPhoto(imageUrls.ToArray(), isMain: true); // فرض می‌کنیم این متد عکس رو به Photo تبدیل می‌کند
 
-    //     Payment updatedPayment = payment with { Photo = photo };
+        Payment updatedPayment = payment with { Photo = photo };
 
-    //     var filter = Builders<AppUser>.Filter.Eq(u => u.Id, appUser.Id);
-    //     var update = Builders<AppUser>.Update
-    //         .Set("EnrolledCourses.$[ec].Payments.$[p]", updatedPayment);
+        var filter = Builders<AppUser>.Filter.Eq(u => u.Id, appUser.Id);
+        var update = Builders<AppUser>.Update
+            .Set("EnrolledCourses.$[ec].Payments.$[p]", updatedPayment);
 
-    //     var arrayFilters = new List<ArrayFilterDefinition>
-    //     {
-    //         new BsonDocumentArrayFilterDefinition<BsonDocument>(
-    //             new BsonDocument("ec.CourseTitle", enrolledCourse.CourseTitle)
-    //         ),
-    //         new BsonDocumentArrayFilterDefinition<BsonDocument>(
-    //             new BsonDocument("p._id", updatedPayment.Id)
-    //         )
-    //     };
+        var arrayFilters = new List<ArrayFilterDefinition>
+        {
+            new BsonDocumentArrayFilterDefinition<BsonDocument>(
+                new BsonDocument("ec.CourseTitle", enrolledCourse.CourseTitle)
+            ),
+            new BsonDocumentArrayFilterDefinition<BsonDocument>(
+                new BsonDocument("p._id", updatedPayment.Id)
+            )
+        };
 
-    //     UpdateResult result = await _collectionAppUser.Up`dateOneAsync(
-    //         filter,
-    //         update,
-    //         new UpdateOptions { ArrayFilters = arrayFilters },
-    //         cancellationToken);
+        UpdateResult result = await _collectionAppUser.UpdateOneAsync(
+            filter,
+            update,
+            new UpdateOptions { ArrayFilters = arrayFilters },
+            cancellationToken);
 
-    //     return result.ModifiedCount > 0 ? photo : null;
-    // }
+        return result.ModifiedCount > 0 ? photo : null;
+    }
 
     public async Task<bool> DeletePhotoAsync(ObjectId targetPaymentId, CancellationToken cancellationToken)
     {
@@ -468,7 +470,7 @@ public class ManagerRepository : IManagerRepository
 
         payment = payment with { Photo = null };
 
-         var filter = Builders<AppUser>.Filter.Eq(u => u.Id, appUser.Id);
+        var filter = Builders<AppUser>.Filter.Eq(u => u.Id, appUser.Id);
         var update = Builders<AppUser>.Update
             .Set("EnrolledCourses.$[ec].Payments.$[p]", payment);
 
@@ -491,11 +493,58 @@ public class ManagerRepository : IManagerRepository
         return result.ModifiedCount > 0;
     }
 
-    // public async Task<PagedList<AppUser>> GetAllAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
-    // {
-        
-    //     IMongoQueryable<AppUser> query = _collectionAppUser.AsQueryable();
+    public async Task<List<Course?>> GetTargetMemberCourseAsync(string targetUserName, CancellationToken cancellationToken)
+    {
+        List<string>? enrolledCourseIds = await _collectionAppUser.AsQueryable<AppUser>()
+            .Where(appUser => appUser.NormalizedUserName == targetUserName.ToUpper())
+            .SelectMany(appUser => appUser.EnrolledCourses)
+            .Select(doc => doc.CourseId.ToString())
+            .ToListAsync(cancellationToken);
 
-    //     return await PagedList<AppUser>.CreatePagedListAsync(query, paginationParams.PageNumber, paginationParams.PageSize, cancellationToken);
-    // }
+        if (enrolledCourseIds is null || !enrolledCourseIds.Any())
+            return null;
+
+        List<Course>? courses = await _collectionCourse.Find<Course>(doc =>
+            enrolledCourseIds.Contains(doc.Id.ToString())).ToListAsync(cancellationToken);
+
+        if (courses is null)
+        {
+            return null;
+        }
+
+        return courses is null
+            ? null
+            // : Mappers.ConvertAppUserToLoggedInDto(appUser, token);
+            : courses;
+    }
+
+    public async Task<EnrolledCourse?> GetTargetMemberEnrolledCourseAsync(string targetUserName, string courseTitle, CancellationToken cancellationToken)
+    {
+        AppUser? appUser = await _collectionAppUser.Find<AppUser>(
+            doc => doc.NormalizedUserName == targetUserName.ToUpper()
+        ).FirstOrDefaultAsync(cancellationToken);
+
+        if (appUser is null)
+            return null;
+
+        EnrolledCourse? enrolledCourse = appUser.EnrolledCourses
+            .FirstOrDefault(ec => ec.CourseTitle == courseTitle.ToUpper());
+        if (enrolledCourse is null)
+            return null;
+
+        return enrolledCourse;
+    }
+
+    public async Task<List<string>> GetTargetCourseTitleAsync(string targetUserName, CancellationToken cancellationToken)
+    {
+        List<string>? courseTitles = await _collectionAppUser.AsQueryable<AppUser>()
+            .Where(appUser => appUser.NormalizedUserName == targetUserName.ToUpper())
+            .SelectMany(appUser => appUser.EnrolledCourses)
+            .Select(doc => doc.CourseTitle.ToUpper())
+            .ToListAsync(cancellationToken);
+
+        return courseTitles.Count <= 0
+            ? null
+            : courseTitles;
+    }
 }

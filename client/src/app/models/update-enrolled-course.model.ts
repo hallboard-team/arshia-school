@@ -1,5 +1,11 @@
 export interface UpdateEnrolledCourse {
     titleCourse: string,
     paidAmount: number,
-    method: string
+    method: PaymentMethod
+}
+
+export enum PaymentMethod {
+    KartBeKart,
+    Naghdi,
+    PozDevice
 }

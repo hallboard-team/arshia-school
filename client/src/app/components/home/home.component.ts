@@ -16,6 +16,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { LoggedInUser } from '../../models/logged-in-user.model';
 import { AccountService } from '../../services/account.service';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MemberService } from '../../services/member.service';
+import { UserProfile } from '../../models/user-profile.model';
 
 @Component({
   selector: 'app-home',
@@ -31,13 +33,30 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 })
 export class HomeComponent implements OnInit{
   private accountService = inject(AccountService);
+  public memberService = inject(MemberService);
   loggedInUserSig: Signal<LoggedInUser | null> | undefined;
+
+  profile: UserProfile | null = null;
+  error: string | null = null;
 
   ngOnInit(): void {
     this.loggedInUserSig = this.accountService.loggedInUserSig;
 
     console.log('THE LOGGED-IN USER:', this.loggedInUserSig()?.userName);
+
+    // this.getLoggedInProfile();
   }
+
+  // getLoggedInProfile(): void {
+  //   this.memberService.getProfile().subscribe({
+  //     next: (data) => {
+  //       this.profile = data;
+  //     },
+  //     error: (err) => {
+  //       this.error = 'خطا در گرفتن یوزرنیم';
+  //     }
+  //   })
+  // }
   
   logout(): void {
     this.accountService.logout();

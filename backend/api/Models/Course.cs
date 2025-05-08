@@ -1,3 +1,4 @@
+using api.Controllers.Enums;
 using MongoDbGenericRepository.Attributes;
 
 namespace api.Models;
@@ -15,14 +16,6 @@ public record Course(
     DateTime Start, //TODO: Rename to StartOn //  1 mars 2025
     string IsStarted  
 );
-
-
-// enum TitleType 
-// {
-//     PROGRAMMING,
-//     MATH,
-//     ICDL
-// }
 
 public record EnrolledCourse(
     // Guid Id,
@@ -45,16 +38,6 @@ public record Payment(
     string CourseTitle,
     int Amount,
     DateTime PaidOn,
-    string Method, //aberbank / naghdi
+    PaymentMethod Method, //aberbank / naghdi
     Photo? Photo
 );
-
-// public class Payment(
-//     // Guid Id,
-//     [Optional][property: BsonId, BsonRepresentation(BsonType.ObjectId)] ObjectId Id,
-//     string CourseTitle,
-//     int Amount,
-//     DateTime PaidOn,
-//     string Method, //aberbank / naghdi
-//     Photo? Photo
-// );

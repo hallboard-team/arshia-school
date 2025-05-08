@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import {MatAccordion, MatExpansionModule} from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { provideNativeDateAdapter } from '@angular/material/core';
-
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-about-us',
@@ -16,7 +16,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
   imports: [
     NavbarComponent, MatTabsModule, MatDatepickerModule,
     MatInputModule, MatFormFieldModule, MatIconModule,
-    MatExpansionModule, MatButtonModule
+    MatExpansionModule, MatButtonModule, RouterModule
   ],
   templateUrl: './about-us.component.html',
   styleUrl: './about-us.component.scss',

@@ -33,7 +33,7 @@
         align-items: center;
         width: 100%;
 
-        .button-edit-member {
+        .button-view {
             height: 30px;
             padding: 1rem;
             font-size: 15px;
@@ -47,7 +47,7 @@
             align-items: center;
             transition: 0.3s;
         }
-        .button-edit-member:hover {
+        .button-view:hover {
             cursor: pointer;
             transition: 0.3s;
             background: linear-gradient(145deg, #f0f0f0, #cacaca);
@@ -55,26 +55,26 @@
                 -5px -5px 10px #ffffff;
         }
 
-        .button-add-enrolledCourse {
-            height: 30px;
-            padding: 1rem;
-            font-size: 15px;
-            border: none;
-            border-radius: 10px;
-            background: #e0e0e0;
-            box-shadow: inset 5px 5px 10px #a8a8a8,
-                inset -5px -5px 10px #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: 0.3s;
-        }
-        .button-add-enrolledCourse:hover {
-            cursor: pointer;
-            transition: 0.3s;
-            background: linear-gradient(145deg, #f0f0f0, #cacaca);
-            box-shadow:  5px 5px 10px #a8a8a8,
-                -5px -5px 10px #ffffff;
-        }
+        // .button-add-enrolledCourse {
+        //     height: 30px;
+        //     padding: 1rem;
+        //     font-size: 15px;
+        //     border: none;
+        //     border-radius: 10px;
+        //     background: #e0e0e0;
+        //     box-shadow: inset 5px 5px 10px #a8a8a8,
+        //         inset -5px -5px 10px #ffffff;
+        //     display: flex;
+        //     justify-content: center;
+        //     align-items: center;
+        //     transition: 0.3s;
+        // }
+        // .button-add-enrolledCourse:hover {
+        //     cursor: pointer;
+        //     transition: 0.3s;
+        //     background: linear-gradient(145deg, #f0f0f0, #cacaca);
+        //     box-shadow:  5px 5px 10px #a8a8a8,
+        //         -5px -5px 10px #ffffff;
+        // }
     }
 }

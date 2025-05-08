@@ -5,12 +5,14 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { AccountService } from './services/account.service';
 import { isPlatformBrowser } from '@angular/common';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { LightboxModule } from 'ngx-lightbox';
+
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     RouterModule, RouterOutlet, NgxSpinnerModule,
-    NavbarComponent, FooterComponent
+    NavbarComponent, FooterComponent, LightboxModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
