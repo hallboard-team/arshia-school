@@ -94,9 +94,8 @@
 
         <div class="div-bg-course-from-backend">
             <div class="div-bg-title-img">
-                <img src="../assets/images/sky4.webp" alt="">
-                <span class="span-course">دوره پروژه محور</span>
-                <h2 class="span-course-title">FUll Stack</h2>
+                <img src="../assets/images/background-full-stack3.jpg" alt="">
+                <span class="span-course">دوره پروژه محور FUll-Stack</span>
             </div>
             <div class="div-title-course">
                 <div class="right">
@@ -123,7 +122,9 @@
                 </div>
                 <div class="center">
                     <div class="div-profile">
-                        <button></button>
+                        <button>
+                            <mat-icon>person</mat-icon>
+                        </button>
                     </div>
                     <div class="div-teacher-name">
                         <span class="span-title">مدرس دوره:</span>
@@ -131,11 +132,44 @@
                     </div>
                 </div>
                 <div class="bottom">
-                    <button class="btn-click-course"> <mat-icon>north_west</mat-icon>مشاهده دوره</button>
+                    <button class="btn-click-course"> <mat-icon
+                            class="icon-after-hover">keyboard_backspace</mat-icon><mat-icon
+                            class="icon-befor-hover">north_west</mat-icon>مشاهده دوره</button>
                     <button class="btn-like"><mat-icon>favorite</mat-icon></button>
                 </div>
             </div>
         </div>
+    </section>
+
+    <section class="sec-bottom">
+        <div class="div-title-about">
+            <div class="div-matn">
+                <span class="title">درمورد طلوع فناوری چه میشنویم؟</span>
+                <span class="matn">این‌ها، بخش خیلی کوچکی از نظراتی هستند که افراد مختلف در مورد طلوع فناوری
+                    دارند.</span>
+            </div>
+            <div class="div-icon">
+                <button>
+                    <mat-icon>school</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <div class="slider-wrapper">
+            <button class="button-nav" (click)="prev()">❮</button>
+
+            <div class="slider-window">
+                <div class="slide" *ngFor="let slide of slides.slice(currentIndex, currentIndex + 1)">
+                    <span class="description">{{ slide.description}}</span>
+                    <span class="name">{{ slide.name }}</span>
+                    <span class="course">{{ slide.course }}</span>
+                </div>
+            </div>
+
+            <button class="button-nav" (click)="next()">❯</button>
+        </div>
+
+
     </section>
 </main>
 

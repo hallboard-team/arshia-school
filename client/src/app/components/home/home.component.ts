@@ -4,7 +4,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatStepHeader, MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
-import { NgTemplateOutlet } from '@angular/common';
+import { CommonModule, NgTemplateOutlet } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
 import { HttpClient } from '@angular/common/http';
@@ -24,6 +24,7 @@ import { CourseParams } from '../../models/helpers/course-params';
 import { PaginatedResult } from '../../models/helpers/paginatedResult';
 import { CourseService } from '../../services/course.service';
 import { Pagination } from '../../models/helpers/pagination';
+import { MatSliderModule } from '@angular/material/slider';
 
 @Component({
   selector: 'app-home',
@@ -32,7 +33,7 @@ import { Pagination } from '../../models/helpers/pagination';
     MatButtonModule, MatIconModule,
     RouterModule, MatInputModule, MatDividerModule,
     FormsModule, NavbarComponent, MatMenuModule,
-    MatToolbarModule
+    MatToolbarModule, MatSliderModule, CommonModule
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -55,6 +56,26 @@ export class HomeComponent implements OnInit {
     this.loggedInUserSig = this.accountService.loggedInUserSig;
 
     console.log('THE LOGGED-IN USER:', this.loggedInUserSig()?.userName);
+  }
+
+  slides = [
+    { name: 'Slide 1', course: 'This is the first slide', description: 'وبسایت شما ' },
+    { name: 'Slide 2', course: 'Second slide content', description: 'matnnnnnnn tozohatsjkfdsjkfkadsjfdsjfokdsjf;kdsjfsdofjsdaf;jsdf;jd' },
+    { name: 'Slide 3', course: 'Another slide here', description: 'matnnnnnnn tozohatsjkfdsjkfkadsjfdsjfokdsjf;kdsjfsdofjsdaf;jsdf;jd' },
+  ];
+
+  currentIndex = 0;
+
+  next() {
+    if (this.currentIndex < this.slides.length - 1) {
+      this.currentIndex++;
+    }
+  }
+
+  prev() {
+    if (this.currentIndex > 0) {
+      this.currentIndex--;
+    }
   }
 
   // getLoggedInProfile(): void {
