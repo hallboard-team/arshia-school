@@ -3,8 +3,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatStepHeader, MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
-import {CdkStepper, CdkStepperModule} from '@angular/cdk/stepper';
-import {NgTemplateOutlet} from '@angular/common'; 
+import { CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
+import { NgTemplateOutlet } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
 import { HttpClient } from '@angular/common/http';
@@ -18,33 +18,43 @@ import { AccountService } from '../../services/account.service';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MemberService } from '../../services/member.service';
 import { UserProfile } from '../../models/user-profile.model';
+import { Observable, Subscription } from 'rxjs';
+import { Course, ShowCourse } from '../../models/course.model';
+import { CourseParams } from '../../models/helpers/course-params';
+import { PaginatedResult } from '../../models/helpers/paginatedResult';
+import { CourseService } from '../../services/course.service';
+import { Pagination } from '../../models/helpers/pagination';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
-    MatButtonModule, MatIconModule, 
+    MatButtonModule, MatIconModule,
     RouterModule, MatInputModule, MatDividerModule,
     FormsModule, NavbarComponent, MatMenuModule,
     MatToolbarModule
-  ], 
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent implements OnInit {
   private accountService = inject(AccountService);
   public memberService = inject(MemberService);
   loggedInUserSig: Signal<LoggedInUser | null> | undefined;
+  courseService = inject(CourseService);
+  courses$: Observable<Course[] | null> | undefined;
 
   profile: UserProfile | null = null;
   error: string | null = null;
+  showCourses: ShowCourse[] | undefined;
+  courseParams: CourseParams | undefined;
+  subscribed: Subscription | undefined;
+  pagination: Pagination | undefined;
 
   ngOnInit(): void {
     this.loggedInUserSig = this.accountService.loggedInUserSig;
 
     console.log('THE LOGGED-IN USER:', this.loggedInUserSig()?.userName);
-
-    // this.getLoggedInProfile();
   }
 
   // getLoggedInProfile(): void {
@@ -57,26 +67,38 @@ export class HomeComponent implements OnInit{
   //     }
   //   })
   // }
-  
+
   logout(): void {
     this.accountService.logout();
   }
 
+  // getAll(): void {
+  //   if (this.courseParams)
+  //     this.subscribed = this.courseService.getAll(this.courseParams).subscribe({
+  //       next: (response: PaginatedResult<ShowCourse[]>) => {
+  //         if (response.body && response.pagination) {
+  //           this.showCourses = response.body;
+  //           this.pagination = response.pagination;
+  //         }
+  //       }
+  //     });
+  // }
+
   openMenu() {
     // document.body.style.backgroundColor = color; 
 
-    const elements = document.querySelectorAll('.hamburger-menu'); 
+    const elements = document.querySelectorAll('.hamburger-menu');
 
-    elements.forEach((element) => { 
+    elements.forEach((element) => {
       (element as HTMLElement).style.display = "block";
       // (element as HTMLElement).style.left = "5%"; 
     });
   }
 
   closeMenu() {
-    const elements = document.querySelectorAll('.hamburger-menu'); 
+    const elements = document.querySelectorAll('.hamburger-menu');
 
-    elements.forEach((element) => { 
+    elements.forEach((element) => {
       // (element as HTMLElement).style.left = "-100%", 
       (element as HTMLElement).style.display = "none";
     });
@@ -85,54 +107,55 @@ export class HomeComponent implements OnInit{
   openMenuDesctop() {
     // document.body.style.backgroundColor = color; 
 
-    const elements = document.querySelectorAll('.hamburger-menu'); 
+    const elements = document.querySelectorAll('.hamburger-menu');
 
-    elements.forEach((element) => { 
+    elements.forEach((element) => {
       (element as HTMLElement).style.display = "block";
       // (element as HTMLElement).style.left = "5%"; 
     });
 
-    const openMenu = document.querySelectorAll('.right-open-menu'); 
+    const openMenu = document.querySelectorAll('.right-open-menu');
 
-    openMenu.forEach((element) => { 
+    openMenu.forEach((element) => {
       (element as HTMLElement).style.display = "none";
     });
 
-    const closeMenu = document.querySelectorAll('.right-close-menu'); 
+    const closeMenu = document.querySelectorAll('.right-close-menu');
 
-    closeMenu.forEach((element) => { 
+    closeMenu.forEach((element) => {
       (element as HTMLElement).style.display = "flex";
     });
   }
 
   closeMenuDesctop() {
-    const elements = document.querySelectorAll('.hamburger-menu'); 
+    const elements = document.querySelectorAll('.hamburger-menu');
 
-    elements.forEach((element) => { 
+    elements.forEach((element) => {
       // (element as HTMLElement).style.left = "-100%", 
       (element as HTMLElement).style.display = "none";
     });
 
-    const openMenu = document.querySelectorAll('.right-open-menu'); 
+    const openMenu = document.querySelectorAll('.right-open-menu');
 
-    openMenu.forEach((element) => { 
+    openMenu.forEach((element) => {
       (element as HTMLElement).style.display = "flex";
     });
 
-    const closeMenu = document.querySelectorAll('.right-close-menu'); 
+    const closeMenu = document.querySelectorAll('.right-close-menu');
 
-    closeMenu.forEach((element) => { 
+    closeMenu.forEach((element) => {
       (element as HTMLElement).style.display = "none";
     });
   }
+
   // selectStepByIndex(index: number): void {
-    //   this.selectedIndex = index;
-    // }
+  //   this.selectedIndex = index;
+  // }
   // http = inject(HttpClient);
   // private readonly _apiUrl = environment.apiUrl + 'color/';
-    
+
   // favoriteColor: string = '#ffffff';
-    
+
   // ngOnInit(): void {
   //   this.http.get<{ color: string }>(this._apiUrl + 'get-color')
   //   .subscribe(response => {
@@ -169,12 +192,12 @@ export class HomeComponent implements OnInit{
   //     `; 
   //   });
   // }
-  
+
   // darkenColor(color: string): string 
   // { 
   //   return tinycolor(color).darken(20).toString(); 
   // } 
-  
+
   // lightenColor(color: string): string {
   //    return tinycolor(color).lighten(20).toString();
   // }

@@ -23,17 +23,17 @@ import { RouterModule } from '@angular/router';
   imports: [
     CommonModule, MatPaginatorModule, CourseCardComponent,
     NavbarComponent, RouterModule
-],
+  ],
   templateUrl: './course-list.component.html',
   styleUrl: './course-list.component.scss'
 })
-export class CourseListComponent implements OnInit, OnDestroy{
+export class CourseListComponent implements OnInit, OnDestroy {
   private _accountService = inject(AccountService);
   courseService = inject(CourseService);
   courses$: Observable<Course[] | null> | undefined;
 
   subscribed: Subscription | undefined;
- 
+
   pagination: Pagination | undefined;
   // courses: Course[] | undefined;
   showCourses: ShowCourse[] | undefined;

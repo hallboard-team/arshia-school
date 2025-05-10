@@ -3,15 +3,20 @@
     font-family: 'Vazir';
     src: url('assets/fonts/Vazir.woff2') format('woff2'),
         url('assets/fonts/Vazir.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+    font-weight: bold;
+    // font-style: normal;
     font-display: swap;
 }
+
+// @font-face {
+//     font-family: 'Bold';
+//     src: url('assets/fonts/Mj_Saudi\ Arabia\ XL_0.TTF') format('TTF');
+//     font-weight: bold;
+// }
 
 body {
     width: 100%;
     background-color: #e0e0e0;
-    font-family: 'Vazir', sans-serif;
 }
 
 *,
