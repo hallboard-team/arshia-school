@@ -161,15 +161,24 @@
             <div class="slider-window">
                 <div class="slide" *ngFor="let slide of slides.slice(currentIndex, currentIndex + 1)">
                     <span class="description">{{ slide.description}}</span>
-                    <span class="name">{{ slide.name }}</span>
-                    <span class="course">{{ slide.course }}</span>
+                    <div class="bottom-description">
+                        <div class="right">
+                            <img class="profile" [src]="slide.image" [alt]="slide.name" />
+                        </div>
+                        <div class="left">
+                            <span class="name">{{ slide.name }}</span>
+                            <span class="course">{{ slide.course }}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <button class="button-nav" (click)="next()">❯</button>
         </div>
 
-
+        <div class="div-footer">
+            <app-footer />
+        </div>
     </section>
 </main>
 

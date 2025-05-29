@@ -20,8 +20,8 @@ public class AccountController(IAccountRepository _accountRepository) : BaseApiC
     public async Task<ActionResult<LoggedInDto>> ReloadLoggedInUser(CancellationToken cancellationToken)
     {
         // obtain token value
-        string? token = null; 
-        
+        string? token = null;
+
         bool isTokenValid = HttpContext.Request.Headers.TryGetValue("Authorization", out var authHeader);
 
         if (isTokenValid)

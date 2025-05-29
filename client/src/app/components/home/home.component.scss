@@ -784,6 +784,7 @@ main {
                 justify-content: center;
                 align-items: end;
                 gap: 10px;
+                padding: 10px;
 
                 .title {
                     color: rgb(52, 52, 255);
@@ -829,6 +830,12 @@ main {
             gap: 10px;
             margin-top: 1rem;
             width: 100%;
+            background-color: #fff;
+            padding: 1rem;
+            width: 90%;
+            border: 1px solid rgba(0, 0, 0, 0.377);
+            border-radius: 10px;
+            box-shadow: 0 0 10px black;
 
             .slider-window {
                 width: 100%;
@@ -850,25 +857,61 @@ main {
                         color: rgba(0, 0, 0, 0.705);
                     }
 
-                    .name {
-                        font-size: 14px;
-                        color: black;
+                    .bottom-description {
+                        display: flex;
+                        flex-direction: row-reverse;
+                        justify-content: center;
+                        align-items: center;
+                        width: 100%;
                         margin-top: 1rem;
-                    }
+                        gap: 10px;
 
-                    .course {
-                        font-size: 14px;
-                        color: blue;
+                        .right {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+
+                            .profile {
+                                height: 45px;
+                                width: 45px;
+                            }
+                        }
+
+                        .left {
+                            display: flex;
+                            justify-content: center;
+                            align-items: flex-end;
+                            flex-direction: column;
+
+                            .name {
+                                font-size: 15px;
+                                color: black;
+                                margin-top: 1rem;
+                            }
+
+                            .course {
+                                font-size: 14px;
+                                color: rgba(0, 0, 0, 0.534);
+                                direction: rtl;
+                            }
+                        }
                     }
                 }
             }
 
             .button-nav {
-                font-size: 2rem;
+                font-size: 1.1rem;
                 background: none;
-                border: none;
                 cursor: pointer;
+                border-radius: 50%;
+                background-color: #fff;
+                border: 1px solid rgba(0, 0, 0, 0.37);
             }
+        }
+
+        .div-footer {
+            width: 100%;
+            margin-top: 1rem;
         }
     }
 }

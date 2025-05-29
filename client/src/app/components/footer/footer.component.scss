@@ -1,0 +1,416 @@
+.main {
+    // background-color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+
+    .top {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        gap: 1rem;
+        flex-direction: column;
+
+        .div-title {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            flex-direction: row-reverse;
+            gap: 10px;
+
+            mat-icon {
+                color: rgb(52, 52, 255);
+                margin-right: 10px;
+            }
+
+            .bottom-title-span {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+
+                .title {
+                    font-size: 17px;
+                    color: black;
+                    font-weight: bold;
+                }
+
+                .title-color {
+                    font-size: 17px;
+                    color: rgb(52, 52, 255);
+                }
+            }
+        }
+
+        .div-phone-numbers {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            flex-direction: row-reverse;
+            width: 100%;
+
+            .right {
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+                flex-direction: row-reverse;
+                gap: 10px;
+
+                button {
+                    background-color: rgba(128, 128, 128, 0.151);
+                    border: none;
+                    border-radius: 50%;
+                    height: 40px;
+                    width: 40px;
+
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    mat-icon {
+                        font-size: 1.2rem;
+                        color: rgba(0, 0, 0, 0.664);
+                    }
+                }
+
+                .desc {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: flex-end;
+
+                    .title {
+                        color: rgb(52, 52, 255);
+                        font-size: 16px;
+                    }
+
+                    .phone-number {
+                        color: 15px;
+                        color: black;
+                    }
+                }
+            }
+
+            .left {
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+                flex-direction: row-reverse;
+                gap: 10px;
+
+                button {
+                    background-color: rgba(128, 128, 128, 0.151);
+                    border: none;
+                    border-radius: 50%;
+                    height: 40px;
+                    width: 40px;
+
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    mat-icon {
+                        font-size: 1.2rem;
+                        color: rgba(0, 0, 0, 0.664);
+                    }
+                }
+
+                .desc {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: flex-end;
+
+                    .title {
+                        color: rgb(52, 52, 255);
+                        font-size: 16px;
+                    }
+
+                    .time {
+                        color: 15px;
+                        color: black;
+                    }
+                }
+            }
+        }
+    }
+
+    .center {
+        // background-color: yellow;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        width: 100%;
+
+        .div-about-us {
+            width: 90%;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background-color: white;
+
+            .div-title {
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                gap: 3px;
+
+                .title {
+                    font-size: 17px;
+                    color: black;
+                }
+
+                mat-icon {
+                    color: black;
+                }
+            }
+
+            .desc {
+                font-size: 15px;
+                direction: rtl;
+                color: rgba(0, 0, 0, 0.575);
+            }
+        }
+
+        .div-links {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+            margin-right: 2rem;
+            padding: 10px;
+
+            .div-title {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+
+                span {
+                    font-size: 17px;
+                    color: black;
+                }
+            }
+
+            .links {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: flex-end;
+                gap: 5px;
+
+                a {
+                    font-size: 15px;
+                    color: rgba(0, 0, 0, 0.493);
+                }
+            }
+        }
+
+        .news {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 1rem;
+            margin-right: 2rem;
+            width: 100%;
+            padding: 10px;
+
+            .div-title {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+
+                span {
+                    font-size: 17px;
+                    color: black;
+                }
+            }
+
+            .desc {
+                font-size: 15px;
+                color: rgba(0, 0, 0, 0.493);
+                direction: rtl;
+            }
+        }
+    }
+
+    .bottom {
+        // background-color: yellow;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+
+        .div-email {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .input-wrapper {
+                width: fit-content;
+                height: 35px;
+                border-radius: 13px;
+                padding: 5px;
+                box-sizing: content-box;
+                display: flex;
+                align-items: center;
+                background-color: white;
+            }
+
+            .icon {
+                width: 30px;
+                fill: rgb(255, 255, 255);
+                margin-left: 8px;
+                transition: all 0.3s;
+                color: rgba(0, 0, 0, 0.514);
+            }
+
+            .input {
+                max-width: 170px;
+                height: 100%;
+                border: none;
+                outline: none;
+                padding-left: 15px;
+                background-color: #fff;
+                color: black;
+                font-size: 1em;
+                direction: rtl;
+            }
+
+            .input:-webkit-autofill {
+                -webkit-box-shadow: 0 0 0px 1000px #292524 inset;
+                -webkit-text-fill-color: black;
+            }
+
+            .Subscribe-btn {
+                height: 100%;
+                width: 95px;
+                border: none;
+                border-radius: 15px;
+                color: white;
+                cursor: pointer;
+                background-color: rgb(52, 52, 255);
+                font-weight: 500;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                transition: all 0.3s;
+            }
+
+            .arrow {
+                /* display: none; */
+                position: absolute;
+                margin-right: 150px;
+                transition: all 0.3s;
+                color: #fff;
+            }
+
+            .input-wrapper:active .icon {
+                transform: scale(1.3);
+            }
+
+            .Subscribe-btn:hover {
+                color: rgb(52, 52, 255);
+            }
+
+            .Subscribe-btn:hover .arrow {
+                margin-right: 0;
+                animation: jello-vertical 0.9s both;
+                transform-origin: right;
+            }
+
+            @keyframes jello-vertical {
+                0% {
+                    transform: scale3d(1, 1, 1);
+                }
+
+                30% {
+                    transform: scale3d(0.75, 1.25, 1);
+                }
+
+                40% {
+                    transform: scale3d(1.25, 0.75, 1);
+                }
+
+                50% {
+                    transform: scale3d(0.85, 1.15, 1);
+                }
+
+                65% {
+                    transform: scale3d(1.05, 0.95, 1);
+                }
+
+                75% {
+                    transform: scale3d(0.95, 1.05, 1);
+                }
+
+                100% {
+                    transform: scale3d(1, 1, 1);
+                }
+            }
+
+            .Subscribe-btn:active {
+                transform: scale(0.9);
+            }
+        }
+
+        .title {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .social-media {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+
+            button {
+                background-color: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: none;
+                border-radius: 50%;
+                padding: 10px;
+
+                mat-icon {
+                    color: black;
+                }
+            }
+        }
+
+        .legacy {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+
+            span {
+                font-size: 13px;
+                color: rgba(0, 0, 0, 0.664);
+            }
+        }
+    }
+}

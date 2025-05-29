@@ -25,6 +25,7 @@ import { PaginatedResult } from '../../models/helpers/paginatedResult';
 import { CourseService } from '../../services/course.service';
 import { Pagination } from '../../models/helpers/pagination';
 import { MatSliderModule } from '@angular/material/slider';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-home',
@@ -33,7 +34,8 @@ import { MatSliderModule } from '@angular/material/slider';
     MatButtonModule, MatIconModule,
     RouterModule, MatInputModule, MatDividerModule,
     FormsModule, NavbarComponent, MatMenuModule,
-    MatToolbarModule, MatSliderModule, CommonModule
+    MatToolbarModule, MatSliderModule, CommonModule,
+    FooterComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -59,9 +61,8 @@ export class HomeComponent implements OnInit {
   }
 
   slides = [
-    { name: 'Slide 1', course: 'This is the first slide', description: 'وبسایت شما ' },
-    { name: 'Slide 2', course: 'Second slide content', description: 'matnnnnnnn tozohatsjkfdsjkfkadsjfdsjfokdsjf;kdsjfsdofjsdaf;jsdf;jd' },
-    { name: 'Slide 3', course: 'Another slide here', description: 'matnnnnnnn tozohatsjkfdsjkfkadsjfdsjfokdsjf;kdsjfsdofjsdaf;jsdf;jd' },
+    { name: 'ارشیا رضایی', course: 'دوره پروژه محور FullStack', image: 'assets/images/profile-icon1.png', description: 'من به تیم شما بابت پشتیبانی عالیتان از وبسایتتان تشکر میکنم. سوالات و مشکلات من به سرعت پاسخ داده میشن و همیشه یه راه حل مناسب برای هر مشکل پیدا میکنید این امر بسیار قابل ارزش است.' },
+    { name: 'ملیکا جعفری', course: 'دوره پروژه محور ICDL', image: 'assets/images/profile-icon2.png', description: 'من به تیم شما بابت پشتیبانی عالیتان از وبسایتتان تشکر میکنم. سوالات و مشکلات من به سرعت پاسخ داده میشن و همیشه یه راه حل مناسب برای هر مشکل پیدا میکنید این امر بسیار قابل ارزش است.' },
   ];
 
   currentIndex = 0;
