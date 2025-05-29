@@ -14,6 +14,8 @@ nav {
     position: fixed;
     top: 0;
     left: 0;
+    // border-bottom: 1px solid rgba(0, 0, 0, 0.39);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.301);
     // box-shadow: 0 0 30px black;
 
     .right {
@@ -62,8 +64,9 @@ nav {
                     height: 40px;
                     width: 80px;
                 }
-                
-                .btn::after, .btn::before {
+
+                .btn::after,
+                .btn::before {
                     content: '';
                     display: block;
                     height: 100%;
@@ -76,25 +79,25 @@ nav {
                     transition: .5s ease-out;
                     background-color: #02fee1;
                 }
-                
+
                 .btn::before {
                     top: -50%;
                     left: -25%;
                     transform: skew(90deg) rotate(180deg) translate(-50%, -50%);
                 }
-                
+
                 .btn:hover::before {
                     transform: skew(45deg) rotate(180deg) translate(-50%, -50%);
                 }
-                
+
                 .btn:hover::after {
                     transform: skew(45deg) translate(-50%, -50%);
                 }
-                
+
                 .btn:hover {
                     color: #fff;
                 }
-                
+
                 .btn:active {
                     filter: brightness(.7);
                     transform: scale(.98);
@@ -116,7 +119,7 @@ nav {
             width: 35px;
             border-radius: 5px;
             background: linear-gradient(145deg, #f0f0f0, #cacaca);
-            box-shadow:  5px 5px 10px #5a5a5a,
+            box-shadow: 5px 5px 10px #5a5a5a,
                 -5px -5px 10px #ffffff;
             display: flex;
             justify-content: center;
@@ -127,7 +130,7 @@ nav {
             cursor: pointer;
         }
 
-        .menu-button::after{
+        .menu-button::after {
             background: #e0e0e0;
             box-shadow: inset 5px 5px 10px #696969,
                 inset -5px -5px 10px #ffffff;
@@ -144,7 +147,7 @@ nav {
         z-index: 100;
         border-radius: 10px;
         background: linear-gradient(145deg, #f0f0f0, #cacaca);
-        box-shadow:  5px 5px 10px #b1b1b1,
+        box-shadow: 5px 5px 10px #b1b1b1,
             -5px -5px 10px #ffffff;
         display: none;
         flex-direction: column;
@@ -170,9 +173,9 @@ nav {
                 overflow: hidden;
                 transition-duration: .3s;
                 background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                box-shadow:  5px 5px 10px #5a5a5a,
+                box-shadow: 5px 5px 10px #5a5a5a,
                     -5px -5px 10px #ffffff;
-    
+
                 .sign {
                     width: 100%;
                     transition-duration: .3s;
@@ -180,15 +183,15 @@ nav {
                     align-items: center;
                     justify-content: center;
                 }
-    
+
                 .sign svg {
                     width: 17px;
                 }
-    
+
                 .sign svg path {
                     fill: red;
                 }
-    
+
                 .text {
                     position: absolute;
                     left: 0%;
@@ -206,19 +209,22 @@ nav {
                 border-radius: 40px;
                 transition-duration: .3s;
             }
+
             .Btn:hover .sign {
                 width: 30%;
                 transition-duration: .3s;
                 padding-right: 40px;
             }
+
             .Btn:hover .text {
                 opacity: 1;
                 width: 70%;
                 transition-duration: .3s;
                 padding-left: 30px;
             }
+
             .Btn:active {
-                transform: translate(2px ,2px);
+                transform: translate(2px, 2px);
             }
         }
 
@@ -236,7 +242,7 @@ nav {
                 width: 90%;
                 // height: 8%;
                 background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                box-shadow:  5px 5px 10px #797979,
+                box-shadow: 5px 5px 10px #797979,
                     -5px -5px 10px #ffffff;
                 cursor: pointer;
                 display: flex;
@@ -254,7 +260,7 @@ nav {
                     font-weight: bold;
                 }
             }
-           
+
             button:hover {
                 transform: scale(1.08);
                 transition: ease-in 0.25s;
@@ -293,12 +299,12 @@ nav {
                     font-size: inherit;
                     font-family: inherit;
                 }
-                
+
                 button.exit {
                     width: 7rem;
                     height: auto;
                 }
-                
+
                 button.exit .circle {
                     transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
                     position: relative;
@@ -309,7 +315,7 @@ nav {
                     background: hsl(345deg 100% 47%);
                     border-radius: 1.625rem;
                 }
-                
+
                 button.exit .circle .icon {
                     transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
                     position: absolute;
@@ -318,7 +324,7 @@ nav {
                     margin: auto;
                     background: #fff;
                 }
-                
+
                 button.exit .circle .icon.arrow {
                     transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
                     left: 0.625rem;
@@ -326,7 +332,7 @@ nav {
                     height: 0.125rem;
                     background: none;
                 }
-                
+
                 button.exit .circle .icon.arrow::before {
                     position: absolute;
                     content: "";
@@ -338,7 +344,7 @@ nav {
                     border-right: 0.125rem solid #fff;
                     transform: rotate(45deg);
                 }
-                
+
                 button.exit .button-text {
                     transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
                     position: absolute;
@@ -355,16 +361,16 @@ nav {
                     text-align: center;
                     text-transform: uppercase;
                 }
-                
+
                 button:hover .circle {
                     width: 100%;
                 }
-                
+
                 button:hover .circle .icon.arrow {
                     background: #fff;
                     transform: translate(1rem, 0);
                 }
-                
+
                 button:hover .button-text {
                     color: #fff;
                 }
@@ -384,9 +390,10 @@ nav {
                 overflow: hidden;
                 transition: all 0.2s ease;
                 background: linear-gradient(225deg, #f0f0f0, #cacaca);
-                box-shadow:  -5px 5px 10px #5a5a5a,
+                box-shadow: -5px 5px 10px #5a5a5a,
                     5px -5px 10px #ffffff;
             }
+
             // .btn:hover {
             //     box-shadow: inset 2px 2px 5px #bcbcbc, inset -2px -2px 5px #ffffff, 2px 2px 5px #bcbcbc, -2px -2px 5px #ffffff;
             // }
@@ -399,6 +406,7 @@ nav {
                 transform: perspective(80px) rotateX(5deg) rotateY(1deg) translateY(3px) scale(0.96);
                 transition: all .1s ease-in-out 0s;
             }
+
             .btn:hover {
                 transition: all 0.2s ease;
                 scale: 1.05;
@@ -415,7 +423,7 @@ nav {
     width: 100%;
     border-radius: 10px;
     background: linear-gradient(145deg, #f0f0f0, #cacaca);
-    box-shadow:  5px 5px 10px #b1b1b1,
+    box-shadow: 5px 5px 10px #b1b1b1,
         -5px -5px 10px #ffffff;
 
     .section-menu {
@@ -432,6 +440,7 @@ nav {
         .div-menu-button {
             margin-right: 1rem;
         }
+
         .left {
             margin-left: 1rem;
         }
@@ -445,9 +454,11 @@ nav {
         .div-menu-button {
             display: none;
         }
+
         .right {
             display: flex;
         }
+
         .left {
             margin-left: 0;
         }
