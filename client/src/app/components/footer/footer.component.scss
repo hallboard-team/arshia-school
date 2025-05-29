@@ -401,6 +401,12 @@
             }
         }
 
+        .divider {
+            width: 80%;
+            background-color: rgba(0, 0, 0, 0.466);
+            height: 1px;
+        }
+
         .legacy {
             display: flex;
             justify-content: center;
@@ -410,6 +416,40 @@
             span {
                 font-size: 13px;
                 color: rgba(0, 0, 0, 0.664);
+            }
+        }
+    }
+}
+
+@media (min-width: 768px) {
+    .main {
+        .top {
+            gap: 1.5rem;
+
+            .div-phone-numbers {
+                justify-content: flex-start;
+                gap: 2rem;
+            }
+        }
+
+        .center {
+            flex-direction: row-reverse;
+            padding: 1rem;
+            width: 100%;
+            gap: 10px;
+
+            .div-about-us {
+                width: 45%;
+            }
+
+            .div-links {
+                width: 27%;
+                margin-right: 0rem;
+            }
+
+            .news {
+                margin-right: 0rem;
+                width: 25%;
             }
         }
     }
