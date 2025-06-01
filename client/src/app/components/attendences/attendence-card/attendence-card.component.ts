@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
-import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
+// import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
 import { MatTableModule } from '@angular/material/table';
 // import moment from 'moment';
 import moment from 'jalali-moment';
@@ -14,15 +14,16 @@ import moment from 'jalali-moment';
   selector: 'app-attendence-card',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, MatCardModule, 
+    CommonModule, FormsModule, MatCardModule,
     RouterModule, MatTableModule,
-    MatCardModule, MatIconModule, NgPersianDatepickerModule
+    MatCardModule, MatIconModule,
+    // NgPersianDatepickerModule
   ],
   templateUrl: './attendence-card.component.html',
   styleUrl: './attendence-card.component.scss'
 })
 export class AttendenceCardComponent {
-  @Input('attendenceInput') attendenceIn: Attendence | undefined; 
+  @Input('attendenceInput') attendenceIn: Attendence | undefined;
 
   dataSource: any[] = [];
   displayedColumns: string[] = ['date', 'absent'];
@@ -31,7 +32,7 @@ export class AttendenceCardComponent {
     if (this.attendenceIn) {
       this.dataSource = [this.attendenceIn];
     }
-  }  
+  }
 
   toJalali(date: string | Date): string {
     console.log('📅 date received:', date);

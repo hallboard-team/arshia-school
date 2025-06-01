@@ -15,13 +15,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { TeacherService } from '../../services/teacher.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { AddCourse } from '../../models/course.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CourseService } from '../../services/course.service';
 // import { IDatepickerTheme } from '../../../../projects/ng-persian-datepicker/src/public-api';
 
 @Component({
   selector: 'app-demo',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, MatCardModule, 
+    CommonModule, FormsModule, MatCardModule,
     RouterModule, MatCardModule, MatIconModule,
     NgPersianDatepickerModule, MatFormFieldModule,
     ReactiveFormsModule
@@ -30,55 +33,78 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   styleUrl: './demo.component.scss'
 })
 export class DemoComponent {
-  // fb = inject(FormBuilder);
-  // teacherService = inject(TeacherService);
-  // selectedDate: string = "";
-  // // selectedDate = new FormControl(new Date().valueOf());
-  // // dateValue = new FormControl(new Date().valueOf());
+  fb = inject(FormBuilder);
+  private _courseService = inject(CourseService);
+  private _matSnackBar = inject(MatSnackBar);
+  teacherService = inject(TeacherService);
+  selectedDate: string = "";
+  // selectedDate = new FormControl(new Date().valueOf());
+  // dateValue = new FormControl(new Date().valueOf());
 
-  // uiIsVisible: boolean = true;
-  // uiTheme: IDatepickerTheme = defaultTheme;
-  // uiYearView: boolean = true;
-  // uiMonthView: boolean = true;
-  // uiHideAfterSelectDate: boolean = false;
-  // uiHideOnOutsideClick: boolean = false;
-  // uiTodayBtnEnable: boolean = true;
+  uiIsVisible: boolean = true;
+  uiTheme: IDatepickerTheme = defaultTheme;
+  uiYearView: boolean = true;
+  uiMonthView: boolean = true;
+  uiHideAfterSelectDate: boolean = false;
+  uiHideOnOutsideClick: boolean = false;
+  uiTodayBtnEnable: boolean = true;
 
-  // addAttendenceFg = this.fb.group({
-  //   userNameCtrl: ['', ],
-  //   timeCtrl: ['', ],
-  //   absentOrPresentCtrl: ['', ]
-  // })
+  addCourseFg = this.fb.group({
+    titleCtrl: ['', [Validators.required]],
+    tuitionCtrl: ['', [Validators.required]],
+    hourseCtrl: ['', [Validators.required]],
+    hoursePerClassCtrl: ['', [Validators.required]],
+    startCtrl: ['', [Validators.required]]
+  })
 
-  // get UserNameCtrl(): FormControl {
-  //   return this.addAttendenceFg.get('userNameCtrl') as FormControl;
-  // }
-  // get TimeCtrl(): FormControl {
-  //   return this.addAttendenceFg.get('timeCtrl') as FormControl;
-  // }
-  // get AbsentOrPresentCtrl(): FormControl {
-  //   return this.addAttendenceFg.get('absentOrPresentCtrl') as FormControl;
-  // }
+  get TitleCtrl(): FormControl {
+    return this.addCourseFg.get('titleCtrl') as FormControl;
+  }
+  get TuitionCtrl(): FormControl {
+    return this.addCourseFg.get('tuitionCtrl') as FormControl;
+  }
+  get HourseCtrl(): FormControl {
+    return this.addCourseFg.get('hourseCtrl') as FormControl;
+  }
+  get HoursePerClassCtrl(): FormControl {
+    return this.addCourseFg.get('hoursePerClassCtrl') as FormControl;
+  }
+  get StartCtrl(): FormControl {
+    return this.addCourseFg.get('startCtrl') as FormControl;
+  }
 
-  // addAttendence(): void {
-  //   //  const dob: string | undefined = this.getDateOnly(this.DateOfBirthCtrl.value);
-  
-  //   let attendenceDemo: AddAttendenceDemo = {
-  //     userName: this.UserNameCtrl.value,
-  //     time: this.TimeCtrl.value,
-  //     absentOrPresent: this.AbsentOrPresentCtrl.value
-  //   }
-  
-  //   this.teacherService.addAttendenceDemo(attendenceDemo).subscribe({
-  //     next: user => console.log(user)
-  //   });
-  // }
+  add(): void {
+    let addCourse: AddCourse = {
+      title: this.TitleCtrl.value,
+      tuition: this.TuitionCtrl.value,
+      hours: this.HourseCtrl.value,
+      hoursPerClass: this.HoursePerClassCtrl.value,
+      start: this.StartCtrl.value
+    }
 
-  // onSelect(date: IActiveDate) {
-  //   // console.log(date);
-  //   const selectedDate = date.shamsi;
-  //   console.log("Selected Date:", selectedDate);
+    this._courseService.addCourse(addCourse).subscribe({
+      next: (response) => {
+        this._matSnackBar.open("دوره اضافه شد", "Close", {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 10000
+        });
+      },
+      error: (err) => {
+        this._matSnackBar.open("در اضافه شدن دوره خطایی به وجود آمده", "Close", {
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          duration: 10000
+        });
+      }
+    })
+  }
 
-  //   this.TimeCtrl.setValue(selectedDate);
-  // }
+  onSelect(date: IActiveDate) {
+    // console.log(date);
+    const selectedDate = date.shamsi;
+    console.log("Selected Date:", selectedDate);
+
+    this.StartCtrl.setValue(selectedDate);
+  }
 }

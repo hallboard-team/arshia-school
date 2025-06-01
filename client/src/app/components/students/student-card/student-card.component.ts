@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Member } from '../../../models/member.model';
-import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
+// import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TeacherService } from '../../../services/teacher.service';
 import { LoggedInUser } from '../../../models/logged-in-user.model';
@@ -17,16 +17,17 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
   selector: 'app-student-card',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, MatCardModule, 
-    RouterModule, MatSlideToggleModule, 
-    MatCardModule, MatIconModule, NgPersianDatepickerModule,
+    CommonModule, FormsModule, MatCardModule,
+    RouterModule, MatSlideToggleModule,
+    MatCardModule, MatIconModule,
     ReactiveFormsModule
+    // NgPersianDatepickerModule
   ],
   templateUrl: './student-card.component.html',
   styleUrl: './student-card.component.scss'
 })
-export class StudentCardComponent implements OnInit{
-  @Input('studentInput') studentIn: Member | undefined; 
+export class StudentCardComponent implements OnInit {
+  @Input('studentInput') studentIn: Member | undefined;
   loggedInUserSig: Signal<LoggedInUser | null> | undefined;
 
   private _teacherService = inject(TeacherService);
@@ -39,7 +40,7 @@ export class StudentCardComponent implements OnInit{
 
   // مقدار پیش‌فرض برای تاریخ، زمان فعلی (UTC)
   selectedDate: string = new Date().toISOString().split("T")[0];
-  attendenceStatus: { [userName: string]: boolean } = {}; 
+  attendenceStatus: { [userName: string]: boolean } = {};
 
   ngOnInit(): void {
     this.loggedInUserSig = this._accountService.loggedInUserSig;
@@ -61,10 +62,10 @@ export class StudentCardComponent implements OnInit{
 
     if (courseTitle) {
       const attendanceData = {
-        userName: userName,  
+        userName: userName,
         isAbsent: true
       };
-  
+
       this._teacherService.addAttendence(attendanceData, courseTitle).subscribe({
         next: response => {
           // console.log("✅ حضور و غیاب ثبت شد:", response);
@@ -93,9 +94,8 @@ export class StudentCardComponent implements OnInit{
 
   removeAttendence(userName: string) {
     const courseTitle: string | null = this._route.snapshot.paramMap.get('courseTitle');
-    
-    if (courseTitle)
-    {
+
+    if (courseTitle) {
       this._teacherService.deleteAttendence(userName, courseTitle).subscribe({
         next: (response) => {
           this.attendenceStatus[userName] = false;

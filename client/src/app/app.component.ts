@@ -3,9 +3,11 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 import { FooterComponent } from './components/footer/footer.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { AccountService } from './services/account.service';
-import { isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { LightboxModule } from 'ngx-lightbox';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -17,10 +19,10 @@ import { LightboxModule } from 'ngx-lightbox';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   private accountService = inject(AccountService);
   private platformId = inject(PLATFORM_ID);
-  
+
   ngOnInit(): void {
     this.initUserOnPageRefresh();
   }

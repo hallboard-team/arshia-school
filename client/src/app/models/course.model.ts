@@ -3,12 +3,12 @@ export interface Course {
     title: string,
     // professorNames: string[],
     tuition: number,
-    hours: number, 
+    hours: number,
     hoursPerClass: DoubleRange,
     // hoursePerClass: number,
     days: number,
     start: Date,
-    isStarted: string  
+    isStarted: string
 }
 
 export interface ShowCourse {
@@ -16,28 +16,28 @@ export interface ShowCourse {
     title: string,
     professorNames: string[],
     tuition: number,
-    hours: number, 
+    hours: number,
     hoursPerClass: DoubleRange,
     // hoursePerClass: number,
     days: number,
     start: Date,
-    isStarted: string  
+    isStarted: string
 }
 
 export interface CourseUpdate {
     title: string,
     // professorUserName: string,
     tuition: number,
-    hours: number, 
+    hours: number,
     hoursPerClass: DoubleRange,
     start: Date,
-    isStarted: boolean  
+    isStarted: boolean
 }
 
 export interface AddCourse {
     title: string,
     tuition: number,
-    hourse: number,
-    hoursePerClass: number,
+    hours: number,
+    hoursPerClass: number,
     start: Date
 }

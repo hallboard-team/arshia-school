@@ -30,7 +30,7 @@ export class CourseService {
     return this.paginationHandler.getPaginatedResult<ShowCourse[]>(this._baseApiUrl + 'get-all-courses', params);
   }
 
-  addCourse(addCourse: AddCourse):Observable<ShowCourse> {
+  addCourse(addCourse: AddCourse): Observable<ShowCourse> {
     return this._http.post<ShowCourse>(this._baseApiUrl + 'add', addCourse)
   }
 
@@ -38,8 +38,8 @@ export class CourseService {
     return this._http.put<Course>(this._baseApiUrl + 'update/' + targetTitelCourse, courseUpdate);
   }
 
-  getByTitle(courseTitle: string):Observable<Course> {
-    return this._http.get<Course>(this._baseApiUrl + 'get-targetCourse/'+ courseTitle);
+  getByTitle(courseTitle: string): Observable<Course> {
+    return this._http.get<Course>(this._baseApiUrl + 'get-targetCourse/' + courseTitle);
   }
 
   addProfessorToCourse(targetCourseTitle: string, professorUserName: string): Observable<any> {

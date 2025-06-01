@@ -1,6 +1,6 @@
 <header>
     <nav>
-      <app-navbar />
+        <app-navbar />
     </nav>
 </header>
 
@@ -13,41 +13,48 @@
         <div class="content">
             <mat-form-field appearance="outline">
                 <mat-label>اسم دوره</mat-label>
-                <input class="input" autoFocusDir type="text" formControlName="titleCtrl" label="Title" placeHolder="" matInput>
+                <input class="input" autoFocusDir type="text" formControlName="titleCtrl" label="Title" placeHolder=""
+                    matInput>
                 <mat-hint>اسم دوره جدید را وارد کنید</mat-hint>
                 @if (TitleCtrl.hasError('required')) {
-                    <mat-error>فرم رو پرکنید</mat-error>
+                <mat-error>فرم رو پرکنید</mat-error>
                 }
             </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>شهریه </mat-label>
-                <input class="input" autoFocusDir type="number" formControlName="tuitionCtrl" label="Tuition" placeHolder="" matInput>
+                <input class="input" autoFocusDir type="number" formControlName="tuitionCtrl" label="Tuition"
+                    placeHolder="" matInput>
                 <mat-hint>شهریه دوره را وارد کنید</mat-hint>
                 @if (TuitionCtrl.hasError('required')) {
-                    <mat-error>فرم رو پرکنید</mat-error>
+                <mat-error>فرم رو پرکنید</mat-error>
                 }
             </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>ساعت دوره</mat-label>
-                <input class="input" autoFocusDir type="number" formControlName="hourseCtrl" label="Hourse" placeHolder="" matInput>
+                <input class="input" autoFocusDir type="number" formControlName="hourseCtrl" label="Hourse"
+                    placeHolder="" matInput>
                 <mat-hint>ساعت کل دوره را وارد کنید</mat-hint>
                 @if (HourseCtrl.hasError('required')) {
-                    <mat-error>فرم رو پرکنید</mat-error>
+                <mat-error>فرم رو پرکنید</mat-error>
                 }
             </mat-form-field>
 
             <mat-form-field appearance="outline">
                 <mat-label>ساعت هر کلاس</mat-label>
-                <input class="input" autoFocusDir type="number" formControlName="hoursePerClassCtrl" label="Hourse Per Class" placeHolder="" matInput>
+                <input class="input" autoFocusDir type="number" formControlName="hoursePerClassCtrl"
+                    label="Hourse Per Class" placeHolder="" matInput>
                 <mat-hint>ساعت هر کلاس را وارد کنید</mat-hint>
                 @if (HoursePerClassCtrl.hasError('required')) {
-                    <mat-error>فرم رو پرکنید</mat-error>
+                <mat-error>فرم رو پرکنید</mat-error>
                 }
             </mat-form-field>
 
-            <mat-form-field appearance="outline">
+            <!-- <ng-persian-datepicker [(ngModel)]="startDate" (ngModelChange)="onDateChange($event)">
+            </ng-persian-datepicker> -->
+
+            <!-- <mat-form-field appearance="outline">
                 <mat-label>تاریخ شروع دوره</mat-label>
                 <input class="input" formControlName="startCtrl" matInput [matDatepicker]="dp3" matInput>
 
@@ -56,10 +63,38 @@
                 @if (StartCtrl.hasError('required')) {
                 <mat-error>فرم رو پرکنید</mat-error>
                 }
+            </mat-form-field> -->
+            <mat-form-field appearance="outline">
+                <mat-label>تاریخ شروع دوره</mat-label>
+                <input class="input" [value]="shamsiDisplayDate" readonly (click)="openDatePicker()" matInput />
             </mat-form-field>
 
+            <div class="div-button-date">
+                <button class="open-date" (click)="openDatePicker()"></button>
+            </div>
+
+            <div class="div-background-date-picker">
+                <button class="close-date" (click)="closeDatePicker()"></button>
+
+                <div class="col offset-l2 l4 offset-m3 m6 offset-s2 s8">
+                    <div class="datepicker-wrapper">
+                        <ng-persian-datepicker (dateOnSelect)="onSelect($event)" [dateFormat]="'jYYYY/jMM/jDD'"
+                            [dateGregorianFormat]="'YYYY-MM-DD'" [(uiIsVisible)]="uiIsVisible" [uiTheme]="uiTheme"
+                            [uiYearView]="uiYearView" [uiMonthView]="uiMonthView"
+                            [uiHideAfterSelectDate]="uiHideAfterSelectDate"
+                            [uiHideOnOutsideClick]="uiHideOnOutsideClick" [uiTodayBtnEnable]="uiTodayBtnEnable">
+
+                            <div class="input-field">
+                                <input type="text" formControlName="startCtrl" aria-label="Datepicker Input" />
+                            </div>
+                        </ng-persian-datepicker>
+                    </div>
+                </div>
+            </div>
+
             <div class="div-btn-add">
-                <button type="submit" [disabled]="addCourseFg.invalid" mat-raised-button color="warn">ثبت دوره جدید</button>
+                <button type="submit" [disabled]="addCourseFg.invalid" mat-raised-button color="warn">ثبت دوره
+                    جدید</button>
             </div>
         </div>
     </form>

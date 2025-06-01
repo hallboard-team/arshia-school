@@ -11,8 +11,8 @@ public record AddCourseDto(
 public class ShowCourseDto
 {
     public string Id { get; init; } = string.Empty;
-    public string Title { get; init; }  = string.Empty;
-    public List<string> ProfessorNames { get; init;} = [];
+    public string Title { get; init; } = string.Empty;
+    public List<string> ProfessorNames { get; init; } = [];
     public int Tuition { get; init; }
     public int Hours { get; init; }
     public double HoursPerClass { get; init; }
@@ -23,12 +23,12 @@ public class ShowCourseDto
 
 public class UpdateCourseDto
 {
-    public string Title { get; init; }  = string.Empty;
+    public string Title { get; init; } = string.Empty;
     // public string ProfessorId { get; init; }
     public int Tuition { get; init; }
     public int Hours { get; init; }
     public double HoursPerClass { get; init; }
-    public DateTime Start { get; init; } 
+    public DateTime Start { get; init; }
     public string IsStarted { get; init; } = string.Empty;
 };
 
