@@ -330,7 +330,20 @@ public class ManagerRepository : IManagerRepository
     {
         IList<AppUser> teachers = await _userManager.GetUsersInRoleAsync("teacher");
 
-        return teachers.ToList();
+        var pureTeachers = new List<AppUser>();
+
+        foreach (var user in teachers)
+        {
+            if (!await _userManager.IsInRoleAsync(user, "admin"))
+            {
+                pureTeachers.Add(user);
+            }
+        }
+
+        return pureTeachers;
+        // IList<AppUser> teachers = await _userManager.GetUsersInRoleAsync("teacher");
+
+        // return teachers.ToList();
     }
 
     public async Task<MemberDto?> GetMemberByEmailAsync(string targetMemberEmail, CancellationToken cancellationToken)
@@ -533,6 +546,29 @@ public class ManagerRepository : IManagerRepository
             return null;
 
         return enrolledCourse;
+    }
+
+    public async Task<Payment?> GetTargetPaymentByIdAsync(ObjectId targetPaymentId, CancellationToken cancellationToken)
+    {
+        AppUser? appUser = await _collectionAppUser
+            .Find(doc => doc.EnrolledCourses.Any(ec => ec.Payments.Any(p => p.Id == targetPaymentId)))
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (appUser is null)
+            return null;
+
+        EnrolledCourse? enrolledCourse = appUser.EnrolledCourses
+            .FirstOrDefault(ec => ec.Payments.Any(p => p.Id == targetPaymentId));
+
+        if (enrolledCourse is null)
+            return null;
+
+        Payment? payment = enrolledCourse.Payments.FirstOrDefault(p => p.Id == targetPaymentId);
+
+        if (payment is null)
+            return null;
+
+        return payment;
     }
 
     public async Task<List<string>> GetTargetCourseTitleAsync(string targetUserName, CancellationToken cancellationToken)

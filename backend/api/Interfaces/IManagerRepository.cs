@@ -20,5 +20,6 @@ public interface IManagerRepository
     public Task<bool> DeletePhotoAsync(ObjectId targetPaymentId, CancellationToken cancellationToken);
     public Task<List<Course?>> GetTargetMemberCourseAsync(string targetUserName, CancellationToken cancellationToken);
     public Task<EnrolledCourse?> GetTargetMemberEnrolledCourseAsync(string targetUserName, string courseTitle, CancellationToken cancellationToken);
+    public Task<Payment?> GetTargetPaymentByIdAsync(ObjectId targetPaymentId, CancellationToken cancellationToken);
     public Task<List<string>> GetTargetCourseTitleAsync(string targetUserName, CancellationToken cancellationToken);
 }

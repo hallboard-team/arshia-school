@@ -161,15 +161,6 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
 
         List<TeacherDto> teacherDtos = appUserTeachers.Select(Mappers.ConvertAppUserToTeacherDto).ToList();
 
-        // List<TeacherDto> teacherDtos = appUserTeachers.Select(doc => new TeacherDto
-        // {
-        //     UserName = doc.UserName,
-        //     Name = doc.Name,
-        //     LastName = doc.LastName,
-        //     PhoneNum = doc.PhoneNum,
-        //     Gender = doc.Gender
-        // }).ToList();
-
         return teacherDtos;
     }
 
@@ -288,6 +279,17 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
             return NotFound("دوره مورد نظر یافت نشد");
 
         return enrolledCourse;
+    }
+
+    [HttpGet("get-target-payment-by-id/{targetPaymentId}")]
+    public async Task<ActionResult<Payment>> GetTargetPaymentById(ObjectId targetPaymentId, CancellationToken cancellationToken)
+    {
+        Payment? payment = await _managerRepository.GetTargetPaymentByIdAsync(targetPaymentId, cancellationToken);
+
+        if (payment == null)
+            return NotFound("پرداخت مورد نظر یافت نشد");
+
+        return payment;
     }
 
     [HttpGet("get-target-courseTitle/{targetUserName}")]
