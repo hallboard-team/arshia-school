@@ -29,6 +29,7 @@ import { MemberEnrolledCourseComponent } from './components/enrolled-courses/mem
 import { ContactUsComponent } from './components/contact-us/contact-us.component';
 import { TargetUserProfileComponent } from './components/target-user-profile/target-user-profile.component';
 import { TargetMemberEnrolledCourseComponent } from './components/enrolled-courses/target-member-enrolled-course/target-member-enrolled-course.component';
+import { UploadPhotoComponent } from './components/enrolled-courses/upload-photo/upload-photo.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -59,6 +60,7 @@ export const routes: Routes = [
             { path: 'enrolled-course/:memberUserName', component: EnrolledCourseComponent },
             { path: 'member-enrolled-course/:courseTitle', component: MemberEnrolledCourseComponent },
             { path: 'target-member-enrolled-course/:memberUserName/:courseTitle', component: TargetMemberEnrolledCourseComponent },
+            { path: 'target-payment/:targetPaymentId', component: UploadPhotoComponent },
             // { path: 'منشی', component: SecretaryComponent },
             // { path: 'معلم', component: TeacherComponent },
             // { path: 'user/user-edit', component: UserEditComponent },

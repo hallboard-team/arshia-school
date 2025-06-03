@@ -7,7 +7,7 @@ import { MemberUpdate } from '../../../models/member-update.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Course, CourseUpdate } from '../../../models/course.model';
 import { CourseService } from '../../../services/course.service';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule, CurrencyPipe, isPlatformBrowser } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -29,7 +29,7 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './course-update.component.html',
   styleUrl: './course-update.component.scss'
 })
-export class CourseUpdateComponent implements OnInit{
+export class CourseUpdateComponent implements OnInit {
   private _courseService = inject(CourseService);
   private _managerService = inject(ManagerService);
 
@@ -39,7 +39,7 @@ export class CourseUpdateComponent implements OnInit{
   private _platformId = inject(PLATFORM_ID);
   // isLoading = true;
 
-  course: Course | undefined; 
+  course: Course | undefined;
   teachers: Teacher[] = [];
 
   ngOnInit(): void {
@@ -47,15 +47,15 @@ export class CourseUpdateComponent implements OnInit{
   }
 
   courseEditFg: FormGroup = this._fb.group({
-    titleCtrl: ['', ],
+    titleCtrl: ['',],
     // professorUserNameCtrl: ['', ],
-    tuitionCtrl: ['', ],
-    hoursCtrl: ['', ],
-    hoursPerClassCtrl: ['', ],
-    startCtrl: ['', ],
-    isStartedCtrl: ['', ]
+    tuitionCtrl: ['',],
+    hoursCtrl: ['',],
+    hoursPerClassCtrl: ['',],
+    startCtrl: ['',],
+    isStartedCtrl: ['',]
   });
-  
+
   get TitleCtrl(): AbstractControl {
     return this.courseEditFg.get('titleCtrl') as FormControl;
   }
@@ -77,6 +77,16 @@ export class CourseUpdateComponent implements OnInit{
   get IsStartedCtrl(): AbstractControl {
     return this.courseEditFg.get('isStartedCtrl') as FormControl;
   }
+
+  // formattedTuition: string = '';
+
+  // formatTuition(): void {
+  //   const rawValue = this.TuitionCtrl.value.toString().replace(/\D/g, '');
+  //   const number = Number(rawValue);
+
+  //   this.formattedTuition = number.toLocaleString('fa-IR');
+  //   this.TuitionCtrl.setValue(number, { emitEvent: false }); // فقط مقدار اصلی بدون فرمت در فرم ذخیره شود
+  // }
 
   getCourse(): void {
     if (isPlatformBrowser(this._platformId)) {
@@ -158,11 +168,11 @@ export class CourseUpdateComponent implements OnInit{
     if (courseTitle) {
       this._courseService.addProfessorToCourse(courseTitle, teacher.userName).subscribe({
         next: (response) => {
-            this._matSnackBar.open("مدرس به دوره اضافه شد", "Close", {
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-              duration: 10000
-            });
+          this._matSnackBar.open("مدرس به دوره اضافه شد", "Close", {
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            duration: 10000
+          });
         },
         error: (err) => {
           this._matSnackBar.open("خطا در اضافه کردن مدرس به دوره", "Close", {
@@ -201,29 +211,29 @@ export class CourseUpdateComponent implements OnInit{
   openDivTeachers() {
     this.getTeachers();
 
-    const divTeachers = document.querySelectorAll('.div-get-all-teachers'); 
+    const divTeachers = document.querySelectorAll('.div-get-all-teachers');
 
-    divTeachers.forEach((element) => { 
+    divTeachers.forEach((element) => {
       (element as HTMLElement).style.display = "flex";
     });
 
-    const divBtnGetTeachers = document.querySelectorAll('.div-btn-get-teachers'); 
+    const divBtnGetTeachers = document.querySelectorAll('.div-btn-get-teachers');
 
-    divBtnGetTeachers.forEach((element) => { 
+    divBtnGetTeachers.forEach((element) => {
       (element as HTMLElement).style.display = "none";
     });
   }
 
   closeDivTeachers() {
-    const divTeachers = document.querySelectorAll('.div-get-all-teachers'); 
+    const divTeachers = document.querySelectorAll('.div-get-all-teachers');
 
-    divTeachers.forEach((element) => { 
+    divTeachers.forEach((element) => {
       (element as HTMLElement).style.display = "none";
     });
 
-    const divBtnGetTeachers = document.querySelectorAll('.div-btn-get-teachers'); 
+    const divBtnGetTeachers = document.querySelectorAll('.div-btn-get-teachers');
 
-    divBtnGetTeachers.forEach((element) => { 
+    divBtnGetTeachers.forEach((element) => {
       (element as HTMLElement).style.display = "flex";
     });
   }

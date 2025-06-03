@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Validators, FormControl, FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddCourse } from '../../../models/course.model';
 import { CourseService } from '../../../services/course.service';
@@ -34,7 +34,7 @@ moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
   templateUrl: './add-course.component.html',
   styleUrl: './add-course.component.scss'
 })
-export class AddCourseComponent {
+export class AddCourseComponent implements OnInit {
 
   fb = inject(FormBuilder);
   private _courseService = inject(CourseService);
@@ -49,7 +49,7 @@ export class AddCourseComponent {
   uiTodayBtnEnable: boolean = true;
 
   shamsiDisplayDate: string = '';
-
+  formattedTuition: string = ''; // برای نمایش با فرمت فارسی
 
   addCourseFg = this.fb.group({
     titleCtrl: ['', [Validators.required]],
@@ -73,6 +73,13 @@ export class AddCourseComponent {
   }
   get StartCtrl(): FormControl {
     return this.addCourseFg.get('startCtrl') as FormControl;
+  }
+
+  ngOnInit() {
+    const val = this.TuitionCtrl.value;
+    if (val) {
+      this.formattedTuition = Number(val).toLocaleString('fa-IR') + ' تومان';
+    }
   }
 
   // onDateChange(jalaliDate: string): void {
@@ -108,6 +115,25 @@ export class AddCourseComponent {
       }
     })
   }
+
+  onTuitionInput(value: string): void {
+    // حذف هر چیزی که عدد نیست
+    const raw = value.replace(/[^0-9]/g, '');
+
+    if (raw) {
+      const numeric = parseInt(raw, 10);
+      this.formattedTuition = this.formatEnglishNumber(numeric); // 1,560,000
+      this.TuitionCtrl.setValue(numeric); // فقط عدد خالص ذخیره میشه
+    } else {
+      this.formattedTuition = '';
+      this.TuitionCtrl.setValue('');
+    }
+  }
+
+  formatEnglishNumber(num: number): string {
+    return num.toLocaleString('en-US');  // این خودش عدد رو سه‌رقمی با کاما جدا می‌کنه
+  }
+
 
   // onSelect(date: IActiveDate) {
   //   // console.log(date);

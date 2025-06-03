@@ -21,7 +21,16 @@
                 }
             </mat-form-field>
 
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" class="tuition-field">
+                <mat-label>شهریه</mat-label>
+                <input class="input" type="text" [ngModel]="formattedTuition" (ngModelChange)="onTuitionInput($event)"
+                    matInput autocomplete="off" />
+                <span matSuffix class="suffix-text">تومان</span>
+                <mat-hint>شهریه دوره را وارد کنید</mat-hint>
+                <mat-error *ngIf="TuitionCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            </mat-form-field>
+
+            <!-- <mat-form-field appearance="outline">
                 <mat-label>شهریه </mat-label>
                 <input class="input" autoFocusDir type="number" formControlName="tuitionCtrl" label="Tuition"
                     placeHolder="" matInput>
@@ -29,7 +38,7 @@
                 @if (TuitionCtrl.hasError('required')) {
                 <mat-error>فرم رو پرکنید</mat-error>
                 }
-            </mat-form-field>
+            </mat-form-field> -->
 
             <mat-form-field appearance="outline">
                 <mat-label>ساعت دوره</mat-label>

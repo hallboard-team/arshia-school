@@ -49,6 +49,15 @@
                         <mat-icon>zoom_in</mat-icon>
                     </div>
                 </ng-container>
+                @if (loggedInUserSig && loggedInUserSig()) {
+                @if (loggedInUserSig()?.roles?.includes('manager')) {
+                <!-- <button class="button-add-photo" [routerLink]="['/' + 'target-payment' + payment.id]" routerLinkActive
+                    #rla="routerLinkActive">
+                </button> -->
+                <button class="button-add-photo" [routerLink]="['/target-payment', payment.id?.toString()]">
+                </button>
+                }
+                }
                 <ng-container *ngIf="!payment.photo">
                     <span class="no-photo">!عکس وجود ندارد</span>
                 </ng-container>

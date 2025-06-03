@@ -129,69 +129,77 @@
                 </div>
             </mat-tab>
 
+
             @if (courses && targetUserPofile) {
             <mat-tab label="دوره ها">
-                <div class="div-courses">
-                    <!-- <div class="div-title-course">
+                <ng-container *ngIf="hasCourse; else noCourse">
+                    <div class="div-courses">
+                        <!-- <div class="div-title-course">
                             <span class="title-course">دوره‌های شما</span>
                         </div> -->
 
-                    @if (!loading) {
-                    <div class="course-container">
-                        @if (error) {
-                        <div class="error-message">
-                            {{ error }}
-                        </div>
-                        }
+                        @if (!loading) {
+                        <div class="course-container">
+                            @if (error) {
+                            <div class="error-message">
+                                {{ error }}
+                            </div>
+                            }
 
-                        @if (courses.length > 0) {
-                        <div class="course-list">
-                            @for (course of courses; track $index) {
-                            <div class="course-card">
-                                @if (targetUserPofile.gender == 'male') {
-                                <span class="name-of-course-men">{{ course.title }}</span>
-                                }@else {
-                                <span class="name-of-course-women">{{ course.title }}</span>
-                                }
-                                <div class="tozihat-course">
-                                    <span class="text">شهریه: {{ course.tuition | currency:'IRR' }}</span>
-                                    <span class="text">مدت زمان کلاس: <span class="red-text">{{ course.hours }}</span>
-                                        ساعت</span>
-                                    <span class="text">تاریخ شروع: {{ course.start | date:'yyyy/MM/dd' }}</span>
-                                    @if (course.isStarted == 'true') {
-                                    <span class="text">آغاز شده: <span class="green-text">بله</span></span>
+                            @if (courses.length > 0) {
+                            <div class="course-list">
+                                @for (course of courses; track $index) {
+                                <div class="course-card">
+                                    @if (targetUserPofile.gender == 'male') {
+                                    <span class="name-of-course-men">{{ course.title }}</span>
                                     }@else {
-                                    <span class="text">آغاز شده: <span class="red-text">خیر</span></span>
+                                    <span class="name-of-course-women">{{ course.title }}</span>
                                     }
-                                </div>
+                                    <div class="tozihat-course">
+                                        <span class="text">شهریه: {{ course.tuition | currency:'IRR' }}</span>
+                                        <span class="text">مدت زمان کلاس: <span class="red-text">{{ course.hours
+                                                }}</span>
+                                            ساعت</span>
+                                        <span class="text">تاریخ شروع: {{ course.start | date:'yyyy/MM/dd' }}</span>
+                                        @if (course.isStarted == 'true') {
+                                        <span class="text">آغاز شده: <span class="green-text">بله</span></span>
+                                        }@else {
+                                        <span class="text">آغاز شده: <span class="red-text">خیر</span></span>
+                                        }
+                                    </div>
 
-                                <div class="div-button-show-classmate">
-                                    <button [routerLink]="['/students-card/' + course.title]">مشاهده دانشجویان</button>
-                                    <button [routerLink]="['/attendences-card/' + course.title]">
-                                        دیدن حضور و غیاب
-                                    </button>
-                                    <button
-                                        [routerLink]="['/' + 'target-member-enrolled-course/' + targetUserPofile.userName + '/' + course.title]">
-                                        مشاهده پرداخت ها
-                                    </button>
+                                    <div class="div-button-show-classmate">
+                                        <button [routerLink]="['/students-card/' + course.title]">مشاهده
+                                            دانشجویان</button>
+                                        <button [routerLink]="['/attendences-card/' + course.title]">
+                                            دیدن حضور و غیاب
+                                        </button>
+                                        <button
+                                            [routerLink]="['/' + 'target-member-enrolled-course/' + targetUserPofile.userName + '/' + course.title]">
+                                            مشاهده پرداخت ها
+                                        </button>
+                                    </div>
                                 </div>
+                                }
+                            </div>
+                            }
+                            @if (courses.length === 0) {
+                            <div class="no-courses">
+                                <span>
+                                    هیچ دوره‌ای ثبت‌نام نکرده‌اید.
+                                </span>
                             </div>
                             }
                         </div>
                         }
-                        @if (courses.length === 0) {
-                        <div class="no-courses">
-                            <span>
-                                هیچ دوره‌ای ثبت‌نام نکرده‌اید.
-                            </span>
-                        </div>
+                        @else {
+                        <div class="loading">در حال بارگذاری...</div>
                         }
                     </div>
-                    }
-                    @else {
-                    <div class="loading">در حال بارگذاری...</div>
-                    }
-                </div>
+                </ng-container>
+                <ng-template #noCourse>
+                    <p>Course doesn't exist.</p>
+                </ng-template>
             </mat-tab>
             }
 

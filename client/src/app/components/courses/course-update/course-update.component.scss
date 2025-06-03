@@ -35,12 +35,12 @@
 
             border-radius: 5px;
             background: linear-gradient(145deg, #f0f0f0, #cacaca);
-            box-shadow:  5px 5px 10px #a4a4a4,
+            box-shadow: 5px 5px 10px #a4a4a4,
                 -5px -5px 10px #ffffff;
-            
+
             mat-form-field {
                 width: 80%;
-    
+
                 .input {
                     height: 54px;
                     width: 100%;
@@ -50,13 +50,14 @@
                     box-shadow: inset 5px 5px 10px #cecece,
                         inset -5px -5px 10px #f2f2f2;
                 }
+
                 mat-label {
                     font-size: 15px;
                     font-weight: 800;
                     color: black;
                 }
-            } 
-            
+            }
+
             .div-isStarted {
                 display: flex;
                 flex-direction: column;
@@ -87,7 +88,7 @@
 
                         border-radius: 10px;
                         background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                        box-shadow:  5px 5px 10px #5a5a5a,
+                        box-shadow: 5px 5px 10px #5a5a5a,
                             -5px -5px 10px #ffffff;
                     }
                 }
@@ -110,14 +111,15 @@
                 cursor: pointer;
                 transition: all 0.3s ease;
                 background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                box-shadow:  5px 5px 10px #989898,
+                box-shadow: 5px 5px 10px #989898,
                     -5px -5px 10px #ffffff;
-        
+
                 &:hover {
                     box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.15), -6px -6px 15px rgba(255, 255, 255, 0.8);
                 }
             }
-            .button-edit-course:active{
+
+            .button-edit-course:active {
                 transition: all .1s ease-in-out 0s;
                 background: #e0e0e0;
                 box-shadow: inset 5px 5px 10px #989898,
@@ -143,14 +145,15 @@
             cursor: pointer;
             transition: all 0.3s ease;
             background: linear-gradient(145deg, #f0f0f0, #cacaca);
-            box-shadow:  5px 5px 10px #989898,
+            box-shadow: 5px 5px 10px #989898,
                 -5px -5px 10px #ffffff;
-    
+
             &:hover {
                 box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.15), -6px -6px 15px rgba(255, 255, 255, 0.8);
             }
         }
-        button:active{
+
+        button:active {
             transition: all .1s ease-in-out 0s;
             background: #e0e0e0;
             box-shadow: inset 5px 5px 10px #989898,
@@ -188,9 +191,9 @@
                 overflow: hidden;
                 transition-duration: .3s;
                 background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                box-shadow:  5px 5px 10px #5a5a5a,
+                box-shadow: 5px 5px 10px #5a5a5a,
                     -5px -5px 10px #ffffff;
-    
+
                 .sign {
                     width: 100%;
                     transition-duration: .3s;
@@ -198,15 +201,15 @@
                     align-items: center;
                     justify-content: center;
                 }
-    
+
                 .sign svg {
                     width: 17px;
                 }
-    
+
                 .sign svg path {
                     fill: red;
                 }
-    
+
                 .text {
                     position: absolute;
                     left: 0%;
@@ -224,19 +227,22 @@
                 border-radius: 40px;
                 transition-duration: .3s;
             }
+
             .btn:hover .sign {
                 width: 30%;
                 transition-duration: .3s;
                 padding-right: 40px;
             }
+
             .btn:hover .text {
                 opacity: 1;
                 width: 70%;
                 transition-duration: .3s;
                 padding-left: 30px;
             }
+
             .btn:active {
-                transform: translate(2px ,2px);
+                transform: translate(2px, 2px);
             }
         }
 
@@ -279,7 +285,7 @@
                     // box-shadow: 0 0 10px black;
                     // border-radius: 50px;
                     background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                    box-shadow:  5px 5px 10px #696969,
+                    box-shadow: 5px 5px 10px #696969,
                         -5px -5px 10px #ffffff;
                     overflow: hidden;
                     margin-top: 1rem;
@@ -292,17 +298,18 @@
                     color: black;
                     font-weight: 600;
 
-                    .information{
+                    .information {
                         font-size: 15px;
                         color: black;
                         font-weight: 100;
                     }
+
                     // .information-women {
                     //     font-size: 15px;
                     //     color: rgb(255, 0, 170);
                     //     font-weight: 500;
                     // }
-                } 
+                }
 
                 .div-add-or-remove-teacher-btn {
                     width: 100%;
@@ -319,7 +326,7 @@
                         border: none;
                         border-radius: 50%;
                         background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                        box-shadow:  5px 5px 10px #696969,
+                        box-shadow: 5px 5px 10px #696969,
                             -5px -5px 10px #ffffff;
                         display: flex;
                         justify-content: center;
@@ -339,7 +346,7 @@
                         // margin-right: 8px; 
                         font-size: 24px;
                     }
-                
+
                     .button:hover mat-icon {
                         font-size: 26px;
                     }
@@ -355,8 +362,9 @@
     }
 }
 
-::ng-deep mat-form-field{
+::ng-deep mat-form-field {
     height: 40px !important;
+
     // mat-label {
     //     direction: rtl;
     //     text-align: right;
@@ -364,6 +372,7 @@
     .mat-mdc-text-field-wrapper {
         padding: 0px !important;
     }
+
     .mat-mdc-form-field-infix {
         text-align: right;
         padding: 0px !important;
@@ -378,7 +387,7 @@
                     font-size: 20px;
                 }
             }
-    
+
             .content {
                 padding: 1rem;
                 width: 90%;

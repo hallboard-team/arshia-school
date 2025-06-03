@@ -69,6 +69,8 @@ export class TargetUserProfileComponent implements OnInit {
   pageEvent: PageEvent | undefined;
   pagination: Pagination | undefined;
 
+  hasCourse = false;
+
   ngOnInit(): void {
     const currentYear = new Date().getFullYear();
     this.minDate = new Date(currentYear - 99, 0, 1);
@@ -78,7 +80,7 @@ export class TargetUserProfileComponent implements OnInit {
     // this.courseParams = new CourseParams();
 
     this.getTargetUserProfile();
-    this.getTargetUserCourse();
+    // this.getTargetUserCourse();
     this.courseParams = new CourseParams();
     // this.loggedInUserSig = this._accountService.loggedInUserSig;
 
@@ -351,8 +353,20 @@ export class TargetUserProfileComponent implements OnInit {
   }
 
   onTabChange(event: MatTabChangeEvent): void {
+    if (event.index === 1) { // Assuming "Courses" tab is index 1
+      // const user = this.targetUserPofile;
+
+      if (this.targetUserPofile?.enrolledCourses || this.targetUserPofile?.enrolledCourses) {
+        this.hasCourse = true;
+        this.getTargetUserCourse();
+      } else {
+        this.hasCourse = false;
+        this.courseTitles = null; // Optional: clear data
+      }
+    }
     if (event.index === 3) {
       this.getTargetCourseTitles();
     }
   }
+
 }

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, Input, PLATFORM_ID, signal } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from 'express';
@@ -17,7 +17,7 @@ import { UpdateEnrolledCourse } from '../models/update-enrolled-course.model';
 import { UserProfile } from '../models/user-profile.model';
 import { TargetUserProfile } from '../models/target-user-profile.model';
 import { Course } from '../models/course.model';
-import { EnrolledCourse } from '../models/helpers/enrolled-course.model';
+import { EnrolledCourse, Payment } from '../models/helpers/enrolled-course.model';
 
 @Injectable({
   providedIn: 'root'
@@ -93,6 +93,10 @@ export class ManagerService {
     return this._http.get<EnrolledCourse>(this._apiUrl + 'get-target-member-enrolled-course/' + targetMemberUserName + '/' + courseTitle);
   }
 
+  getTargetPayment(targetPaymentId: string | null): Observable<Payment> {
+    return this._http.get<Payment>(this._apiUrl + 'get-target-payment-by-id/' + targetPaymentId);
+  }
+
   updateMember(managerUpdateInput: ManagerUpdateMemberDto, targetMemberEmail: string): Observable<any> {
     return this._http.put(this._apiUrl + 'update-member/' + targetMemberEmail, managerUpdateInput)
   }
@@ -103,6 +107,12 @@ export class ManagerService {
 
   updateEnrolledCourse(targetUserName: string, updateEnrolledCourse: UpdateEnrolledCourse) {
     return this._http.put(this._apiUrl + 'update-enrolledCourse/' + targetUserName, updateEnrolledCourse)
+  }
+
+  deletePhoto(url_165In: string, targetPaymentId: string | null): Observable<ApiResponse> {
+    let queryParams = new HttpParams().set('photoUrlIn', url_165In);
+
+    return this._http.put<ApiResponse>(this._apiUrl + 'delete-photo/' + targetPaymentId, null, { params: queryParams });
   }
 
   // getUsersWithRoles(): Observable<UserWithRole[]> {

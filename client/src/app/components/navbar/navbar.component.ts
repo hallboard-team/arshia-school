@@ -39,7 +39,7 @@ export class NavbarComponent {
   ngOnInit(): void {
     this.loggedInUserSig = this.accountService.loggedInUserSig;
 
-    console.log('THE LOGGED-IN USER:', this.loggedInUserSig()?.userName);
+    // console.log('THE LOGGED-IN USER:', this.loggedInUserSig()?.userName);
 
     // this.getLoggedInProfile();
   }
@@ -54,7 +54,7 @@ export class NavbarComponent {
   //     }
   //   })
   // }
-  
+
   logout(): void {
     this.accountService.logout();
   }
@@ -62,18 +62,18 @@ export class NavbarComponent {
   openMenu() {
     // document.body.style.backgroundColor = color; 
 
-    const elements = document.querySelectorAll('.hamburger-menu'); 
+    const elements = document.querySelectorAll('.hamburger-menu');
 
-    elements.forEach((element) => { 
+    elements.forEach((element) => {
       (element as HTMLElement).style.display = "block";
       // (element as HTMLElement).style.left = "5%"; 
     });
   }
 
   closeMenu() {
-    const elements = document.querySelectorAll('.hamburger-menu'); 
+    const elements = document.querySelectorAll('.hamburger-menu');
 
-    elements.forEach((element) => { 
+    elements.forEach((element) => {
       // (element as HTMLElement).style.left = "-100%", 
       (element as HTMLElement).style.display = "none";
     });
