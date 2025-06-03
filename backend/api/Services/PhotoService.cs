@@ -26,7 +26,7 @@ public class PhotoService(
     /// <param name="formFile"></param>
     /// <param name="productId"></param>
     /// <returns>ADD: array of filePaths. DELETE: boolean</returns>
-    public async Task<string[]?> AddPhotoToDiskAsync(IFormFile formFile, ObjectId productId)
+    public async Task<string[]?> AddPhotoToDiskAsync(IFormFile formFile, string productId)
     {
         // copy file/s to the folder
         if (formFile.Length > 0) // 301kb => 301_000 byte
@@ -105,7 +105,7 @@ public class PhotoService(
         {
             // بررسی اینکه فایل وجود دارد
             string fullPath = Path.Combine(wwwRootUrl, photoPath);
-            
+
             if (File.Exists(fullPath))
             {
                 try

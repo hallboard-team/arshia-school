@@ -16,10 +16,10 @@ public interface IManagerRepository
     public Task<MemberDto?> GetMemberByEmailAsync(string targetMemberEmail, CancellationToken cancellationToken);
     public Task<TargetMemberDto?> GetMemberByUserNameAsync(string targetUserName, CancellationToken cancellationToken);
     public Task<bool> UpdateMemberAsync(string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken);
-    public Task<Photo?> AddPhotoAsync(IFormFile file, ObjectId targetPaymentId, CancellationToken cancellationToken);
-    public Task<bool> DeletePhotoAsync(ObjectId targetPaymentId, CancellationToken cancellationToken);
+    public Task<Photo?> AddPhotoAsync(IFormFile file, string targetPaymentId, CancellationToken cancellationToken);
+    public Task<bool> DeletePhotoAsync(string targetPaymentId, CancellationToken cancellationToken);
     public Task<List<Course?>> GetTargetMemberCourseAsync(string targetUserName, CancellationToken cancellationToken);
     public Task<EnrolledCourse?> GetTargetMemberEnrolledCourseAsync(string targetUserName, string courseTitle, CancellationToken cancellationToken);
-    public Task<Payment?> GetTargetPaymentByIdAsync(ObjectId targetPaymentId, CancellationToken cancellationToken);
+    public Task<Payment?> GetTargetPaymentByIdAsync(string targetPaymentId, CancellationToken cancellationToken);
     public Task<List<string>> GetTargetCourseTitleAsync(string targetUserName, CancellationToken cancellationToken);
 }

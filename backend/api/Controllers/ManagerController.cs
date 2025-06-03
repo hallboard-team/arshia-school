@@ -217,7 +217,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
     [HttpPost("add-photo/{targetPaymentId}")]
     public async Task<ActionResult<Photo>> AddPhoto(
             [AllowedFileExtensions]
-            IFormFile file, ObjectId targetPaymentId, CancellationToken cancellationToken
+            IFormFile file, string targetPaymentId, CancellationToken cancellationToken
         )
     {
         if (file is null)
@@ -229,7 +229,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
     }
 
     [HttpDelete("delete-photo/{targetPaymentId}")]
-    public async Task<ActionResult> DeletePhoto(ObjectId targetPaymentId, CancellationToken cancellationToken)
+    public async Task<ActionResult> DeletePhoto(string targetPaymentId, CancellationToken cancellationToken)
     {
         string? hashedUserId = User.GetHashedUserId();
         if (string.IsNullOrEmpty(hashedUserId))
@@ -282,7 +282,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
     }
 
     [HttpGet("get-target-payment-by-id/{targetPaymentId}")]
-    public async Task<ActionResult<Payment>> GetTargetPaymentById(ObjectId targetPaymentId, CancellationToken cancellationToken)
+    public async Task<ActionResult<Payment>> GetTargetPaymentById(string targetPaymentId, CancellationToken cancellationToken)
     {
         Payment? payment = await _managerRepository.GetTargetPaymentByIdAsync(targetPaymentId, cancellationToken);
 

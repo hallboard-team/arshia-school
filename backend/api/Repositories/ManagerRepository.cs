@@ -278,7 +278,7 @@ public class ManagerRepository : IManagerRepository
 
         // ایجاد پرداخت جدید
         Payment newPayment = new Payment(
-            Id: ObjectId.GenerateNewId(),
+            Id: ObjectId.GenerateNewId().ToString(),
             CourseTitle: updateEnrolledDto.TitleCourse.ToUpper(),
             Amount: updateEnrolledDto.PaidAmount,
             PaidOn: DateTime.UtcNow,
@@ -406,7 +406,7 @@ public class ManagerRepository : IManagerRepository
         return updateResult.ModifiedCount > 0;
     }
 
-    public async Task<Photo?> AddPhotoAsync(IFormFile file, ObjectId targetPaymentId, CancellationToken cancellationToken)
+    public async Task<Photo?> AddPhotoAsync(IFormFile file, string targetPaymentId, CancellationToken cancellationToken)
     {
         AppUser? appUser = await _collectionAppUser
             .Find(doc => doc.EnrolledCourses.Any(ec => ec.Payments.Any(p => p.Id == targetPaymentId)))
@@ -458,7 +458,7 @@ public class ManagerRepository : IManagerRepository
         return result.ModifiedCount > 0 ? photo : null;
     }
 
-    public async Task<bool> DeletePhotoAsync(ObjectId targetPaymentId, CancellationToken cancellationToken)
+    public async Task<bool> DeletePhotoAsync(string targetPaymentId, CancellationToken cancellationToken)
     {
         AppUser? appUser = await _collectionAppUser
             .Find(u => u.EnrolledCourses.Any(ec => ec.Payments.Any(p => p.Id == targetPaymentId)))
@@ -548,8 +548,11 @@ public class ManagerRepository : IManagerRepository
         return enrolledCourse;
     }
 
-    public async Task<Payment?> GetTargetPaymentByIdAsync(ObjectId targetPaymentId, CancellationToken cancellationToken)
+    public async Task<Payment?> GetTargetPaymentByIdAsync(string targetPaymentId, CancellationToken cancellationToken)
     {
+        // if (!ObjectId.TryParse(targetPaymentId, out ObjectId paymentObjectId))
+        //     return null; // یا throw BadRequestException یا لاگ کردن
+
         AppUser? appUser = await _collectionAppUser
             .Find(doc => doc.EnrolledCourses.Any(ec => ec.Payments.Any(p => p.Id == targetPaymentId)))
             .FirstOrDefaultAsync(cancellationToken);

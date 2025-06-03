@@ -32,7 +32,7 @@ public class PhotoModifySaveService(IWebHostEnvironment _webHostEnvironment) : P
     /// <param name="userId"></param>
     /// <param name="standardSizeIndex"></param>
     /// <returns>filePath</returns>
-    public async Task<string> ResizeImageByScale(IFormFile formFile, ObjectId productId, int standardSizeIndex)
+    public async Task<string> ResizeImageByScale(IFormFile formFile, string productId, int standardSizeIndex)
     {
         // performace
         if (formFile.Length < 300_000)
@@ -84,7 +84,7 @@ public class PhotoModifySaveService(IWebHostEnvironment _webHostEnvironment) : P
     /// <param name="widthIn"></param>
     /// <param name="heightIn"></param>
     /// <returns></returns>
-    public async Task<string> ResizeByPixel(IFormFile formFile, ObjectId productId, int widthIn, int heightIn)
+    public async Task<string> ResizeByPixel(IFormFile formFile, string productId, int widthIn, int heightIn)
     {
         // do the job
         using var binaryReader = new BinaryReader(formFile.OpenReadStream());
@@ -125,7 +125,7 @@ public class PhotoModifySaveService(IWebHostEnvironment _webHostEnvironment) : P
     /// <param name="userId"></param>
     /// <param name="sideIn"></param>
     /// <returns>filePath</returns>
-    public async Task<string> ResizeByPixel_Square(IFormFile formFile, ObjectId productId, int sideIn)
+    public async Task<string> ResizeByPixel_Square(IFormFile formFile, string productId, int sideIn)
     {
         using var binaryReader = new BinaryReader(formFile.OpenReadStream());
         // get image from formFile
@@ -186,7 +186,7 @@ public class PhotoModifySaveService(IWebHostEnvironment _webHostEnvironment) : P
     /// <param name="widthIn"></param>
     /// <param name="heightIn"></param>
     /// <returns></returns>
-    public async Task<string> Crop(IFormFile formFile, ObjectId productId, int widthIn, int heightIn)
+    public async Task<string> Crop(IFormFile formFile, string productId, int widthIn, int heightIn)
     {
         using var binaryReader = new BinaryReader(formFile.OpenReadStream());
         // get image from formFile
@@ -246,7 +246,7 @@ public class PhotoModifySaveService(IWebHostEnvironment _webHostEnvironment) : P
     /// <param name="productId"></param>
     /// <param name="sideIn"></param>
     /// <returns></returns>
-    public async Task<string> Crop_Square(IFormFile formFile, ObjectId productId, int sideIn)
+    public async Task<string> Crop_Square(IFormFile formFile, string productId, int sideIn)
     {
         using var binaryReader = new BinaryReader(formFile.OpenReadStream());
         // get image from formFile
@@ -284,7 +284,7 @@ public class PhotoModifySaveService(IWebHostEnvironment _webHostEnvironment) : P
     /// <param name="formFile"></param>
     /// <param name="productId"></param>
     /// <returns></returns>
-    public async Task<string> CropWithOriginalSide_Square(IFormFile formFile, ObjectId productId)
+    public async Task<string> CropWithOriginalSide_Square(IFormFile formFile, string productId)
     {
         using var binaryReader = new BinaryReader(formFile.OpenReadStream());
         // get image from formFile
@@ -350,7 +350,7 @@ public class PhotoModifySaveService(IWebHostEnvironment _webHostEnvironment) : P
     /// <param name="width"></param>
     /// <param name="height"></param>
     /// <returns>string: saved path on the disk</returns>
-    private async Task<string> SaveImage(SKData sKData, ObjectId productId, string fileName, int operation, int width, int height)
+    private async Task<string> SaveImage(SKData sKData, string productId, string fileName, int operation, int width, int height)
     {
         string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, storageAddress, productId.ToString(), operations[operation],
                             Convert.ToString(width) + "x" + Convert.ToString(height));
@@ -385,7 +385,7 @@ public class PhotoModifySaveService(IWebHostEnvironment _webHostEnvironment) : P
     /// <param name="fileName"></param>
     /// <param name="operation"></param>
     /// <returns>string: saved path on the disk</returns>
-    private async Task<string> SaveImage(SKData sKData, ObjectId productId, string fileName, int operation)
+    private async Task<string> SaveImage(SKData sKData, string productId, string fileName, int operation)
     {
         string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, storageAddress, productId.ToString(), operations[operation]);
 
@@ -417,7 +417,7 @@ public class PhotoModifySaveService(IWebHostEnvironment _webHostEnvironment) : P
     /// <param name="userId"></param>
     /// <param name="operation"></param>
     /// <returns>string: saved path on the disk</returns>
-    public async Task<string> SaveImageAsIs(IFormFile formFile, ObjectId productId, int operation)
+    public async Task<string> SaveImageAsIs(IFormFile formFile, string productId, int operation)
     {
         string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, storageAddress, productId.ToString(), operations[operation]);
 

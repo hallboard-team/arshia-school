@@ -8,13 +8,13 @@ public record Course(
     [Optional][property: BsonId, BsonRepresentation(BsonType.ObjectId)] ObjectId Id,
     string Title, // English
     List<ObjectId> ProfessorsIds, //132342344
-    // List<string> ProfessorsUserNames,
+                                  // List<string> ProfessorsUserNames,
     int Tuition, //6_000_000t
     int Hours, //128h
     Double HoursPerClass,
     int Days, // Cal in API
     DateTime Start, //TODO: Rename to StartOn //  1 mars 2025
-    string IsStarted  
+    string IsStarted
 );
 
 public record EnrolledCourse(
@@ -34,7 +34,8 @@ public record EnrolledCourse(
 
 public record Payment(
     // Guid Id,
-    [Optional][property: BsonId, BsonRepresentation(BsonType.ObjectId)] ObjectId Id,
+    // [Optional][property: BsonId, BsonRepresentation(BsonType.ObjectId)] ObjectId Id,
+    [property: BsonId] string Id,
     string CourseTitle,
     int Amount,
     DateTime PaidOn,
