@@ -113,20 +113,41 @@
     <section class="left">
         <div class="div-btns">
             @if (loggedInUserSig && loggedInUserSig(); as user) {
-            <div class="div-btn-log-out">
-                <button class="exit" (click)="logout()">
-                    <span class="circle" aria-hidden="true">
-                        <span class="icon arrow"></span>
-                    </span>
-                    <span class="button-text">خروج</span>
-                </button>
-            </div>
+            <button class="profile" (click)="openProfile()">
+                <span>{{loggedInUserSig()?.name?.charAt(0)?.toUpperCase()}}</span>
+            </button>
             }
             @else {
-            <button class="btn" routerLink="/account/login">
+            <button class="btn-login" routerLink="/account/login">
                 <span class="text">ورود</span>
             </button>
             }
+
+            <div class="div-open-profile" *ngIf="showProfile">
+                <div class="div-button-back-page">
+                    <button class="back-to-page" (click)="closeProfile()">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+
+                <!-- @if (loggedInUserSig && loggedInUserSig(); as user) { -->
+                <div class="div-description-of-user">
+                    <span>نام: {{loggedInUserSig && loggedInUserSig()?.name}}</span>
+                    <span>نام کاربری: {{loggedInUserSig && loggedInUserSig()?.userName}}</span>
+                    <span>ایمیل: {{loggedInUserSig && loggedInUserSig()?.email}}</span>
+                    <!-- <span>نام{{loggedInUserSig()?.name}}:</span> -->
+                </div>
+
+                <div class="div-btn-log-out">
+                    <span class="desc">شما وارد حساب کاربری شده اید میخواهید خارج بشید؟</span>
+                    <button class="exit" (click)="logout()">
+                        <span class="circle" aria-hidden="true">
+                            <span class="icon arrow"></span>
+                        </span>
+                        <span class="button-text">خروج</span>
+                    </button>
+                </div>
+            </div>
         </div>
     </section>
 </nav>

@@ -279,104 +279,30 @@ nav {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 1rem;
 
-            .div-btn-log-out {
+            .profile {
+                border-radius: 50%;
+                border: none;
+                height: 40px;
+                width: 40px;
+                background: linear-gradient(225deg, #f0f0f0, #cacaca);
+                box-shadow: 0 0 10px black;
                 display: flex;
                 justify-content: center;
                 align-items: center;
 
-                button {
-                    position: relative;
-                    display: inline-block;
-                    cursor: pointer;
-                    outline: none;
-                    border: 0;
-                    vertical-align: middle;
-                    text-decoration: none;
-                    background: transparent;
-                    padding: 0;
-                    font-size: inherit;
-                    font-family: inherit;
-                }
-
-                button.exit {
-                    width: 7rem;
-                    height: auto;
-                }
-
-                button.exit .circle {
-                    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-                    position: relative;
-                    display: block;
-                    margin: 0;
-                    width: 2.5rem;
-                    height: 2.5rem;
-                    background: hsl(345deg 100% 47%);
-                    border-radius: 1.625rem;
-                }
-
-                button.exit .circle .icon {
-                    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-                    position: absolute;
-                    top: 0;
-                    bottom: 0;
-                    margin: auto;
-                    background: #fff;
-                }
-
-                button.exit .circle .icon.arrow {
-                    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-                    left: 0.625rem;
-                    width: 1.125rem;
-                    height: 0.125rem;
-                    background: none;
-                }
-
-                button.exit .circle .icon.arrow::before {
-                    position: absolute;
-                    content: "";
-                    top: -0.29rem;
-                    right: 0.0625rem;
-                    width: 0.625rem;
-                    height: 0.625rem;
-                    border-top: 0.125rem solid #fff;
-                    border-right: 0.125rem solid #fff;
-                    transform: rotate(45deg);
-                }
-
-                button.exit .button-text {
-                    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-                    position: absolute;
-                    top: -5px;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    padding: 0.75rem 0;
-                    margin: 0 0 0 1.85rem;
-                    // color: #282936;
-                    color: hsl(345deg 100% 47%);
-                    font-weight: 700;
-                    line-height: 1.6;
-                    text-align: center;
-                    text-transform: uppercase;
-                }
-
-                button:hover .circle {
-                    width: 100%;
-                }
-
-                button:hover .circle .icon.arrow {
-                    background: #fff;
-                    transform: translate(1rem, 0);
-                }
-
-                button:hover .button-text {
-                    color: #fff;
+                span {
+                    font-size: 22px;
+                    font-weight: bold;
+                    color: black;
                 }
             }
 
-            .btn {
+            .profile:hover {
+                cursor: pointer;
+            }
+
+            .btn-login {
                 height: 45px;
                 width: 120px;
                 font-weight: bold;
@@ -394,22 +320,181 @@ nav {
                     5px -5px 10px #ffffff;
             }
 
-            // .btn:hover {
-            //     box-shadow: inset 2px 2px 5px #bcbcbc, inset -2px -2px 5px #ffffff, 2px 2px 5px #bcbcbc, -2px -2px 5px #ffffff;
-            // }
-            // .btn:focus {
-            //     outline: none;
-            //     box-shadow: inset 2px 2px 5px #bcbcbc, inset -2px -2px 5px #ffffff, 2px 2px 5px #bcbcbc, -2px -2px 5px #ffffff;
-            // }
-            .btn:active {
+            .btn-login:active {
                 will-change: transform;
                 transform: perspective(80px) rotateX(5deg) rotateY(1deg) translateY(3px) scale(0.96);
                 transition: all .1s ease-in-out 0s;
             }
 
-            .btn:hover {
+            .btn-login:hover {
                 transition: all 0.2s ease;
                 scale: 1.05;
+            }
+
+            .div-open-profile {
+                border-radius: 10px;
+                background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                box-shadow: 5px 5px 10px #b1b1b1,
+                    -5px -5px 10px #ffffff;
+                padding: 1rem;
+                width: 90%;
+
+                position: absolute;
+                left: 5%;
+                top: 6rem;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                gap: 1rem;
+
+                .div-button-back-page {
+                    width: 100%;
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+
+                    .back-to-page {
+                        height: 40px;
+                        width: 40px;
+                        border-radius: 50%;
+                        border: none;
+                        background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                        box-shadow: 5px 5px 10px #b1b1b1,
+                            -5px -5px 10px #ffffff;
+
+                        mat-icon {
+                            color: red;
+                            font-weight: bold;
+                        }
+                    }
+
+                    .back-to-page {
+                        cursor: pointer;
+                    }
+                }
+
+                .div-description-of-user {
+                    display: flex;
+                    width: 100%;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 1rem;
+
+                    span {
+                        direction: rtl;
+                        font-size: 15px;
+                        color: black;
+                    }
+                }
+
+                .div-btn-log-out {
+                    display: flex;
+                    justify-content: center;
+                    flex-direction: column;
+                    gap: 10px;
+                    align-items: center;
+
+                    .desc {
+                        width: 90%;
+                        font-size: 13px;
+                        color: rgba(0, 0, 0, 0.486);
+                        direction: rtl;
+                    }
+
+                    button {
+                        position: relative;
+                        display: inline-block;
+                        cursor: pointer;
+                        outline: none;
+                        border: 0;
+                        vertical-align: middle;
+                        text-decoration: none;
+                        background: transparent;
+                        padding: 0;
+                        font-size: inherit;
+                        font-family: inherit;
+                    }
+
+                    button.exit {
+                        width: 7rem;
+                        height: auto;
+                    }
+
+                    button.exit .circle {
+                        transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+                        position: relative;
+                        display: block;
+                        margin: 0;
+                        width: 2.5rem;
+                        height: 2.5rem;
+                        background: hsl(345deg 100% 47%);
+                        border-radius: 1.625rem;
+                    }
+
+                    button.exit .circle .icon {
+                        transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+                        position: absolute;
+                        top: 0;
+                        bottom: 0;
+                        margin: auto;
+                        background: #fff;
+                    }
+
+                    button.exit .circle .icon.arrow {
+                        transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+                        left: 0.625rem;
+                        width: 1.125rem;
+                        height: 0.125rem;
+                        background: none;
+                    }
+
+                    button.exit .circle .icon.arrow::before {
+                        position: absolute;
+                        content: "";
+                        top: -0.29rem;
+                        right: 0.0625rem;
+                        width: 0.625rem;
+                        height: 0.625rem;
+                        border-top: 0.125rem solid #fff;
+                        border-right: 0.125rem solid #fff;
+                        transform: rotate(45deg);
+                    }
+
+                    button.exit .button-text {
+                        transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+                        position: absolute;
+                        top: -5px;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        padding: 0.75rem 0;
+                        margin: 0 0 0 1.85rem;
+                        // color: #282936;
+                        color: hsl(345deg 100% 47%);
+                        font-weight: 700;
+                        line-height: 1.6;
+                        text-align: center;
+                        text-transform: uppercase;
+                    }
+
+                    button:hover .circle {
+                        width: 100%;
+                    }
+
+                    button:hover .circle .icon.arrow {
+                        background: #fff;
+                        transform: translate(1rem, 0);
+                    }
+
+                    button:hover .button-text {
+                        color: #fff;
+                    }
+                }
+
+
             }
         }
     }
@@ -461,6 +546,13 @@ nav {
 
         .left {
             margin-left: 0;
+
+            .div-btns {
+                .div-open-profile {
+                    width: 30%;
+                    left: 5%;
+                }
+            }
         }
     }
 }

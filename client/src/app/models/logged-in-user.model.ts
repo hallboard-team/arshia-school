@@ -1,6 +1,6 @@
 export interface LoggedInUser {
     token: string;
-    normalizedEmail: string;
+    email: string;
     userName: string;
     name: string;
     lastName: string;
