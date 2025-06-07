@@ -1,56 +1,58 @@
 @if (loggedInUserSig && loggedInUserSig()) {
-    @if (loggedInUserSig()?.roles?.includes('teacher')) {
-        @if (studentIn) {
-            <div class="background">
-                <div class="toggler">
-                    <span class="selected-date">تاریخ انتخاب‌شده: <span>{{ selectedDate }}</span></span>
+@if (loggedInUserSig()?.roles?.includes('teacher')) {
+@if (studentIn) {
+<div class="background">
+    <div class="toggler">
+        <span class="selected-date">تاریخ انتخاب‌شده: <span>{{ selectedDate }}</span></span>
 
-                    <input id="toggler-1" name="toggler-1" type="checkbox" value="1"
-                    [checked]="attendenceStatus[studentIn.userName]">
+        <input id="toggler-1" name="toggler-1" type="checkbox" value="1"
+            [checked]="attendenceStatus[studentIn.userName]">
 
-                    <label for="toggler-{{studentIn.userName}}">
-                        @if (!attendenceStatus[studentIn.userName] && studentIn.isAbsent === false) {
-                            <svg (click)="addAbsent(studentIn.userName)" class="toggler-off" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
-                                <polyline class="path check" points="100.2,40.2 51.5,88.8 29.8,67.5"></polyline>
-                            </svg>
-                        } @else {
-                            <svg (click)="removeAttendence(studentIn.userName)" class="toggler-on" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
-                                <line class="path line" x1="34.4" y1="34.4" x2="95.8" y2="95.8"></line>
-                                <line class="path line" x1="95.8" y1="34.4" x2="34.4" y2="95.8"></line>
-                            </svg>
-                        }
-                    </label>
-                </div>
+        <label for="toggler-{{studentIn.userName}}">
+            @if (!attendenceStatus[studentIn.userName] && studentIn.isAbsent === false) {
+            <svg (click)="addAbsent(studentIn.userName)" class="toggler-off" version="1.1"
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                <polyline class="path check" points="100.2,40.2 51.5,88.8 29.8,67.5"></polyline>
+            </svg>
+            } @else {
+            <svg (click)="removeAttendence(studentIn.userName)" class="toggler-on" version="1.1"
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                <line class="path line" x1="34.4" y1="34.4" x2="95.8" y2="95.8"></line>
+                <line class="path line" x1="95.8" y1="34.4" x2="34.4" y2="95.8"></line>
+            </svg>
+            }
+        </label>
+    </div>
 
-                <div class="student-card" [class.expanded]="isExpanded" (click)="isExpanded = !isExpanded">
-                    <div class="student-header">
-                        @if (studentIn.gender == 'male') {
-                            <img src="../assets/images/boyPhoto2prev.png" class="student-image">
-                        }
-                        @else {
-                            <img src="../assets/images/girlPhoto5prevNew.png" class="student-image">
-                        }
-                        <div class="student-info">
-                            @if (studentIn.gender == 'male') {
-                                <span class="student-name-for-men">{{ studentIn.name }} {{ studentIn.lastName }}</span>
-                            }
-                            @else {
-                                <span class="student-name-for-women">{{ studentIn.name }} {{ studentIn.lastName }}</span>
-                            }
-                            <span class="student-age">سن: {{ studentIn.age }}</span>
-                        </div>
-                    </div>
-                
-                    <div class="student-details">
-                        @if (studentIn.gender == 'male') {
-                            <span class="student-gender">جنسیت: مرد</span>
-                        }@else {
-                            <span class="student-gender">جنسیت: زن</span>
-                        }
-                        <span class="student-userName">نام کاربری: {{studentIn.userName}}</span>
-                        <span class="student-phone">📞شماره تلفن: {{ studentIn.phoneNum }}</span>
-                
-                        <!-- <span class="title-absent-present-student">حضور و غیاب دانشجو</span>
+    <div class="student-card" [class.expanded]="isExpanded" (click)="isExpanded = !isExpanded">
+        <div class="student-header">
+            @if (studentIn.gender == 'male') {
+            <img src="../assets/images/boyPhoto2prev.png" class="student-image">
+            }
+            @else {
+            <img src="../assets/images/girlPhoto5prevNew.png" class="student-image">
+            }
+            <div class="student-info">
+                @if (studentIn.gender == 'male') {
+                <span class="student-name-for-men">{{ studentIn.name }} {{ studentIn.lastName }}</span>
+                }
+                @else {
+                <span class="student-name-for-women">{{ studentIn.name }} {{ studentIn.lastName }}</span>
+                }
+                <span class="student-age">سن: {{ studentIn.age }}</span>
+            </div>
+        </div>
+
+        <div class="student-details">
+            @if (studentIn.gender == 'male') {
+            <span class="student-gender">جنسیت: مرد</span>
+            }@else {
+            <span class="student-gender">جنسیت: زن</span>
+            }
+            <span class="student-userName">نام کاربری: {{studentIn.userName}}</span>
+            <span class="student-phone">📞شماره تلفن: {{ studentIn.phoneNum }}</span>
+
+            <!-- <span class="title-absent-present-student">حضور و غیاب دانشجو</span>
                         <div class="attendance-section">
                            
                             <span class="selected-date">📅 تاریخ انتخاب‌شده: {{ selectedDate }}</span>
@@ -59,30 +61,29 @@
                                 <button (click)="markAttendance('غایب')" class="absent-btn">❌ غایب</button>
                             </div>
                         </div> -->
-                    </div>
-                </div>
-            </div>
-        }
+        </div>
+    </div>
+</div>
+}
+}
+@else {
+@if (studentIn) {
+<div class="card-classmate">
+    @if (studentIn.gender == 'male') {
+    <img class="photo-profile" src="../assets/images/menProfilePhoto1.png" alt="">
+    }@else {
+    <!-- <img src="../assets/images/femial-profilePhoto1.png" alt=""> -->
+    <img class="photo-profile" src="../assets/images/femailProfilePhoto2.png" alt="">
     }
-
-    @if (loggedInUserSig()?.roles?.includes('student')) {
-        @if (studentIn) {
-            <div class="card-classmate">
-                @if (studentIn.gender == 'male') {
-                    <img class="photo-profile" src="../assets/images/menProfilePhoto1.png" alt="">
-                }@else {
-                    <!-- <img src="../assets/images/femial-profilePhoto1.png" alt=""> -->
-                    <img class="photo-profile" src="../assets/images/femailProfilePhoto2.png" alt="">
-                }
-                <span class="name-last-name-p">نام: {{studentIn.name}}</span>
-                <span class="name-last-name-p">نام خانوادگی: {{studentIn.lastName}}</span>
-                @if (studentIn.gender == 'male') {
-                    <span class="gender-p">جنسیت: مرد</span>
-                }@else {
-                    <span class="gender-p">جنسیت: زن</span>
-                }
-                <!-- <span>{{studentIn.email}}</span> -->
-            </div>
-        }
+    <span class="name-last-name-p">نام: {{studentIn.name}}</span>
+    <span class="name-last-name-p">نام خانوادگی: {{studentIn.lastName}}</span>
+    @if (studentIn.gender == 'male') {
+    <span class="gender-p">جنسیت: مرد</span>
+    }@else {
+    <span class="gender-p">جنسیت: زن</span>
     }
+    <!-- <span>{{studentIn.email}}</span> -->
+</div>
+}
+}
 }
