@@ -303,9 +303,9 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
 
         List<string> courseTitles = await _managerRepository.GetTargetCourseTitleAsync(targetUserName, cancellationToken);
 
-        if (courseTitles == null)
+        if (courseTitles is null || !courseTitles.Any())
         {
-            return NotFound("نام دوره ها یافت نشد");
+            new List<string>();
         }
 
         return courseTitles;
