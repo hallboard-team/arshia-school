@@ -69,7 +69,7 @@ export class TargetUserProfileComponent implements OnInit {
   pageEvent: PageEvent | undefined;
   pagination: Pagination | undefined;
 
-  hasCourse = false;
+  // hasCourse = false;
 
   ngOnInit(): void {
     const currentYear = new Date().getFullYear();
@@ -80,6 +80,8 @@ export class TargetUserProfileComponent implements OnInit {
     // this.courseParams = new CourseParams();
 
     this.getTargetUserProfile();
+    this.getTargetUserCourse();
+    this.getTargetCourseTitles();
     // this.getTargetUserCourse();
     this.courseParams = new CourseParams();
     // this.loggedInUserSig = this._accountService.loggedInUserSig;
@@ -272,6 +274,9 @@ export class TargetUserProfileComponent implements OnInit {
             verticalPosition: 'bottom',
             duration: 10000
           });
+
+          this.getTargetUserCourse();
+          this.getTargetCourseTitles();
         },
         error: (err) => {
           this._matSnackBar.open("در اضافه کردن دوره مشکل به وجود آمده", "Close", {
@@ -338,13 +343,6 @@ export class TargetUserProfileComponent implements OnInit {
     }
   }
 
-  // onTabChange(event: MatTabChangeEvent): void {
-  //   if (event.index === 1 && !this.courseLoaded && this.loggedInUserSig?.()?.roles?.includes('student')) {
-  //     this.getCourse();
-  //     this.courseLoaded = true;
-  //   }
-  // }
-
   private getDateOnly(dob: string | null): string | undefined {
     if (!dob) return undefined;
 
@@ -352,21 +350,20 @@ export class TargetUserProfileComponent implements OnInit {
     return new Date(theDob.setMinutes(theDob.getMinutes() - theDob.getTimezoneOffset())).toISOString().slice(0, 10);
   }
 
-  onTabChange(event: MatTabChangeEvent): void {
-    if (event.index === 1) { // Assuming "Courses" tab is index 1
-      // const user = this.targetUserPofile;
+  // onTabChange(event: MatTabChangeEvent): void {
+  //   if (event.index === 1) { // Assuming "Courses" tab is index 1
+  //     // const user = this.targetUserPofile;
 
-      if (this.targetUserPofile?.enrolledCourses || this.targetUserPofile?.enrolledCourses) {
-        this.hasCourse = true;
-        this.getTargetUserCourse();
-      } else {
-        this.hasCourse = false;
-        this.courseTitles = null; // Optional: clear data
-      }
-    }
-    if (event.index === 3) {
-      this.getTargetCourseTitles();
-    }
-  }
-
+  //     if (this.targetUserPofile?.enrolledCourses || this.targetUserPofile?.enrolledCourses) {
+  //       this.hasCourse = true;
+  //       this.getTargetUserCourse();
+  //     } else {
+  //       this.hasCourse = false;
+  //       this.courseTitles = null; // Optional: clear data
+  //     }
+  //   }
+  //   if (event.index === 3) {
+  //     this.getTargetCourseTitles();
+  //   }
+  // }
 }

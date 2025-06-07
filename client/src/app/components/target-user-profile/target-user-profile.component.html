@@ -33,7 +33,7 @@
     </div>
 
     <div class="div-tabs">
-        <mat-tab-group (selectedTabChange)="onTabChange($event)">
+        <mat-tab-group>
             <mat-tab label="ادیت پروفایل">
                 <div class="div-edit-profile">
                     <form class="update-member-form" [formGroup]="targetMemberEditFg"
@@ -130,9 +130,9 @@
             </mat-tab>
 
 
-            @if (courses && targetUserPofile) {
             <mat-tab label="دوره ها">
-                <ng-container *ngIf="hasCourse; else noCourse">
+                @if (courses && targetUserPofile) {
+                <ng-container>
                     <div class="div-courses">
                         <!-- <div class="div-title-course">
                             <span class="title-course">دوره‌های شما</span>
@@ -197,11 +197,13 @@
                         }
                     </div>
                 </ng-container>
-                <ng-template #noCourse>
+                }
+                @else {
+                <ng-template>
                     <p>Course doesn't exist.</p>
                 </ng-template>
+                }
             </mat-tab>
-            }
 
             <mat-tab label="اضافه کردن دوره">
                 <div class="div-enrolled-course">
@@ -242,8 +244,8 @@
                 </div>
             </mat-tab>
 
-            @if (courseTitles) {
             <mat-tab label="پرداخت شهریه">
+                @if (courseTitles) {
                 <div class="div-enrolled-course">
                     <form class="enrolled-form" [formGroup]="updateEnrolledCourseFg"
                         (ngSubmit)="updateEnrolledCourseFg.valid && updateEnrolledCourse()">
@@ -297,8 +299,8 @@
                         </div>
                     </form>
                 </div>
+                }
             </mat-tab>
-            }
         </mat-tab-group>
     </div>
 </div>
