@@ -25,9 +25,9 @@
             color: rgba(0, 0, 0, 0.404);
         }
 
-        mat-form-filed {
-            height: 40px !important;
-        }
+        // mat-form-filed {
+        //     height: 40px !important;
+        // }
 
         .input-search {
             direction: rtl;
@@ -102,6 +102,16 @@
         background: linear-gradient(145deg, #f0f0f0, #cacaca);
         box-shadow: 5px 5px 10px #747474,
             -5px -5px 10px #ffffff;
+    }
+}
+
+::ng-deep {
+    mat-form-filed {
+        height: 40px !important;
+
+        .input-search {
+            height: 100%;
+        }
     }
 }
 

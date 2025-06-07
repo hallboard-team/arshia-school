@@ -8,7 +8,7 @@
         align-items: center;
         margin-top: 2rem;
         margin-bottom: 2rem;
-        
+
         .content {
             width: 90%;
             display: flex;
@@ -19,7 +19,7 @@
 
             border-radius: 10px;
             background: linear-gradient(145deg, #f0f0f0, #cacaca);
-            box-shadow:  5px 5px 10px #5a5a5a,
+            box-shadow: 5px 5px 10px #5a5a5a,
                 -5px -5px 10px #ffffff;
 
             .div-title-radio-input {
@@ -53,16 +53,17 @@
 
                         border-radius: 10px;
                         background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                        box-shadow:  5px 5px 10px #5a5a5a,
+                        box-shadow: 5px 5px 10px #5a5a5a,
                             -5px -5px 10px #ffffff;
                     }
                 }
             }
-            
+
             mat-form-field {
                 width: 80%;
 
                 .input {
+                    padding: 10px;
                     height: 54px;
                     width: 100%;
                     border: none;
@@ -71,20 +72,23 @@
                     box-shadow: inset 5px 5px 10px #cecece,
                         inset -5px -5px 10px #f2f2f2;
                 }
+
                 mat-label {
                     font-size: 15px;
                     font-weight: 800;
                     color: black;
-                } 
+                }
+
                 mat-hint {
                     font-size: 12px;
                 }
+
                 mat-error {
                     color: red;
                     font-size: 12px;
                 }
             }
-            
+
             .div-btn-add {
                 width: 100%;
                 display: flex;
@@ -128,6 +132,7 @@
         }
     }
 }
+
 @media (min-width: 1200px) {
     #main-section {
         mat-tab-group {
@@ -152,8 +157,9 @@
     margin-top: 5rem;
 }
 
-::ng-deep mat-form-field{
+::ng-deep mat-form-field {
     height: 40px !important;
+
     // mat-label {
     //     direction: rtl;
     //     text-align: right;
@@ -161,6 +167,7 @@
     .mat-mdc-text-field-wrapper {
         padding: 0px !important;
     }
+
     .mat-mdc-form-field-infix {
         text-align: right;
         padding: 0px !important;
