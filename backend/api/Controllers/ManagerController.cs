@@ -259,7 +259,8 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
 
         if (courses is null || !courses.Any())
         {
-            return NotFound("No Enrolled Courses found for the user.");
+            new List<Course>();
+            // return NotFound("No Enrolled Courses found for the user.");
         }
 
         return Ok(courses);
