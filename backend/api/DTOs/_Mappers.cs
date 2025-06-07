@@ -14,7 +14,7 @@ public static class Mappers
             PhoneNum = adminInput.PhoneNum,
             Gender = adminInput.Gender.ToLower(),
             // Titles = adminInput.Titles
-        }; 
+        };
     }
 
     public static LoggedInDto ConvertAppUserToLoggedInDto(AppUser appUser, string tokenValue)
@@ -23,7 +23,9 @@ public static class Mappers
         {
             Token = tokenValue,
             UserName = appUser.NormalizedUserName,
+            Email = appUser.NormalizedEmail,
             Name = appUser.Name,
+            LastName = appUser.LastName,
             PhoneNum = appUser.PhoneNum,
             Gender = appUser.Gender
         };
@@ -78,10 +80,10 @@ public static class Mappers
             PhoneNum: appUser.PhoneNum,
             Gender: appUser.Gender,
             Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth)
-            // EnrolledCourses: appUser.EnrolledCourses
+        // EnrolledCourses: appUser.EnrolledCourses
         );
     }
-    
+
     public static UserWithRoleDto ConvertAppUserToUserWithRoleDto(AppUser appUser)
     {
         return new UserWithRoleDto(
@@ -97,7 +99,7 @@ public static class Mappers
             CourseId: courseId,
             // UserName: teacherInput.UserName,
             Date: currentDate
-            // IsPresent: teacherInput.IsPresent
+        // IsPresent: teacherInput.IsPresent
         );
     }
 
@@ -161,7 +163,7 @@ public static class Mappers
     public static EnrolledCourse ConvertAddEnrolledCourseDtoToEnrolledCourse
         (AddEnrolledCourseDto managerInput, Course course,
             int paymentPerMonthCalc, int tuitionReminderCalc
-        ) 
+        )
     {
         return new EnrolledCourse(
             // Id: Guid.NewGuid(),
