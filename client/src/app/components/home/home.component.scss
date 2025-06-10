@@ -84,6 +84,7 @@ main {
 
                 span {
                     color: black;
+                    line-height: 40px;
                     font-weight: bold;
                     font-size: 30px;
                 }
@@ -150,6 +151,7 @@ main {
                 justify-content: center;
                 align-items: center;
                 position: relative;
+                animation: pulse-scale 2s ease-in-out infinite;
 
                 .btn-title {
                     width: 60%;
@@ -207,6 +209,7 @@ main {
                             font-size: 33px;
                             width: auto;
                             height: auto;
+                            opacity: 0.3;
                             animation: pulse-opacity 2s ease-in-out infinite;
                         }
                     }
@@ -240,7 +243,7 @@ main {
                         align-items: center;
 
                         mat-icon {
-                            color: rgb(255, 208, 0);
+                            color: rgb(255, 123, 0);
                             font-size: 33px;
                             width: auto;
                             height: auto;
@@ -250,7 +253,7 @@ main {
 
                     span {
                         font-size: 15px;
-                        color: rgb(255, 208, 0);
+                        color: rgb(255, 123, 0);
                         font-weight: 500;
                         transition: 0.4s;
                         animation: pulse-opacity 2s ease-in-out infinite;
@@ -386,7 +389,7 @@ main {
                         align-items: center;
 
                         mat-icon {
-                            color: rgb(52, 248, 117);
+                            color: rgb(43, 255, 0);
                             font-size: 33px;
                             width: auto;
                             height: auto;
@@ -396,7 +399,7 @@ main {
 
                     span {
                         font-size: 15px;
-                        color: rgb(52, 248, 117);
+                        color: rgb(43, 255, 0);
                         font-weight: 500;
                         animation: pulse-opacity 2s ease-in-out infinite;
                     }
@@ -918,15 +921,15 @@ main {
 
 @keyframes pulse-opacity {
     0% {
-        opacity: 1;
-    }
-
-    50% {
         opacity: 0.3;
     }
 
-    100% {
+    50% {
         opacity: 1;
+    }
+
+    100% {
+        opacity: 0.3;
     }
 }
 
@@ -941,6 +944,20 @@ main {
 
     100% {
         background-color: rgb(52, 52, 255);
+    }
+}
+
+@keyframes pulse-scale {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
     }
 }
 
