@@ -65,7 +65,14 @@ export class HomeComponent implements OnInit {
     { name: 'ملیکا جعفری', course: 'دوره پروژه محور ICDL', image: 'assets/images/profile-icon2.png', description: 'من به تیم شما بابت پشتیبانی عالیتان از وبسایتتان تشکر میکنم. سوالات و مشکلات من به سرعت پاسخ داده میشن و همیشه یه راه حل مناسب برای هر مشکل پیدا میکنید این امر بسیار قابل ارزش است.' },
   ];
 
+  sliderCourses = [
+    { nameTitleCourse: 'Full-Stack', image: 'assets/images/background-full-stack3.jpg', chapter: '2', hourse: '300', teacher: ' وحید حیاطی پور' },
+    { nameTitleCourse: 'C#', image: 'assets/images/background-full-stack2.jpg', chapter: '4', hourse: '400', teacher: 'پارسا جعفری' },
+    { nameTitleCourse: 'Angular', image: 'assets/images/background-full-stack4.jpg', chapter: '2', hourse: '200', teacher: 'ارشیا رضایی' },
+  ];
+
   currentIndex = 0;
+  currentIndexCourse = 0;
 
   next() {
     if (this.currentIndex < this.slides.length - 1) {
@@ -76,6 +83,18 @@ export class HomeComponent implements OnInit {
   prev() {
     if (this.currentIndex > 0) {
       this.currentIndex--;
+    }
+  }
+
+  nextCourse() {
+    if (this.currentIndexCourse < this.sliderCourses.length - 1) {
+      this.currentIndexCourse++;
+    }
+  }
+
+  prevCourse() {
+    if (this.currentIndexCourse > 0) {
+      this.currentIndexCourse--;
     }
   }
 

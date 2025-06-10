@@ -92,52 +92,60 @@
             </div>
         </div>
 
-        <div class="div-bg-course-from-backend">
-            <div class="div-bg-title-img">
-                <img src="../assets/images/background-full-stack3.jpg" alt="">
-                <span class="span-course">دوره پروژه محور FUll-Stack</span>
-            </div>
-            <div class="div-title-course">
-                <div class="right">
-                    <span class="span-done">تکمیل شده</span>
-                    <span class="span-title">دوره پروژه محور FUllStack</span>
-                </div>
+        <div class="div-slider-courses">
+            <button class="button-nav" (click)="prevCourse()">❮</button>
 
-                <div class="left">
-                    <div class="bg-icon">
-                        <mat-icon>chevron_left</mat-icon>
+            <div class="div-bg-course-from-backend"
+                *ngFor="let sliderCourses of sliderCourses.slice(currentIndexCourse, currentIndexCourse + 1)">
+                <div class="div-bg-title-img">
+                    <img [src]="sliderCourses.image" [alt]="sliderCourses.nameTitleCourse">
+                    <span class="span-course">دوره پروژه محور {{sliderCourses.nameTitleCourse}}</span>
+                </div>
+                <div class="div-title-course">
+                    <div class="right">
+                        <span class="span-done">تکمیل شده</span>
+                        <span class="span-title">دوره پروژه محور</span>
+                        <span class="span-title-from-ts">{{sliderCourses.nameTitleCourse}}</span>
+                    </div>
+
+                    <div class="left">
+                        <div class="bg-icon">
+                            <mat-icon>chevron_left</mat-icon>
+                        </div>
+                    </div>
+                </div>
+                <div class="div-time-buttonStart">
+                    <div class="top">
+                        <div class="div-matn">
+                            <span>ساعت {{sliderCourses.hourse}}</span>
+                            <mat-icon>schedule</mat-icon>
+                        </div>
+                        <div class="div-matn">
+                            <span>فصل {{sliderCourses.chapter}}</span>
+                            <mat-icon>file_copy</mat-icon>
+                        </div>
+                    </div>
+                    <div class="center">
+                        <div class="div-profile">
+                            <button>
+                                <mat-icon>person</mat-icon>
+                            </button>
+                        </div>
+                        <div class="div-teacher-name">
+                            <span class="span-title">مدرس دوره:</span>
+                            <span class="span-teacher-course">{{sliderCourses.teacher}}</span>
+                        </div>
+                    </div>
+                    <div class="bottom">
+                        <button class="btn-click-course"> <mat-icon
+                                class="icon-after-hover">keyboard_backspace</mat-icon><mat-icon
+                                class="icon-befor-hover">north_west</mat-icon>مشاهده دوره</button>
+                        <button class="btn-like"><mat-icon>favorite</mat-icon></button>
                     </div>
                 </div>
             </div>
-            <div class="div-time-buttonStart">
-                <div class="top">
-                    <div class="div-matn">
-                        <span>ساعت...</span>
-                        <mat-icon>schedule</mat-icon>
-                    </div>
-                    <div class="div-matn">
-                        <span>فصل...</span>
-                        <mat-icon>file_copy</mat-icon>
-                    </div>
-                </div>
-                <div class="center">
-                    <div class="div-profile">
-                        <button>
-                            <mat-icon>person</mat-icon>
-                        </button>
-                    </div>
-                    <div class="div-teacher-name">
-                        <span class="span-title">مدرس دوره:</span>
-                        <span>-----</span>
-                    </div>
-                </div>
-                <div class="bottom">
-                    <button class="btn-click-course"> <mat-icon
-                            class="icon-after-hover">keyboard_backspace</mat-icon><mat-icon
-                            class="icon-befor-hover">north_west</mat-icon>مشاهده دوره</button>
-                    <button class="btn-like"><mat-icon>favorite</mat-icon></button>
-                </div>
-            </div>
+
+            <button class="button-nav" (click)="nextCourse()">❯</button>
         </div>
     </section>
 
@@ -181,344 +189,3 @@
         <app-footer />
     </div>
 </main>
-
-<!-- <main>
-    <section class="top-side">
-        <div class="left-items">
-            <div class="div-background-neum">
-                <span>چرا مارو انتخاب کنید؟</span>
-                <div class="div-image">
-                    <img src="../assets/images/homeImage1NoB.png" alt="">
-                </div>
-                <div class="div-image">
-                    <img src="../assets/images/homeImage4NoB.png" alt="">
-                </div>
-            </div>
-        </div>
-
-        <div class="center-photo">
-            <div class="div-laptop-item">
-                <img class="monitor" src="../assets/images/laptop1.png" alt="">
-                <img class="into-laptop" src="../assets/images/cloudAiPhoto3.jpg" alt="">
-
-                <div class="div-title">
-                    <span class="title1">آکادمی طلوع فناوری</span>
-
-                    <div class="div-buttons">
-                        <button class="btn-yadgiri" [routerLink]="['/' + 'not-found']" routerLinkActive
-                            #rla="routerLinkActive">
-                            <span class="shadow"></span>
-                            <span class="edge"></span>
-                            <span class="front text">
-                                شروع یادگیری
-                            </span>
-                        </button>
-                        <button class="btn-dore" [routerLink]="['/' + 'courses']" routerLinkActive
-                            #rla="routerLinkActive">
-                            <span class="shadow"></span>
-                            <span class="edge"></span>
-                            <span class="front text">
-                                دوره ها
-                            </span>
-                        </button>
-                    </div>
-                </div>
-
-                <nav>
-                    <div class="right-open-menu">
-                        <button class="menu-button" (click)="openMenuDesctop()">
-                            <mat-icon>menu</mat-icon>
-                        </button>
-                    </div>
-
-                    <div class="right-close-menu">
-                        <button class="menu-button" (click)="closeMenuDesctop()">
-                            <mat-icon>close</mat-icon>
-                        </button>
-                    </div>
-
-                    <div class="left">
-                        @if (loggedInUserSig && loggedInUserSig(); as user) {
-                        <div class="div-btn-log-out">
-                            <button class="exit" (click)="logout()">
-                                <span class="circle" aria-hidden="true">
-                                    <span class="icon arrow"></span>
-                                </span>
-                                <span class="button-text">خروج</span>
-                            </button>
-                        </div>
-                        }
-                        @else {
-                        <div class="div-btns">
-                            <button class="btn1" routerLink="/account/login">ورود اساتید</button>
-
-                            <button class="btn2" routerLink="/account/login">
-                                <span class="text">ورود دانشجویان</span>
-                            </button>
-                        </div>
-                        }
-                    </div>
-                </nav>
-
-                <div class="hamburger-menu">
-                    <div class="bottom">
-                        @if (loggedInUserSig && loggedInUserSig()) {
-                        @if (loggedInUserSig()?.roles?.includes('manager')) {
-                        <button class="btn" [routerLink]="['/' + 'manager-panel']" routerLinkActive
-                            #rla="routerLinkActive">پنل-مدیر</button>
-                        <button class="btn" [routerLink]="['/' + 'members']" routerLinkActive
-                            #rla="routerLinkActive">کاربران</button>
-                        }
-                        @if (loggedInUserSig()?.roles?.includes('teacher')) {
-                        <button class="btn" [routerLink]="['/' + 'home']" routerLinkActive
-                            #rla="routerLinkActive">خانه</button>
-                        <button class="btn" [routerLink]="['/' + 'profile']" routerLinkActive
-                            #rla="routerLinkActive">پروفایل</button>
-                        <button class="btn" [routerLink]="['/' + 'courses']" routerLinkActive
-                            #rla="routerLinkActive">دوره ها</button>
-                        <button class="btn" [routerLink]="['/' + 'about']" routerLinkActive
-                            #rla="routerLinkActive">درباره ما</button>
-                        <button class="btn" [routerLink]="['/' + 'contact-us']" routerLinkActive
-                            #rla="routerLinkActive">تماس با ما</button>
-                        <button class="btn" [routerLink]="['/' + 'teacher-panel']" routerLinkActive
-                            #rla="routerLinkActive">پنل-معلم</button>
-                        }
-                        @else {
-                        <button class="btn" [routerLink]="['/' + 'home']" routerLinkActive
-                            #rla="routerLinkActive">خانه</button>
-                        <button class="btn" [routerLink]="['/' + 'profile']" routerLinkActive
-                            #rla="routerLinkActive">پروفایل</button>
-                        <button class="btn" [routerLink]="['/' + 'courses']" routerLinkActive
-                            #rla="routerLinkActive">دوره ها</button>
-                        <button class="btn" [routerLink]="['/' + 'about']" routerLinkActive
-                            #rla="routerLinkActive">درباره ما</button>
-                        <button class="btn" [routerLink]="['/' + 'contact-us']" routerLinkActive
-                            #rla="routerLinkActive">تماس با ما</button>
-                        }
-                        }@else {
-                        <button class="btn" [routerLink]="['/' + 'home']" routerLinkActive
-                            #rla="routerLinkActive">خانه</button>
-                        <button class="btn" [routerLink]="['/' + 'courses']" routerLinkActive
-                            #rla="routerLinkActive">دوره ها</button>
-                        <button class="btn" [routerLink]="['/' + 'about']" routerLinkActive
-                            #rla="routerLinkActive">درباره ما</button>
-                        <button class="btn" [routerLink]="['/' + 'contact-us']" routerLinkActive
-                            #rla="routerLinkActive">تماس با ما</button>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="right-items">
-            <img src="../assets/images/phonePhoto.png" alt="">
-            <img class="background" src="../assets/images/cloudAiPhoto3.jpg" alt="">
-            <div class="div-background-matn">
-                <span class="p1">مهارت</span>
-                <span class="p2">برنامه نویسی</span>
-                <span class="p3">و</span>
-                <span class="p4">طراحی وبسایت</span>
-                <span class="p5">از مبتدی تا</span>
-                <span class="p6">پیشرفته</span>
-            </div>
-        </div>
-    </section>
-
-    <div class="left-items-media">
-        <div class="div-background-neum">
-            <span>چرا مارو انتخاب کنید؟</span>
-            <div class="div-image">
-                <img src="../assets/images/homeImage1NoB.png" alt="">
-            </div>
-            <div class="div-image">
-                <img src="../assets/images/homeImage4NoB.png" alt="">
-            </div>
-        </div>
-
-        <div class="cube-loader">
-            <div class="cube-top">
-            </div>
-            <div class="cube-wrapper">
-                <span style="--i:0" class="cube-span">
-                    <img src="../assets/images/angularIcon.png" alt="">
-                </span>
-                <span style="--i:1" class="cube-span">
-                    <img src="../assets/images/typeScriptIcon.png" alt="">
-                </span>
-                <span style="--i:2" class="cube-span">
-                    <img src="../assets/images/cSharpIcon.png" alt="">
-                </span>
-                <span style="--i:3" class="cube-span">
-                    <img src="../assets/images/cSharpIcon.png" alt="">
-                </span>
-            </div>
-        </div>
-    </div>
-
-    <section class="bottom-side">
-        <div class="cube-loader">
-            <div class="cube-wrapper">
-                <span style="--i:0" class="cube-span">
-                    <img src="../assets/images/angularIcon.png" alt="">
-                </span>
-                <span style="--i:1" class="cube-span">
-                    <img src="../assets/images/typeScriptIcon.png" alt="">
-                </span>
-                <span style="--i:2" class="cube-span">
-                    <img src="../assets/images/cSharpIcon.png" alt="">
-                </span>
-                <span style="--i:3" class="cube-span">
-                    <img src="../assets/images/brainIcon.png" alt="">
-                </span>
-            </div>
-        </div>
-
-        <div class="cards">
-            <span>ورود سریع به بازار کار</span>
-            <div class="div-photo">
-                <img src="../assets/images/cardHomePic1.png" alt="">
-            </div>
-            <button [routerLink]="['/' + 'about']" routerLinkActive #rla="routerLinkActive">شروع کن</button>
-        </div>
-
-        <div class="cards">
-            <span>پروژه های تخصصی</span>
-            <div class="div-photo">
-                <img src="../assets/images/cardHomePic2.png" alt="">
-            </div>
-            <button [routerLink]="['/' + 'about']" routerLinkActive #rla="routerLinkActive">شروع کن</button>
-        </div>
-
-        <div class="cards">
-            <span>شروع از صفر</span>
-            <div class="div-photo">
-                <img src="../assets/images/cardHomePic3.png" alt="">
-            </div>
-            <button [routerLink]="['/' + 'about']" routerLinkActive #rla="routerLinkActive">شروع کن</button>
-        </div>
-    </section>
-</main>
-
-<section id="section-page-mobile">
-    <header>
-        <nav>
-            <app-navbar />
-        </nav>
-    </header>
-
-    <div class="div-photo-start">
-        <img src="../assets/images/cloudAiPhoto3.jpg" alt="">
-
-        <div class="div-start-item">
-            <div class="div-titles">
-                <span class="title1">آکادمی</span>
-                <span class="title2"> طلوع فناوری</span>
-            </div>
-
-            <div class="div-buttons">
-                <button class="btn-yadgiri">
-                    <span class="shadow"></span>
-                    <span class="edge"></span>
-                    <span class="front text">
-                        شروع یادگیری
-                    </span>
-                </button>
-                <button class="btn-dore">
-                    <span class="shadow"></span>
-                    <span class="edge"></span>
-                    <span class="front text">
-                        دوره ها
-                    </span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div class="background-card">
-        <div class="card playing">
-            <div class="image">
-                <img src="../assets/images/codingProgrammingPhoto1.png" alt="">
-            </div>
-
-            <div class="div-background-matn">
-                <span class="p1">آموزش</span>
-                <span class="p2">برنامه نویسی</span>
-                <span class="p3">و</span>
-                <span class="p4">طراحی وبسایت</span>
-                <span class="p5">از مبتدی تا</span>
-                <span class="p6">پیشرفته</span>
-            </div>
-
-            <div class="div-background-matn-tablet">
-                <span class="p1"> آموزش برنامه نویسی</span>
-                <span class="p2">و</span>
-                <span class="p3">طراحی وبسایت</span>
-                <span class="p4">از مبتدی تا پیشرفته</span>
-            </div>
-
-            <div class="wave"></div>
-            <div class="wave"></div>
-            <div class="wave"></div>
-        </div>
-    </div>
-
-    <div class="div-items-matn-cube">
-        <div class="div-background-neum">
-            <span>چرا مارو انتخاب کنید؟</span>
-
-            <div class="div-images">
-                <div class="neu-style">
-                    <img src="../assets/images/homeImage1NoB.png" alt="">
-                </div>
-                <div class="neu-style">
-                    <img src="../assets/images/homeImage4NoB.png" alt="">
-                </div>
-            </div>
-        </div>
-
-        <div class="cube-loader">
-            <div class="cube-top">
-            </div>
-            <div class="cube-wrapper">
-                <span style="--i:0" class="cube-span">
-                    <img src="../assets/images/angularIcon.png" alt="">
-                </span>
-                <span style="--i:1" class="cube-span">
-                    <img src="../assets/images/typeScriptIcon.png" alt="">
-                </span>
-                <span style="--i:2" class="cube-span">
-                    <img src="../assets/images/cSharpIcon.png" alt="">
-                </span>
-                <span style="--i:3" class="cube-span">
-                    <img src="../assets/images/cSharpIcon.png" alt="">
-                </span>
-            </div>
-        </div>
-    </div>
-
-    <div class="div-cards">
-        <div class="card">
-            <span>ورود سریع به بازار کار</span>
-            <div class="div-photo">
-                <img src="../assets/images/cardHomePic1.png" alt="">
-            </div>
-            <button>شروع کن</button>
-        </div>
-
-        <div class="card">
-            <span>پروژه های تخصصی</span>
-            <div class="div-photo">
-                <img src="../assets/images/cardHomePic2.png" alt="">
-            </div>
-            <button>شروع کن</button>
-        </div>
-
-        <div class="card">
-            <span>شروع از صفر</span>
-            <div class="div-photo">
-                <img src="../assets/images/cardHomePic3.png" alt="">
-            </div>
-            <button>شروع کن</button>
-        </div>
-    </div>
-</section> -->
