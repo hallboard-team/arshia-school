@@ -15,6 +15,7 @@ import { AccountService } from '../../services/account.service';
 import { LoggedInUser } from '../../models/logged-in-user.model';
 import { MemberService } from '../../services/member.service';
 import { UserProfile } from '../../models/user-profile.model';
+import { BackForwardButtonComponent } from '../back-forward-button/back-forward-button.component';
 
 @Component({
   selector: 'app-navbar',
@@ -23,7 +24,7 @@ import { UserProfile } from '../../models/user-profile.model';
     CommonModule, RouterModule, NgOptimizedImage,
     MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule,
     MatDividerModule, MatListModule, MatTabsModule,
-    MatSlideToggleModule, FormsModule
+    MatSlideToggleModule, FormsModule, BackForwardButtonComponent
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'

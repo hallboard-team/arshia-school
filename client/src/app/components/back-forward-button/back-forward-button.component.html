@@ -1,0 +1,2 @@
+<button *ngIf="history.canGoBack$ | async" (click)="goBack()">← Back</button>
+<button *ngIf="history.canGoForward$ | async" (click)="goForward()">Forward →</button>

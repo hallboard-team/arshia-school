@@ -20,6 +20,8 @@
             <mat-icon>menu</mat-icon>
         </button>
 
+        <app-back-forward-button></app-back-forward-button>
+
         <div class="div-btns">
             @if (loggedInUserSig && loggedInUserSig(); as user) {
             <button class="profile" (click)="openProfile()">
