@@ -516,6 +516,13 @@ main {
                 cursor: pointer;
             }
 
+            .button-nav.disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
+                pointer-events: none;
+                transition: 0.3s;
+            }
+
             .div-bg-course-from-backend {
                 margin-top: 1rem;
                 width: 90%;
@@ -883,68 +890,94 @@ main {
                 display: flex;
                 justify-content: center;
 
-                .slide {
-                    width: 100%;
-                    text-align: center;
+                position: relative;
+
+                .slide-track {
                     display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
+                    transition: transform 0.5s ease-in-out;
+                    width: 100%;
 
-                    .description {
-                        font-size: 15px;
-                        color: rgba(0, 0, 0, 0.705);
-                    }
-
-                    .bottom-description {
+                    .slide {
+                        width: 100%;
+                        text-align: center;
                         display: flex;
-                        flex-direction: row-reverse;
+                        flex-direction: column;
                         justify-content: center;
                         align-items: center;
-                        width: 100%;
-                        margin-top: 1rem;
-                        gap: 10px;
 
-                        .right {
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
+                        min-width: 100%;
+                        padding: 1rem;
+                        box-sizing: border-box;
+                        transition: all 0.5s ease;
 
-                            .profile {
-                                height: 45px;
-                                width: 45px;
-                            }
+                        .description {
+                            font-size: 15px;
+                            color: rgba(0, 0, 0, 0.705);
                         }
 
-                        .left {
+                        .bottom-description {
                             display: flex;
+                            flex-direction: row-reverse;
                             justify-content: center;
-                            align-items: flex-end;
-                            flex-direction: column;
+                            align-items: center;
+                            width: 100%;
+                            margin-top: 1rem;
+                            gap: 10px;
 
-                            .name {
-                                font-size: 15px;
-                                color: black;
-                                margin-top: 1rem;
+                            .right {
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+
+                                .profile {
+                                    height: 45px;
+                                    width: 45px;
+                                }
                             }
 
-                            .course {
-                                font-size: 14px;
-                                color: rgba(0, 0, 0, 0.534);
-                                direction: rtl;
+                            .left {
+                                display: flex;
+                                justify-content: center;
+                                align-items: flex-end;
+                                flex-direction: column;
+
+                                .name {
+                                    font-size: 15px;
+                                    color: black;
+                                    margin-top: 1rem;
+                                }
+
+                                .course {
+                                    font-size: 14px;
+                                    color: rgba(0, 0, 0, 0.534);
+                                    direction: rtl;
+                                }
                             }
                         }
                     }
                 }
             }
 
+            // .button-nav {
+            //     font-size: 1.1rem;
+            //     background: none;
+            //     cursor: pointer;
+            //     border-radius: 50%;
+            //     background-color: #fff;
+            //     border: 1px solid rgba(0, 0, 0, 0.37);
+            // }
             .button-nav {
                 font-size: 1.1rem;
-                background: none;
                 cursor: pointer;
                 border-radius: 50%;
                 background-color: #fff;
                 border: 1px solid rgba(0, 0, 0, 0.37);
+                transition: all 0.3s ease;
+
+                &.disabled {
+                    opacity: 0.4;
+                    cursor: not-allowed;
+                }
             }
         }
     }

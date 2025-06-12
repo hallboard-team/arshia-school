@@ -26,7 +26,7 @@ import { CourseService } from '../../services/course.service';
 import { Pagination } from '../../models/helpers/pagination';
 import { MatSliderModule } from '@angular/material/slider';
 import { FooterComponent } from '../footer/footer.component';
-
+import { trigger, transition, style, animate, AnimationEvent } from '@angular/animations';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -38,7 +38,19 @@ import { FooterComponent } from '../footer/footer.component';
     FooterComponent
   ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  styleUrl: './home.component.scss',
+  animations: [
+    trigger('slideAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateX({{ enterFrom }})' }),
+        animate('400ms ease', style({ opacity: 1, transform: 'translateX(0)' }))
+      ], { params: { enterFrom: '100%' } }),
+
+      transition(':leave', [
+        animate('400ms ease', style({ opacity: 0, transform: 'translateX({{ leaveTo }})' }))
+      ], { params: { leaveTo: '-100%' } })
+    ])
+  ]
 })
 export class HomeComponent implements OnInit {
   private accountService = inject(AccountService);
@@ -53,12 +65,18 @@ export class HomeComponent implements OnInit {
   courseParams: CourseParams | undefined;
   subscribed: Subscription | undefined;
   pagination: Pagination | undefined;
+  disableAnimation = false;
 
   ngOnInit(): void {
     this.loggedInUserSig = this.accountService.loggedInUserSig;
 
     console.log('THE LOGGED-IN USER:', this.loggedInUserSig()?.userName);
   }
+
+  direction: { value: string, params: { enterFrom: string, leaveTo: string } } = {
+    value: '',
+    params: { enterFrom: '100%', leaveTo: '-100%' }
+  };
 
   slides = [
     { name: 'ارشیا رضایی', course: 'دوره پروژه محور FullStack', image: 'assets/images/profile-icon1.png', description: 'من به تیم شما بابت پشتیبانی عالیتان از وبسایتتان تشکر میکنم. سوالات و مشکلات من به سرعت پاسخ داده میشن و همیشه یه راه حل مناسب برای هر مشکل پیدا میکنید این امر بسیار قابل ارزش است.' },
@@ -86,48 +104,35 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  setDirection(dir: 'next' | 'prev') {
+    this.direction = {
+      value: dir,
+      params: {
+        enterFrom: dir === 'next' ? '100%' : '-100%',
+        leaveTo: dir === 'next' ? '-100%' : '100%'
+      }
+    };
+  }
+
   nextCourse() {
     if (this.currentIndexCourse < this.sliderCourses.length - 1) {
+      this.setDirection('next');
       this.currentIndexCourse++;
     }
   }
 
   prevCourse() {
     if (this.currentIndexCourse > 0) {
+      this.setDirection('prev');
       this.currentIndexCourse--;
     }
   }
-
-  // getLoggedInProfile(): void {
-  //   this.memberService.getProfile().subscribe({
-  //     next: (data) => {
-  //       this.profile = data;
-  //     },
-  //     error: (err) => {
-  //       this.error = 'خطا در گرفتن یوزرنیم';
-  //     }
-  //   })
-  // }
 
   logout(): void {
     this.accountService.logout();
   }
 
-  // getAll(): void {
-  //   if (this.courseParams)
-  //     this.subscribed = this.courseService.getAll(this.courseParams).subscribe({
-  //       next: (response: PaginatedResult<ShowCourse[]>) => {
-  //         if (response.body && response.pagination) {
-  //           this.showCourses = response.body;
-  //           this.pagination = response.pagination;
-  //         }
-  //       }
-  //     });
-  // }
-
   openMenu() {
-    // document.body.style.backgroundColor = color; 
-
     const elements = document.querySelectorAll('.hamburger-menu');
 
     elements.forEach((element) => {
@@ -188,58 +193,4 @@ export class HomeComponent implements OnInit {
       (element as HTMLElement).style.display = "none";
     });
   }
-
-  // selectStepByIndex(index: number): void {
-  //   this.selectedIndex = index;
-  // }
-  // http = inject(HttpClient);
-  // private readonly _apiUrl = environment.apiUrl + 'color/';
-
-  // favoriteColor: string = '#ffffff';
-
-  // ngOnInit(): void {
-  //   this.http.get<{ color: string }>(this._apiUrl + 'get-color')
-  //   .subscribe(response => {
-  //     const userColor = response.color;
-  //     this.applyBackgroundColor(userColor);
-  //   })
-  // }
-
-  // submitColor() {
-  //   this.http.post(this._apiUrl + 'set-color', { color: this.favoriteColor})
-  //   .subscribe(response => {
-  //     console.log('Color saved successfully', response);
-  //   })
-  // }
-
-  // applyBackgroundColor(color: string) {
-  //   document.body.style.backgroundColor = color; 
-  //   const elements = document.querySelectorAll('.neumorphic-button, input[type="color"]'); 
-  //   elements.forEach((element) => { 
-  //     (element as HTMLElement).style.boxShadow = ` 
-  //       8px 8px 15px ${color},
-  //       -8px -8px 15px ${(color)} 
-  //     `; 
-  //   });
-  // }
-
-  // applyBackgroundColor(color: string) {
-  //   document.body.style.backgroundColor = color; 
-  //   const elements = document.querySelectorAll('.neumorphic-button, input[type="color"]'); 
-  //   elements.forEach((element) => { 
-  //     (element as HTMLElement).style.boxShadow = ` 
-  //       8px 8px 15px ${this.darkenColor(color)},
-  //       -8px -8px 15px ${this.lightenColor(color)} 
-  //     `; 
-  //   });
-  // }
-
-  // darkenColor(color: string): string 
-  // { 
-  //   return tinycolor(color).darken(20).toString(); 
-  // } 
-
-  // lightenColor(color: string): string {
-  //    return tinycolor(color).lighten(20).toString();
-  // }
 }

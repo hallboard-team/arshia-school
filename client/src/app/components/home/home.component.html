@@ -93,10 +93,15 @@
         </div>
 
         <div class="div-slider-courses">
-            <button class="button-nav" (click)="prevCourse()">❮</button>
+            <button class="button-nav" [class.disabled]="currentIndexCourse === 0" [disabled]="currentIndexCourse === 0"
+                (click)="prevCourse()">❮</button>
 
             <div class="div-bg-course-from-backend"
-                *ngFor="let sliderCourses of sliderCourses.slice(currentIndexCourse, currentIndexCourse + 1)">
+                *ngFor="let sliderCourses of sliderCourses.slice(currentIndexCourse, currentIndexCourse + 1)"
+                [@slideAnimation]="direction" [@.disabled]="disableAnimation" [@slideAnimation]="{
+                value: direction.value,
+                params: direction.params
+                }">
                 <div class="div-bg-title-img">
                     <img [src]="sliderCourses.image" [alt]="sliderCourses.nameTitleCourse">
                     <span class="span-course">دوره پروژه محور {{sliderCourses.nameTitleCourse}}</span>
@@ -145,7 +150,8 @@
                 </div>
             </div>
 
-            <button class="button-nav" (click)="nextCourse()">❯</button>
+            <button class="button-nav" [class.disabled]="currentIndexCourse === sliderCourses.length - 1"
+                [disabled]="currentIndexCourse === sliderCourses.length - 1" (click)="nextCourse()">❯</button>
         </div>
     </section>
 
@@ -164,24 +170,28 @@
         </div>
 
         <div class="slider-wrapper">
-            <button class="button-nav" (click)="prev()">❮</button>
+            <button class="button-nav" [disabled]="currentIndex === 0" [class.disabled]="currentIndex === 0"
+                (click)="prev()">❮</button>
 
             <div class="slider-window">
-                <div class="slide" *ngFor="let slide of slides.slice(currentIndex, currentIndex + 1)">
-                    <span class="description">{{ slide.description}}</span>
-                    <div class="bottom-description">
-                        <div class="right">
-                            <img class="profile" [src]="slide.image" [alt]="slide.name" />
-                        </div>
-                        <div class="left">
-                            <span class="name">{{ slide.name }}</span>
-                            <span class="course">{{ slide.course }}</span>
+                <div class="slide-track" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
+                    <div class="slide" *ngFor="let slide of slides">
+                        <span class="description">{{ slide.description }}</span>
+                        <div class="bottom-description">
+                            <div class="right">
+                                <img class="profile" [src]="slide.image" [alt]="slide.name" />
+                            </div>
+                            <div class="left">
+                                <span class="name">{{ slide.name }}</span>
+                                <span class="course">{{ slide.course }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <button class="button-nav" (click)="next()">❯</button>
+            <button class="button-nav" [disabled]="currentIndex === slides.length - 1"
+                [class.disabled]="currentIndex === slides.length - 1" (click)="next()">❯</button>
         </div>
     </section>
 
