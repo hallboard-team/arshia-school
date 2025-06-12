@@ -5,7 +5,7 @@
     gap: 1rem;
     justify-content: center;
     align-items: center;
-    margin-top: 6rem;
+    margin-top: 8rem;
 
     .div-top {
         width: 90%;
@@ -251,6 +251,8 @@
 
 @media (min-width: 1100px) {
     .section-enrolled-course {
+        margin-top: 6rem;
+
         .div-top {
             width: 30%;
         }

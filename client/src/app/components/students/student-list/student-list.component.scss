@@ -12,8 +12,9 @@
         font-size: 30px;
         color: black;
         font-weight: 700;
-        margin-top: 6.5rem;
+        margin-top: 8rem;
     }
+
     .div-cards-student {
         width: 100%;
         display: flex;
@@ -23,13 +24,14 @@
         gap: 1rem;
         // margin-top: 5rem;
     }
+
     .paginator {
         // position: absolute;
         // bottom: 1rem;
         width: 90%;
         border-radius: 10px;
         background: linear-gradient(145deg, #f0f0f0, #cacaca);
-        box-shadow:  5px 5px 10px #5a5a5a,
+        box-shadow: 5px 5px 10px #5a5a5a,
             -5px -5px 10px #ffffff;
     }
 }
@@ -50,6 +52,11 @@
 
 @media (min-width: 1100px) {
     .students-container {
+
+        .title {
+            margin-top: 6rem;
+        }
+
         .div-cards-student {
             width: 80%;
         }

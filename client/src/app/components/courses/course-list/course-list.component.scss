@@ -22,7 +22,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 7rem;
+        margin-top: 8.5rem;
         margin-bottom: 1.5rem;
 
         span {
@@ -37,19 +37,19 @@
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        
+
         button {
             text-decoration: none;
             border: none;
             background-color: transparent;
             margin-right: 1rem;
             border-radius: 10px;
-            padding: 1rem;        
+            padding: 1rem;
             background: #e0e0e0;
             box-shadow: inset 5px 5px 10px #a6a6a6af,
                 inset -5px -5px 10px #ffffff;
             transition: 0.4s;
-            
+
             .btn2 {
                 color: red;
                 font-weight: bold;
@@ -61,7 +61,7 @@
             transform: scale(1.03);
             transition: 0.4s;
             background: linear-gradient(145deg, #f0f0f0, #cacaca);
-            box-shadow:  5px 5px 10px #b1b1b1,
+            box-shadow: 5px 5px 10px #b1b1b1,
                 -5px -5px 10px #ffffff;
             transition: 0.4s;
         }
@@ -71,7 +71,7 @@
         margin-top: 1.5rem;
         border-radius: 10px;
         background: linear-gradient(145deg, #f0f0f0, #cacaca);
-        box-shadow:  5px 5px 10px #b1b1b1,
+        box-shadow: 5px 5px 10px #b1b1b1,
             -5px -5px 10px #ffffff;
     }
 }
@@ -79,5 +79,13 @@
 @media (min-width: 768px) {
     .courses {
         flex-direction: row;
+    }
+}
+
+@media (min-width: 1100px) {
+    .courses-container {
+        .div-title-course {
+            margin-top: 8rem;
+        }
     }
 }

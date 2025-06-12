@@ -1,6 +1,43 @@
-button {
-    margin: 0 5px;
-    padding: 6px 12px;
-    font-size: 16px;
-    cursor: pointer;
+.div-btns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    button {
+        font-size: 15px;
+        cursor: pointer;
+        border: none;
+        padding: 5px;
+        border-radius: 8px;
+        background-color: rgba(0, 0, 0, 0);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        mat-icon {
+            font-size: 24px;
+            color: white;
+            transition: color 0.3s ease;
+        }
+
+        &.active {
+            background-color: #1976d2;
+
+            mat-icon {
+                color: white;
+                font-weight: bold;
+            }
+        }
+
+        &:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+
+            mat-icon {
+                color: #aaa;
+            }
+        }
+    }
 }

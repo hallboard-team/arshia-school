@@ -1,2 +1,10 @@
-<button *ngIf="history.canGoBack$ | async" (click)="goBack()">← Back</button>
-<button *ngIf="history.canGoForward$ | async" (click)="goForward()">Forward →</button>
+<div class="div-btns">
+    <button [disabled]="!(history.canGoBack$ | async)" [class.active]="lastClicked === 'back'" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    <button [disabled]="!(history.canGoForward$ | async)" [class.active]="lastClicked === 'forward'"
+        (click)="goForward()">
+        <mat-icon>arrow_forward</mat-icon>
+    </button>
+</div>
