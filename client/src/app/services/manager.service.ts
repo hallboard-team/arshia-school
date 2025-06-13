@@ -109,10 +109,15 @@ export class ManagerService {
     return this._http.put(this._apiUrl + 'update-enrolledCourse/' + targetUserName, updateEnrolledCourse)
   }
 
-  deletePhoto(url_165In: string, targetPaymentId: string | null): Observable<ApiResponse> {
-    let queryParams = new HttpParams().set('photoUrlIn', url_165In);
+  // deletePhoto(url_165In: string, targetPaymentId: string | null): Observable<ApiResponse> {
+  //   let queryParams = new HttpParams().set('photoUrlIn', url_165In);
 
-    return this._http.put<ApiResponse>(this._apiUrl + 'delete-photo/' + targetPaymentId, null, { params: queryParams });
+  //   return this._http.put<ApiResponse>(this._apiUrl + 'delete-photo/' + targetPaymentId, null, { params: queryParams });
+  // }
+  deletePhoto(url_165: string, paymentId: string | null): Observable<ApiResponse> {
+    return this._http.delete<ApiResponse>(
+      `${this._apiUrl}delete-photo/${paymentId}?photoUrlIn=${url_165}`
+    );
   }
 
   // getUsersWithRoles(): Observable<UserWithRole[]> {

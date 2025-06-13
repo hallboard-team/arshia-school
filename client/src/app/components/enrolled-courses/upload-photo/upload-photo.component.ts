@@ -59,6 +59,7 @@ export class UploadPhotoComponent implements OnInit {
           next: (response) => {
             console.log(response);
             this.payment = response;
+            this.initializeUploader();
             // this.dataSource = response.payments || [];
             // this.setGalleryImages();
           },

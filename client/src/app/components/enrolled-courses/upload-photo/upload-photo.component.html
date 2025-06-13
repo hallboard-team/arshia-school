@@ -1,10 +1,56 @@
 <section class="section-upload-photo">
     <section class="top">
-        <div *ngIf="payment?.photo === null" class="div-empty-album">
+        <!-- <div *ngIf="payment?.photo === null" class="div-empty-album">
             <mat-error>Your album is empty. You may upload a photo.</mat-error>
-        </div>
+        </div> -->
+        <ng-container *ngIf="payment?.photo; else noPhoto">
+            <div class="gallery">
+                <div class="photos">
+                    <img [ngSrc]="photoUrl + payment?.photo?.url_256" width="265" height="265"
+                        [alt]="payment?.method + ' photo'" priority />
 
-        <div class="gallery" *ngIf="payment?.photo as photo">
+                    <div class="buttons">
+                        <button mat-stroked-button color="primary" disabled>انتخاب عکس</button>
+                        <button (click)="deletePhotoComp(payment!.photo!.url_165!)" mat-mini-fab color="warn">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-template #noPhoto>
+            <div class="div-empty-album">
+                <mat-error>Your album is empty. You may upload a photo.</mat-error>
+            </div>
+        </ng-template>
+
+        @if(loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
+        <div class="upload-photo-area">
+            <mat-card ng2FileDrop (fileOver)="fileOverBase($event)" (click)="fileInput.click()" [uploader]="uploader"
+                [ngClass]="{
+                     'nv-file-not-over': !hasBaseDropZoneOver,
+                     'nv-file-over': hasBaseDropZoneOver
+                  }">
+
+                <mat-card-header>
+                    <mat-card-title>اضافه کردن عکس</mat-card-title>
+                    <mat-card-subtitle>کلیک کنید یا دراپ کنید</mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-content>
+                    <mat-icon>cloud_upload</mat-icon>
+                </mat-card-content>
+
+                <mat-card-actions>
+                    <button mat-raised-button type="button">انتخاب عکس</button>
+                    <input #fileInput type="file" multiple ng2FileSelect [uploader]="uploader" />
+                </mat-card-actions>
+
+            </mat-card>
+        </div>
+        }
+        <!-- <div class="gallery" *ngIf="payment?.photo as photo">
             <div class="photos">
                 <img [ngSrc]="photoUrl + photo.url_256" width="265" height="265" [alt]="payment?.method + ' photo'"
                     priority />
@@ -17,21 +63,6 @@
                     </button>
                 </div>
             </div>
-
-            <!-- @for (photo of payment.photo; track $index) {
-            <div class="photos">
-                <img ngSrc="{{photoUrl + photo.url_165}}" width="165" height="165" alt="{{payment?.method}} photo"
-                    priority>
-                <div class="buttons">
-                    <button mat-stroked-button color="primary" [disabled]="photo.isMain">
-                        Set profile
-                    </button>
-                    <button (click)="deletePhotoComp(photo.url_165, $index)" mat-mini-fab
-                        color="warn"><mat-icon>delete</mat-icon>
-                    </button>
-                </div>
-            </div>
-            } -->
 
             @if(loggedInUserSig && loggedInUserSig()) {
             @if(loggedInUserSig()?.roles?.includes('manager')) {
@@ -59,7 +90,7 @@
             </div>
             }
             }
-        </div>
+        </div> -->
     </section>
 
     @if (uploader && uploader.queue && uploader.queue.length) {
