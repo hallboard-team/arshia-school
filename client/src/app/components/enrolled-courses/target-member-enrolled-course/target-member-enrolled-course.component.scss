@@ -126,6 +126,7 @@
 
     .mat-elevation-z8 {
         border-radius: 10px;
+        width: 100%;
         background: linear-gradient(145deg, #f0f0f0, #cacaca);
         box-shadow: 5px 5px 10px #a4a4a4,
             -5px -5px 10px #ffffff;
@@ -191,9 +192,22 @@
         }
 
         .button-add-photo {
-            background-color: red;
-            height: 30px;
-            width: 30px;
+            height: 40px;
+            width: 40px;
+            border: none;
+            padding: 5px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .button-add-photo:hover {
+            cursor: pointer;
+            transform: scale(1.05);
+            transition: 0.3s;
         }
 
         // .gallery {
@@ -235,9 +249,21 @@
         }
 
         .no-photo {
-            color: red;
+            color: black;
             direction: rtl;
+            font-size: 13px;
         }
+    }
+}
+
+::ng-deep {
+    .photo-area {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
     }
 }
 
@@ -245,6 +271,10 @@
     .section-enrolled-course {
         .div-top {
             width: 50%;
+        }
+
+        .photo-area {
+            flex-direction: row;
         }
     }
 }
