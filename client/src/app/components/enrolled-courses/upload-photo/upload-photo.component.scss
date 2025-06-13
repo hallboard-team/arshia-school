@@ -1,0 +1,111 @@
+.section-upload-photo {
+    width: 100%;
+
+    .top {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+
+        .div-empty-album {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 3rem;
+
+            mat-error {
+                font-size: 15px;
+                color: black;
+            }
+        }
+
+        .gallery {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 1rem;
+
+            .photos {
+                width: 100%;
+
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 1rem;
+
+                .buttons {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 1rem;
+                }
+            }
+
+            .upload-photo-area {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                mat-card {
+                    width: 90%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-direction: column;
+
+                    mat-card-header {
+                        direction: rtl;
+                        color: black;
+                        font-weight: bold;
+                    }
+
+                    mat-card-actions {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        flex-direction: column;
+                        gap: 1rem;
+
+                        input {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 768px) {
+    .section-upload-photo {
+        .top {
+            .gallery {
+                .upload-photo-area {
+                    mat-card {
+                        width: 50%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 1100px) {
+    .section-upload-photo {
+        .top {
+            .gallery {
+                .upload-photo-area {
+                    mat-card {
+                        width: 30%;
+                    }
+                }
+            }
+        }
+    }
+}
