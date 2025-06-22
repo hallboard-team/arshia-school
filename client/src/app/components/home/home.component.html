@@ -26,7 +26,9 @@
                 با طلوع فناوری</span>
 
             <div class="div-button-start">
-                <button class="button-start">شروع یادگیری برنامه نویسی</button>
+                <button class="button-start" [routerLink]="['contact-us']" routerLinkActive #rla="routerLinkActive">شروع
+                    یادگیری برنامه نویسی
+                </button>
             </div>
         </div>
 
@@ -79,7 +81,7 @@
 
         <div class="div-bg-course">
             <div class="div-course">
-                <div class="left-item">
+                <div class="left-item" [routerLink]="['courses']" routerLinkActive #rla="routerLinkActive">
                     <mat-icon>north_west</mat-icon>
                 </div>
                 <div class="center-item">
@@ -114,7 +116,7 @@
                     </div>
 
                     <div class="left">
-                        <div class="bg-icon">
+                        <div class="bg-icon" [routerLink]="['courses']" routerLinkActive #rla="routerLinkActive">
                             <mat-icon>chevron_left</mat-icon>
                         </div>
                     </div>
@@ -142,10 +144,19 @@
                         </div>
                     </div>
                     <div class="bottom">
-                        <button class="btn-click-course"> <mat-icon
-                                class="icon-after-hover">keyboard_backspace</mat-icon><mat-icon
-                                class="icon-befor-hover">north_west</mat-icon>مشاهده دوره</button>
-                        <button class="btn-like"><mat-icon>favorite</mat-icon></button>
+                        <button class="btn-click-course" [routerLink]="['courses']" routerLinkActive
+                            #rla="routerLinkActive">
+                            <mat-icon class="icon-after-hover">
+                                keyboard_backspace
+                            </mat-icon>
+                            <mat-icon class="icon-befor-hover">
+                                north_west
+                            </mat-icon>مشاهده دوره
+                        </button>
+
+                        <button class="btn-like">
+                            <mat-icon>favorite</mat-icon>
+                        </button>
                     </div>
                 </div>
             </div>

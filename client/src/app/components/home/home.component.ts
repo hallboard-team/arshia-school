@@ -43,11 +43,11 @@ import { trigger, transition, style, animate, AnimationEvent } from '@angular/an
     trigger('slideAnimation', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateX({{ enterFrom }})' }),
-        animate('400ms ease', style({ opacity: 1, transform: 'translateX(0)' }))
+        animate('200ms ease', style({ opacity: 1, transform: 'translateX(0)' }))
       ], { params: { enterFrom: '100%' } }),
 
       transition(':leave', [
-        animate('400ms ease', style({ opacity: 0, transform: 'translateX({{ leaveTo }})' }))
+        animate('200ms ease', style({ opacity: 0, transform: 'translateX({{ leaveTo }})' }))
       ], { params: { leaveTo: '-100%' } })
     ])
   ]
