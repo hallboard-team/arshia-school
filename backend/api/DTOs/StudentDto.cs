@@ -1,4 +1,5 @@
 namespace api.DTOs;
+
 public record AddStudentStatusDto(
     // ObjectId StudentId,
     string UserName,
@@ -7,7 +8,7 @@ public record AddStudentStatusDto(
     // string AbsentOrPresent
     bool IsAbsent
 );
-  
+
 public class ShowStudentStatusDto
 {
     // public AppUser? UserName { get; init; }
@@ -15,7 +16,7 @@ public class ShowStudentStatusDto
     // public string UserName { get; init; } = string.Empty;
     // public string DaysOfWeek { get; init; }
     public DateOnly Date { get; init; }
-    public string CourseId { get; init; }
+    public string CourseId { get; init; } = string.Empty;
     // public string AbsentOrPresent { get; init; }
     // public bool IsPresent { get; init; }
 }

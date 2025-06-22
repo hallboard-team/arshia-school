@@ -143,10 +143,44 @@ export class AddCourseComponent implements OnInit {
   //   this.StartCtrl.setValue(selectedDate);
   // }
   // فاصله امروز تا تاریخ انتخاب‌شده باید <= 1 سال باشه
-  onSelect(date: IActiveDate) {
-    moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
-    const shamsi = date.shamsi; // مثل: 1404/03/13
+  // onSelect(date: IActiveDate) {
+  //   moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
+
+  //   const shamsi = date.shamsi; // مثل: 1404/03/13
+
+  //   const isValidJalali = /^\d{4}\/\d{2}\/\d{2}$/.test(shamsi);
+  //   if (!isValidJalali) {
+  //     this._matSnackBar.open("تاریخ انتخاب شده معتبر نیست", "بستن", {
+  //       duration: 5000,
+  //       horizontalPosition: 'center',
+  //       verticalPosition: 'bottom'
+  //     });
+  //     return;
+  //   }
+
+  //   // const miladiDate = moment(shamsi, 'jYYYY/jMM/jDD').format('YYYY-MM-DD');
+  //   const miladiDate = moment(shamsi, 'jYYYY/jMM/jDD').toDate();
+  //   const selected = new Date(miladiDate);
+  //   const today = new Date();
+  //   const oneYearLater = new Date();
+  //   oneYearLater.setFullYear(today.getFullYear() + 1);
+
+  //   if (selected > oneYearLater) {
+  //     this._matSnackBar.open("تاریخ بیش از یک سال آینده مجاز نیست", "بستن", {
+  //       duration: 5000,
+  //       horizontalPosition: 'center',
+  //       verticalPosition: 'bottom'
+  //     });
+  //     return;
+  //   }
+
+  //   this.shamsiDisplayDate = shamsi;
+  //   this.StartCtrl.setValue(miladiDate);
+  // }
+
+  onSelect(date: IActiveDate) {
+    const shamsi = date.shamsi;
 
     const isValidJalali = /^\d{4}\/\d{2}\/\d{2}$/.test(shamsi);
     if (!isValidJalali) {
@@ -158,23 +192,24 @@ export class AddCourseComponent implements OnInit {
       return;
     }
 
-    const miladiDate = moment(shamsi, 'jYYYY/jMM/jDD').format('YYYY-MM-DD');
-    const selected = new Date(miladiDate);
+    const miladiDateObj = moment(shamsi, 'jYYYY/jMM/jDD').toDate(); // <-- ✅ create a real Date
     const today = new Date();
     const oneYearLater = new Date();
     oneYearLater.setFullYear(today.getFullYear() + 1);
 
-    if (selected > oneYearLater) {
-      this._matSnackBar.open("تاریخ بیش از یک سال آینده مجاز نیست", "بستن", {
-        duration: 5000,
-        horizontalPosition: 'center',
-        verticalPosition: 'bottom'
-      });
-      return;
-    }
+    // if (miladiDateObj > oneYearLater) {
+    //   this._matSnackBar.open("تاریخ بیش از یک سال آینده مجاز نیست", "بستن", {
+    //     duration: 5000,
+    //     horizontalPosition: 'center',
+    //     verticalPosition: 'bottom'
+    //   });
+    //   return;
+    // }
+
+    console.log(miladiDateObj);
 
     this.shamsiDisplayDate = shamsi;
-    this.StartCtrl.setValue(miladiDate);
+    this.StartCtrl.setValue(miladiDateObj); // ✅ not string
   }
 
   // onSelect(date: IActiveDate) {

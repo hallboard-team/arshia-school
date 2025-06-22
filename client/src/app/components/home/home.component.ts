@@ -84,7 +84,7 @@ export class HomeComponent implements OnInit {
   ];
 
   sliderCourses = [
-    { nameTitleCourse: 'Full-Stack', image: 'assets/images/background-full-stack3.jpg', chapter: '2', hourse: '300', teacher: ' وحید حیاطی پور' },
+    { nameTitleCourse: 'Full-Stack', image: 'assets/images/background-full-stack3-RS.jpg', chapter: '2', hourse: '300', teacher: ' وحید حیاطی پور' },
     { nameTitleCourse: 'C#', image: 'assets/images/background-full-stack2.jpg', chapter: '4', hourse: '400', teacher: 'پارسا جعفری' },
     { nameTitleCourse: 'Angular', image: 'assets/images/background-full-stack4.jpg', chapter: '2', hourse: '200', teacher: 'ارشیا رضایی' },
   ];

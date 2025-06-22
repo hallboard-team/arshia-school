@@ -6,8 +6,6 @@ import { AccountService } from './services/account.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { LightboxModule } from 'ngx-lightbox';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BrowserModule } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',

@@ -6,21 +6,17 @@
 
 <section id="section-main">
   <div class="div-background">
-    <!-- <div class="div-photo"> -->
-      <img class="left-side-img" src="../assets/images/homePicture1.jpeg" alt="">
-      <!-- <img class="left-side-img" src="../assets/images/homePic1.png" alt=""> -->
-      <!-- <img class="left-side-img" src="../assets/images/homePic1.jpg" alt=""> -->
-
-    <!-- </div> -->
+    <img class="left-side-img" src="../assets/images/loginPhotoRS.jpg" alt="">
 
     <form class="login-form" [formGroup]="loginFg" (ngSubmit)="loginFg.valid && login()">
       <div class="content">
         <span class="title">به آکادمی طلوع فناوری خوش آمدید</span>
         <!-- <p class="matn-sepanta">به سپتابپیوندید و با متد های آمریکایی بیاموزید</p> -->
-    
+
         <mat-form-field appearance="outline">
           <mat-label>ایمیل</mat-label>
-          <input autoFocusDir type="email" formControlName="emailCtrl" label="email" placeHolder="ایمیل خود را وارد کنید" matInput>
+          <input autoFocusDir type="email" formControlName="emailCtrl" label="email"
+            placeHolder="ایمیل خود را وارد کنید" matInput>
           @if (EmailCtrl.hasError('required')) {
           <mat-error>!این فیلد خالی است</mat-error>
           }
@@ -28,7 +24,7 @@
           <mat-error>در انتخاب فرمت ایمیل دقت کنید</mat-error>
           }
         </mat-form-field>
-    
+
         <mat-form-field appearance="outline">
           <mat-label>رمز عبور</mat-label>
           <input type="password" formControlName="passwordCtrl" label="password" placeHolder="پسوورد" matInput>
@@ -37,16 +33,17 @@
           }
           @else if (PasswordCtrl.errors && PasswordCtrl.hasError('minlength')) {
           <mat-error>
-          حداقل این مقدار باید باشد {{PasswordCtrl.errors['minlength'].requiredLength}} خیلی کوتاه است.
-          .شما این مقدار وارد کردین {{PasswordCtrl.errors['minlength'].actualLength}} 
+            حداقل این مقدار باید باشد {{PasswordCtrl.errors['minlength'].requiredLength}} خیلی کوتاه است.
+            .شما این مقدار وارد کردین {{PasswordCtrl.errors['minlength'].actualLength}}
           </mat-error>
           }
           @else if(PasswordCtrl.errors && PasswordCtrl.hasError('maxlength')) {
           <mat-error>It's too long. Max: {{PasswordCtrl.errors['maxlength'].requiredLength}} characters.</mat-error>
           }
         </mat-form-field>
-    
-        <button class="button-login" type="submit" [disabled]="loginFg.invalid" mat-raised-button color="primary">ورود</button>
+
+        <button class="button-login" type="submit" [disabled]="loginFg.invalid" mat-raised-button
+          color="primary">ورود</button>
         <div class="div-signUp">
           <span>ثبت نام نکرده اید؟</span>
           <a href="">ثبت نام</a>
@@ -55,12 +52,12 @@
           <span>رمز عبور خودرا فراموش کردید؟</span>
           <a href="">بازیابی رمزعبور</a>
         </div>
-        
-    
+
+
         <mat-error>{{wrongUsernameOrPassword}}.</mat-error>
       </div>
     </form>
-  </div>  
+  </div>
 </section>
 <!-- <section class="section-login-page">
     <div class="div-photo-login-page">

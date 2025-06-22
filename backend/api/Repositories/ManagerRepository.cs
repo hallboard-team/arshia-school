@@ -5,6 +5,7 @@ public class ManagerRepository : IManagerRepository
     #region Vars and Constructor 
     private readonly IMongoCollection<AppUser>? _collectionAppUser;
     private readonly IMongoCollection<Course>? _collectionCourse;
+    private readonly IMongoCollection<Attendence>? _collectionAttendence;
     private readonly UserManager<AppUser> _userManager;
     private readonly ITokenService _tokenService;
     private readonly IMongoClient _client; // used for Session
@@ -585,5 +586,29 @@ public class ManagerRepository : IManagerRepository
         return courseTitles.Count <= 0
             ? null
             : courseTitles;
+    }
+
+    public async Task<PagedList<Attendence>> GetAllAttendenceAsync(AttendenceParams attendenceParams, string targetMemberUserName, string targetCourseTitle, CancellationToken cancellationToken)
+    {
+        AppUser? appUser = await _collectionAppUser.Find<AppUser>(
+            doc => doc.NormalizedUserName == targetMemberUserName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        if (appUser is null)
+            return null;
+
+        ObjectId? targetCourseId = await _collectionCourse.AsQueryable()
+            .Where(doc => doc.Title == targetCourseTitle.ToUpper())
+            .Select(doc => doc.Id)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (targetCourseId is null)
+            return null;
+
+        // inja bug daram ke date in studentId ke az attendenceParams miyad ro ba in appUserId moghayess mikonae
+        //valie man attendenceParams Id ro por nkardam
+
+        IMongoQueryable<Attendence>? query = _collectionAttendence.AsQueryable<Attendence>()
+            .Where(doc => doc.StudentId == appUser.Id && doc.CourseId == targetCourseId);
+
+        return await PagedList<Attendence>.CreatePagedListAsync(query, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
     }
 }

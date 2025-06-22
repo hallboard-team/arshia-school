@@ -22,4 +22,5 @@ public interface IManagerRepository
     public Task<EnrolledCourse?> GetTargetMemberEnrolledCourseAsync(string targetUserName, string courseTitle, CancellationToken cancellationToken);
     public Task<Payment?> GetTargetPaymentByIdAsync(string targetPaymentId, CancellationToken cancellationToken);
     public Task<List<string>> GetTargetCourseTitleAsync(string targetUserName, CancellationToken cancellationToken);
+    public Task<PagedList<Attendence>> GetAllAttendenceAsync(AttendenceParams attendenceParams, string targetMemberUserName, string targetCourseTitle, CancellationToken cancellationToken);
 }
