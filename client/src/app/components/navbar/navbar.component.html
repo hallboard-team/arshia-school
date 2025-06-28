@@ -51,15 +51,27 @@
                     <button [routerLink]="['/' + 'profile']" routerLinkActive
                         #rla="routerLinkActive"><span>پروفایل</span></button>
 
-                    @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
-                    <button [routerLink]="['/' + 'manager-panel']" routerLinkActive
-                        #rla="routerLinkActive"><span>پنل-مدیر</span></button>
-                    <button [routerLink]="['/' + 'members']" routerLinkActive
-                        #rla="routerLinkActive"><span>کاربران</span></button>
+                    @if (
+                    loggedInUserSig &&
+                    loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
+                    loggedInUserSig()?.roles?.includes('manager')
+                    ) {
+                    <button [routerLink]="['/' + 'manager-panel']"><span>پنل-مدیر</span></button>
                     }
-                    @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('teacher')) {
-                    <button [routerLink]="['/' + 'teacher-panel']" routerLinkActive
-                        #rla="routerLinkActive"><span>پنل-معلم</span></button>
+
+                    @if (
+                    loggedInUserSig &&
+                    loggedInUserSig()?.roles?.includes('manager')
+                    ) {
+                    <button [routerLink]="['/' + 'members']"><span>کاربران</span></button>
+                    }
+
+                    @if (
+                    loggedInUserSig &&
+                    loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
+                    loggedInUserSig()?.roles?.includes('teacher')
+                    ) {
+                    <button [routerLink]="['/' + 'teacher-panel']"><span>پنل-معلم</span></button>
                     }
                 </div>
 
@@ -130,16 +142,29 @@
                     <button [routerLink]="['/' + 'profile']" routerLinkActive
                         #rla="routerLinkActive"><span>پروفایل</span></button>
 
-                    @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
-                    <button [routerLink]="['/' + 'manager-panel']" routerLinkActive
-                        #rla="routerLinkActive"><span>پنل-مدیر</span></button>
-                    <button [routerLink]="['/' + 'members']" routerLinkActive
-                        #rla="routerLinkActive"><span>کاربران</span></button>
+                    @if (
+                    loggedInUserSig &&
+                    loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
+                    loggedInUserSig()?.roles?.includes('manager')
+                    ) {
+                    <button [routerLink]="['/' + 'manager-panel']"><span>پنل-مدیر</span></button>
                     }
-                    @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('teacher')) {
-                    <button [routerLink]="['/' + 'teacher-panel']" routerLinkActive
-                        #rla="routerLinkActive"><span>پنل-معلم</span></button>
+
+                    @if (
+                    loggedInUserSig &&
+                    loggedInUserSig()?.roles?.includes('manager')
+                    ) {
+                    <button [routerLink]="['/' + 'members']"><span>کاربران</span></button>
                     }
+
+                    @if (
+                    loggedInUserSig &&
+                    loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
+                    loggedInUserSig()?.roles?.includes('teacher')
+                    ) {
+                    <button [routerLink]="['/' + 'teacher-panel']"><span>پنل-معلم</span></button>
+                    }
+
                 </div>
 
                 <div class="div-btn-log-out">
@@ -156,7 +181,7 @@
 
         <div class="div-logo">
             <img [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive"
-                src="../assets/images/logo-tolou-fanavariRS.jpg" alt="">
+                src="../assets/images/logo-tolou-fanavariRS.png" alt="">
         </div>
     </section>
 </nav>
