@@ -17,6 +17,7 @@ import {
   NgPersianDatepickerModule
 } from '../../../../../projects/ng-persian-datepicker/src/public-api';
 import moment from 'moment-jalaali';
+import { CurrencyFormatterDirective } from '../../../directives/currency-formatter.directive';
 
 moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
@@ -29,7 +30,7 @@ moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
     MatButtonModule, MatSnackBarModule,
     AutoFocusDirective,
     MatIconModule, NavbarComponent,
-    NgPersianDatepickerModule
+    NgPersianDatepickerModule, CurrencyFormatterDirective
   ],
   templateUrl: './add-course.component.html',
   styleUrl: './add-course.component.scss'
