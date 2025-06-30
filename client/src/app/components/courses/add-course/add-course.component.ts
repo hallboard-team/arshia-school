@@ -18,6 +18,7 @@ import {
 } from '../../../../../projects/ng-persian-datepicker/src/public-api';
 import moment from 'moment-jalaali';
 import { CurrencyFormatterDirective } from '../../../directives/currency-formatter.directive';
+import { HttpClient } from '@angular/common/http';
 
 moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
@@ -35,7 +36,7 @@ moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
   templateUrl: './add-course.component.html',
   styleUrl: './add-course.component.scss'
 })
-export class AddCourseComponent implements OnInit {
+export class AddCourseComponent {
 
   fb = inject(FormBuilder);
   private _courseService = inject(CourseService);
@@ -50,7 +51,10 @@ export class AddCourseComponent implements OnInit {
   uiTodayBtnEnable: boolean = true;
 
   shamsiDisplayDate: string = '';
-  formattedTuition: string = ''; // برای نمایش با فرمت فارسی
+
+  dateCtrl = new FormControl();
+
+  constructor(private http: HttpClient) { }
 
   addCourseFg = this.fb.group({
     titleCtrl: ['', [Validators.required]],
@@ -76,12 +80,12 @@ export class AddCourseComponent implements OnInit {
     return this.addCourseFg.get('startCtrl') as FormControl;
   }
 
-  ngOnInit() {
-    const val = this.TuitionCtrl.value;
-    if (val) {
-      this.formattedTuition = Number(val).toLocaleString('fa-IR') + ' تومان';
-    }
-  }
+  // ngOnInit() {
+  //   const val = this.TuitionCtrl.value;
+  //   if (val) {
+  //     this.formattedTuition = Number(val).toLocaleString('fa-IR') + ' تومان';
+  //   }
+  // }
 
   // onDateChange(jalaliDate: string): void {
   //   const miladiDate = moment(jalaliDate, 'jYYYY/jMM/jDD').format('YYYY-MM-DD');
@@ -116,25 +120,6 @@ export class AddCourseComponent implements OnInit {
       }
     })
   }
-
-  onTuitionInput(value: string): void {
-    // حذف هر چیزی که عدد نیست
-    const raw = value.replace(/[^0-9]/g, '');
-
-    if (raw) {
-      const numeric = parseInt(raw, 10);
-      this.formattedTuition = this.formatEnglishNumber(numeric); // 1,560,000
-      this.TuitionCtrl.setValue(numeric); // فقط عدد خالص ذخیره میشه
-    } else {
-      this.formattedTuition = '';
-      this.TuitionCtrl.setValue('');
-    }
-  }
-
-  formatEnglishNumber(num: number): string {
-    return num.toLocaleString('en-US');  // این خودش عدد رو سه‌رقمی با کاما جدا می‌کنه
-  }
-
 
   // onSelect(date: IActiveDate) {
   //   // console.log(date);
@@ -180,38 +165,49 @@ export class AddCourseComponent implements OnInit {
   //   this.StartCtrl.setValue(miladiDate);
   // }
 
-  onSelect(date: IActiveDate) {
-    const shamsi = date.shamsi;
+  onDateSelect(event: {
+    shamsi: string;
+    gregorian: string;
+    timestamp: number;
+  }): void {
+    this.shamsiDisplayDate = event.shamsi; // برای نمایش در input
+    this.StartCtrl.setValue(new Date(event.gregorian)); // تاریخ میلادی برای ارسال
 
-    const isValidJalali = /^\d{4}\/\d{2}\/\d{2}$/.test(shamsi);
-    if (!isValidJalali) {
-      this._matSnackBar.open("تاریخ انتخاب شده معتبر نیست", "بستن", {
-        duration: 5000,
-        horizontalPosition: 'center',
-        verticalPosition: 'bottom'
-      });
-      return;
-    }
-
-    const miladiDateObj = moment(shamsi, 'jYYYY/jMM/jDD').toDate(); // <-- ✅ create a real Date
-    const today = new Date();
-    const oneYearLater = new Date();
-    oneYearLater.setFullYear(today.getFullYear() + 1);
-
-    // if (miladiDateObj > oneYearLater) {
-    //   this._matSnackBar.open("تاریخ بیش از یک سال آینده مجاز نیست", "بستن", {
-    //     duration: 5000,
-    //     horizontalPosition: 'center',
-    //     verticalPosition: 'bottom'
-    //   });
-    //   return;
-    // }
-
-    console.log(miladiDateObj);
-
-    this.shamsiDisplayDate = shamsi;
-    this.StartCtrl.setValue(miladiDateObj); // ✅ not string
+    this.closeDatePicker(); // بستن تقویم
   }
+
+  // onSelect(date: IActiveDate) {
+  //   const shamsi = date.shamsi;
+
+  //   const isValidJalali = /^\d{4}\/\d{2}\/\d{2}$/.test(shamsi);
+  //   if (!isValidJalali) {
+  //     this._matSnackBar.open("تاریخ انتخاب شده معتبر نیست", "بستن", {
+  //       duration: 5000,
+  //       horizontalPosition: 'center',
+  //       verticalPosition: 'bottom'
+  //     });
+  //     return;
+  //   }
+
+  //   const miladiDateObj = moment(shamsi, 'jYYYY/jMM/jDD').toDate(); // <-- ✅ create a real Date
+  //   const today = new Date();
+  //   const oneYearLater = new Date();
+  //   oneYearLater.setFullYear(today.getFullYear() + 1);
+
+  //   // if (miladiDateObj > oneYearLater) {
+  //   //   this._matSnackBar.open("تاریخ بیش از یک سال آینده مجاز نیست", "بستن", {
+  //   //     duration: 5000,
+  //   //     horizontalPosition: 'center',
+  //   //     verticalPosition: 'bottom'
+  //   //   });
+  //   //   return;
+  //   // }
+
+  //   console.log(miladiDateObj);
+
+  //   this.shamsiDisplayDate = shamsi;
+  //   this.StartCtrl.setValue(miladiDateObj); // ✅ not string
+  // }
 
   // onSelect(date: IActiveDate) {
   //   const shamsi = date.shamsi; // مثل: 1404/03/12

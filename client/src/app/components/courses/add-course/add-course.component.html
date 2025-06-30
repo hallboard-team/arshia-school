@@ -64,7 +64,8 @@
                 <mat-error>فرم رو پرکنید</mat-error>
                 }
             </mat-form-field> -->
-            <mat-form-field appearance="outline">
+
+            <!-- <mat-form-field appearance="outline">
                 <mat-label>تاریخ شروع دوره</mat-label>
                 <input class="input" [value]="shamsiDisplayDate" readonly (click)="openDatePicker()" matInput />
             </mat-form-field>
@@ -78,19 +79,35 @@
 
                 <div class="col offset-l2 l4 offset-m3 m6 offset-s2 s8">
                     <div class="datepicker-wrapper">
-                        <ng-persian-datepicker (dateOnSelect)="onSelect($event)" [dateFormat]="'jYYYY/jMM/jDD'"
-                            [dateGregorianFormat]="'YYYY-MM-DD'" [(uiIsVisible)]="uiIsVisible" [uiTheme]="uiTheme"
-                            [uiYearView]="uiYearView" [uiMonthView]="uiMonthView"
-                            [uiHideAfterSelectDate]="uiHideAfterSelectDate"
+                        <ng-persian-datepicker [calendarIsGregorian]="false" (dateOnSelect)="onDateSelect($event)"
+                            [dateFormat]="'jYYYY/jMM/jDD'" [dateGregorianFormat]="'YYYY-MM-DD'"
+                            [(uiIsVisible)]="uiIsVisible" [uiTheme]="uiTheme" [uiYearView]="uiYearView"
+                            [uiMonthView]="uiMonthView" [uiHideAfterSelectDate]="uiHideAfterSelectDate"
                             [uiHideOnOutsideClick]="uiHideOnOutsideClick" [uiTodayBtnEnable]="uiTodayBtnEnable">
 
                             <div class="input-field">
-                                <input type="text" formControlName="startCtrl" aria-label="Datepicker Input" />
+                                <input type="text" formControlName="dateCtrl" aria-label="Datepicker Input" />
                             </div>
                         </ng-persian-datepicker>
                     </div>
                 </div>
-            </div>
+            </div> -->
+
+            <mat-form-field appearance="outline">
+                <mat-label>تاریخ شروع دوره</mat-label>
+                <input class="input" [value]="shamsiDisplayDate" readonly (click)="openDatePicker()" matInput />
+            </mat-form-field>
+
+            <ng-persian-datepicker [calendarIsGregorian]="false" (dateOnSelect)="onDateSelect($event)"
+                [dateFormat]="'jYYYY/jMM/jDD'" [dateGregorianFormat]="'YYYY-MM-DD'" [(uiIsVisible)]="uiIsVisible"
+                [uiTheme]="uiTheme" [uiYearView]="uiYearView" [uiMonthView]="uiMonthView"
+                [uiHideAfterSelectDate]="uiHideAfterSelectDate" [uiHideOnOutsideClick]="uiHideOnOutsideClick"
+                [uiTodayBtnEnable]="uiTodayBtnEnable">
+
+                <!-- <div class="input-field">
+                    <input type="text" formControlName="dateCtrl" aria-label="Datepicker Input" />
+                </div> -->
+            </ng-persian-datepicker>
 
             <div class="div-btn-add">
                 <button type="submit" [disabled]="addCourseFg.invalid" mat-raised-button color="warn">ثبت دوره
