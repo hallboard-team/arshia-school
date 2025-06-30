@@ -1,30 +1,34 @@
 @if (courseIn) {
-    <!-- <section class="main-section">     -->
-        <!-- <div class="background-card"> -->
-            <div class="card-items">
-                <span class="course-title">{{ courseIn.title }}</span>
-                <span class="text">🕒 مدت دوره: {{ courseIn.hours }} ساعت</span>
-                <span class="text">📅 روزهای دوره: {{ courseIn.days }}</span>
-                <span class="text">⏳ ساعت به ازای هر کلاس: {{ courseIn.hoursPerClass }}</span>
-                <span class="teachers-name">اسم اساتید: {{courseIn.professorNames}}</span>
-                @if (courseIn.isStarted == 'true') {
-                    <span class="text-isStarted-true">در حال اجرا ✅</span>
-                }@else {
-                    <span class="text-isStarted-false">هنوز شروع نشده ❌</span>
-                }
-        
-                @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
-                    <div class="div-button-edit-course" 
-                        [routerLink]="['/' + 'update-course/' + courseIn.title]" routerLinkActive #rla="routerLinkActive">
-                        <button>ادیت دوره</button>
-                    </div>
-                }
-    
-                <!-- <button 
+<!-- <section class="main-section">     -->
+<!-- <div class="background-card"> -->
+<div class="card-items">
+    <span class="course-title">{{ courseIn.title }}</span>
+    <span class="text">🕒 مدت دوره: {{ courseIn.hours }} ساعت</span>
+    <span class="text">📅 روزهای دوره: {{ courseIn.days }}</span>
+    <span class="text">⏳ ساعت به ازای هر کلاس: {{ courseIn.hoursPerClass }}</span>
+    <div class="div-start-day">
+        <span class="title">📅 تاریخ شروع دوره</span>
+        <span class="result">{{ shamsiStartDate }}</span>
+    </div>
+    <span class="teachers-name">اسم اساتید: {{courseIn.professorNames}}</span>
+    @if (courseIn.isStarted == 'true') {
+    <span class="text-isStarted-true">در حال اجرا ✅</span>
+    }@else {
+    <span class="text-isStarted-false">هنوز شروع نشده ❌</span>
+    }
+
+    @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
+    <div class="div-button-edit-course" [routerLink]="['/' + 'update-course/' + courseIn.title]" routerLinkActive
+        #rla="routerLinkActive">
+        <button>ادیت دوره</button>
+    </div>
+    }
+
+    <!-- <button 
                     class="btn-click-student-show" [routerLink]="['/students-card/' + courseIn.title]">
                     مشاهده دانش‌آموزان 📚
                 </button> -->
-            </div>
-        <!-- </div> -->
-    <!-- </section> -->
+</div>
+<!-- </div> -->
+<!-- </section> -->
 }
