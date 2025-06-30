@@ -31,7 +31,7 @@ export class CourseCardComponent implements OnInit {
   // }
   @Input('courseInput') courseIn: ShowCourse | undefined;
 
-  shamsiStartDate: string = ''; // اینو اضافه کن
+  shamsiStartDate: string = '';
 
   private _accountService = inject(AccountService);
   loggedInUserSig: Signal<LoggedInUser | null> | undefined;

@@ -147,7 +147,7 @@
 
                             @if (courses.length > 0) {
                             <div class="course-list">
-                                @for (course of courses; track $index) {
+                                @for (course of shamsiCourses; track $index) {
                                 <div class="course-card">
                                     @if (targetUserPofile.gender == 'male') {
                                     <span class="name-of-course-men">{{ course.title }}</span>
@@ -156,10 +156,11 @@
                                     }
                                     <div class="tozihat-course">
                                         <span class="text">شهریه: {{ course.tuition | currency:'IRR' }}</span>
-                                        <span class="text">مدت زمان کلاس: <span class="red-text">{{ course.hours
-                                                }}</span>
-                                            ساعت</span>
-                                        <span class="text">تاریخ شروع: {{ course.start | date:'yyyy/MM/dd' }}</span>
+                                        <span class="text">مدت زمان کلاس: <span class="red-text">{{
+                                                course.hours}}</span>
+                                            ساعت
+                                        </span>
+                                        <span class="text">تاریخ شروع: {{ course.shamsiStart }}</span>
                                         @if (course.isStarted == 'true') {
                                         <span class="text">آغاز شده: <span class="green-text">بله</span></span>
                                         }@else {

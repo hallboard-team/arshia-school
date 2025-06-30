@@ -27,6 +27,8 @@ import { CourseService } from '../../services/course.service';
 import { PaginatedResult } from '../../models/helpers/paginatedResult';
 import { PageEvent } from '@angular/material/paginator';
 import { Pagination } from '../../models/helpers/pagination';
+import moment from 'moment-jalaali';
+moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
 @Component({
   selector: 'app-target-user-profile',
@@ -52,6 +54,7 @@ export class TargetUserProfileComponent implements OnInit {
 
   targetUserPofile: TargetUserProfile | null = null;
   courses: Course[] | null = [];
+  shamsiCourses: (Course & { shamsiStart: string })[] = [];
   courseTitles: string[] | null = [];
   // courses$: Observable<Course[] | null> | undefined;
   member: Member | undefined;
@@ -68,8 +71,6 @@ export class TargetUserProfileComponent implements OnInit {
   pageSizeOptions = [5, 10, 25];
   pageEvent: PageEvent | undefined;
   pagination: Pagination | undefined;
-
-  // hasCourse = false;
 
   ngOnInit(): void {
     const currentYear = new Date().getFullYear();
@@ -183,6 +184,12 @@ export class TargetUserProfileComponent implements OnInit {
       this._managerService.getTargetUserCourses(memberUserName).subscribe({
         next: (data) => {
           this.courses = data;
+          if (data !== null) {
+            this.shamsiCourses = data.map(course => ({
+              ...course,
+              shamsiStart: moment(course.start).format('jYYYY/jMM/jDD')
+            }));
+          }
           this.loading = false;
         },
         error: (err) => {
