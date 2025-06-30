@@ -19,18 +19,17 @@
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-                <mat-label>شهریه </mat-label>
-                <input class="input" type="number" formControlName="tuitionCtrl" label="Tuition" placeHolder=""
-                    matInput>
+                <mat-label>شهریه</mat-label>
+                <input class="input" type="text" matInput formControlName="tuitionCtrl" appCurrencyFormatter />
+                <span matSuffix class="suffix-text">تومان</span>
             </mat-form-field>
 
-            <!-- <mat-form-field appearance="outline" class="tuition-field">
+            <!-- <mat-form-field appearance="outline">
                 <mat-label>شهریه </mat-label>
-                <div matPrefix class="tuition-container">
-                    <input class="input" type="text" formControlName="tuitionCtrl" label="Tuition" placeHolder=""
-                        matInput (input)="formatTuition()" [value]="formattedTuition" />
-                    <span class="currency-label">تومان</span>
-                </div>
+                <input class="input" type="text" formControlName="tuitionCtrl" label="Tuition" placeHolder="" matInput
+                    appCurrencyFormatter />
+                <span matSuffix class="suffix-text">تومان</span>
+                
             </mat-form-field> -->
 
             <mat-form-field appearance="outline">
@@ -44,15 +43,24 @@
                     placeHolder="" matInput>
             </mat-form-field>
 
-            <mat-form-field appearance="outline">
+            <!-- <mat-form-field appearance="outline">
                 <mat-label>تاریخ شروع</mat-label>
                 <input class="input" type="date" formControlName="startCtrl" label="Start" placeHolder="" matInput>
+            </mat-form-field> -->
+
+            <mat-form-field appearance="outline">
+                <mat-label>تاریخ شروع دوره</mat-label>
+                <input class="input" [value]="shamsiDisplayDate" readonly (click)="openDatePicker()" matInput />
             </mat-form-field>
 
-            <!-- <mat-form-field appearance="outline">
-                <mat-label>شروع شده است؟</mat-label>
-                <input class="input" type="text" formControlName="isStartedCtrl" label="Is Started" placeHolder="" matInput>
-            </mat-form-field> -->
+            <ng-persian-datepicker [calendarIsGregorian]="false" (dateOnSelect)="onDateSelect($event)"
+                [dateFormat]="'jYYYY/jMM/jDD'" [dateGregorianFormat]="'YYYY-MM-DD'" [(uiIsVisible)]="uiIsVisible"
+                [uiTheme]="uiTheme" [uiYearView]="uiYearView" [uiMonthView]="uiMonthView"
+                [uiHideAfterSelectDate]="uiHideAfterSelectDate" [uiHideOnOutsideClick]="uiHideOnOutsideClick"
+                [uiTodayBtnEnable]="uiTodayBtnEnable">
+            </ng-persian-datepicker>
+
+
             <div class="div-isStarted">
                 <span>دوره شروع شده است؟</span>
 
@@ -101,11 +109,6 @@
                 <img class="profile" src="../assets/images/menProfilePhoto1.png" alt="">
                 } @else {
                 <img class="profile" src="../assets/images/womenProfilePhoto.png" alt="">
-                <!-- <span>نام کاربری: <span class="information-women">{{teacher.userName}}</span></span>
-                            <span>نام: <span class="information-women">{{teacher.name}}</span></span>
-                            <span>نام خانوادگی: <span class="information-women">{{teacher.lastName}}</span></span>
-                            <span>شماره تلفن: <span class="information-women">{{teacher.phoneNum}}</span></span>
-                            <span>جنسیت: <span class="information-women">زن</span></span> -->
                 }
                 <span>نام کاربری: <span class="information">{{teacher.userName}}</span></span>
                 <span>نام: <span class="information">{{teacher.name}}</span></span>

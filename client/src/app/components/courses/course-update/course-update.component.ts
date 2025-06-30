@@ -1,13 +1,11 @@
 import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { FormGroup, Validators, AbstractControl, FormControl, FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, AbstractControl, FormControl, FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs';
-import { ApiResponse } from '../../../models/helpers/apiResponse.model';
-import { MemberUpdate } from '../../../models/member-update.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Course, CourseUpdate } from '../../../models/course.model';
 import { CourseService } from '../../../services/course.service';
-import { CommonModule, CurrencyPipe, isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,6 +15,13 @@ import { ManagerService } from '../../../services/manager.service';
 import { Teacher } from '../../../models/teacher.model';
 import { NavbarComponent } from '../../navbar/navbar.component';
 import { MatIconModule } from '@angular/material/icon';
+import { CurrencyFormatterDirective } from '../../../directives/currency-formatter.directive';
+import {
+  defaultTheme,
+  IDatepickerTheme,
+  NgPersianDatepickerModule
+} from '../../../../../projects/ng-persian-datepicker/src/public-api';
+import moment from 'moment-jalaali';
 
 @Component({
   selector: 'app-course-update',
@@ -24,7 +29,9 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [
     CommonModule, FormsModule, NavbarComponent,
     ReactiveFormsModule, MatRadioModule, MatIconModule,
-    MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule
+    MatCardModule, MatFormFieldModule, MatInputModule,
+    MatButtonModule, CurrencyFormatterDirective,
+    NgPersianDatepickerModule
   ],
   templateUrl: './course-update.component.html',
   styleUrl: './course-update.component.scss'
@@ -42,8 +49,19 @@ export class CourseUpdateComponent implements OnInit {
   course: Course | undefined;
   teachers: Teacher[] = [];
 
+  uiIsVisible: boolean = true;
+  uiTheme: IDatepickerTheme = defaultTheme;
+  uiYearView: boolean = true;
+  uiMonthView: boolean = true;
+  uiHideAfterSelectDate: boolean = false;
+  uiHideOnOutsideClick: boolean = false;
+  uiTodayBtnEnable: boolean = true;
+
+  shamsiDisplayDate: string = '';
+
   ngOnInit(): void {
     this.getCourse();
+    console.log(this.course);
   }
 
   courseEditFg: FormGroup = this._fb.group({
@@ -78,16 +96,6 @@ export class CourseUpdateComponent implements OnInit {
     return this.courseEditFg.get('isStartedCtrl') as FormControl;
   }
 
-  // formattedTuition: string = '';
-
-  // formatTuition(): void {
-  //   const rawValue = this.TuitionCtrl.value.toString().replace(/\D/g, '');
-  //   const number = Number(rawValue);
-
-  //   this.formattedTuition = number.toLocaleString('fa-IR');
-  //   this.TuitionCtrl.setValue(number, { emitEvent: false }); // فقط مقدار اصلی بدون فرمت در فرم ذخیره شود
-  // }
-
   getCourse(): void {
     if (isPlatformBrowser(this._platformId)) {
       const courseTitle: string | null = this._route.snapshot.paramMap.get('courseTitle');
@@ -104,14 +112,74 @@ export class CourseUpdateComponent implements OnInit {
     }
   }
 
+  // initControllersValues(course: Course) {
+  //   this.TitleCtrl.setValue(course.title);
+  //   // this.ProfessorUserNameCtrl.setValue(course.professorsNames);
+  //   this.TuitionCtrl.setValue(course.tuition);
+  //   this.HoursCtrl.setValue(course.hours);
+  //   this.HoursPerClassCtrl.setValue(course.hoursPerClass);
+  //   this.StartCtrl.setValue(course.start);
+  //   this.IsStartedCtrl.setValue(course.isStarted);
+  // }
   initControllersValues(course: Course) {
     this.TitleCtrl.setValue(course.title);
-    // this.ProfessorUserNameCtrl.setValue(course.professorsNames);
-    this.TuitionCtrl.setValue(course.tuition);
+
+    // ❶ شهریه رو با تاخیر ست کن تا دایرکتیو آماده باشه
+    setTimeout(() => {
+      this.TuitionCtrl.setValue(course.tuition);
+    });
+
     this.HoursCtrl.setValue(course.hours);
     this.HoursPerClassCtrl.setValue(course.hoursPerClass);
+
+    // ❷ تاریخ شروع (میلادی در کنترل، شمسی در ویو)
     this.StartCtrl.setValue(course.start);
+    this.shamsiDisplayDate = moment(course.start).format('jYYYY/jMM/jDD');
+
     this.IsStartedCtrl.setValue(course.isStarted);
+  }
+
+
+  onDateSelect(event: { shamsi: string; gregorian: string; timestamp: number }): void {
+    this.shamsiDisplayDate = event.shamsi;
+    this.StartCtrl.setValue(new Date(event.gregorian));
+    this.closeDatePicker();
+  }
+
+  openDatePicker() {
+    const elements = document.querySelectorAll('.div-background-date-picker');
+    const buttonClose = document.querySelectorAll('.close-date');
+    const buttonOpen = document.querySelectorAll('.open-date');
+
+    elements.forEach((element) => {
+      (element as HTMLElement).style.display = "flex";
+    });
+
+    buttonClose.forEach((element) => {
+      (element as HTMLElement).style.display = "flex";
+    });
+
+    buttonOpen.forEach((element) => {
+      (element as HTMLElement).style.display = "none";
+    });
+  }
+
+  closeDatePicker() {
+    const elements = document.querySelectorAll('.div-background-date-picker');
+    const buttonClose = document.querySelectorAll('.close-date');
+    const buttonOpen = document.querySelectorAll('.open-date');
+
+    elements.forEach((element) => {
+      (element as HTMLElement).style.display = "none";
+    });
+
+    buttonClose.forEach((element) => {
+      (element as HTMLElement).style.display = "none";
+    });
+
+    buttonOpen.forEach((element) => {
+      (element as HTMLElement).style.display = "flex";
+    });
   }
 
   updateCourse(): void {

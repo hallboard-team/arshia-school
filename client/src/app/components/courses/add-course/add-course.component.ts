@@ -80,20 +80,6 @@ export class AddCourseComponent {
     return this.addCourseFg.get('startCtrl') as FormControl;
   }
 
-  // ngOnInit() {
-  //   const val = this.TuitionCtrl.value;
-  //   if (val) {
-  //     this.formattedTuition = Number(val).toLocaleString('fa-IR') + ' تومان';
-  //   }
-  // }
-
-  // onDateChange(jalaliDate: string): void {
-  //   const miladiDate = moment(jalaliDate, 'jYYYY/jMM/jDD').format('YYYY-MM-DD');
-  //   console.log('تاریخ میلادی ارسال به بک‌اند:', miladiDate);
-
-  //   this.StartCtrl.setValue(miladiDate);  // ست کردن مقدار میلادی در فرم کنترل
-  // }
-
   add(): void {
     let addCourse: AddCourse = {
       title: this.TitleCtrl.value,
@@ -121,50 +107,6 @@ export class AddCourseComponent {
     })
   }
 
-  // onSelect(date: IActiveDate) {
-  //   // console.log(date);
-  //   const selectedDate = date.shamsi;
-  //   console.log("Selected Date:", selectedDate);
-
-  //   this.StartCtrl.setValue(selectedDate);
-  // }
-  // فاصله امروز تا تاریخ انتخاب‌شده باید <= 1 سال باشه
-
-  // onSelect(date: IActiveDate) {
-  //   moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
-
-  //   const shamsi = date.shamsi; // مثل: 1404/03/13
-
-  //   const isValidJalali = /^\d{4}\/\d{2}\/\d{2}$/.test(shamsi);
-  //   if (!isValidJalali) {
-  //     this._matSnackBar.open("تاریخ انتخاب شده معتبر نیست", "بستن", {
-  //       duration: 5000,
-  //       horizontalPosition: 'center',
-  //       verticalPosition: 'bottom'
-  //     });
-  //     return;
-  //   }
-
-  //   // const miladiDate = moment(shamsi, 'jYYYY/jMM/jDD').format('YYYY-MM-DD');
-  //   const miladiDate = moment(shamsi, 'jYYYY/jMM/jDD').toDate();
-  //   const selected = new Date(miladiDate);
-  //   const today = new Date();
-  //   const oneYearLater = new Date();
-  //   oneYearLater.setFullYear(today.getFullYear() + 1);
-
-  //   if (selected > oneYearLater) {
-  //     this._matSnackBar.open("تاریخ بیش از یک سال آینده مجاز نیست", "بستن", {
-  //       duration: 5000,
-  //       horizontalPosition: 'center',
-  //       verticalPosition: 'bottom'
-  //     });
-  //     return;
-  //   }
-
-  //   this.shamsiDisplayDate = shamsi;
-  //   this.StartCtrl.setValue(miladiDate);
-  // }
-
   onDateSelect(event: {
     shamsi: string;
     gregorian: string;
@@ -175,49 +117,6 @@ export class AddCourseComponent {
 
     this.closeDatePicker(); // بستن تقویم
   }
-
-  // onSelect(date: IActiveDate) {
-  //   const shamsi = date.shamsi;
-
-  //   const isValidJalali = /^\d{4}\/\d{2}\/\d{2}$/.test(shamsi);
-  //   if (!isValidJalali) {
-  //     this._matSnackBar.open("تاریخ انتخاب شده معتبر نیست", "بستن", {
-  //       duration: 5000,
-  //       horizontalPosition: 'center',
-  //       verticalPosition: 'bottom'
-  //     });
-  //     return;
-  //   }
-
-  //   const miladiDateObj = moment(shamsi, 'jYYYY/jMM/jDD').toDate(); // <-- ✅ create a real Date
-  //   const today = new Date();
-  //   const oneYearLater = new Date();
-  //   oneYearLater.setFullYear(today.getFullYear() + 1);
-
-  //   // if (miladiDateObj > oneYearLater) {
-  //   //   this._matSnackBar.open("تاریخ بیش از یک سال آینده مجاز نیست", "بستن", {
-  //   //     duration: 5000,
-  //   //     horizontalPosition: 'center',
-  //   //     verticalPosition: 'bottom'
-  //   //   });
-  //   //   return;
-  //   // }
-
-  //   console.log(miladiDateObj);
-
-  //   this.shamsiDisplayDate = shamsi;
-  //   this.StartCtrl.setValue(miladiDateObj); // ✅ not string
-  // }
-
-  // onSelect(date: IActiveDate) {
-  //   const shamsi = date.shamsi; // مثل: 1404/03/12
-  //   const gregorian = date.gregorian; // مثل: 2025-06-02
-
-  //   console.log("شمسی:", shamsi, "میلادی:", gregorian);
-
-  //   this.shamsiDisplayDate = shamsi;
-  //   this.StartCtrl.setValue(gregorian); // به بک‌اند مقدار میلادی ارسال بشه
-  // }
 
   openDatePicker() {
     const elements = document.querySelectorAll('.div-background-date-picker');
