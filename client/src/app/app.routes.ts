@@ -30,6 +30,7 @@ import { ContactUsComponent } from './components/contact-us/contact-us.component
 import { TargetUserProfileComponent } from './components/target-user-profile/target-user-profile.component';
 import { TargetMemberEnrolledCourseComponent } from './components/enrolled-courses/target-member-enrolled-course/target-member-enrolled-course.component';
 import { UploadPhotoComponent } from './components/enrolled-courses/upload-photo/upload-photo.component';
+import { NgPersianDatepickerComponent, NgPersianDatepickerModule } from '../../projects/ng-persian-datepicker/src/public-api';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
