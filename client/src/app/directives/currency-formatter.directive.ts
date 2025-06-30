@@ -40,8 +40,9 @@ export class CurrencyFormatterDirective implements ControlValueAccessor {
   }
 
   writeValue(value: any): void {
-    if (value) {
-      this.el.nativeElement.value = this.formatWithCommas(value);
+    if (value != null && value !== '') {
+      const formatted = this.formatWithCommas(value.toString());
+      this.el.nativeElement.value = formatted;
     } else {
       this.el.nativeElement.value = '';
     }
