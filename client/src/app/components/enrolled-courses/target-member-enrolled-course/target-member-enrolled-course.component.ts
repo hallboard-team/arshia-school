@@ -5,7 +5,6 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import moment from 'moment';
 import { GalleryModule, Gallery, GalleryItem, ImageItem } from 'ng-gallery';
 import { Lightbox, LightboxModule } from 'ng-gallery/lightbox';
 import { environment } from '../../../../environments/environment.development';
@@ -13,6 +12,8 @@ import { EnrolledCourse } from '../../../models/helpers/enrolled-course.model';
 import { ManagerService } from '../../../services/manager.service';
 import { AccountService } from '../../../services/account.service';
 import { LoggedInUser } from '../../../models/logged-in-user.model';
+import moment from 'moment-jalaali';
+moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
 @Component({
   selector: 'app-target-member-enrolled-course',
@@ -44,15 +45,6 @@ export class TargetMemberEnrolledCourseComponent implements OnInit {
     ref.load(this.images);
     this.lightbox.open(index, 'paymentGallery');
   }
-  // openLightbox(index: number): void {
-  //   const album: IAlbum[] = this.enrolledCourse?.payments.map(payment => ({
-  //     src: this._apiPhotoUrl + payment.photo?.url_enlarged,
-  //     caption: 'رسید پرداخت',
-  //     thumb: this._apiPhotoUrl + payment.photo?.url_165
-  //   })) || [];
-
-  //   this.lightbox.open(album, index);
-  // }
 
   ngOnInit() {
     this.loggedInUserSig = this._accountService.loggedInUserSig;
@@ -61,7 +53,7 @@ export class TargetMemberEnrolledCourseComponent implements OnInit {
   }
 
   toJalali(date: string): string {
-    return moment(date).locale('fa').format('YYYY/MM/DD');
+    return moment(date).format('jYYYY/jMM/jDD');
   }
 
   formatCurrency(amount: number): string {

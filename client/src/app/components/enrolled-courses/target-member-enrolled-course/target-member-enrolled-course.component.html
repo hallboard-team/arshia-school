@@ -58,7 +58,9 @@
 
         <ng-container matColumnDef="paidOn">
             <th mat-header-cell *matHeaderCellDef> تاریخ پرداخت </th>
-            <td mat-cell *matCellDef="let payment"> {{ toJalali(payment.paidOn) }} </td>
+            <td mat-cell *matCellDef="let payment">
+                {{ toJalali(payment.paidOn) }}
+            </td>
         </ng-container>
 
         <ng-container matColumnDef="amount">
