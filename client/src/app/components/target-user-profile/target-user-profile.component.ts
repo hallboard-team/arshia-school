@@ -28,6 +28,7 @@ import { PaginatedResult } from '../../models/helpers/paginatedResult';
 import { PageEvent } from '@angular/material/paginator';
 import { Pagination } from '../../models/helpers/pagination';
 import moment from 'moment-jalaali';
+import { CurrencyFormatterDirective } from '../../directives/currency-formatter.directive';
 moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
 @Component({
@@ -39,7 +40,7 @@ moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
     MatInputModule, MatButtonModule, NavbarComponent,
     RouterModule, MatTabsModule, MatNativeDateModule,
     MatRadioModule, MatSnackBarModule, MatDatepickerModule,
-    MatSelectModule,
+    MatSelectModule, CurrencyFormatterDirective
   ],
   templateUrl: './target-user-profile.component.html',
   styleUrl: './target-user-profile.component.scss'
@@ -308,14 +309,14 @@ export class TargetUserProfileComponent implements OnInit {
 
       this._managerService.updateEnrolledCourse(memberUserName, updateEnrolledCourse).subscribe({
         next: (response) => {
-          this._matSnackBar.open("اضافه کردن دوره با موفقیت انجام شد", "Close", {
+          this._matSnackBar.open("پرداخت شهریه با موفقیت ثبت شد", "Close", {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
             duration: 10000
           });
         },
         error: (err) => {
-          this._matSnackBar.open("در اضافه کردن دوره مشکل به وجود آمده", "Close", {
+          this._matSnackBar.open("در پرداخت شهریه مشکلی پیش آمده", "Close", {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
             duration: 10000
@@ -356,21 +357,4 @@ export class TargetUserProfileComponent implements OnInit {
     let theDob: Date = new Date(dob);
     return new Date(theDob.setMinutes(theDob.getMinutes() - theDob.getTimezoneOffset())).toISOString().slice(0, 10);
   }
-
-  // onTabChange(event: MatTabChangeEvent): void {
-  //   if (event.index === 1) { // Assuming "Courses" tab is index 1
-  //     // const user = this.targetUserPofile;
-
-  //     if (this.targetUserPofile?.enrolledCourses || this.targetUserPofile?.enrolledCourses) {
-  //       this.hasCourse = true;
-  //       this.getTargetUserCourse();
-  //     } else {
-  //       this.hasCourse = false;
-  //       this.courseTitles = null; // Optional: clear data
-  //     }
-  //   }
-  //   if (event.index === 3) {
-  //     this.getTargetCourseTitles();
-  //   }
-  // }
 }
