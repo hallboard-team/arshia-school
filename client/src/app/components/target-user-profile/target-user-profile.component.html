@@ -259,15 +259,26 @@
                                 </mat-select>
                                 <mat-error *ngIf="TitleCourseCtrl.hasError('required')">!این فیلد خالی است</mat-error>
                             </mat-form-field>
-
+                            <!-- 
+                            
                             <mat-form-field appearance="outline">
                                 <mat-label>مبلغ پرداختی</mat-label>
-                                <input type="number" formControlName="paidAmountUpdateCtrl" label="paid amount"
-                                    matInput>
+                                <input type="text" formControlName="paidAmountUpdateCtrl" label="paid amount" matInput
+                                    appCurrencyFormatter>
+                                <span matSuffix class="suffix-text">تومان</span>
+                                @if (PaidAmountCtrl.hasError('required')) {
+                                <mat-error>!این فیلد خالی است</mat-error>
+                                }
+                            </mat-form-field> -->
+                            <mat-form-field appearance="outline">
+                                <mat-label>مبلغ پرداختی</mat-label>
+                                <input type="text" formControlName="paidAmountUpdateCtrl" matInput appCurrencyFormatter>
+                                <span matSuffix class="suffix-text">تومان</span>
                                 @if (PaidAmountCtrl.hasError('required')) {
                                 <mat-error>!این فیلد خالی است</mat-error>
                                 }
                             </mat-form-field>
+
 
                             <div class="radio-inputs">
                                 <mat-radio-group class="radio-group" aria-label="Select an option"
