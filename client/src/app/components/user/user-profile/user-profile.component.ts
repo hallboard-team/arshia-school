@@ -30,6 +30,7 @@ import { CourseParams } from '../../../models/helpers/course-params';
 import { CourseService } from '../../../services/course.service';
 import { PaginatedResult } from '../../../models/helpers/paginatedResult';
 import { Pagination } from '../../../models/helpers/pagination';
+import moment from 'moment-jalaali';
 
 @Component({
   selector: 'app-user-profile',
@@ -45,7 +46,7 @@ import { Pagination } from '../../../models/helpers/pagination';
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss'
 })
-export class UserProfileComponent implements OnInit{
+export class UserProfileComponent implements OnInit {
   private _accountService = inject(AccountService);
   private _memberService = inject(MemberService);
   private _courseService = inject(CourseService);
@@ -56,6 +57,7 @@ export class UserProfileComponent implements OnInit{
   private _route = inject(ActivatedRoute);
 
   loggedInUserSig: Signal<LoggedInUser | null> | undefined;
+  shamsiCourses: (Course & { shamsiStart: string })[] = [];
 
   profile: UserProfile | null = null;
   courses: Course[] | null = [];
@@ -64,10 +66,10 @@ export class UserProfileComponent implements OnInit{
   subscribed: Subscription | undefined;
   courseParams: CourseParams | undefined;
   pagination: Pagination | undefined;
-  
+
   member: Member | undefined;
   showCourses: ShowCourse[] | undefined;
-   
+
   minDate = new Date();
   maxDate = new Date();
 
@@ -90,7 +92,7 @@ export class UserProfileComponent implements OnInit{
     passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]]
   });
-  
+
   //geter for members
   get EmailCtrl(): AbstractControl {
     return this.memberEditFg.get('emailCtrl') as FormControl;
@@ -111,32 +113,38 @@ export class UserProfileComponent implements OnInit{
   getProfile(): void {
     // const memberUserName: string | null = this._route.snapshot.paramMap.get('memberUserName');
 
-      this._memberService.getProfile().subscribe({
-        next: (data) => {
-          this.profile = data;  // ذخیره داده‌ها در متغیر پروفایل
-          this.loading = false;  // پایان لود
-  
-          // if(this.profile) {
-          //   this.memberEditFg.patchValue({
-          //     emailCtrl: this.profile.email || '',
-          //     userNameCtrl: this.profile.userName || '',
-          //     currentPasswordCtrl: '',
-          //     passwordCtrl: '',
-          //     confirmPasswordCtrl: ''
-          //   })
-          // }
-        },
-        error: (err) => {
-          this.error = 'خطا در بارگذاری پروفایل. لطفاً دوباره تلاش کنید.';  // خطا در صورت مشکل
-          this.loading = false;  // پایان لود
-        }
-      });
+    this._memberService.getProfile().subscribe({
+      next: (data) => {
+        this.profile = data;
+        this.loading = false;
+
+        // if(this.profile) {
+        //   this.memberEditFg.patchValue({
+        //     emailCtrl: this.profile.email || '',
+        //     userNameCtrl: this.profile.userName || '',
+        //     currentPasswordCtrl: '',
+        //     passwordCtrl: '',
+        //     confirmPasswordCtrl: ''
+        //   })
+        // }
+      },
+      error: (err) => {
+        this.error = 'خطا در بارگذاری پروفایل. لطفاً دوباره تلاش کنید.';
+        this.loading = false;
+      }
+    });
   }
 
   getCourse(): void {
     this._memberService.getCourses().subscribe({
       next: (data) => {
-        this.courses = data;
+        if (data !== null) {
+          this.courses = data;
+          this.shamsiCourses = data.map(course => ({
+            ...course,
+            shamsiStart: moment(course.start).format('jYYYY/jMM/jDD')
+          }));
+        }
         this.loading = false;
       },
       error: (err) => {
