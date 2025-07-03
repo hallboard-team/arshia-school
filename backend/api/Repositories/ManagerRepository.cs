@@ -1,3 +1,5 @@
+using static api.DTOs.Mappers;
+
 namespace api.Repositories;
 
 public class ManagerRepository : IManagerRepository
@@ -51,16 +53,46 @@ public class ManagerRepository : IManagerRepository
         return query;
     }
 
+    private async Task<string> GenerateUniqueUsernameAsync(CancellationToken cancellationToken)
+    {
+        string newUserName;
+        bool exists;
+
+        do
+        {
+            newUserName = Utils.GenerateComplexUsername(8);
+            exists = await _collectionAppUser
+                .Find(u => u.UserName == newUserName)
+                .AnyAsync(cancellationToken);
+        }
+        while (exists);
+
+        return newUserName;
+    }
+
     public async Task<LoggedInDto?> CreateSecretaryAsync(RegisterDto registerDto, CancellationToken cancellationToken)
     {
         LoggedInDto loggedInDto = new();
 
-        bool doasePhoneNumEixst = await _collectionAppUser.Find<AppUser>(doc =>
-            doc.PhoneNum == registerDto.PhoneNum).AnyAsync(cancellationToken);
+        bool doasePhoneNumEixst = await _collectionAppUser
+            .Find<AppUser>(doc => doc.PhoneNum == registerDto.PhoneNum)
+            .AnyAsync(cancellationToken);
 
-        if (doasePhoneNumEixst) return null;
+        if (doasePhoneNumEixst)
+            return null;
 
-        AppUser appUser = Mappers.ConvertRegisterDtoToAppUser(registerDto);
+        string uniqueUsername = await GenerateUniqueUsernameAsync(cancellationToken);
+
+        AppUser appUser = new AppUser
+        {
+            Email = registerDto.Email,
+            UserName = uniqueUsername,
+            DateOfBirth = registerDto.DateOfBirth,
+            Name = registerDto.Name.Trim(),
+            LastName = registerDto.LastName.Trim(),
+            PhoneNum = registerDto.PhoneNum,
+            Gender = registerDto.Gender.ToLower()
+        };
 
         IdentityResult? userCreatedResult = await _userManager.CreateAsync(appUser, registerDto.Password);
 
@@ -93,12 +125,25 @@ public class ManagerRepository : IManagerRepository
     {
         LoggedInDto loggedInDto = new();
 
-        bool doasePhoneNumEixst = await _collectionAppUser.Find<AppUser>(doc =>
-            doc.PhoneNum == registerDto.PhoneNum).AnyAsync(cancellationToken);
+        bool doasePhoneNumEixst = await _collectionAppUser
+            .Find<AppUser>(doc => doc.PhoneNum == registerDto.PhoneNum)
+            .AnyAsync(cancellationToken);
 
-        if (doasePhoneNumEixst) return null;
+        if (doasePhoneNumEixst)
+            return null;
 
-        AppUser appUser = Mappers.ConvertRegisterDtoToAppUser(registerDto);
+        string uniqueUsername = await GenerateUniqueUsernameAsync(cancellationToken);
+
+        AppUser appUser = new AppUser
+        {
+            Email = registerDto.Email,
+            UserName = uniqueUsername,
+            DateOfBirth = registerDto.DateOfBirth,
+            Name = registerDto.Name.Trim(),
+            LastName = registerDto.LastName.Trim(),
+            PhoneNum = registerDto.PhoneNum,
+            Gender = registerDto.Gender.ToLower()
+        };
 
         IdentityResult? userCreatedResult = await _userManager.CreateAsync(appUser, registerDto.Password);
 
@@ -131,12 +176,25 @@ public class ManagerRepository : IManagerRepository
     {
         LoggedInDto loggedInDto = new();
 
-        bool doasePhoneNumEixst = await _collectionAppUser.Find<AppUser>(doc =>
-            doc.PhoneNum == registerDto.PhoneNum).AnyAsync(cancellationToken);
+        bool doasePhoneNumEixst = await _collectionAppUser
+            .Find<AppUser>(doc => doc.PhoneNum == registerDto.PhoneNum)
+            .AnyAsync(cancellationToken);
 
-        if (doasePhoneNumEixst) return null;
+        if (doasePhoneNumEixst)
+            return null;
 
-        AppUser appUser = Mappers.ConvertRegisterDtoToAppUser(registerDto);
+        string uniqueUsername = await GenerateUniqueUsernameAsync(cancellationToken);
+
+        AppUser appUser = new AppUser
+        {
+            Email = registerDto.Email,
+            UserName = uniqueUsername,
+            DateOfBirth = registerDto.DateOfBirth,
+            Name = registerDto.Name.Trim(),
+            LastName = registerDto.LastName.Trim(),
+            PhoneNum = registerDto.PhoneNum,
+            Gender = registerDto.Gender.ToLower()
+        };
 
         IdentityResult? userCreatedResult = await _userManager.CreateAsync(appUser, registerDto.Password);
 

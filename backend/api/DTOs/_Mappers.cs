@@ -7,7 +7,7 @@ public static class Mappers
         return new AppUser
         {
             Email = adminInput.Email, // required by AspNet Identity
-            UserName = adminInput.UserName, // required by AspNet Identity
+            UserName = Utils.GenerateComplexUsername(),
             DateOfBirth = adminInput.DateOfBirth,
             Name = adminInput.Name.Trim(),
             LastName = adminInput.LastName.Trim(),
@@ -116,17 +116,6 @@ public static class Mappers
         };
     }
 
-    // public static ShowStudentStatusDtoDemo ConvertAttendenceDemoToShowStudentStatusDemo(AttendenceDemo attendenceDemo)
-    // {
-    //     return new ShowStudentStatusDtoDemo
-    //     {
-    //         StudentId = attendenceDemo.Id,
-    //         UserName = attendenceDemo.UserName,
-    //         Time = attendenceDemo.Time,
-    //         AbsentOrPresent = attendenceDemo.AbsentOrPresent
-    //     };
-    // }
-
     public static Course ConvertAddCourseDtoToCourse(AddCourseDto managerInput, int daysCalc)
     {
         return new Course(
@@ -188,5 +177,17 @@ public static class Mappers
             Url_enlarged: photoUrls[2],
             IsMain: isMain
         );
+    }
+
+    public static class Utils
+    {
+        private static readonly Random _random = new();
+
+        public static string GenerateComplexUsername(int length = 8)
+        {
+            const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789?!/<>()";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[_random.Next(s.Length)]).ToArray());
+        }
     }
 }
