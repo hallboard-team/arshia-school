@@ -21,21 +21,6 @@ import { MatNativeDateModule } from '@angular/material/core';
   styleUrl: './attendence-card.component.scss'
 })
 export class AttendenceCardComponent {
-  // @Input('attendenceInput') attendenceIn: Attendence | undefined;
-
-  // displayedColumns: string[] = ['date', 'absent'];
-  // dataSource: any[] = [];
-
-  // ngOnInit(): void {
-  //   if (this.attendenceIn) {
-  //     this.dataSource = [this.attendenceIn];
-  //   }
-  // }
-
-  // toJalali(date: string | Date): string {
-  //   if (!date) return '';
-  //   return moment(date).locale('fa').format('YYYY/MM/DD');
-  // }
   @Input('attendenceInput') attendenceIn: Attendence[] = [];
 
   displayedColumns: string[] = ['date', 'absent'];
