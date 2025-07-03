@@ -111,22 +111,10 @@ export class UserProfileComponent implements OnInit {
   }
 
   getProfile(): void {
-    // const memberUserName: string | null = this._route.snapshot.paramMap.get('memberUserName');
-
     this._memberService.getProfile().subscribe({
       next: (data) => {
         this.profile = data;
         this.loading = false;
-
-        // if(this.profile) {
-        //   this.memberEditFg.patchValue({
-        //     emailCtrl: this.profile.email || '',
-        //     userNameCtrl: this.profile.userName || '',
-        //     currentPasswordCtrl: '',
-        //     passwordCtrl: '',
-        //     confirmPasswordCtrl: ''
-        //   })
-        // }
       },
       error: (err) => {
         this.error = 'خطا در بارگذاری پروفایل. لطفاً دوباره تلاش کنید.';

@@ -7,7 +7,7 @@ public class MemberController
     (IMemberRepository _memberRepository, ITokenService _tokenService) : BaseApiController
 {
     [HttpGet("get-profile")]
-    public async Task<ActionResult<ProfileDto>> 
+    public async Task<ActionResult<ProfileDto>>
     GetProfile(CancellationToken cancellationToken)
     {
         string? HashedUserId = User.GetHashedUserId();
@@ -28,7 +28,7 @@ public class MemberController
 
         if (userId is null)
             return Unauthorized("You are not logged in. Login in again.");
-        
+
         attendenceParams.UserId = userId;
 
         PagedList<Attendence> pagedAttendences = await _memberRepository.GetAllAttendenceAsync(attendenceParams, userId, targetCourseTitle, cancellationToken);
@@ -58,16 +58,16 @@ public class MemberController
 
         return showStudentStatusDtos;
     }
-    
+
     [HttpPut]
     public async Task<ActionResult> UpdateMember(MemberUpdateDto memberUpdateDto, CancellationToken cancellationToken)
     {
         if (memberUpdateDto is null)
             return null;
-            
+
         bool? updateResult = await _memberRepository.UpdateMemberAsync(memberUpdateDto, User.GetHashedUserId(), cancellationToken);
 
-        return updateResult is false 
+        return updateResult is false
             ? BadRequest("Update failed. Try again later.")
             : Ok(new { message = "User has been updated successfully." });
     }
@@ -84,12 +84,12 @@ public class MemberController
 
         if (courses is null || !courses.Any())
         {
-            return NotFound("No Enrolled Courses found for the user.");
+            return Ok(new List<Course>());
         }
 
         return Ok(courses);
     }
-    
+
     [HttpGet("get-enrolled-course/{courseTitle}")]
     public async Task<ActionResult<EnrolledCourse>> GetEnrolledCourse(string courseTitle, CancellationToken cancellationToken)
     {

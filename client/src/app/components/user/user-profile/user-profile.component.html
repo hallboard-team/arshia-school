@@ -141,6 +141,12 @@
                     <div class="loading">در حال بارگذاری...</div>
                     }
                 </div>
+
+                @if (courses.length === 0) {
+                <div class="no-courses">
+                    <span>هیچ دوره‌ای ثبت‌نام نکرده‌اید.</span>
+                </div>
+                }
             </mat-tab>
             }
         </mat-tab-group>
