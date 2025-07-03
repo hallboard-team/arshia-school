@@ -7,6 +7,8 @@ import { NavbarComponent } from '../navbar/navbar.component';
 import { Member } from '../../models/member.model';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import moment from 'moment-jalaali';
+moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
 @Component({
   selector: 'app-teacher',
@@ -17,17 +19,20 @@ import { RouterModule } from '@angular/router';
   templateUrl: './teacher.component.html',
   styleUrl: './teacher.component.scss'
 })
-export class TeacherComponent implements OnInit, OnDestroy{
+export class TeacherComponent implements OnInit, OnDestroy {
   teacherService = inject(TeacherService);
 
   courses$: Observable<Course[] | null> | undefined;
-  courses: Course[] | undefined;
+  // courses: Course[] | undefined;
+  courses: (Course & { shamsiStart: string })[] | undefined;
 
   subscribed: Subscription | undefined;
 
-  students: Member[] = []; 
+  students: Member[] = [];
   selectedCourse: string | null = null;
-  
+  shamsiStartDate: string = '';
+
+
   ngOnInit(): void {
     this.getAllCourses();
   }
@@ -38,25 +43,17 @@ export class TeacherComponent implements OnInit, OnDestroy{
 
   getAllCourses(): void {
     this.teacherService.getCourse().subscribe({
-        next: (response: Course[]) => {
-          if (response) {
-            this.courses = response;
-          }
-          console.log(response);
-        },
-        error: (err) => {
-            console.error('Error fetching courses:', err);
+      next: (response: Course[]) => {
+        if (response) {
+          this.courses = response.map(course => ({
+            ...course,
+            shamsiStart: moment(course.start).format('jYYYY/jMM/jDD')
+          }));
         }
+      },
+      error: (err) => {
+        console.error('Error fetching courses:', err);
+      }
     });
   }
-
-  // getStudentsByCourseId(courseId: string): void {
-  //   this.selectedCourse = courseId;
-  //   this.teacherService.getStudents(courseId).subscribe({
-  //     next: (res: Member[]) => {
-  //       this.students = res;
-  //     },
-  //     error: (err) => console.error('خطا در دریافت دانش‌آموزان:', err)
-  //   });
-  // }
 }

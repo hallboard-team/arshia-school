@@ -45,6 +45,24 @@
                 color: blue;
             }
 
+            .div-start-day {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+
+                .title {
+                    color: black;
+                    font-size: 15px;
+                }
+
+                .result {
+                    color: black;
+                    font-size: 15px;
+                }
+            }
+
             .text {
                 color: black;
                 font-size: 15px;

@@ -1,7 +1,7 @@
 <section class="main-section">
     <header>
         <nav>
-          <app-navbar />
+            <app-navbar />
         </nav>
     </header>
 
@@ -15,11 +15,14 @@
             <span class="text">🕒 مدت دوره: {{ course.hours }} ساعت</span>
             <span class="text">📅 روزهای دوره: {{ course.days }}</span>
             <span class="text">⏳ ساعت به ازای هر کلاس: {{ course.hoursPerClass }}</span>
+            <div class="div-start-day">
+                <span class="title">📅 تاریخ شروع دوره</span>
+                <span class="result">{{ course.shamsiStart }}</span>
+            </div>
             <span class="text-isStarted-true" *ngIf="course.isStarted">در حال اجرا ✅</span>
             <span class="text-isStarted-false" *ngIf="!course.isStarted">هنوز شروع نشده ❌</span>
 
-            <button 
-                class="btn-click-student-show" [routerLink]="['/students-card/' + course.title]">
+            <button class="btn-click-student-show" [routerLink]="['/students-card/' + course.title]">
                 مشاهده دانش‌آموزان 📚
             </button>
         </div>
