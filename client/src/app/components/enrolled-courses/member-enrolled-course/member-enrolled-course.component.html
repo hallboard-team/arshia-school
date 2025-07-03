@@ -5,81 +5,57 @@
 </header>
 
 @if (enrolledCourse) {
-  <section class="section-enrolled-course">
-    <div class="div-top">
-      <span class="title-course">{{ enrolledCourse.courseTitle }}</span>
-      <span>هزینه دوره: {{ formatCurrency(enrolledCourse.courseTuition) }}</span>
-      <span>تعداد پرداخت‌ها: {{ enrolledCourse.numberOfPayments }}</span>
-      <span>مقدار باقی‌مانده: <span class="value">{{ formatCurrency(enrolledCourse.tuitionRemainder) }}</span></span>
-    </div>
+<section class="section-enrolled-course">
+  <div class="div-top">
+    <span class="title-course">{{ enrolledCourse.courseTitle }}</span>
+    <span>هزینه دوره: {{ formatCurrency(enrolledCourse.courseTuition) }}</span>
+    <span>تعداد پرداخت‌ها: {{ enrolledCourse.numberOfPayments }}</span>
+    <span>مقدار باقی‌مانده: <span class="value">{{ formatCurrency(enrolledCourse.tuitionRemainder) }}</span></span>
+  </div>
 
-    <div class="div-title-payments">
-      <span>پرداخت های شما</span>
-    </div>
+  <div class="div-title-payments">
+    <span>پرداخت های شما</span>
+  </div>
 
-    <!-- <div class="div-background-card-payments">
-      @for (payment of enrolledCourse.payments; track $index) {
-      
-        <div class="div-card-payment">
-          <span>مبلغ پرداخت: <span class="value">{{payment.amount}} تومان</span></span>
-          <span>تاریخ پرداخت: <span>{{payment.paidOn}}</span></span>
-          <span>نوع پرداخت: <span>{{payment.method}}</span></span>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-          <div class="div-text-and-img">
-            <div class="div-text">
-              <span>عکس رسید پرداخت:</span>
-            </div>
-            @if (payment.photo) {
-              <div class="div-background-photo-of-payment">
-                <img src="{{_apiPhotoUrl + payment.photo.url_165}}" alt="">
-              </div>
-            }
+    <ng-container matColumnDef="photo">
+      <th mat-header-cell *matHeaderCellDef> رسید پرداخت </th>
+      <td mat-cell *matCellDef="let payment; let i = index">
+        <ng-container *ngIf="payment.photo">
+          <div class="gallery" (click)="openLightbox(i)" title="دیدن تصویر رسید">
+            <img gallerize [src]="_apiPhotoUrl + payment.photo.url_165" alt="رسید پرداخت">
+            <mat-icon>zoom_in</mat-icon>
           </div>
-        </div>
-      }
-    </div> -->
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        </ng-container>
+        <ng-container *ngIf="!payment.photo">
+          <span class="no-photo">!عکس وجود ندارد</span>
+        </ng-container>
+      </td>
+    </ng-container>
 
-      <ng-container matColumnDef="photo">
-        <th mat-header-cell *matHeaderCellDef> رسید پرداخت </th>
-        <td mat-cell *matCellDef="let payment; let i = index">
-          <ng-container *ngIf="payment.photo">
-            <div class="gallery" (click)="openLightbox(i)" title="دیدن تصویر رسید">
-              <img gallerize [src]="_apiPhotoUrl + payment.photo.url_165" alt="رسید پرداخت">
-              <mat-icon>zoom_in</mat-icon>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="!payment.photo">
-            <span class="no-photo">!عکس وجود ندارد</span>
-          </ng-container>
-        </td>     
-      </ng-container>      
+    <ng-container matColumnDef="method">
+      <th mat-header-cell *matHeaderCellDef> نوع پرداخت </th>
+      <td mat-cell *matCellDef="let payment">
+        <ng-container *ngIf="payment.method === 0">کارت به کارت</ng-container>
+        <ng-container *ngIf="payment.method === 1">پرداخت نقدی</ng-container>
+        <ng-container *ngIf="payment.method === 2">پرداخت با پوز</ng-container>
+      </td>
+    </ng-container>
 
-      <ng-container matColumnDef="method">
-        <th mat-header-cell *matHeaderCellDef> نوع پرداخت </th>
-          <!-- <img src="../assets/images/iconKartKhon.png" alt=""> -->
-          <!-- <img src="../assets/images/iconNaghdi.png" alt=""> -->
-          <!-- <img src="../assets/images/iconKartBeKart.png" alt=""> -->
-        <td mat-cell *matCellDef="let payment">
-          <ng-container *ngIf="payment.method === 0">کارت به کارت</ng-container>
-          <ng-container *ngIf="payment.method === 1">پرداخت نقدی</ng-container>
-          <ng-container *ngIf="payment.method === 2">پرداخت با پوز</ng-container>
-        </td>
-      </ng-container>
+    <ng-container matColumnDef="paidOn">
+      <th mat-header-cell *matHeaderCellDef> تاریخ پرداخت </th>
+      <td mat-cell *matCellDef="let payment"> {{ toJalali(payment.paidOn) }} </td>
+    </ng-container>
 
-      <ng-container matColumnDef="paidOn">
-        <th mat-header-cell *matHeaderCellDef> تاریخ پرداخت </th>
-        <td mat-cell *matCellDef="let payment"> {{ toJalali(payment.paidOn) }} </td>
-      </ng-container>
+    <ng-container matColumnDef="amount">
+      <th mat-header-cell *matHeaderCellDef> مبلغ پرداخت </th>
+      <td mat-cell *matCellDef="let payment"> {{ formatCurrency(payment.amount) }} </td>
+    </ng-container>
 
-      <ng-container matColumnDef="amount">
-        <th mat-header-cell *matHeaderCellDef> مبلغ پرداخت </th>
-        <td mat-cell *matCellDef="let payment"> {{ formatCurrency(payment.amount) }} </td>
-      </ng-container>
-    
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-    
-  </section>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</section>
 }

@@ -109,20 +109,4 @@ export class MemberEnrolledCourseComponent implements OnInit {
         });
     }
   }
-
-  // openLightbox(payment: any) {
-  //   const album = [
-  //     {
-  //       src: this._apiPhotoUrl + payment.photo.url_original,
-  //       caption: 'رسید پرداخت',
-  //       thumb: this._apiPhotoUrl + payment.photo.url_165
-  //     }
-  //   ];
-
-  //   this.lightbox.open(album, 0);
-  // }
-
-  // closeLightbox(): void {
-  //   this.lightbox.close();
-  // }
 }

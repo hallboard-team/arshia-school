@@ -1,26 +1,47 @@
-@if (attendenceIn) {
+<!-- @if (attendenceIn) {
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="absent">
+        <th mat-header-cell *matHeaderCellDef> نوع حضور و غیاب </th>
+        <td mat-cell *matCellDef="let attendenceIn"> <span class="absent">غایب</span> </td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> تاریخ </th>
+        <td mat-cell *matCellDef="let attendenceIn"> {{ toJalali(attendenceIn.date) }} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+}@else {
+<div class="div-background-no-absent">
+    <span>شما هیچ تاریخی غیبت نداشته اید</span>
+</div>
+} -->
+
+@if (dataSource.length > 0) {
+<section class="section-attendence-card">
+
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-        <ng-container matColumnDef="absent">
-          <th mat-header-cell *matHeaderCellDef> نوع حضور و غیاب </th>
-          <td mat-cell *matCellDef="let payment"> <span class="absent">غایب</span> </td>
-        </ng-container>
 
         <ng-container matColumnDef="date">
-            <th mat-header-cell *matHeaderCellDef> تاریخ </th>
-            <td mat-cell *matCellDef="let payment"> {{ toJalali(attendenceIn.date) }} </td>
+            <th mat-header-cell *matHeaderCellDef>تاریخ</th>
+            <td mat-cell *matCellDef="let item">{{ toJalali(item.date) }}</td>
         </ng-container>
-      
+
+        <ng-container matColumnDef="absent">
+            <th mat-header-cell *matHeaderCellDef>نوع حضور و غیاب</th>
+            <td mat-cell *matCellDef="let item"><span class="absent">غایب</span></td>
+        </ng-container>
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
     </table>
-    <!-- <div class="background-attendences-div">
-        <div class="attendence-item">
-            <span class="span-date">تاریخ: {{attendenceIn.date}}</span>
-            <span class="span-absent">نوع حضور و غیاب: <span class="absent">غایب</span></span>
-        </div>
-    </div> -->
-}@else {
-    <div class="div-background-no-absent">
-        <span>شما هیچ تاریخی غیبت نداشته اید</span>
-    </div>
+
+</section>
+} @else {
+<div class="div-background-no-absent">
+    <span>شما هیچ تاریخی غیبت نداشته‌اید</span>
+</div>
 }
