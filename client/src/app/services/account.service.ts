@@ -15,7 +15,7 @@ export class AccountService {
   //#region injects and variables
   http = inject(HttpClient);
   router = inject(Router);
-  platformId = inject(PLATFORM_ID); 
+  platformId = inject(PLATFORM_ID);
 
   private readonly baseApiUrl = environment.apiUrl + 'account/';
 
@@ -30,7 +30,7 @@ export class AccountService {
         if (userResponse) {
           this.setCurrentUser(userResponse);
 
-          this.navigateToReturnUrl(); 
+          this.navigateToReturnUrl();
 
           return userResponse;
         }
@@ -74,11 +74,10 @@ export class AccountService {
     this.loggedInUserSig.set(null);
 
     if (isPlatformBrowser(this.platformId)) {
-      // localStorage.removeItem('loggedInUser');
       localStorage.clear();
-    }
 
-    this.router.navigateByUrl('account/home');
+      this.router.navigateByUrl('/home');
+    }
   }
 
   private navigateToReturnUrl(): void {
