@@ -32,25 +32,25 @@ public class MemberRepository : IMemberRepository
 
     //     return appUser;
     // }
-    
+
     public async Task<PagedList<Attendence>> GetAllAttendenceAsync(AttendenceParams attendenceParams, ObjectId? userId, string targetCourseTitle, CancellationToken cancellationToken)
     {
         AppUser? appUser = await _collectionAppUser.Find<AppUser>(
             doc => doc.Id == userId).FirstOrDefaultAsync(cancellationToken);
-        if (appUser is null) 
+        if (appUser is null)
             return null;
 
         ObjectId? targetCourseId = await _collectionCourse.AsQueryable()
             .Where(doc => doc.Title == targetCourseTitle.ToUpper())
             .Select(doc => doc.Id)
             .FirstOrDefaultAsync(cancellationToken);
-        
-        if(targetCourseId is null)
+
+        if (targetCourseId is null)
             return null;
 
         IMongoQueryable<Attendence>? query = _collectionAttendence.AsQueryable<Attendence>()
             .Where(doc => doc.StudentId == appUser.Id && doc.CourseId == targetCourseId);
-        
+
         return await PagedList<Attendence>.CreatePagedListAsync(query, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
     }
 
@@ -67,12 +67,12 @@ public class MemberRepository : IMemberRepository
         targetAppUser.Email = memberUpdateDto.Email;
         // targetAppUser.UserName = memberUpdateDto.UserName;
 
-        if (!string.IsNullOrEmpty(memberUpdateDto.currentPassword) && 
-            !string.IsNullOrEmpty(memberUpdateDto.Password) && 
+        if (!string.IsNullOrEmpty(memberUpdateDto.CurrentPassword) &&
+            !string.IsNullOrEmpty(memberUpdateDto.Password) &&
             !string.IsNullOrEmpty(memberUpdateDto.ConfirmPassword))
         {
             //Change password if last password exist
-            IdentityResult passwordChangeResult = await _userManager.ChangePasswordAsync(targetAppUser, memberUpdateDto.currentPassword, memberUpdateDto.Password);
+            IdentityResult passwordChangeResult = await _userManager.ChangePasswordAsync(targetAppUser, memberUpdateDto.CurrentPassword, memberUpdateDto.Password);
             if (!passwordChangeResult.Succeeded)
             {
                 var errors = string.Join(", ", passwordChangeResult.Errors.Select(e => e.Description));
@@ -82,11 +82,11 @@ public class MemberRepository : IMemberRepository
 
         targetAppUser.NormalizedEmail = memberUpdateDto.Email.ToUpper();
         // targetAppUser.NormalizedUserName = memberUpdateDto.UserName.ToUpper();
-        
+
         //save changes in DataBase
         IdentityResult updateResult = await _userManager.UpdateAsync(targetAppUser);
         return updateResult.Succeeded;
-        
+
         // if (string.IsNullOrEmpty(hashedUserId)) return null;
 
         // ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
@@ -161,11 +161,11 @@ public class MemberRepository : IMemberRepository
             .SelectMany(appUser => appUser.EnrolledCourses)
             .Select(doc => doc.CourseId.ToString())
             .ToListAsync(cancellationToken);
-            
+
         if (enrolledCourseIds is null || !enrolledCourseIds.Any())
             return null;
 
-        List<Course>? courses = await _collectionCourse.Find<Course>(doc => 
+        List<Course>? courses = await _collectionCourse.Find<Course>(doc =>
             enrolledCourseIds.Contains(doc.Id.ToString())).ToListAsync(cancellationToken);
 
         if (courses is null)
@@ -195,7 +195,7 @@ public class MemberRepository : IMemberRepository
         EnrolledCourse? enrolledCourse = appUser.EnrolledCourses
             .FirstOrDefault(ec => ec.CourseTitle == courseTitle.ToUpper());
         if (enrolledCourse is null)
-            return null; 
+            return null;
 
         return enrolledCourse;
     }

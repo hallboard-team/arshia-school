@@ -276,6 +276,11 @@ public class ManagerRepository : IManagerRepository
         AddEnrolledCourseDto addEnrolledCourseDto, string targetUserName,
         CancellationToken cancellationToken)
     {
+        if (addEnrolledCourseDto.NumberOfPayments <= 0)
+        {
+            return null;
+        }
+
         AppUser appUser = await _collectionAppUser
             .Find(doc => doc.NormalizedUserName == targetUserName.ToUpper())
             .FirstOrDefaultAsync(cancellationToken);

@@ -3,7 +3,7 @@ namespace api.Controllers;
 [Authorize]
 public class AccountController(IAccountRepository _accountRepository) : BaseApiController
 {
-    [AllowAnonymous]
+    [AllowAnonymous] 
     [HttpPost("login")]
     public async Task<ActionResult<LoggedInDto>> Login(LoginDto userInput, CancellationToken cancellationToken)
     {
