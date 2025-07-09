@@ -22,6 +22,7 @@ public class ManagerRepository : IManagerRepository
         var database = client.GetDatabase(dbSettings.DatabaseName);
         _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.collectionUsers);
         _collectionCourse = database.GetCollection<Course>(AppVariablesExtensions.collectionCourses);
+        _collectionAttendence = database.GetCollection<Attendence>(AppVariablesExtensions.collectionAttendences);
 
         _userManager = userManager;
         _tokenService = tokenService;
@@ -665,9 +666,6 @@ public class ManagerRepository : IManagerRepository
 
         if (targetCourseId is null)
             return null;
-
-        // inja bug daram ke date in studentId ke az attendenceParams miyad ro ba in appUserId moghayess mikonae
-        //valie man attendenceParams Id ro por nkardam
 
         IMongoQueryable<Attendence>? query = _collectionAttendence.AsQueryable<Attendence>()
             .Where(doc => doc.StudentId == appUser.Id && doc.CourseId == targetCourseId);

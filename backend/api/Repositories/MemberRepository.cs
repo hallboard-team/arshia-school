@@ -124,24 +124,6 @@ public class MemberRepository : IMemberRepository
             : Mappers.ConvertAppUserToProfileDto(appUser);
     }
 
-    // public async Task<MemberDto?> GetByUserNameAsync(string memberUserName, CancellationToken cancellationToken)
-    // {
-    //     // ObjectId memberId = await _collectionAppUser.AsQueryable()
-    //     // .Where(appUser => appUser.NormalizedUserName == memberUserName)
-    //     // .Select(appUser => appUser.Id)
-    //     // .FirstOrDefaultAsync(cancellationToken);
-
-    //     AppUser appUser = await _collectionAppUser.Find<AppUser>(appUser =>
-    //             appUser.NormalizedUserName == memberUserName).FirstOrDefaultAsync(cancellationToken);
-
-    //     if (appUser.ToString() is not null)
-    //     {
-    //         return Mappers.ConvertAppUserToMemberDto(appUser);
-    //     }
-
-    //     return null;
-    // }
-
     public async Task<List<Course?>> GetCourseAsync(string HashedUserId, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(HashedUserId, cancellationToken);

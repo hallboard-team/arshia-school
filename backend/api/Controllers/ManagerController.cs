@@ -323,20 +323,11 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         {
             return BadRequest("دوره مورد نظر باید وارد بشود");
         }
-        // ObjectId? userId = await _tokenService.GetActualUserIdAsync(User.GetHashedUserId(), cancellationToken);
 
-        // if (userId is null)
-        //     return Unauthorized("You are not logged in. Login in again.");
-
-        // attendenceParams.UserId = userId;
-
-        // PagedList<Attendence> pagedAttendences = await _memberRepository.GetAllAttendenceAsync(attendenceParams, userId, targetCourseTitle, cancellationToken);
         PagedList<Attendence> pagedAttendences = await _managerRepository.GetAllAttendenceAsync(attendenceParams, targetMemberUserName, targetCourseTitle, cancellationToken);
 
         if (pagedAttendences.Count == 0)
             return NoContent();
-
-        // After that we shure to exist on Controller we must set PaginaionHeader here before Converting AppUseer to studentDto
 
         PaginationHeader paginationHeader = new(
             CurrentPage: pagedAttendences.CurrentPage,
@@ -346,8 +337,6 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         );
 
         Response.AddPaginationHeader(paginationHeader);
-
-        //after setup now we can covert appUser to studentDto
 
         List<ShowStudentStatusDto> showStudentStatusDtos = [];
 
