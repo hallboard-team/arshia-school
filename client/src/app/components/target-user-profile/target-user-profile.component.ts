@@ -53,7 +53,7 @@ export class TargetUserProfileComponent implements OnInit {
   private _matSnackBar = inject(MatSnackBar);
   private _platformId = inject(PLATFORM_ID);
 
-  targetUserPofile: TargetUserProfile | null = null;
+  targetUserProfile: TargetUserProfile | null = null;
   courses: Course[] | null = [];
   shamsiCourses: (Course & { shamsiStart: string })[] = [];
   courseTitles: string[] | null = [];
@@ -165,7 +165,7 @@ export class TargetUserProfileComponent implements OnInit {
       if (memberUserName) {
         this._managerService.getMemberByUserName(memberUserName).subscribe({
           next: (data) => {
-            this.targetUserPofile = data;
+            this.targetUserProfile = data;
             this.initTargetControllersValues(data);
             this.loading = false;
           },
@@ -252,7 +252,7 @@ export class TargetUserProfileComponent implements OnInit {
               verticalPosition: 'bottom',
               duration: 10000
             });
-            this.targetUserPofile = data;
+            this.targetUserProfile = data;
           },
           error: err => {
             this._matSnackBar.open("در انجام آپدیت خطا پیش آمده", "Close", {

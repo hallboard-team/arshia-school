@@ -18,6 +18,10 @@ import { UserProfile } from '../models/user-profile.model';
 import { TargetUserProfile } from '../models/target-user-profile.model';
 import { Course } from '../models/course.model';
 import { EnrolledCourse, Payment } from '../models/helpers/enrolled-course.model';
+import { AttendenceParams } from '../models/helpers/attendence-params';
+import { Attendence } from '../models/attendence.model';
+import { PaginatedResult } from '../models/helpers/paginatedResult';
+import { PaginationHandler } from '../extensions/paginationHandler';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +30,7 @@ export class ManagerService {
   private _http = inject(HttpClient);
   private _apiUrl: string = environment.apiUrl + 'manager/';
   private snackBar = inject(MatSnackBar);
+  private paginationHandler = new PaginationHandler();
 
   createTeacher(managerInput: RegisterUser): Observable<LoggedInUser | null> {
     return this._http.post<LoggedInUser>(this._apiUrl + 'create-teacher', managerInput).pipe(
@@ -91,6 +96,20 @@ export class ManagerService {
 
   getTargetUserEnrolledCourse(targetMemberUserName: string | null, courseTitle: string): Observable<EnrolledCourse> {
     return this._http.get<EnrolledCourse>(this._apiUrl + 'get-target-member-enrolled-course/' + targetMemberUserName + '/' + courseTitle);
+  }
+
+  getTargetUserAttendence(attendenceParams: AttendenceParams, targetUserName: string, targetCourseTitle: string): Observable<PaginatedResult<Attendence[]>> {
+    let params = new HttpParams();
+
+    if (attendenceParams?.pageNumber)
+      params = params.append('pageNumber', attendenceParams.pageNumber);
+    if (attendenceParams?.pageSize)
+      params = params.append('pageSize', attendenceParams.pageSize);
+
+    return this.paginationHandler.getPaginatedResult<Attendence[]>(
+      `${this._apiUrl}get-target-member-attendences/${targetUserName}/${targetCourseTitle}`,
+      params
+    );
   }
 
   getTargetPayment(targetPaymentId: string | null): Observable<Payment> {

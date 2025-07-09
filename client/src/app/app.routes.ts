@@ -53,11 +53,12 @@ export const routes: Routes = [
             { path: 'manager-panel', component: ManageerPannelComponent, canActivate: [managerGuard] },
             { path: 'add-course', component: AddCourseComponent, canActivate: [managerGuard] },
             { path: 'update-course/:courseTitle', component: CourseUpdateComponent, canActivate: [managerGuard] },
+            { path: 'target-member-enrolled-course/:memberUserName/:courseTitle', component: TargetMemberEnrolledCourseComponent, canActivate: [managerGuard] },
+            { path: 'target-payment/:targetPaymentId', component: UploadPhotoComponent, canActivate: [managerGuard] },
 
             // Teacher-only
             { path: 'teacher-panel', component: TeacherComponent, canActivate: [teacherGuard] },
-            { path: 'students-card/:courseTitle', component: StudentListComponent },
-            { path: 'attendences-card/:courseTitle', component: AttendenceListComponent },
+
 
             // Secretary-only
             { path: 'secretary-panel', component: SecretaryComponent, canActivate: [secretaryGuard] },
@@ -69,17 +70,16 @@ export const routes: Routes = [
             { path: 'course-card', component: CourseCardComponent },
             { path: 'attendences', component: AttendenceCardComponent },
             { path: 'member-card', component: MemberCardComponent },
+            { path: 'students-card/:courseTitle', component: StudentListComponent },
+            { path: 'attendences-card/:courseTitle', component: AttendenceListComponent },
+            { path: 'attendences-card/:memberUserName/:courseTitle', component: AttendenceListComponent, canActivate: [managerGuard] },
             // { path: 'edit-member/:memberEmail', component: EditMemberComponent },
             { path: 'member-enrolled-course/:courseTitle', component: MemberEnrolledCourseComponent },
-            { path: 'target-member-enrolled-course/:memberUserName/:courseTitle', component: TargetMemberEnrolledCourseComponent, canActivate: [managerGuard] },
-            { path: 'target-payment/:targetPaymentId', component: UploadPhotoComponent, canActivate: [managerGuard] },
 
-            // Fallback
             { path: 'not-found', component: NotFoundComponent }
         ]
     },
 
-    // Guest-only routes
     {
         path: '',
         runGuardsAndResolvers: 'always',
@@ -90,9 +90,9 @@ export const routes: Routes = [
         ]
     },
 
-    // Catch-all
     { path: '**', component: NotFoundComponent, pathMatch: 'full' }
 ];
+
 // export const routes: Routes = [
 //     { path: '', component: HomeComponent },
 //     { path: 'home', component: HomeComponent },

@@ -8,7 +8,7 @@
     <div class="div-profile">
         <div class="profile-card">
             <div class="profile-image">
-                @if (targetUserPofile?.gender == 'male') {
+                @if (targetUserProfile?.gender == 'male') {
                 <img src="../assets/images/menProfilePhoto.png" alt="Profile">
                 }@else {
                 <img src="../assets/images/womenProfilePhoto.png" alt="Profile">
@@ -16,14 +16,14 @@
             </div>
 
             <div class="profile-info">
-                <span class="description">ایمیل: {{targetUserPofile?.email}}</span>
-                <span class="description">نام: {{targetUserPofile?.name}}</span>
-                <span class="description">نام خانوادگی: {{targetUserPofile?.lastName}}</span>
-                <span class="description">تاریخ تولد: {{targetUserPofile?.age}}</span>
-                <span class="description">شماره تلفن: {{targetUserPofile?.phoneNum}}</span>
-                <span class="description">نام کاربری: {{targetUserPofile?.userName}}</span>
+                <span class="description">ایمیل: {{targetUserProfile?.email}}</span>
+                <span class="description">نام: {{targetUserProfile?.name}}</span>
+                <span class="description">نام خانوادگی: {{targetUserProfile?.lastName}}</span>
+                <span class="description">تاریخ تولد: {{targetUserProfile?.age}}</span>
+                <span class="description">شماره تلفن: {{targetUserProfile?.phoneNum}}</span>
+                <span class="description">نام کاربری: {{targetUserProfile?.userName}}</span>
 
-                @if (targetUserPofile?.gender == 'male') {
+                @if (targetUserProfile?.gender == 'male') {
                 <span class="gender-men-span">جنسیت: مرد</span>
                 }@else {
                 <span class="gender-women-span">جنسیت: زن</span>
@@ -130,7 +130,7 @@
             </mat-tab>
 
             <mat-tab label="دوره ها">
-                @if (courses && targetUserPofile) {
+                @if (courses && targetUserProfile) {
                 <ng-container>
                     <div class="div-courses">
                         <!-- <div class="div-title-course">
@@ -149,7 +149,7 @@
                             <div class="course-list">
                                 @for (course of shamsiCourses; track $index) {
                                 <div class="course-card">
-                                    @if (targetUserPofile.gender == 'male') {
+                                    @if (targetUserProfile.gender == 'male') {
                                     <span class="name-of-course-men">{{ course.title }}</span>
                                     }@else {
                                     <span class="name-of-course-women">{{ course.title }}</span>
@@ -171,11 +171,12 @@
                                     <div class="div-button-show-classmate">
                                         <button [routerLink]="['/students-card/' + course.title]">مشاهده
                                             دانشجویان</button>
-                                        <button [routerLink]="['/attendences-card/' + course.title]">
+                                        <button
+                                            [routerLink]="['/attendences-card/' + targetUserProfile.userName + '/' + course.title]">
                                             دیدن حضور و غیاب
                                         </button>
                                         <button
-                                            [routerLink]="['/' + 'target-member-enrolled-course/' + targetUserPofile.userName + '/' + course.title]">
+                                            [routerLink]="['/' + 'target-member-enrolled-course/' + targetUserProfile.userName + '/' + course.title]">
                                             مشاهده پرداخت ها
                                         </button>
                                     </div>
