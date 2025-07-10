@@ -23,9 +23,9 @@ import { NavbarComponent } from '../navbar/navbar.component';
   selector: 'app-manageer-pannel',
   standalone: true,
   imports: [
-    MatTabsModule, CommonModule, FormsModule, 
-    ReactiveFormsModule, MatFormFieldModule, MatInputModule, 
-    MatButtonModule, MatSnackBarModule, MatRadioModule, 
+    MatTabsModule, CommonModule, FormsModule,
+    ReactiveFormsModule, MatFormFieldModule, MatInputModule,
+    MatButtonModule, MatSnackBarModule, MatRadioModule,
     MatDatepickerModule, MatNativeDateModule, AutoFocusDirective,
     MatTableModule, MatIconModule, NavbarComponent
   ],
@@ -33,8 +33,7 @@ import { NavbarComponent } from '../navbar/navbar.component';
   styleUrl: './manageer-pannel.component.scss'
 })
 //Dont foget Implement ngOnInit and Destroy
-export class ManageerPannelComponent implements OnInit, OnDestroy{
-  //#region injects and vars
+export class ManageerPannelComponent implements OnInit, OnDestroy {
   accountService = inject(AccountService);
   managerService = inject(ManagerService);
 
@@ -47,13 +46,9 @@ export class ManageerPannelComponent implements OnInit, OnDestroy{
   passowrdsNotMatch: boolean | undefined;
   emailExistsError: string | undefined;
   loggedInUser: LoggedInUser | null | undefined;
-  //for get-users-with-role
   private snackBar = inject(MatSnackBar);
 
-  //#endregion injects and vars
-
   //#region auto-run methods
-
   constructor() {
     this.loggedInUser = this.accountService.loggedInUserSig();
   }
@@ -73,7 +68,6 @@ export class ManageerPannelComponent implements OnInit, OnDestroy{
 
   addMemberFg = this.fb.group({
     emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
-    userNameCtrl: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(30)]],
     passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
@@ -82,15 +76,12 @@ export class ManageerPannelComponent implements OnInit, OnDestroy{
     dateOfBirthCtrl: ['', [Validators.required]],
     genderCtrl: ['', [Validators.required]]
   })
-  
+
   get GenderCtrl(): FormControl {
     return this.addMemberFg.get('genderCtrl') as FormControl;
   }
   get EmailCtrl(): FormControl {
     return this.addMemberFg.get('emailCtrl') as FormControl;
-  }
-  get UserNameCtrl(): FormControl {
-    return this.addMemberFg.get('userNameCtrl') as FormControl;
   }
   get PasswordCtrl(): FormControl {
     return this.addMemberFg.get('passwordCtrl') as FormControl;
@@ -110,7 +101,7 @@ export class ManageerPannelComponent implements OnInit, OnDestroy{
   get DateOfBirthCtrl(): FormControl {
     return this.addMemberFg.get('dateOfBirthCtrl') as FormControl;
   }
-  
+
   addStudent(): void {
     const dob: string | undefined = this.getDateOnly(this.DateOfBirthCtrl.value);
 
@@ -119,7 +110,6 @@ export class ManageerPannelComponent implements OnInit, OnDestroy{
 
       let registerUser: RegisterUser = {
         email: this.EmailCtrl.value,
-        userName: this.UserNameCtrl.value,
         password: this.PasswordCtrl.value,
         confirmPassword: this.ConfirmPasswordCtrl.value,
         gender: this.GenderCtrl.value,
@@ -140,59 +130,57 @@ export class ManageerPannelComponent implements OnInit, OnDestroy{
   }
 
   addSecretary(): void {
-   const dob: string | undefined = this.getDateOnly(this.DateOfBirthCtrl.value);
+    const dob: string | undefined = this.getDateOnly(this.DateOfBirthCtrl.value);
 
-   if (this.PasswordCtrl.value === this.ConfirmPasswordCtrl.value) {
-     this.passowrdsNotMatch = false;
+    if (this.PasswordCtrl.value === this.ConfirmPasswordCtrl.value) {
+      this.passowrdsNotMatch = false;
 
-     let registerUser: RegisterUser = {
-       email: this.EmailCtrl.value,
-       userName: this.UserNameCtrl.value,
-       password: this.PasswordCtrl.value,
-       confirmPassword: this.ConfirmPasswordCtrl.value,
-       gender: this.GenderCtrl.value,
-       dateOfBirth: dob,
-       name: this.NameCtrl.value,
-       lastName: this.LastNameCtrl.value,
-       phoneNum: this.PhoneNumCtrl.value
-     }
+      let registerUser: RegisterUser = {
+        email: this.EmailCtrl.value,
+        password: this.PasswordCtrl.value,
+        confirmPassword: this.ConfirmPasswordCtrl.value,
+        gender: this.GenderCtrl.value,
+        dateOfBirth: dob,
+        name: this.NameCtrl.value,
+        lastName: this.LastNameCtrl.value,
+        phoneNum: this.PhoneNumCtrl.value
+      }
 
-    this.managerService.createSecretary(registerUser).subscribe({
-       next: user => console.log(user),
-       error: err => this.emailExistsError = err.error
-     });
-   }
-   else {
-     this.passowrdsNotMatch = true;
-   }
+      this.managerService.createSecretary(registerUser).subscribe({
+        next: user => console.log(user),
+        error: err => this.emailExistsError = err.error
+      });
+    }
+    else {
+      this.passowrdsNotMatch = true;
+    }
   }
-  
+
   addTeacher(): void {
-   const dob: string | undefined = this.getDateOnly(this.DateOfBirthCtrl.value);
+    const dob: string | undefined = this.getDateOnly(this.DateOfBirthCtrl.value);
 
-   if (this.PasswordCtrl.value === this.ConfirmPasswordCtrl.value) {
-     this.passowrdsNotMatch = false;
+    if (this.PasswordCtrl.value === this.ConfirmPasswordCtrl.value) {
+      this.passowrdsNotMatch = false;
 
-     let registerUser: RegisterUser = {
-       email: this.EmailCtrl.value,
-       userName: this.UserNameCtrl.value,
-       password: this.PasswordCtrl.value,
-       confirmPassword: this.ConfirmPasswordCtrl.value,
-       gender: this.GenderCtrl.value,
-       dateOfBirth: dob,
-       name: this.NameCtrl.value,
-       lastName: this.LastNameCtrl.value,
-       phoneNum: this.PhoneNumCtrl.value
-     }
+      let registerUser: RegisterUser = {
+        email: this.EmailCtrl.value,
+        password: this.PasswordCtrl.value,
+        confirmPassword: this.ConfirmPasswordCtrl.value,
+        gender: this.GenderCtrl.value,
+        dateOfBirth: dob,
+        name: this.NameCtrl.value,
+        lastName: this.LastNameCtrl.value,
+        phoneNum: this.PhoneNumCtrl.value
+      }
 
-     this.managerService.createTeacher(registerUser).subscribe({
-       next: user => console.log(user),
-       error: err => this.emailExistsError = err.error
-     });
-   }
-   else {
-     this.passowrdsNotMatch = true;
-   }
+      this.managerService.createTeacher(registerUser).subscribe({
+        next: user => console.log(user),
+        error: err => this.emailExistsError = err.error
+      });
+    }
+    else {
+      this.passowrdsNotMatch = true;
+    }
   }
 
   // showAllUsersWithRoles(): void {

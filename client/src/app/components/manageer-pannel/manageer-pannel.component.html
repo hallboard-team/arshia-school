@@ -21,7 +21,8 @@
 
           <mat-form-field appearance="outline">
             <mat-label>ایمیل</mat-label>
-            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" label="Email" placeHolder="Your email" matInput>
+            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" label="Email"
+              placeHolder="Your email" matInput>
             <mat-hint>ایمیل خودرا وارد کنید</mat-hint>
             @if (EmailCtrl.hasError('required')) {
             <mat-error>فرم رو پرکنید</mat-error>
@@ -31,7 +32,7 @@
             }
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <!-- <mat-form-field appearance="outline">
             <mat-label>نام کاربری</mat-label>
             <input class="input" type="text" formControlName="userNameCtrl" label="Username" placeHolder="Your username"
               matInput>
@@ -39,11 +40,12 @@
             @if (EmailCtrl.hasError('required')) {
             <mat-error>فرم رو پرکنید</mat-error>
             }
-          </mat-form-field>
+          </mat-form-field> -->
 
           <mat-form-field appearance="outline">
             <mat-label>رمز عبور</mat-label>
-            <input class="input" type="password" formControlName="passwordCtrl" label="Password" placeHolder="Your password" matInput>
+            <input class="input" type="password" formControlName="passwordCtrl" label="Password"
+              placeHolder="Your password" matInput>
             @if (PasswordCtrl.hasError('required')) {
             <mat-error>فرم رو پرکنید</mat-error>
             }
@@ -54,7 +56,7 @@
             <mat-error>خیلی بلنده حداقل: {{PasswordCtrl.errors['maxlength'].requiredLength}} حرف</mat-error>
             }
           </mat-form-field>
-      
+
           <mat-form-field appearance="outline">
             <mat-label>تکرار رمز عبور</mat-label>
             <input class="input" type="password" formControlName="confirmPasswordCtrl" label="Confirm Password"
@@ -72,7 +74,8 @@
 
           <mat-form-field appearance="outline">
             <mat-label>نام</mat-label>
-            <input class="input" type="text" formControlName="nameCtrl" label="Name" placeHolder="Enter your desired name." matInput>
+            <input class="input" type="text" formControlName="nameCtrl" label="Name"
+              placeHolder="Enter your desired name." matInput>
             @if (NameCtrl.hasError('required')) {
             <mat-error>فرم رو پرکنید</mat-error>
             }
@@ -86,7 +89,8 @@
 
           <mat-form-field appearance="outline">
             <mat-label>نام خانوادگی</mat-label>
-            <input class="input" type="text" formControlName="lastNameCtrl" label="Last Name" placeHolder="Enter your desired name." matInput>
+            <input class="input" type="text" formControlName="lastNameCtrl" label="Last Name"
+              placeHolder="Enter your desired name." matInput>
             @if (LastNameCtrl.hasError('required')) {
             <mat-error>فرم رو پرکنید</mat-error>
             }
@@ -100,7 +104,8 @@
 
           <mat-form-field appearance="outline">
             <mat-label>شماره تلفن</mat-label>
-            <input class="input" type="text" formControlName="phoneNumCtrl" label="Phone Number" placeHolder="Enter your phone number." matInput>
+            <input class="input" type="text" formControlName="phoneNumCtrl" label="Phone Number"
+              placeHolder="Enter your phone number." matInput>
             @if (LastNameCtrl.hasError('required')) {
             <mat-error>فرم رو پرکنید</mat-error>
             }
@@ -108,7 +113,8 @@
 
           <mat-form-field appearance="outline">
             <mat-label>تاریخ تولد</mat-label>
-            <input class="input" formControlName="dateOfBirthCtrl" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp1" matInput>
+            <input class="input" formControlName="dateOfBirthCtrl" [min]="minDate" [max]="maxDate" matInput
+              [matDatepicker]="dp1" matInput>
             <!-- @if (DateOfBirthCtrl.invalid) { -->
             <mat-hint>بین {{minDate.getFullYear()}} تا {{maxDate.getFullYear()}}</mat-hint>
             <!-- } -->
@@ -142,7 +148,8 @@
 
           <mat-form-field appearance="outline">
             <mat-label>ایمیل</mat-label>
-            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" label="Email" placeHolder="Your email" matInput>
+            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" label="Email"
+              placeHolder="Your email" matInput>
             <mat-hint>ایمیل خودرا وارد کنید</mat-hint>
             @if (EmailCtrl.hasError('required')) {
             <mat-error>فرم رو پرکنید</mat-error>
@@ -153,18 +160,9 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>نام کاربری</mat-label>
-            <input class="input" type="text" formControlName="userNameCtrl" label="Username" placeHolder="Your username"
-              matInput>
-            <mat-hint>بین ۱ تا ۳۰ حرف</mat-hint>
-            @if (EmailCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
             <mat-label>رمز عبور</mat-label>
-            <input class="input" type="password" formControlName="passwordCtrl" label="Password" placeHolder="Your password" matInput>
+            <input class="input" type="password" formControlName="passwordCtrl" label="Password"
+              placeHolder="Your password" matInput>
             @if (PasswordCtrl.hasError('required')) {
             <mat-error>فرم رو پرکنید</mat-error>
             }
@@ -175,7 +173,7 @@
             <mat-error>خیلی بلنده حداقل: {{PasswordCtrl.errors['maxlength'].requiredLength}} حرف</mat-error>
             }
           </mat-form-field>
-      
+
           <mat-form-field appearance="outline">
             <mat-label>تکرار رمز عبور</mat-label>
             <input class="input" type="password" formControlName="confirmPasswordCtrl" label="Confirm Password"
@@ -193,7 +191,8 @@
 
           <mat-form-field appearance="outline">
             <mat-label>نام</mat-label>
-            <input class="input" type="text" formControlName="nameCtrl" label="Name" placeHolder="Enter your desired name." matInput>
+            <input class="input" type="text" formControlName="nameCtrl" label="Name"
+              placeHolder="Enter your desired name." matInput>
             @if (NameCtrl.hasError('required')) {
             <mat-error>فرم رو پرکنید</mat-error>
             }
@@ -207,7 +206,8 @@
 
           <mat-form-field appearance="outline">
             <mat-label>نام خانوادگی</mat-label>
-            <input class="input" type="text" formControlName="lastNameCtrl" label="Last Name" placeHolder="Enter your desired name." matInput>
+            <input class="input" type="text" formControlName="lastNameCtrl" label="Last Name"
+              placeHolder="Enter your desired name." matInput>
             @if (LastNameCtrl.hasError('required')) {
             <mat-error>فرم رو پرکنید</mat-error>
             }
@@ -221,7 +221,8 @@
 
           <mat-form-field appearance="outline">
             <mat-label>شماره تلفن</mat-label>
-            <input class="input" type="text" formControlName="phoneNumCtrl" label="Phone Number" placeHolder="Enter your phone number." matInput>
+            <input class="input" type="text" formControlName="phoneNumCtrl" label="Phone Number"
+              placeHolder="Enter your phone number." matInput>
             @if (LastNameCtrl.hasError('required')) {
             <mat-error>فرم رو پرکنید</mat-error>
             }
@@ -229,7 +230,8 @@
 
           <mat-form-field appearance="outline">
             <mat-label>تاریخ تولد</mat-label>
-            <input class="input" formControlName="dateOfBirthCtrl" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp2" matInput>
+            <input class="input" formControlName="dateOfBirthCtrl" [min]="minDate" [max]="maxDate" matInput
+              [matDatepicker]="dp2" matInput>
             <!-- @if (DateOfBirthCtrl.invalid) { -->
             <mat-hint>بین {{minDate.getFullYear()}} تا {{maxDate.getFullYear()}}</mat-hint>
             <!-- } -->
@@ -263,7 +265,8 @@
 
           <mat-form-field appearance="outline">
             <mat-label>ایمیل</mat-label>
-            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" label="Email" placeHolder="Your email" matInput>
+            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" label="Email"
+              placeHolder="Your email" matInput>
             <mat-hint>ایمیل خودرا وارد کنید</mat-hint>
             @if (EmailCtrl.hasError('required')) {
             <mat-error>فرم رو پرکنید</mat-error>
@@ -274,18 +277,9 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>نام کاربری</mat-label>
-            <input class="input" type="text" formControlName="userNameCtrl" label="Username" placeHolder="Your username"
-              matInput>
-            <mat-hint>بین ۱ تا ۳۰ حرف</mat-hint>
-            @if (EmailCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
             <mat-label>رمز عبور</mat-label>
-            <input class="input" type="password" formControlName="passwordCtrl" label="Password" placeHolder="Your password" matInput>
+            <input class="input" type="password" formControlName="passwordCtrl" label="Password"
+              placeHolder="Your password" matInput>
             @if (PasswordCtrl.hasError('required')) {
             <mat-error>فرم رو پرکنید</mat-error>
             }
@@ -296,7 +290,7 @@
             <mat-error>خیلی بلنده حداقل: {{PasswordCtrl.errors['maxlength'].requiredLength}} حرف</mat-error>
             }
           </mat-form-field>
-      
+
           <mat-form-field appearance="outline">
             <mat-label>تکرار رمز عبور</mat-label>
             <input class="input" type="password" formControlName="confirmPasswordCtrl" label="Confirm Password"
@@ -314,7 +308,8 @@
 
           <mat-form-field appearance="outline">
             <mat-label>نام</mat-label>
-            <input class="input" type="text" formControlName="nameCtrl" label="Name" placeHolder="Enter your desired name." matInput>
+            <input class="input" type="text" formControlName="nameCtrl" label="Name"
+              placeHolder="Enter your desired name." matInput>
             @if (NameCtrl.hasError('required')) {
             <mat-error>فرم رو پرکنید</mat-error>
             }
@@ -328,7 +323,8 @@
 
           <mat-form-field appearance="outline">
             <mat-label>نام خانوادگی</mat-label>
-            <input class="input" type="text" formControlName="lastNameCtrl" label="Last Name" placeHolder="Enter your desired name." matInput>
+            <input class="input" type="text" formControlName="lastNameCtrl" label="Last Name"
+              placeHolder="Enter your desired name." matInput>
             @if (LastNameCtrl.hasError('required')) {
             <mat-error>فرم رو پرکنید</mat-error>
             }
@@ -342,7 +338,8 @@
 
           <mat-form-field appearance="outline">
             <mat-label>شماره تلفن</mat-label>
-            <input class="input" type="text" formControlName="phoneNumCtrl" label="Phone Number" placeHolder="Enter your phone number." matInput>
+            <input class="input" type="text" formControlName="phoneNumCtrl" label="Phone Number"
+              placeHolder="Enter your phone number." matInput>
             @if (LastNameCtrl.hasError('required')) {
             <mat-error>فرم رو پرکنید</mat-error>
             }
@@ -350,7 +347,8 @@
 
           <mat-form-field appearance="outline">
             <mat-label>تاریخ تولد</mat-label>
-            <input class="input" formControlName="dateOfBirthCtrl" [min]="minDate" [max]="maxDate" matInput [matDatepicker]="dp3" matInput>
+            <input class="input" formControlName="dateOfBirthCtrl" [min]="minDate" [max]="maxDate" matInput
+              [matDatepicker]="dp3" matInput>
             <!-- @if (DateOfBirthCtrl.invalid) { -->
             <mat-hint>بین {{minDate.getFullYear()}} تا {{maxDate.getFullYear()}}</mat-hint>
             <!-- } -->

@@ -102,10 +102,6 @@
                     border: none;
                     height: 40px;
                     width: 120px;
-                    // background-color: red;
-                    // background: linear-gradient(145deg, #0084ff, #006fe6);
-                    // box-shadow:  5px 5px 10px #0057b5,
-                    //     -5px -5px 10px #009fff;
                 }
             }
         }
@@ -157,7 +153,7 @@
 }
 
 ::ng-deep mat-tab-group {
-    margin-top: 5rem;
+    margin-top: 6rem;
 }
 
 ::ng-deep mat-form-field {
