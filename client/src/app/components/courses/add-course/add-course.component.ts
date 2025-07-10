@@ -112,10 +112,10 @@ export class AddCourseComponent {
     gregorian: string;
     timestamp: number;
   }): void {
-    this.shamsiDisplayDate = event.shamsi; // برای نمایش در input
-    this.StartCtrl.setValue(new Date(event.gregorian)); // تاریخ میلادی برای ارسال
+    this.shamsiDisplayDate = event.shamsi;
+    this.StartCtrl.setValue(new Date(event.gregorian));
 
-    this.closeDatePicker(); // بستن تقویم
+    this.closeDatePicker();
   }
 
   openDatePicker() {

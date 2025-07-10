@@ -7,7 +7,7 @@
 <section id="main-section">
   <mat-tab-group>
     <mat-tab label="ثبت نام منشی">
-      <form class="register-form" [formGroup]="addMemberFg" (ngSubmit)="addMemberFg.valid && addSecretary()">
+      <form class="register-form" [formGroup]="addSecretaryFg" (ngSubmit)="addSecretary()">
         <div class="content">
 
           <div class="div-title-radio-input">
@@ -21,125 +21,82 @@
 
           <mat-form-field appearance="outline">
             <mat-label>ایمیل</mat-label>
-            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" label="Email"
-              placeHolder="Your email" matInput>
+            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" matInput>
             <mat-hint>ایمیل خودرا وارد کنید</mat-hint>
-            @if (EmailCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
-            @else if (EmailCtrl.hasError('pattern')) {
-            <mat-error>ایمیل رو به درستی وارد کنید</mat-error>
-            }
+            <mat-error *ngIf="SecretaryEmailCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            <mat-error *ngIf="SecretaryEmailCtrl.hasError('pattern')">ایمیل رو به درستی وارد کنید</mat-error>
           </mat-form-field>
-
-          <!-- <mat-form-field appearance="outline">
-            <mat-label>نام کاربری</mat-label>
-            <input class="input" type="text" formControlName="userNameCtrl" label="Username" placeHolder="Your username"
-              matInput>
-            <mat-hint>بین ۱ تا ۳۰ حرف</mat-hint>
-            @if (EmailCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
-          </mat-form-field> -->
 
           <mat-form-field appearance="outline">
             <mat-label>رمز عبور</mat-label>
-            <input class="input" type="password" formControlName="passwordCtrl" label="Password"
-              placeHolder="Your password" matInput>
-            @if (PasswordCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
-            @else if (PasswordCtrl.errors && PasswordCtrl.hasError('minlength')) {
-            <mat-error>خیلی کوتاهه حداقل : {{PasswordCtrl.errors['minlength'].requiredLength}} حرف</mat-error>
-            }
-            @else if(PasswordCtrl.errors && PasswordCtrl.hasError('maxlength')) {
-            <mat-error>خیلی بلنده حداقل: {{PasswordCtrl.errors['maxlength'].requiredLength}} حرف</mat-error>
-            }
+            <input class="input" type="password" formControlName="passwordCtrl" matInput>
+            <mat-error *ngIf="SecretaryPasswordCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            <mat-error *ngIf="SecretaryPasswordCtrl.hasError('minlength')">خیلی کوتاهه حداقل :
+              {{SecretaryPasswordCtrl.errors?.['minlength']?.requiredLength}} حرف</mat-error>
+            <mat-error *ngIf="SecretaryPasswordCtrl.hasError('maxlength')">خیلی بلنده حداکثر:
+              {{SecretaryPasswordCtrl.errors?.['maxlength']?.requiredLength}} حرف</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>تکرار رمز عبور</mat-label>
-            <input class="input" type="password" formControlName="confirmPasswordCtrl" label="Confirm Password"
-              placeHolder="Re-enter password" matInput>
-            @if (ConfirmPasswordCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
-            @else if (ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('minlength')) {
-            <mat-error>خیلی کوتاهه حداقل : {{ConfirmPasswordCtrl.errors['minlength'].requiredLength}} حرف</mat-error>
-            }
-            @else if(ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('maxlength')) {
-            <mat-error>خیلی بلنده حداقل: {{ConfirmPasswordCtrl.errors['maxlength'].requiredLength}} حرف</mat-error>
-            }
+            <input class="input" type="password" formControlName="confirmPasswordCtrl" matInput>
+            <mat-error *ngIf="SecretaryConfirmPasswordCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            <mat-error *ngIf="SecretaryConfirmPasswordCtrl.hasError('minlength')">خیلی کوتاهه حداقل :
+              {{SecretaryConfirmPasswordCtrl.errors?.['minlength']?.requiredLength}} حرف</mat-error>
+            <mat-error *ngIf="SecretaryConfirmPasswordCtrl.hasError('maxlength')">خیلی بلنده حداکثر:
+              {{SecretaryConfirmPasswordCtrl.errors?.['maxlength']?.requiredLength}} حرف</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>نام</mat-label>
-            <input class="input" type="text" formControlName="nameCtrl" label="Name"
-              placeHolder="Enter your desired name." matInput>
-            @if (NameCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
-            @else if (NameCtrl.hasError('minlength')) {
-            <mat-error>خیلی کوتاهه حداقل :۲ حرف</mat-error>
-            }
-            @else if(NameCtrl.hasError('maxlength')) {
-            <mat-error>خیلی بلنده حداقل: ۳۰ حرف</mat-error>
-            }
+            <input class="input" type="text" formControlName="nameCtrl" matInput>
+            <mat-error *ngIf="SecretaryNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            <mat-error *ngIf="SecretaryNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل :۲ حرف</mat-error>
+            <mat-error *ngIf="SecretaryNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: ۳۰ حرف</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>نام خانوادگی</mat-label>
-            <input class="input" type="text" formControlName="lastNameCtrl" label="Last Name"
-              placeHolder="Enter your desired name." matInput>
-            @if (LastNameCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
-            @else if (LastNameCtrl.hasError('minlength')) {
-            <mat-error>خیلی کوتاهه حداقل :۲ حرف‍</mat-error>
-            }
-            @else if(LastNameCtrl.hasError('maxlength')) {
-            <mat-error>خیلی بلنده حداقل: ۳۰ حرف</mat-error>
-            }
+            <input class="input" type="text" formControlName="lastNameCtrl" matInput>
+            <mat-error *ngIf="SecretaryLastNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            <mat-error *ngIf="SecretaryLastNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل :۲ حرف</mat-error>
+            <mat-error *ngIf="SecretaryLastNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: ۳۰ حرف</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>شماره تلفن</mat-label>
-            <input class="input" type="text" formControlName="phoneNumCtrl" label="Phone Number"
-              placeHolder="Enter your phone number." matInput>
-            @if (LastNameCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
+            <input class="input" type="text" formControlName="phoneNumCtrl" matInput>
+            <mat-error *ngIf="SecretaryPhoneNumCtrl.hasError('required')">فرم رو پرکنید</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>تاریخ تولد</mat-label>
-            <input class="input" formControlName="dateOfBirthCtrl" [min]="minDate" [max]="maxDate" matInput
-              [matDatepicker]="dp1" matInput>
-            <!-- @if (DateOfBirthCtrl.invalid) { -->
-            <mat-hint>بین {{minDate.getFullYear()}} تا {{maxDate.getFullYear()}}</mat-hint>
-            <!-- } -->
-            <mat-datepicker-toggle matIconSuffix [for]="dp1"></mat-datepicker-toggle>
-            <mat-datepicker #dp1 touchUi disabled="false"></mat-datepicker>
-            @if (DateOfBirthCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
+            <input class="input" [value]="shamsiDisplayDate" readonly (click)="uiIsVisible = true" matInput />
           </mat-form-field>
 
+          <ng-persian-datepicker [calendarIsGregorian]="false" (dateOnSelect)="onSecretaryDateSelect($event)"
+            [dateFormat]="'jYYYY/jMM/jDD'" [dateGregorianFormat]="'YYYY-MM-DD'" [(uiIsVisible)]="uiIsVisible"
+            [uiTheme]="uiTheme" [uiYearView]="uiYearView" [uiMonthView]="uiMonthView"
+            [uiHideAfterSelectDate]="uiHideAfterSelectDate" [uiHideOnOutsideClick]="uiHideOnOutsideClick"
+            [uiTodayBtnEnable]="uiTodayBtnEnable">
+          </ng-persian-datepicker>
+
           <div class="div-btn-add">
-            <button type="submit" [disabled]="addMemberFg.invalid" mat-raised-button color="primary">ثبت نام</button>
+            <button type="submit" [disabled]="addSecretaryFg.invalid" mat-raised-button color="primary">ثبت نام</button>
           </div>
 
+          <mat-error *ngIf="passowrdsNotMatch" class="mat-caption mat-warn">
+            رمز عبور و تکرار آن یکسان نیستند.
+          </mat-error>
         </div>
       </form>
     </mat-tab>
 
     <mat-tab label="ثبت نام دانشجو">
-      <form class="register-form" [formGroup]="addMemberFg" (ngSubmit)="addMemberFg.valid && addStudent()">
+      <form class="register-form" [formGroup]="addStudentFg" (ngSubmit)="addStudent()">
         <div class="content">
-
           <div class="div-title-radio-input">
             <span class="title">ثبت نام دانشجو</span>
-
             <mat-radio-group class="radio-group" aria-label="Select an option" formControlName="genderCtrl">
               <mat-radio-button class="radio-button" value="male">مرد</mat-radio-button>
               <mat-radio-button class="radio-button" value="femaile">زن</mat-radio-button>
@@ -148,110 +105,78 @@
 
           <mat-form-field appearance="outline">
             <mat-label>ایمیل</mat-label>
-            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" label="Email"
-              placeHolder="Your email" matInput>
+            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" matInput>
             <mat-hint>ایمیل خودرا وارد کنید</mat-hint>
-            @if (EmailCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
-            @else if (EmailCtrl.hasError('pattern')) {
-            <mat-error>ایمیل رو به درستی وارد کنید</mat-error>
-            }
+            <mat-error *ngIf="StudentEmailCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            <mat-error *ngIf="StudentEmailCtrl.hasError('pattern')">ایمیل رو به درستی وارد کنید</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>رمز عبور</mat-label>
-            <input class="input" type="password" formControlName="passwordCtrl" label="Password"
-              placeHolder="Your password" matInput>
-            @if (PasswordCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
-            @else if (PasswordCtrl.errors && PasswordCtrl.hasError('minlength')) {
-            <mat-error>خیلی کوتاهه حداقل : {{PasswordCtrl.errors['minlength'].requiredLength}} حرف</mat-error>
-            }
-            @else if(PasswordCtrl.errors && PasswordCtrl.hasError('maxlength')) {
-            <mat-error>خیلی بلنده حداقل: {{PasswordCtrl.errors['maxlength'].requiredLength}} حرف</mat-error>
-            }
+            <input class="input" type="password" formControlName="passwordCtrl" matInput>
+            <mat-error *ngIf="StudentPasswordCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            <mat-error *ngIf="StudentPasswordCtrl.hasError('minlength')">خیلی کوتاهه حداقل :
+              {{StudentPasswordCtrl.errors?.['minlength']?.requiredLength}} حرف</mat-error>
+            <mat-error *ngIf="SecretaryPasswordCtrl.hasError('maxlength')">خیلی بلنده حداکثر:
+              {{StudentPasswordCtrl.errors?.['maxlength']?.requiredLength}} حرف</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>تکرار رمز عبور</mat-label>
-            <input class="input" type="password" formControlName="confirmPasswordCtrl" label="Confirm Password"
-              placeHolder="Re-enter password" matInput>
-            @if (ConfirmPasswordCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
-            @else if (ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('minlength')) {
-            <mat-error>خیلی کوتاهه حداقل : {{ConfirmPasswordCtrl.errors['minlength'].requiredLength}} حرف</mat-error>
-            }
-            @else if(ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('maxlength')) {
-            <mat-error>خیلی بلنده حداقل: {{ConfirmPasswordCtrl.errors['maxlength'].requiredLength}} حرف</mat-error>
-            }
+            <input class="input" type="password" formControlName="confirmPasswordCtrl" matInput>
+            <mat-error *ngIf="StudentConfirmPasswordCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            <mat-error *ngIf="StudentConfirmPasswordCtrl.hasError('minlength')">خیلی کوتاهه حداقل :
+              {{StudentConfirmPasswordCtrl.errors?.['minlength']?.requiredLength}} حرف</mat-error>
+            <mat-error *ngIf="StudentConfirmPasswordCtrl.hasError('maxlength')">خیلی بلنده حداکثر:
+              {{StudentConfirmPasswordCtrl.errors?.['maxlength']?.requiredLength}} حرف</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>نام</mat-label>
-            <input class="input" type="text" formControlName="nameCtrl" label="Name"
-              placeHolder="Enter your desired name." matInput>
-            @if (NameCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
-            @else if (NameCtrl.hasError('minlength')) {
-            <mat-error>خیلی کوتاهه حداقل :۲ حرف</mat-error>
-            }
-            @else if(NameCtrl.hasError('maxlength')) {
-            <mat-error>خیلی بلنده حداقل: ۳۰ حرف</mat-error>
-            }
+            <input class="input" type="text" formControlName="nameCtrl" matInput>
+            <mat-error *ngIf="StudentNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            <mat-error *ngIf="StudentNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل :۲ حرف</mat-error>
+            <mat-error *ngIf="StudentNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: ۳۰ حرف</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>نام خانوادگی</mat-label>
-            <input class="input" type="text" formControlName="lastNameCtrl" label="Last Name"
-              placeHolder="Enter your desired name." matInput>
-            @if (LastNameCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
-            @else if (LastNameCtrl.hasError('minlength')) {
-            <mat-error>خیلی کوتاهه حداقل :۲ حرف‍</mat-error>
-            }
-            @else if(LastNameCtrl.hasError('maxlength')) {
-            <mat-error>خیلی بلنده حداقل: ۳۰ حرف</mat-error>
-            }
+            <input class="input" type="text" formControlName="lastNameCtrl" matInput>
+            <mat-error *ngIf="StudentLastNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            <mat-error *ngIf="StudentLastNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل :۲ حرف‍</mat-error>
+            <mat-error *ngIf="StudentLastNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: ۳۰ حرف</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>شماره تلفن</mat-label>
-            <input class="input" type="text" formControlName="phoneNumCtrl" label="Phone Number"
-              placeHolder="Enter your phone number." matInput>
-            @if (LastNameCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
+            <input class="input" type="text" formControlName="phoneNumCtrl" matInput>
+            <mat-error *ngIf="StudentPhoneNumCtrl.hasError('required')">فرم رو پرکنید</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>تاریخ تولد</mat-label>
-            <input class="input" formControlName="dateOfBirthCtrl" [min]="minDate" [max]="maxDate" matInput
-              [matDatepicker]="dp2" matInput>
-            <!-- @if (DateOfBirthCtrl.invalid) { -->
-            <mat-hint>بین {{minDate.getFullYear()}} تا {{maxDate.getFullYear()}}</mat-hint>
-            <!-- } -->
-            <mat-datepicker-toggle matIconSuffix [for]="dp2"></mat-datepicker-toggle>
-            <mat-datepicker #dp2 touchUi disabled="false"></mat-datepicker>
-            @if (DateOfBirthCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
+            <input class="input" [value]="shamsiDisplayDate" readonly (click)="uiIsVisible = true" matInput />
           </mat-form-field>
 
-          <div class="div-btn-add">
-            <button type="submit" [disabled]="addMemberFg.invalid" mat-raised-button color="primary">ثبت نام</button>
-          </div>
+          <ng-persian-datepicker [calendarIsGregorian]="false" (dateOnSelect)="onStudentDateSelect($event)"
+            [dateFormat]="'jYYYY/jMM/jDD'" [dateGregorianFormat]="'YYYY-MM-DD'" [(uiIsVisible)]="uiIsVisible"
+            [uiTheme]="uiTheme" [uiYearView]="uiYearView" [uiMonthView]="uiMonthView"
+            [uiHideAfterSelectDate]="uiHideAfterSelectDate" [uiHideOnOutsideClick]="uiHideOnOutsideClick"
+            [uiTodayBtnEnable]="uiTodayBtnEnable">
+          </ng-persian-datepicker>
 
+          <mat-error *ngIf="passowrdsNotMatch" class="text-danger text-center">رمز عبور و تکرار آن یکسان
+            نیستند.</mat-error>
+
+          <div class="div-btn-add">
+            <button type="submit" [disabled]="addStudentFg.invalid" mat-raised-button color="primary">ثبت نام</button>
+          </div>
         </div>
       </form>
     </mat-tab>
 
     <mat-tab label="ثبت نام مدرس">
-      <form class="register-form" [formGroup]="addMemberFg" (ngSubmit)="addMemberFg.valid && addTeacher()">
+      <form class="register-form" [formGroup]="addTeacherFg" (ngSubmit)="addTeacherFg.valid && addTeacher()">
         <div class="content">
 
           <div class="div-title-radio-input">
@@ -265,102 +190,68 @@
 
           <mat-form-field appearance="outline">
             <mat-label>ایمیل</mat-label>
-            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" label="Email"
-              placeHolder="Your email" matInput>
+            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" matInput>
             <mat-hint>ایمیل خودرا وارد کنید</mat-hint>
-            @if (EmailCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
-            @else if (EmailCtrl.hasError('pattern')) {
-            <mat-error>ایمیل رو به درستی وارد کنید</mat-error>
-            }
+            <mat-error *ngIf="TeacherNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            <mat-error *ngIf="TeacherNameCtrl.hasError('pattern')">ایمیل رو به درستی وارد کنید</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>رمز عبور</mat-label>
-            <input class="input" type="password" formControlName="passwordCtrl" label="Password"
-              placeHolder="Your password" matInput>
-            @if (PasswordCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
-            @else if (PasswordCtrl.errors && PasswordCtrl.hasError('minlength')) {
-            <mat-error>خیلی کوتاهه حداقل : {{PasswordCtrl.errors['minlength'].requiredLength}} حرف</mat-error>
-            }
-            @else if(PasswordCtrl.errors && PasswordCtrl.hasError('maxlength')) {
-            <mat-error>خیلی بلنده حداقل: {{PasswordCtrl.errors['maxlength'].requiredLength}} حرف</mat-error>
-            }
+            <input class="input" type="password" formControlName="passwordCtrl" matInput>
+            <mat-error *ngIf="TeacherPhoneNumCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            <mat-error *ngIf="TeacherPhoneNumCtrl.hasError('minlength')">خیلی کوتاهه حداقل :
+              {{TeacherPhoneNumCtrl.errors?.['minlength']?.requiredLength}} حرف</mat-error>
+            <mat-error *ngIf="TeacherPhoneNumCtrl.hasError('maxlength')">خیلی بلنده حداکثر:
+              {{TeacherPhoneNumCtrl.errors?.['maxlength']?.requiredLength}} حرف</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>تکرار رمز عبور</mat-label>
-            <input class="input" type="password" formControlName="confirmPasswordCtrl" label="Confirm Password"
-              placeHolder="Re-enter password" matInput>
-            @if (ConfirmPasswordCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
-            @else if (ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('minlength')) {
-            <mat-error>خیلی کوتاهه حداقل : {{ConfirmPasswordCtrl.errors['minlength'].requiredLength}} حرف</mat-error>
-            }
-            @else if(ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('maxlength')) {
-            <mat-error>خیلی بلنده حداقل: {{ConfirmPasswordCtrl.errors['maxlength'].requiredLength}} حرف</mat-error>
-            }
+            <input class="input" type="password" formControlName="confirmPasswordCtrl" matInput>
+            <mat-error *ngIf="TeacherConfirmPasswordCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            <mat-error *ngIf="TeacherConfirmPasswordCtrl.hasError('minlength')">خیلی کوتاهه حداقل :
+              {{TeacherConfirmPasswordCtrl.errors?.['minlength']?.requiredLength}} حرف</mat-error>
+            <mat-error *ngIf="TeacherConfirmPasswordCtrl.hasError('maxlength')">خیلی بلنده حداکثر:
+              {{TeacherConfirmPasswordCtrl.errors?.['maxlength']?.requiredLength}} حرف</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>نام</mat-label>
-            <input class="input" type="text" formControlName="nameCtrl" label="Name"
-              placeHolder="Enter your desired name." matInput>
-            @if (NameCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
-            @else if (NameCtrl.hasError('minlength')) {
-            <mat-error>خیلی کوتاهه حداقل :۲ حرف</mat-error>
-            }
-            @else if(NameCtrl.hasError('maxlength')) {
-            <mat-error>خیلی بلنده حداقل: ۳۰ حرف</mat-error>
-            }
+            <input class="input" type="text" formControlName="nameCtrl" matInput>
+            <mat-error *ngIf="TeacherNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            <mat-error *ngIf="TeacherNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل :۲ حرف</mat-error>
+            <mat-error *ngIf="TeacherNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: ۳۰ حرف</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>نام خانوادگی</mat-label>
-            <input class="input" type="text" formControlName="lastNameCtrl" label="Last Name"
-              placeHolder="Enter your desired name." matInput>
-            @if (LastNameCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
-            @else if (LastNameCtrl.hasError('minlength')) {
-            <mat-error>خیلی کوتاهه حداقل :۲ حرف‍</mat-error>
-            }
-            @else if(LastNameCtrl.hasError('maxlength')) {
-            <mat-error>خیلی بلنده حداقل: ۳۰ حرف</mat-error>
-            }
+            <input class="input" type="text" formControlName="lastNameCtrl" matInput>
+            <mat-error *ngIf="TeacherLastNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            <mat-error *ngIf="TeacherLastNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل :۲ حرف</mat-error>
+            <mat-error *ngIf="TeacherLastNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: ۳۰ حرف</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>شماره تلفن</mat-label>
-            <input class="input" type="text" formControlName="phoneNumCtrl" label="Phone Number"
-              placeHolder="Enter your phone number." matInput>
-            @if (LastNameCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
+            <input class="input" type="text" formControlName="phoneNumCtrl" matInput>
+            <mat-error *ngIf="TeacherPhoneNumCtrl.hasError('required')">فرم رو پرکنید</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>تاریخ تولد</mat-label>
-            <input class="input" formControlName="dateOfBirthCtrl" [min]="minDate" [max]="maxDate" matInput
-              [matDatepicker]="dp3" matInput>
-            <!-- @if (DateOfBirthCtrl.invalid) { -->
-            <mat-hint>بین {{minDate.getFullYear()}} تا {{maxDate.getFullYear()}}</mat-hint>
-            <!-- } -->
-            <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
-            <mat-datepicker #dp3 touchUi disabled="false"></mat-datepicker>
-            @if (DateOfBirthCtrl.hasError('required')) {
-            <mat-error>فرم رو پرکنید</mat-error>
-            }
+            <input class="input" [value]="shamsiDisplayDate" readonly (click)="uiIsVisible = true" matInput />
           </mat-form-field>
 
+          <ng-persian-datepicker [calendarIsGregorian]="false" (dateOnSelect)="onTeacherDateSelect($event)"
+            [dateFormat]="'jYYYY/jMM/jDD'" [dateGregorianFormat]="'YYYY-MM-DD'" [(uiIsVisible)]="uiIsVisible"
+            [uiTheme]="uiTheme" [uiYearView]="uiYearView" [uiMonthView]="uiMonthView"
+            [uiHideAfterSelectDate]="uiHideAfterSelectDate" [uiHideOnOutsideClick]="uiHideOnOutsideClick"
+            [uiTodayBtnEnable]="uiTodayBtnEnable">
+          </ng-persian-datepicker>
+
           <div class="div-btn-add">
-            <button type="submit" [disabled]="addMemberFg.invalid" mat-raised-button color="primary">ثبت نام</button>
+            <button type="submit" [disabled]="addTeacherFg.invalid" mat-raised-button color="primary">ثبت نام</button>
           </div>
 
         </div>

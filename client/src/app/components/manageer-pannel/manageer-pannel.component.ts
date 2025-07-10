@@ -18,6 +18,9 @@ import { AccountService } from '../../services/account.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { NavbarComponent } from '../navbar/navbar.component';
+import moment from 'moment-jalaali';
+import { defaultTheme, IDatepickerTheme, NgPersianDatepickerModule } from '../../../../projects/ng-persian-datepicker/src/public-api';
+moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
 @Component({
   selector: 'app-manageer-pannel',
@@ -27,18 +30,20 @@ import { NavbarComponent } from '../navbar/navbar.component';
     ReactiveFormsModule, MatFormFieldModule, MatInputModule,
     MatButtonModule, MatSnackBarModule, MatRadioModule,
     MatDatepickerModule, MatNativeDateModule, AutoFocusDirective,
-    MatTableModule, MatIconModule, NavbarComponent
+    MatTableModule, MatIconModule, NavbarComponent,
+    NgPersianDatepickerModule
   ],
   templateUrl: './manageer-pannel.component.html',
   styleUrl: './manageer-pannel.component.scss'
 })
-//Dont foget Implement ngOnInit and Destroy
 export class ManageerPannelComponent implements OnInit, OnDestroy {
+  private snackBar = inject(MatSnackBar);
+  private deleteSubscription: Subscription | undefined;
+
   accountService = inject(AccountService);
   managerService = inject(ManagerService);
 
   fb = inject(FormBuilder);
-  private deleteSubscription: Subscription | undefined;
 
   minDate = new Date();
   maxDate = new Date();
@@ -46,7 +51,16 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   passowrdsNotMatch: boolean | undefined;
   emailExistsError: string | undefined;
   loggedInUser: LoggedInUser | null | undefined;
-  private snackBar = inject(MatSnackBar);
+
+  uiIsVisible: boolean = true;
+  uiTheme: IDatepickerTheme = defaultTheme;
+  uiYearView: boolean = true;
+  uiMonthView: boolean = true;
+  uiHideAfterSelectDate: boolean = false;
+  uiHideOnOutsideClick: boolean = false;
+  uiTodayBtnEnable: boolean = true;
+
+  shamsiDisplayDate: string = '';
 
   //#region auto-run methods
   constructor() {
@@ -66,7 +80,7 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   }
   //#endregion auto-run methods
 
-  addMemberFg = this.fb.group({
+  addSecretaryFg = this.fb.group({
     emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
     passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
@@ -77,46 +91,121 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     genderCtrl: ['', [Validators.required]]
   })
 
-  get GenderCtrl(): FormControl {
-    return this.addMemberFg.get('genderCtrl') as FormControl;
+  addTeacherFg = this.fb.group({
+    emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
+    passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
+    confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
+    nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    phoneNumCtrl: ['', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
+    dateOfBirthCtrl: ['', [Validators.required]],
+    genderCtrl: ['', [Validators.required]]
+  })
+
+  addStudentFg = this.fb.group({
+    emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
+    passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
+    confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
+    nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    phoneNumCtrl: ['', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
+    dateOfBirthCtrl: ['', [Validators.required]],
+    genderCtrl: ['', [Validators.required]]
+  })
+
+  // Geter for secretary
+  get SecretaryGenderCtrl(): FormControl {
+    return this.addSecretaryFg.get('genderCtrl') as FormControl;
   }
-  get EmailCtrl(): FormControl {
-    return this.addMemberFg.get('emailCtrl') as FormControl;
+  get SecretaryEmailCtrl(): FormControl {
+    return this.addSecretaryFg.get('emailCtrl') as FormControl;
   }
-  get PasswordCtrl(): FormControl {
-    return this.addMemberFg.get('passwordCtrl') as FormControl;
+  get SecretaryPasswordCtrl(): FormControl {
+    return this.addSecretaryFg.get('passwordCtrl') as FormControl;
   }
-  get ConfirmPasswordCtrl(): FormControl {
-    return this.addMemberFg.get('confirmPasswordCtrl') as FormControl;
+  get SecretaryConfirmPasswordCtrl(): FormControl {
+    return this.addSecretaryFg.get('confirmPasswordCtrl') as FormControl;
   }
-  get NameCtrl(): FormControl {
-    return this.addMemberFg.get('nameCtrl') as FormControl;
+  get SecretaryNameCtrl(): FormControl {
+    return this.addSecretaryFg.get('nameCtrl') as FormControl;
   }
-  get LastNameCtrl(): FormControl {
-    return this.addMemberFg.get('lastNameCtrl') as FormControl;
+  get SecretaryLastNameCtrl(): FormControl {
+    return this.addSecretaryFg.get('lastNameCtrl') as FormControl;
   }
-  get PhoneNumCtrl(): FormControl {
-    return this.addMemberFg.get('phoneNumCtrl') as FormControl;
+  get SecretaryPhoneNumCtrl(): FormControl {
+    return this.addSecretaryFg.get('phoneNumCtrl') as FormControl;
   }
-  get DateOfBirthCtrl(): FormControl {
-    return this.addMemberFg.get('dateOfBirthCtrl') as FormControl;
+  get SecretaryDateOfBirthCtrl(): FormControl {
+    return this.addSecretaryFg.get('dateOfBirthCtrl') as FormControl;
+  }
+
+  // Geter for teacher
+  get TeacherGenderCtrl(): FormControl {
+    return this.addTeacherFg.get('genderCtrl') as FormControl;
+  }
+  get TeacherEmailCtrl(): FormControl {
+    return this.addTeacherFg.get('emailCtrl') as FormControl;
+  }
+  get TeacherPasswordCtrl(): FormControl {
+    return this.addTeacherFg.get('passwordCtrl') as FormControl;
+  }
+  get TeacherConfirmPasswordCtrl(): FormControl {
+    return this.addTeacherFg.get('confirmPasswordCtrl') as FormControl;
+  }
+  get TeacherNameCtrl(): FormControl {
+    return this.addTeacherFg.get('nameCtrl') as FormControl;
+  }
+  get TeacherLastNameCtrl(): FormControl {
+    return this.addTeacherFg.get('lastNameCtrl') as FormControl;
+  }
+  get TeacherPhoneNumCtrl(): FormControl {
+    return this.addTeacherFg.get('phoneNumCtrl') as FormControl;
+  }
+  get TeacherDateOfBirthCtrl(): FormControl {
+    return this.addTeacherFg.get('dateOfBirthCtrl') as FormControl;
+  }
+
+  // Geter for student
+  get StudentGenderCtrl(): FormControl {
+    return this.addStudentFg.get('genderCtrl') as FormControl;
+  }
+  get StudentEmailCtrl(): FormControl {
+    return this.addStudentFg.get('emailCtrl') as FormControl;
+  }
+  get StudentPasswordCtrl(): FormControl {
+    return this.addStudentFg.get('passwordCtrl') as FormControl;
+  }
+  get StudentConfirmPasswordCtrl(): FormControl {
+    return this.addStudentFg.get('confirmPasswordCtrl') as FormControl;
+  }
+  get StudentNameCtrl(): FormControl {
+    return this.addStudentFg.get('nameCtrl') as FormControl;
+  }
+  get StudentLastNameCtrl(): FormControl {
+    return this.addStudentFg.get('lastNameCtrl') as FormControl;
+  }
+  get StudentPhoneNumCtrl(): FormControl {
+    return this.addStudentFg.get('phoneNumCtrl') as FormControl;
+  }
+  get StudentDateOfBirthCtrl(): FormControl {
+    return this.addStudentFg.get('dateOfBirthCtrl') as FormControl;
   }
 
   addStudent(): void {
-    const dob: string | undefined = this.getDateOnly(this.DateOfBirthCtrl.value);
+    const dob: string | undefined = this.getDateOnly(this.StudentDateOfBirthCtrl.value);
 
-    if (this.PasswordCtrl.value === this.ConfirmPasswordCtrl.value) {
+    if (this.StudentPasswordCtrl.value === this.StudentConfirmPasswordCtrl.value) {
       this.passowrdsNotMatch = false;
 
       let registerUser: RegisterUser = {
-        email: this.EmailCtrl.value,
-        password: this.PasswordCtrl.value,
-        confirmPassword: this.ConfirmPasswordCtrl.value,
-        gender: this.GenderCtrl.value,
+        email: this.StudentEmailCtrl.value,
+        password: this.StudentPasswordCtrl.value,
+        confirmPassword: this.StudentConfirmPasswordCtrl.value,
+        gender: this.StudentGenderCtrl.value,
         dateOfBirth: dob,
-        name: this.NameCtrl.value,
-        lastName: this.LastNameCtrl.value,
-        phoneNum: this.PhoneNumCtrl.value
+        name: this.StudentNameCtrl.value,
+        lastName: this.StudentLastNameCtrl.value,
+        phoneNum: this.StudentPhoneNumCtrl.value
       }
 
       this.managerService.createStudent(registerUser).subscribe({
@@ -130,20 +219,20 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   }
 
   addSecretary(): void {
-    const dob: string | undefined = this.getDateOnly(this.DateOfBirthCtrl.value);
+    const dob: string | undefined = this.getDateOnly(this.SecretaryDateOfBirthCtrl.value);
 
-    if (this.PasswordCtrl.value === this.ConfirmPasswordCtrl.value) {
+    if (this.SecretaryPasswordCtrl.value === this.SecretaryConfirmPasswordCtrl.value) {
       this.passowrdsNotMatch = false;
 
       let registerUser: RegisterUser = {
-        email: this.EmailCtrl.value,
-        password: this.PasswordCtrl.value,
-        confirmPassword: this.ConfirmPasswordCtrl.value,
-        gender: this.GenderCtrl.value,
+        email: this.SecretaryEmailCtrl.value,
+        password: this.SecretaryPasswordCtrl.value,
+        confirmPassword: this.SecretaryConfirmPasswordCtrl.value,
+        gender: this.SecretaryGenderCtrl.value,
         dateOfBirth: dob,
-        name: this.NameCtrl.value,
-        lastName: this.LastNameCtrl.value,
-        phoneNum: this.PhoneNumCtrl.value
+        name: this.SecretaryNameCtrl.value,
+        lastName: this.SecretaryLastNameCtrl.value,
+        phoneNum: this.SecretaryPhoneNumCtrl.value
       }
 
       this.managerService.createSecretary(registerUser).subscribe({
@@ -157,20 +246,20 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   }
 
   addTeacher(): void {
-    const dob: string | undefined = this.getDateOnly(this.DateOfBirthCtrl.value);
+    const dob: string | undefined = this.getDateOnly(this.TeacherDateOfBirthCtrl.value);
 
-    if (this.PasswordCtrl.value === this.ConfirmPasswordCtrl.value) {
+    if (this.TeacherPasswordCtrl.value === this.TeacherConfirmPasswordCtrl.value) {
       this.passowrdsNotMatch = false;
 
       let registerUser: RegisterUser = {
-        email: this.EmailCtrl.value,
-        password: this.PasswordCtrl.value,
-        confirmPassword: this.ConfirmPasswordCtrl.value,
-        gender: this.GenderCtrl.value,
+        email: this.TeacherEmailCtrl.value,
+        password: this.TeacherPasswordCtrl.value,
+        confirmPassword: this.TeacherConfirmPasswordCtrl.value,
+        gender: this.TeacherGenderCtrl.value,
         dateOfBirth: dob,
-        name: this.NameCtrl.value,
-        lastName: this.LastNameCtrl.value,
-        phoneNum: this.PhoneNumCtrl.value
+        name: this.TeacherNameCtrl.value,
+        lastName: this.TeacherLastNameCtrl.value,
+        phoneNum: this.TeacherPhoneNumCtrl.value
       }
 
       this.managerService.createTeacher(registerUser).subscribe({
@@ -213,5 +302,35 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
 
     let theDob: Date = new Date(dob);
     return new Date(theDob.setMinutes(theDob.getMinutes() - theDob.getTimezoneOffset())).toISOString().slice(0, 10);
+  }
+
+  onStudentDateSelect(event: {
+    shamsi: string;
+    gregorian: string;
+    timestamp: number;
+  }): void {
+    this.shamsiDisplayDate = event.shamsi;
+    this.StudentDateOfBirthCtrl.setValue(new Date(event.gregorian));
+    this.uiIsVisible = false;
+  }
+
+  onTeacherDateSelect(event: {
+    shamsi: string;
+    gregorian: string;
+    timestamp: number;
+  }): void {
+    this.shamsiDisplayDate = event.shamsi;
+    this.TeacherDateOfBirthCtrl.setValue(new Date(event.gregorian));
+    this.uiIsVisible = false;
+  }
+
+  onSecretaryDateSelect(event: {
+    shamsi: string;
+    gregorian: string;
+    timestamp: number;
+  }): void {
+    this.shamsiDisplayDate = event.shamsi;
+    this.SecretaryDateOfBirthCtrl.setValue(new Date(event.gregorian));
+    this.uiIsVisible = false;
   }
 }
