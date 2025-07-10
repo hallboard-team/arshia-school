@@ -73,11 +73,16 @@ public class MemberRepository : IMemberRepository
         {
             //Change password if last password exist
             IdentityResult passwordChangeResult = await _userManager.ChangePasswordAsync(targetAppUser, memberUpdateDto.CurrentPassword, memberUpdateDto.Password);
+            // if (!passwordChangeResult.Succeeded)
+            // {
+            //     var errors = string.Join(", ", passwordChangeResult.Errors.Select(e => e.Description));
+            //     throw new InvalidOperationException($"Failed to change password: {errors}");
+            // }
             if (!passwordChangeResult.Succeeded)
             {
-                var errors = string.Join(", ", passwordChangeResult.Errors.Select(e => e.Description));
-                throw new InvalidOperationException($"Failed to change password: {errors}");
+                throw new ApplicationException(string.Join(" | ", passwordChangeResult.Errors.Select(e => e.Description)));
             }
+
         }
 
         targetAppUser.NormalizedEmail = memberUpdateDto.Email.ToUpper();

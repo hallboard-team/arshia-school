@@ -63,13 +63,20 @@ public class MemberController
     public async Task<ActionResult> UpdateMember(MemberUpdateDto memberUpdateDto, CancellationToken cancellationToken)
     {
         if (memberUpdateDto is null)
-            return null;
+            return BadRequest("ورودی نامعتبر است.");
 
-        bool? updateResult = await _memberRepository.UpdateMemberAsync(memberUpdateDto, User.GetHashedUserId(), cancellationToken);
+        try
+        {
+            bool? updateResult = await _memberRepository.UpdateMemberAsync(memberUpdateDto, User.GetHashedUserId(), cancellationToken);
 
-        return updateResult is false
-            ? BadRequest("Update failed. Try again later.")
-            : Ok(new { message = "User has been updated successfully." });
+            return updateResult is false
+                ? BadRequest("بروزرسانی انجام نشد. لطفاً دوباره تلاش کنید.")
+                : Ok(new { message = "اطلاعات با موفقیت بروزرسانی شد." });
+        }
+        catch (ApplicationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpGet("get-course")]
