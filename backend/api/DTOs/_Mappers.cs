@@ -41,6 +41,7 @@ public static class Mappers
             PhoneNum: appUser.PhoneNum,
             Gender: appUser.Gender,
             Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth),
+            DateOfBirth: appUser.DateOfBirth,
             IsAbsent: isAbsent
         );
     }
@@ -55,6 +56,7 @@ public static class Mappers
             PhoneNum: appUser.PhoneNum,
             Gender: appUser.Gender,
             Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth),
+            DateOfBirth: appUser.DateOfBirth,
             EnrolledCourses: appUser.EnrolledCourses
         );
     }

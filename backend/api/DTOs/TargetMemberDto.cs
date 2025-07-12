@@ -8,5 +8,6 @@ public record TargetMemberDto(
     string? PhoneNum,
     string Gender,
     int Age,
+    DateOnly DateOfBirth,
     List<EnrolledCourse> EnrolledCourses
 );
