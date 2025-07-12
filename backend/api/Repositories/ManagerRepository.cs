@@ -80,7 +80,10 @@ public class ManagerRepository : IManagerRepository
             .AnyAsync(cancellationToken);
 
         if (doasePhoneNumEixst)
-            return null;
+        {
+            loggedInDto.Errors.Add("شماره تلفن وارد شده قبلاً ثبت شده است.");
+            return loggedInDto;
+        }
 
         string uniqueUsername = await GenerateUniqueUsernameAsync(cancellationToken);
 
@@ -131,7 +134,10 @@ public class ManagerRepository : IManagerRepository
             .AnyAsync(cancellationToken);
 
         if (doasePhoneNumEixst)
-            return null;
+        {
+            loggedInDto.Errors.Add("شماره تلفن وارد شده قبلاً ثبت شده است.");
+            return loggedInDto;
+        }
 
         string uniqueUsername = await GenerateUniqueUsernameAsync(cancellationToken);
 
@@ -182,7 +188,10 @@ public class ManagerRepository : IManagerRepository
             .AnyAsync(cancellationToken);
 
         if (doasePhoneNumEixst)
-            return null;
+        {
+            loggedInDto.Errors.Add("شماره تلفن وارد شده قبلاً ثبت شده است.");
+            return loggedInDto;
+        }
 
         string uniqueUsername = await GenerateUniqueUsernameAsync(cancellationToken);
 

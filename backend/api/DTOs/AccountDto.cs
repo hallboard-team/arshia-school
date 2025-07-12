@@ -3,19 +3,20 @@ using System.Runtime.InteropServices;
 namespace api.DTOs;
 
 public record RegisterDto(
-    [MaxLength(50), RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$", ErrorMessage = "Bad Email Format.")] string Email,
+    [MaxLength(50), RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$", ErrorMessage = "فرمت ایمیل درست وارد نشده")] string Email,
     // [Length(1, 30)] string UserName,
-    [DataType(DataType.Password), Length(7, 20, ErrorMessage = "Min of 7 and max of 20 chars are requried")] string Password,
+    [DataType(DataType.Password), Length(7, 20, ErrorMessage = "حداقل باید 7 و حداکثر باید 20 کاراکتر وارد بشه")] string Password,
     [DataType(DataType.Password), Length(7, 20)] string ConfirmPassword,
     [Length(0, 30)] string Name,
     [Length(0, 30)] string LastName,
+    [RegularExpression(@"^09\d{9}$", ErrorMessage = "فرمت شماره تلفن معتبر نیست")]
     string? PhoneNum,
     DateOnly DateOfBirth, // Prevent from 1/1/1
     string Gender
 );
 
 public record LoginDto(
-    [MaxLength(50), RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$", ErrorMessage ="Bad Email Format.")]
+    [MaxLength(50), RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$", ErrorMessage ="فرمت ایمیل درست وارد نشده")]
     string Email,
     [DataType(DataType.Password), MinLength(7), MaxLength(20)]
     string Password
