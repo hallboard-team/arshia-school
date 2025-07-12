@@ -61,6 +61,14 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   uiTodayBtnEnable: boolean = true;
 
   shamsiDisplayDate: string = '';
+  hideSecretaryPassword: boolean = true;
+  hideSecretaryConfirmPassword: boolean = true;
+
+  hideStudentPassword: boolean = true;
+  hideStudentConfirmPassword: boolean = true;
+
+  hideTeacherPassword: boolean = true;
+  hideTeacherConfirmPassword: boolean = true;
 
   //#region auto-run methods
   constructor() {
