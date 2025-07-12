@@ -5,7 +5,7 @@ import { TargetUserProfile } from '../../models/target-user-profile.model';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Member } from '../../models/member.model';
 import { ManagerUpdateMemberDto } from '../../models/manager-update-member.model';
-import { Observable, Subscription, take } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AddEnrolledCourse } from '../../models/add-enrolled-course.model';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
@@ -17,7 +17,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 import { AutoFocusDirective } from '../../directives/auto-focus.directive';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { Course, ShowCourse } from '../../models/course.model';
@@ -29,8 +29,8 @@ import { PageEvent } from '@angular/material/paginator';
 import { Pagination } from '../../models/helpers/pagination';
 import moment from 'moment-jalaali';
 import { CurrencyFormatterDirective } from '../../directives/currency-formatter.directive';
+import { defaultTheme, IDatepickerTheme, NgPersianDatepickerModule } from '../../../../projects/ng-persian-datepicker/src/public-api';
 moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
-
 @Component({
   selector: 'app-target-user-profile',
   standalone: true,
@@ -40,7 +40,8 @@ moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
     MatInputModule, MatButtonModule, NavbarComponent,
     RouterModule, MatTabsModule, MatNativeDateModule,
     MatRadioModule, MatSnackBarModule, MatDatepickerModule,
-    MatSelectModule, CurrencyFormatterDirective
+    MatSelectModule, CurrencyFormatterDirective,
+    NgPersianDatepickerModule
   ],
   templateUrl: './target-user-profile.component.html',
   styleUrl: './target-user-profile.component.scss'
@@ -72,6 +73,16 @@ export class TargetUserProfileComponent implements OnInit {
   pageSizeOptions = [5, 10, 25];
   pageEvent: PageEvent | undefined;
   pagination: Pagination | undefined;
+
+  uiIsVisible: boolean = true;
+  uiTheme: IDatepickerTheme = defaultTheme;
+  uiYearView: boolean = true;
+  uiMonthView: boolean = true;
+  uiHideAfterSelectDate: boolean = false;
+  uiHideOnOutsideClick: boolean = false;
+  uiTodayBtnEnable: boolean = true;
+
+  shamsiDisplayDate: string = '';
 
   ngOnInit(): void {
     const currentYear = new Date().getFullYear();
@@ -220,12 +231,13 @@ export class TargetUserProfileComponent implements OnInit {
 
   initTargetControllersValues(targetUserProfile: TargetUserProfile) {
     this.TargetEmailCtrl.setValue(targetUserProfile.email);
-    // this.TargetUserNameCtrl.setValue(member.userName);
     this.TargetNameCtrl.setValue(targetUserProfile.name);
     this.TargetLastNameCtrl.setValue(targetUserProfile.lastName);
     this.TargetPhoneNumCtrl.setValue(targetUserProfile.phoneNum);
     this.TargetGenderCtrl.setValue(targetUserProfile.gender);
-    this.TargetDateOfBirthCtrl.setValue(targetUserProfile.age);
+
+    this.TargetDateOfBirthCtrl.setValue(targetUserProfile.dateOfBirth);
+    this.shamsiDisplayDate = moment(targetUserProfile.dateOfBirth).format('jYYYY/jMM/jDD');
   }
 
   updateTargetMember() {
@@ -349,6 +361,48 @@ export class TargetUserProfileComponent implements OnInit {
 
       this.getAll();
     }
+  }
+
+  openDatePicker() {
+    const elements = document.querySelectorAll('.div-background-date-picker');
+    const buttonClose = document.querySelectorAll('.close-date');
+    const buttonOpen = document.querySelectorAll('.open-date');
+
+    elements.forEach((element) => {
+      (element as HTMLElement).style.display = "flex";
+    });
+
+    buttonClose.forEach((element) => {
+      (element as HTMLElement).style.display = "flex";
+    });
+
+    buttonOpen.forEach((element) => {
+      (element as HTMLElement).style.display = "none";
+    });
+  }
+
+  closeDatePicker() {
+    const elements = document.querySelectorAll('.div-background-date-picker');
+    const buttonClose = document.querySelectorAll('.close-date');
+    const buttonOpen = document.querySelectorAll('.open-date');
+
+    elements.forEach((element) => {
+      (element as HTMLElement).style.display = "none";
+    });
+
+    buttonClose.forEach((element) => {
+      (element as HTMLElement).style.display = "none";
+    });
+
+    buttonOpen.forEach((element) => {
+      (element as HTMLElement).style.display = "flex";
+    });
+  }
+
+  onDateSelect(event: { shamsi: string; gregorian: string; timestamp: number }): void {
+    this.shamsiDisplayDate = event.shamsi;
+    this.TargetDateOfBirthCtrl.setValue(new Date(event.gregorian));
+    this.closeDatePicker();
   }
 
   private getDateOnly(dob: string | null): string | undefined {

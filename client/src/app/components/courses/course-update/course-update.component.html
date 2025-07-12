@@ -24,14 +24,6 @@
                 <span matSuffix class="suffix-text">تومان</span>
             </mat-form-field>
 
-            <!-- <mat-form-field appearance="outline">
-                <mat-label>شهریه </mat-label>
-                <input class="input" type="text" formControlName="tuitionCtrl" label="Tuition" placeHolder="" matInput
-                    appCurrencyFormatter />
-                <span matSuffix class="suffix-text">تومان</span>
-                
-            </mat-form-field> -->
-
             <mat-form-field appearance="outline">
                 <mat-label>ساعت دوره</mat-label>
                 <input class="input" type="number" formControlName="hoursCtrl" label="Hours" placeHolder="" matInput>
@@ -42,11 +34,6 @@
                 <input class="input" type="number" formControlName="hoursPerClassCtrl" label="Hours Per Class"
                     placeHolder="" matInput>
             </mat-form-field>
-
-            <!-- <mat-form-field appearance="outline">
-                <mat-label>تاریخ شروع</mat-label>
-                <input class="input" type="date" formControlName="startCtrl" label="Start" placeHolder="" matInput>
-            </mat-form-field> -->
 
             <mat-form-field appearance="outline">
                 <mat-label>تاریخ شروع دوره</mat-label>
@@ -59,7 +46,6 @@
                 [uiHideAfterSelectDate]="uiHideAfterSelectDate" [uiHideOnOutsideClick]="uiHideOnOutsideClick"
                 [uiTodayBtnEnable]="uiTodayBtnEnable">
             </ng-persian-datepicker>
-
 
             <div class="div-isStarted">
                 <span>دوره شروع شده است؟</span>

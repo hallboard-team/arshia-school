@@ -1,6 +1,6 @@
 import { EnrolledCourse } from "./helpers/enrolled-course.model";
 
-export interface TargetUserProfile{
+export interface TargetUserProfile {
     email: string;
     userName: string;
     name: string;
@@ -8,5 +8,6 @@ export interface TargetUserProfile{
     phoneNum?: string;
     gender: string;
     age: number;
-    enrolledCourses: EnrolledCourse[]
+    dateOfBirth: Date;
+    enrolledCourses: EnrolledCourse[];
 };

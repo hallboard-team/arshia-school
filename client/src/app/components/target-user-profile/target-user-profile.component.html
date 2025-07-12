@@ -59,16 +59,6 @@
                             }
                         </mat-form-field>
 
-                        <!-- <mat-form-field appearance="outline">
-                            <mat-label>نام کاربری</mat-label>
-                            <input class="input" type="text" formControlName="userNameCtrl" label="Username" placeHolder="Your username"
-                            matInput>
-                            <mat-hint>بین ۱ تا ۳۰ حرف</mat-hint>
-                            @if (EmailCtrl.hasError('required')) {
-                            <mat-error>فرم رو پرکنید</mat-error>
-                            }
-                        </mat-form-field> -->
-
                         <mat-form-field appearance="outline">
                             <mat-label>نام</mat-label>
                             <input class="input" type="text" formControlName="targetNameCtrl" label="Name"
@@ -108,7 +98,7 @@
                             }
                         </mat-form-field>
 
-                        <mat-form-field appearance="outline">
+                        <!-- <mat-form-field appearance="outline">
                             <mat-label>تاریخ تولد</mat-label>
                             <input class="input" formControlName="targetDateOfBirthCtrl" [min]="minDate" [max]="maxDate"
                                 matInput [matDatepicker]="dp3" matInput>
@@ -118,7 +108,20 @@
                             @if (TargetDateOfBirthCtrl.hasError('required')) {
                             <mat-error>فرم رو پرکنید</mat-error>
                             }
+                        </mat-form-field> -->
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>تاریخ تولد</mat-label>
+                            <input class="input" [value]="shamsiDisplayDate" readonly (click)="openDatePicker()"
+                                matInput />
                         </mat-form-field>
+
+                        <ng-persian-datepicker [calendarIsGregorian]="false" (dateOnSelect)="onDateSelect($event)"
+                            [dateFormat]="'jYYYY/jMM/jDD'" [dateGregorianFormat]="'YYYY-MM-DD'"
+                            [(uiIsVisible)]="uiIsVisible" [uiTheme]="uiTheme" [uiYearView]="uiYearView"
+                            [uiMonthView]="uiMonthView" [uiHideAfterSelectDate]="uiHideAfterSelectDate"
+                            [uiHideOnOutsideClick]="uiHideOnOutsideClick" [uiTodayBtnEnable]="uiTodayBtnEnable">
+                        </ng-persian-datepicker>
 
                         <div class="div-btn-add">
                             <button type="submit" [disabled]="targetMemberEditFg.invalid">

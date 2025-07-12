@@ -112,19 +112,9 @@ export class CourseUpdateComponent implements OnInit {
     }
   }
 
-  // initControllersValues(course: Course) {
-  //   this.TitleCtrl.setValue(course.title);
-  //   // this.ProfessorUserNameCtrl.setValue(course.professorsNames);
-  //   this.TuitionCtrl.setValue(course.tuition);
-  //   this.HoursCtrl.setValue(course.hours);
-  //   this.HoursPerClassCtrl.setValue(course.hoursPerClass);
-  //   this.StartCtrl.setValue(course.start);
-  //   this.IsStartedCtrl.setValue(course.isStarted);
-  // }
   initControllersValues(course: Course) {
     this.TitleCtrl.setValue(course.title);
 
-    // ❶ شهریه رو با تاخیر ست کن تا دایرکتیو آماده باشه
     setTimeout(() => {
       this.TuitionCtrl.setValue(course.tuition);
     });
@@ -132,13 +122,11 @@ export class CourseUpdateComponent implements OnInit {
     this.HoursCtrl.setValue(course.hours);
     this.HoursPerClassCtrl.setValue(course.hoursPerClass);
 
-    // ❷ تاریخ شروع (میلادی در کنترل، شمسی در ویو)
     this.StartCtrl.setValue(course.start);
     this.shamsiDisplayDate = moment(course.start).format('jYYYY/jMM/jDD');
 
     this.IsStartedCtrl.setValue(course.isStarted);
   }
-
 
   onDateSelect(event: { shamsi: string; gregorian: string; timestamp: number }): void {
     this.shamsiDisplayDate = event.shamsi;
