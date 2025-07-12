@@ -86,7 +86,7 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
     lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    phoneNumCtrl: ['', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
+    phoneNumCtrl: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
     dateOfBirthCtrl: ['', [Validators.required]],
     genderCtrl: ['', [Validators.required]]
   })
@@ -97,7 +97,7 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
     lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    phoneNumCtrl: ['', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
+    phoneNumCtrl: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
     dateOfBirthCtrl: ['', [Validators.required]],
     genderCtrl: ['', [Validators.required]]
   })
@@ -108,7 +108,7 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
     lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    phoneNumCtrl: ['', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
+    phoneNumCtrl: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
     dateOfBirthCtrl: ['', [Validators.required]],
     genderCtrl: ['', [Validators.required]]
   })
@@ -205,7 +205,7 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
         dateOfBirth: dob,
         name: this.StudentNameCtrl.value,
         lastName: this.StudentLastNameCtrl.value,
-        phoneNum: this.StudentPhoneNumCtrl.value
+        phoneNum: '98' + this.StudentPhoneNumCtrl.value
       }
 
       this.managerService.createStudent(registerUser).subscribe({
@@ -232,7 +232,7 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
         dateOfBirth: dob,
         name: this.SecretaryNameCtrl.value,
         lastName: this.SecretaryLastNameCtrl.value,
-        phoneNum: this.SecretaryPhoneNumCtrl.value
+        phoneNum: '98' + this.SecretaryPhoneNumCtrl.value
       }
 
       this.managerService.createSecretary(registerUser).subscribe({
@@ -259,7 +259,7 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
         dateOfBirth: dob,
         name: this.TeacherNameCtrl.value,
         lastName: this.TeacherLastNameCtrl.value,
-        phoneNum: this.TeacherPhoneNumCtrl.value
+        phoneNum: '98' + this.TeacherPhoneNumCtrl.value
       }
 
       this.managerService.createTeacher(registerUser).subscribe({
