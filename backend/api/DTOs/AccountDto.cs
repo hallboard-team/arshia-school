@@ -9,7 +9,7 @@ public record RegisterDto(
     [DataType(DataType.Password), Length(7, 20)] string ConfirmPassword,
     [Length(0, 30)] string Name,
     [Length(0, 30)] string LastName,
-    [RegularExpression(@"^09\d{9}$", ErrorMessage = "فرمت شماره تلفن معتبر نیست")]
+    [RegularExpression(@"^09\d{10}$", ErrorMessage = "فرمت شماره تلفن معتبر نیست")]
     string? PhoneNum,
     DateOnly DateOfBirth, // Prevent from 1/1/1
     string Gender
