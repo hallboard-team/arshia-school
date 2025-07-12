@@ -12,6 +12,7 @@ import { AutoFocusDirective } from '../../../directives/auto-focus.directive';
 import { AccountService } from '../../../services/account.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NavbarComponent } from '../../navbar/navbar.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,7 @@ import { NavbarComponent } from '../../navbar/navbar.component';
     CommonModule, FormsModule, ReactiveFormsModule,
     MatFormFieldModule, MatInputModule, MatButtonModule,
     MatSnackBarModule, AutoFocusDirective, MatTabsModule,
-    NavbarComponent
+    NavbarComponent, MatIconModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -31,6 +32,7 @@ export class LoginComponent {
   private router = inject(Router);
 
   wrongUsernameOrPassword: string | undefined;
+  hidePassword: boolean = true;
 
   //#region FormGroup
   loginFg: FormGroup = this.fb.group({
