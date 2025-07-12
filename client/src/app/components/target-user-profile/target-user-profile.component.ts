@@ -103,13 +103,27 @@ export class TargetUserProfileComponent implements OnInit {
   }
 
   targetMemberEditFg: FormGroup = this._fb.group({
-    targetEmailCtrl: ['',],
-    // targetUserNameCtrl: ['', ],
-    targetNameCtrl: ['',],
-    targetLastNameCtrl: ['',],
-    targetPhoneNumCtrl: ['',],
-    targetGenderCtrl: ['',],
-    targetDateOfBirthCtrl: ['',]
+    targetEmailCtrl: ['', [
+      Validators.required,
+      Validators.maxLength(50),
+      Validators.pattern(/^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)
+    ]],
+    targetNameCtrl: ['', [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(30)
+    ]],
+    targetLastNameCtrl: ['', [
+      Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(30)
+    ]],
+    targetPhoneNumCtrl: ['', [
+      Validators.required,
+      Validators.pattern(/^[0-9]{10}$/)
+    ]],
+    targetGenderCtrl: ['', Validators.required],
+    targetDateOfBirthCtrl: ['', Validators.required]
   });
 
   addEnrolledCourseFg: FormGroup = this.fb.group({
@@ -233,7 +247,7 @@ export class TargetUserProfileComponent implements OnInit {
     this.TargetEmailCtrl.setValue(targetUserProfile.email);
     this.TargetNameCtrl.setValue(targetUserProfile.name);
     this.TargetLastNameCtrl.setValue(targetUserProfile.lastName);
-    this.TargetPhoneNumCtrl.setValue(targetUserProfile.phoneNum);
+    this.TargetPhoneNumCtrl.setValue(targetUserProfile.phoneNum?.slice(2));
     this.TargetGenderCtrl.setValue(targetUserProfile.gender);
 
     this.TargetDateOfBirthCtrl.setValue(targetUserProfile.dateOfBirth);
@@ -248,10 +262,9 @@ export class TargetUserProfileComponent implements OnInit {
 
       let managerUpdateMember: ManagerUpdateMemberDto = {
         email: this.TargetEmailCtrl.value,
-        // userName: this.TargetUserNameCtrl.value,
         name: this.TargetNameCtrl.value,
         lastName: this.TargetLastNameCtrl.value,
-        phoneNum: this.TargetPhoneNumCtrl.value,
+        phoneNum: '98' + this.TargetPhoneNumCtrl.value,
         gender: this.TargetGenderCtrl.value,
         dateOfBirth: dob,
       }

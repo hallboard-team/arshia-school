@@ -91,10 +91,14 @@
 
                         <mat-form-field appearance="outline">
                             <mat-label>شماره تلفن</mat-label>
-                            <input class="input" type="text" formControlName="targetPhoneNumCtrl" label="Phone Number"
-                                placeHolder="Enter your phone number." matInput>
+                            <span matPrefix dir="ltr">+98&nbsp;</span>
+                            <input class="input" type="tel" maxlength="10" formControlName="targetPhoneNumCtrl"
+                                matInput>
                             @if (TargetPhoneNumCtrl.hasError('required')) {
                             <mat-error>فرم رو پرکنید</mat-error>
+                            }
+                            @else if (TargetPhoneNumCtrl.hasError('pattern')) {
+                            <mat-error>فرمت شماره موبایل معتبر نیست</mat-error>
                             }
                         </mat-form-field>
 
