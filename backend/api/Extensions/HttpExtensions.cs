@@ -1,5 +1,3 @@
-using api.Models.Helpers;
-
 namespace api.Extensions;
 
 public static class HttpExtensions

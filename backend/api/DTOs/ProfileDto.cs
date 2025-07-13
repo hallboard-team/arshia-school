@@ -8,5 +8,4 @@ public record ProfileDto(
     string? PhoneNum,
     string Gender,
     int Age
-    // List<EnrolledCourse> EnrolledCourses
 );

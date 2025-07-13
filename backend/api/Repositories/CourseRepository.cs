@@ -1,6 +1,3 @@
-
-using api.Helpers;
-
 namespace api.Repositories;
 
 public class CourseRepository : ICourseRepository
@@ -8,7 +5,6 @@ public class CourseRepository : ICourseRepository
     #region Vars and Constructor
     private readonly IMongoCollection<Course>? _collectionCourse;
     private readonly IMongoCollection<AppUser>? _collectionAppUser;
-    // private readonly ITokenService _tokenService;
     private readonly IMongoClient _client;
 
     public CourseRepository(IMongoClient client, ITokenService tokenService, IMyMongoDbSettings dbSettings)
@@ -18,16 +14,12 @@ public class CourseRepository : ICourseRepository
         _collectionCourse = database.GetCollection<Course>(AppVariablesExtensions.collectionCourses);
 
         _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.collectionUsers);
-
-        // _tokenService = tokenService;
     }
     #endregion Vars and Constructor
 
     public async Task<ShowCourseDto> AddCourseAsync(AddCourseDto managerInput, CancellationToken cancellationToken)
     {
-        // int daysCalc = managerInput.Hours / managerInput.HoursPerClass;
         int calcDays = (int)Math.Ceiling(managerInput.Hours / managerInput.HoursPerClass);
-        // if (daysCalc == 0) return null;
 
         Course? course = Mappers.ConvertAddCourseDtoToCourse(managerInput, calcDays);
 
@@ -77,16 +69,7 @@ public class CourseRepository : ICourseRepository
     {
         int? calcDays = (int)Math.Ceiling(updateCourseDto.Hours / updateCourseDto.HoursPerClass);
 
-        // AppUser targetProfessor = await _collectionAppUser.Find(
-        //     doc => doc.Id.ToString() == updateCourseDto.ProfessorId
-        // ).FirstOrDefaultAsync(cancellationToken);
-
-        // if (targetProfessor is null)
-        //     return false;
-
         UpdateDefinition<Course> updatedCourse = Builders<Course>.Update
-            // .AddToSet(c => c.ProfessorsIds, targetProfessor.Id)
-            // .Push(c => c.ProfessorsNames, targetProfessor.Name)
             .Set(c => c.Title, updateCourseDto.Title?.ToUpper())
             .Set(c => c.Tuition, updateCourseDto.Tuition)
             .Set(c => c.Hours, updateCourseDto.Hours)
@@ -120,7 +103,6 @@ public class CourseRepository : ICourseRepository
 
         UpdateDefinition<Course> updateCourse = Builders<Course>.Update
             .AddToSet(doc => doc.ProfessorsIds, professorId);
-        // .Push(doc => doc.ProfessorsNames, professorAppUser.Name);
 
         var result = await _collectionCourse.UpdateOneAsync(
             doc => doc.Title == targetCourseTitle.ToUpper(), updateCourse
@@ -147,7 +129,6 @@ public class CourseRepository : ICourseRepository
 
         UpdateDefinition<Course> deleteProfessor = Builders<Course>.Update
             .Pull(doc => doc.ProfessorsIds, professorId);
-        // .Pull(doc => doc.ProfessorsNames, professorAppUser.Name);
 
         var result = await _collectionCourse.UpdateOneAsync(
             doc => doc.Title == targetCourseTitle.ToUpper(), deleteProfessor
@@ -162,16 +143,11 @@ public class CourseRepository : ICourseRepository
             .Find(c => c.Title == courseTitle.ToUpper())
             .FirstOrDefaultAsync(cancellationToken);
 
-        // if (course == null)
-        //     return null;
-
         var professorIds = course.ProfessorsIds;
         var professorUserNames = await _collectionAppUser
             .Find(doc => professorIds.Contains(doc.Id))
             .Project(doc => doc.NormalizedUserName)
             .ToListAsync(cancellationToken);
-
-        // return course is not null ? Mappers.ConvertCourseToShowCourseDto(course, professorNames) : null;
 
         return new ShowCourseDto
         {

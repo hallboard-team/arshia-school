@@ -1,5 +1,3 @@
-using api.Models.Helpers;
-
 namespace api.Controllers;
 
 [Authorize]
@@ -36,8 +34,6 @@ public class MemberController
         if (pagedAttendences.Count == 0)
             return NoContent();
 
-        // After that we shure to exist on Controller we must set PaginaionHeader here before Converting AppUseer to studentDto
-
         PaginationHeader paginationHeader = new(
             CurrentPage: pagedAttendences.CurrentPage,
             ItemsPerPage: pagedAttendences.PageSize,
@@ -46,8 +42,6 @@ public class MemberController
         );
 
         Response.AddPaginationHeader(paginationHeader);
-
-        //after setup now we can covert appUser to studentDto
 
         List<ShowStudentStatusDto> showStudentStatusDtos = [];
 

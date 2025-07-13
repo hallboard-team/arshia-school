@@ -3,7 +3,6 @@ namespace api.Extensions;
 public static class AppVariablesExtensions
 {
     public const string TokenKey = "TokenKey";
-
     public const string collectionUsers = "users";
     public const string collectionCourses = "courses";
     public const string collectionAttendences = "attendences";

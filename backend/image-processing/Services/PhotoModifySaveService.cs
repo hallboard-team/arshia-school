@@ -1,7 +1,6 @@
 using image_processing.Interfaces;
 using image_processing.Helpers;
 using SkiaSharp;
-using MongoDB.Bson;
 
 namespace image_processing.Services;
 

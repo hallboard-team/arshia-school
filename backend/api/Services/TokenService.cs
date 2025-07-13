@@ -1,12 +1,9 @@
-using System.Diagnostics.Metrics;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Identity;
-
 namespace api.Services;
+
 public class TokenService : ITokenService
 {
     private readonly IMongoCollection<AppUser> _collection;
-    private readonly SymmetricSecurityKey? _key; // set it as nullable by ? mark
+    private readonly SymmetricSecurityKey? _key;
     private readonly UserManager<AppUser> _userManager;
 
     public TokenService(IConfiguration config, IMongoClient client, IMyMongoDbSettings dbSettings, UserManager<AppUser> userManager)
@@ -14,10 +11,8 @@ public class TokenService : ITokenService
         var database = client.GetDatabase(dbSettings.DatabaseName);
         _collection = database.GetCollection<AppUser>(AppVariablesExtensions.collectionUsers);
 
-        // string? tokenValue = config[AppVariablesExtensions.TokenKey];
         string? tokenValue = config.GetValue<string>(AppVariablesExtensions.TokenKey);
 
-        // throw exception if tokenValue is null
         _ = tokenValue ?? throw new ArgumentNullException("tokenValue cannot be null", nameof(tokenValue));
 
         _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenValue!));
@@ -36,10 +31,8 @@ public class TokenService : ITokenService
 
         var claims = new List<Claim> {
             new Claim(JwtRegisteredClaimNames.NameId, userIdHashed)
-            // new Claim(JwtRegisteredClaimNames.Email, appUser.NormalizedEmail),
         };
 
-        // Get user's roles and add them all into claims
         IList<string>? roles = await _userManager.GetRolesAsync(appUser);
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
@@ -48,7 +41,7 @@ public class TokenService : ITokenService
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.Now.AddDays(7), // Set expiration time: seconds, minutes, days, etc.
+            Expires = DateTime.Now.AddDays(7),
             SigningCredentials = creds
         };
 
@@ -78,7 +71,6 @@ public class TokenService : ITokenService
 
         UpdateDefinition<AppUser> updatedSecuredToken = Builders<AppUser>.Update
             .Set(appUser => appUser.IdentifierHash, identifierHash);
-        // .Set(appUser => appUser.JtiValue, jtiValue);
 
         UpdateResult updateResult = await _collection.UpdateOneAsync<AppUser>(appUser =>
             appUser.Id == userId, updatedSecuredToken, null, cancellationToken);
@@ -107,16 +99,4 @@ public class TokenService : ITokenService
 
         return ValidationsExtensions.ValidateObjectId(userId);
     }
-
-    // public async Task<IEnumerable<string>> GetActualUserIdLessonAsync(string? hashedUserId, CancellationToken cancellationToken)
-    // {
-    //     if (hashedUserId is null) return null;
-
-    //     string loggedInUserLesson = await _collection.AsQueryable()
-    //         .Where(appUser => appUser.IdentifierHash == hashedUserId)
-    //         .Select(appUser => appUser.Lessons)
-    //         .SingleOrDefaultAsync(cancellationToken);
-
-    //     return loggedInUserLesson;
-    // }
 }

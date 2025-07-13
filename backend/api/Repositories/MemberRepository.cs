@@ -1,5 +1,3 @@
-using api.Helpers;
-
 namespace api.Repositories;
 
 public class MemberRepository : IMemberRepository
@@ -22,16 +20,6 @@ public class MemberRepository : IMemberRepository
         _userManager = userManager;
     }
     #endregion Constructor
-
-    // public async Task<Attendence[]> FindByUserIdAsync(AttendenceParams attendenceParams, CancellationToken cancellationToken)
-    // {
-    //     Attendence attendence[] = await _collectionAttendence.Find<Attendence>(doc
-    //         => doc.StudentId == attendenceParams.UserId).ToList(cancellationToken);
-
-    //     if (appUser is null) return null;
-
-    //     return appUser;
-    // }
 
     public async Task<PagedList<Attendence>> GetAllAttendenceAsync(AttendenceParams attendenceParams, ObjectId? userId, string targetCourseTitle, CancellationToken cancellationToken)
     {
@@ -65,46 +53,23 @@ public class MemberRepository : IMemberRepository
         if (targetAppUser == null) return false;
 
         targetAppUser.Email = memberUpdateDto.Email;
-        // targetAppUser.UserName = memberUpdateDto.UserName;
 
         if (!string.IsNullOrEmpty(memberUpdateDto.CurrentPassword) &&
             !string.IsNullOrEmpty(memberUpdateDto.Password) &&
             !string.IsNullOrEmpty(memberUpdateDto.ConfirmPassword))
         {
-            //Change password if last password exist
             IdentityResult passwordChangeResult = await _userManager.ChangePasswordAsync(targetAppUser, memberUpdateDto.CurrentPassword, memberUpdateDto.Password);
-            // if (!passwordChangeResult.Succeeded)
-            // {
-            //     var errors = string.Join(", ", passwordChangeResult.Errors.Select(e => e.Description));
-            //     throw new InvalidOperationException($"Failed to change password: {errors}");
-            // }
+
             if (!passwordChangeResult.Succeeded)
             {
                 throw new ApplicationException(string.Join(" | ", passwordChangeResult.Errors.Select(e => e.Description)));
             }
-
         }
 
         targetAppUser.NormalizedEmail = memberUpdateDto.Email.ToUpper();
-        // targetAppUser.NormalizedUserName = memberUpdateDto.UserName.ToUpper();
 
-        //save changes in DataBase
         IdentityResult updateResult = await _userManager.UpdateAsync(targetAppUser);
         return updateResult.Succeeded;
-
-        // if (string.IsNullOrEmpty(hashedUserId)) return null;
-
-        // ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
-
-        // if (userId is null) return null;
-
-        // UpdateDefinition<AppUser> updatedMember = Builders<AppUser>.Update
-        // .Set(appUser => appUser.Email, memberUpdateDto.Email)
-        // .Set(appUser => appUser.UserName, memberUpdateDto.UserName)
-        // .Set(appUser => appUser.PasswordHash, memberUpdateDto.Password)
-        // .Set(appUser => appUser.PasswordHash, memberUpdateDto.ConfirmPassword);
-
-        // return await _collectionAppUser.UpdateOneAsync<AppUser>(appUser => appUser.Id == userId, updatedMember, null, cancellationToken);
     }
 
     public async Task<ProfileDto?> GetProfileAsync(string HashedUserId, CancellationToken cancellationToken)
@@ -162,7 +127,6 @@ public class MemberRepository : IMemberRepository
 
         return courses is null
             ? null
-            // : Mappers.ConvertAppUserToLoggedInDto(appUser, token);
             : courses;
     }
 

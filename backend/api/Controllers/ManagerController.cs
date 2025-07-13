@@ -1,6 +1,3 @@
-using api.Models.Helpers;
-using api.Validations;
-
 namespace api.Controllers;
 
 [Authorize(Policy = "RequiredManagerRole")]
@@ -77,8 +74,6 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
 
         List<MemberDto> memberDtos = [];
 
-        // bool IsAbsent;
-        //inja dasti daram false midam chon manager niyaz be isAbsent student ha nadare
         foreach (AppUser appUser in pagedAppUsers)
         {
             bool isAbsent = false;
@@ -140,9 +135,6 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
 
         if (string.IsNullOrWhiteSpace(updateEnrolledDto.TitleCourse))
             return BadRequest("Course title is required.");
-
-        // if (file is null)
-        //     return BadRequest("No file is selected");
 
         var updateResult = await _managerRepository.UpdateEnrolledCourseAsync(updateEnrolledDto, targetUserName, cancellationToken);
 
@@ -260,7 +252,6 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         if (courses is null || !courses.Any())
         {
             new List<Course>();
-            // return NotFound("No Enrolled Courses found for the user.");
         }
 
         return Ok(courses);

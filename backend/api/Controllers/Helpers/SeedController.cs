@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-
 namespace api.Controllers;
 
 public class SeedController : BaseApiController
@@ -24,8 +22,6 @@ public class SeedController : BaseApiController
     [HttpPost]
     public async Task<ActionResult> CreateDummyMembers()
     {
-            
-
         #region If databaseExists
         // Stop if database already exists using its status
         // https://stackoverflow.com/a/53803908/3944285
@@ -46,7 +42,7 @@ public class SeedController : BaseApiController
 
         if (databaseExists == true)
             // return BadRequest("Database already exists");
-        await _client.DropDatabaseAsync("sepanta-project");
+            await _client.DropDatabaseAsync("sepanta-project");
         // await _database.DropCollectionAsync(_collectionName);
         #endregion If databaseExists
 
@@ -66,9 +62,9 @@ public class SeedController : BaseApiController
             Email = "admin@a.com"
         };
 
-        await _userManager.CreateAsync(admin, "Aaaaaaaa/"); // Create admin
+        await _userManager.CreateAsync(admin, "Arshiya123321/"); // Create admin
         await _userManager.AddToRolesAsync(admin, ["admin", "manager", "secretary", "teacher", "student"]);
-
+        // Manager
         AppUser manager = new()
         {
             UserName = "manager",

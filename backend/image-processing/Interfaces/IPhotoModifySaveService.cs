@@ -1,5 +1,3 @@
-using MongoDB.Bson;
-
 namespace image_processing.Interfaces;
 
 public interface IPhotoModifySaveService

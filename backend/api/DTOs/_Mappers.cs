@@ -13,7 +13,6 @@ public static class Mappers
             LastName = adminInput.LastName.Trim(),
             PhoneNum = adminInput.PhoneNum,
             Gender = adminInput.Gender.ToLower(),
-            // Titles = adminInput.Titles
         };
     }
 
@@ -82,7 +81,6 @@ public static class Mappers
             PhoneNum: appUser.PhoneNum,
             Gender: appUser.Gender,
             Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth)
-        // EnrolledCourses: appUser.EnrolledCourses
         );
     }
 
@@ -99,9 +97,7 @@ public static class Mappers
         return new Attendence(
             StudentId: studentId,
             CourseId: courseId,
-            // UserName: teacherInput.UserName,
             Date: currentDate
-        // IsPresent: teacherInput.IsPresent
         );
     }
 
@@ -109,12 +105,8 @@ public static class Mappers
     {
         return new ShowStudentStatusDto
         {
-            // StudentId = attendence.Id,
-            // UserName = studentUserName,
-            // DaysOfWeek = attendence.DaysOfWeek,
             Date = attendence.Date,
             CourseId = attendence.CourseId.ToString()
-            // IsPresent = attendence.IsPresent
         };
     }
 
@@ -132,8 +124,6 @@ public static class Mappers
             IsStarted: "false"
         );
     }
-
-    // public static Course ConvertCourseTo
 
     public static ShowCourseDto ConvertCourseToShowCourseDto(Course course)
     {
@@ -158,15 +148,15 @@ public static class Mappers
     {
         return new EnrolledCourse(
             // Id: Guid.NewGuid(),
-            CourseId: course.Id, //13213213ddfdf
+            CourseId: course.Id,
             CourseTitle: course.Title.ToUpper(),
-            CourseTuition: course.Tuition, //6_000_000
-            NumberOfPayments: managerInput.NumberOfPayments, //4
-            PaidNumber: 0, // TODO: calculate paiedNumber in backend 
-            NumberOfPaymentsLeft: managerInput.NumberOfPayments, // 4 =>methodi ke sakhte mishe dar repo
-            PaymentPerMonth: paymentPerMonthCalc, //2_000_000
-            PaidAmount: managerInput.PaidAmount, //0
-            TuitionRemainder: tuitionReminderCalc, //6_000_000
+            CourseTuition: course.Tuition,
+            NumberOfPayments: managerInput.NumberOfPayments,
+            PaidNumber: 0,
+            NumberOfPaymentsLeft: managerInput.NumberOfPayments,
+            PaymentPerMonth: paymentPerMonthCalc,
+            PaidAmount: managerInput.PaidAmount,
+            TuitionRemainder: tuitionReminderCalc,
             Payments: []
         );
     }

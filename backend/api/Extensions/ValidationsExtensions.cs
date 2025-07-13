@@ -8,11 +8,4 @@ public static class ValidationsExtensions
         ? null
         : objectId;
     }
-
-    // public static List<ObjectId?> ValidateListObjectId(ObjectId? objectId)
-    // {
-    //     return objectId is null || objectId.Equals(ObjectId.Empty)
-    //     ? null
-    //     : objectId;
-    // }
 }

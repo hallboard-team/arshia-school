@@ -1,6 +1,3 @@
-using image_processing.Helpers;
-using image_processing.Interfaces;
-
 namespace api.Services;
 
 public class PhotoService(
@@ -103,14 +100,12 @@ public class PhotoService(
 
         foreach (string photoPath in photoPaths)
         {
-            // بررسی اینکه فایل وجود دارد
             string fullPath = Path.Combine(wwwRootUrl, photoPath);
 
             if (File.Exists(fullPath))
             {
                 try
                 {
-                    // حذف فایل از دیسک
                     await Task.Run(() => File.Delete(fullPath));
                 }
                 catch (Exception ex)

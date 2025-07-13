@@ -3,7 +3,7 @@ namespace api.Controllers;
 [Authorize]
 public class AccountController(IAccountRepository _accountRepository) : BaseApiController
 {
-    [AllowAnonymous] 
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<ActionResult<LoggedInDto>> Login(LoginDto userInput, CancellationToken cancellationToken)
     {
@@ -34,7 +34,6 @@ public class AccountController(IAccountRepository _accountRepository) : BaseApiC
         string? hashedUserId = User.GetHashedUserId();
         if (string.IsNullOrEmpty(hashedUserId))
             return BadRequest("No user was found with this user Id.");
-
         // get loggedInDto
         LoggedInDto? loggedInDto = await _accountRepository.ReloadLoggedInUserAsync(hashedUserId, token, cancellationToken);
 

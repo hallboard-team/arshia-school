@@ -1,5 +1,3 @@
-using static api.DTOs.Mappers;
-
 namespace api.Repositories;
 
 public class ManagerRepository : IManagerRepository
@@ -10,7 +8,7 @@ public class ManagerRepository : IManagerRepository
     private readonly IMongoCollection<Attendence>? _collectionAttendence;
     private readonly UserManager<AppUser> _userManager;
     private readonly ITokenService _tokenService;
-    private readonly IMongoClient _client; // used for Session
+    private readonly IMongoClient _client;
     private readonly IPhotoService _photoService;
 
     public ManagerRepository(
@@ -346,11 +344,9 @@ public class ManagerRepository : IManagerRepository
         int newTotalPaidAmount = enrolledCourse.PaidAmount + updateEnrolledDto.PaidAmount;
         int tuitionReminder = enrolledCourse.CourseTuition - newTotalPaidAmount;
 
-        // PaidNumber
         int newPaidNumber = newTotalPaidAmount / enrolledCourse.PaymentPerMonth;
         int numberOfPaymentsLeft = enrolledCourse.NumberOfPayments - newPaidNumber;
 
-        // ایجاد پرداخت جدید
         Payment newPayment = new Payment(
             Id: ObjectId.GenerateNewId().ToString(),
             CourseTitle: updateEnrolledDto.TitleCourse.ToUpper(),
@@ -359,16 +355,6 @@ public class ManagerRepository : IManagerRepository
             Method: updateEnrolledDto.Method,
             Photo: null
         );
-
-        // if (file is not null) {
-        //     IEnumerable<string>? imageUrls = await _photoService.AddPhotoToDiskAsync(file, newPayment.Id);
-
-        //     if (imageUrls is null)
-        //         throw new ArgumentNullException("Saving photo has failed. Error from PhotoService.");
-
-        //     Photo photo = Mappers.ConvertPhotoUrlsToPhoto(imageUrls.ToArray(), isMain: true);
-        //     newPayment = newPayment with { Photo = photo };
-        // }
 
         FilterDefinition<AppUser> filter = Builders<AppUser>.Filter.And(
             Builders<AppUser>.Filter.Eq(u => u.Id, appUser.Id),
@@ -415,9 +401,6 @@ public class ManagerRepository : IManagerRepository
         }
 
         return pureTeachers;
-        // IList<AppUser> teachers = await _userManager.GetUsersInRoleAsync("teacher");
-
-        // return teachers.ToList();
     }
 
     public async Task<MemberDto?> GetMemberByEmailAsync(string targetMemberEmail, CancellationToken cancellationToken)
@@ -450,19 +433,12 @@ public class ManagerRepository : IManagerRepository
         if (targetAppUser == null) return false;
 
         bool emailChanged = !string.Equals(targetAppUser.Email, updatedMember.Email, StringComparison.OrdinalIgnoreCase);
-        // bool userNameChanged = !string.Equals(targetAppUser.UserName, updatedMember.UserName, StringComparison.OrdinalIgnoreCase);
 
         if (emailChanged)
         {
             targetAppUser.Email = updatedMember.Email;
             targetAppUser.NormalizedEmail = updatedMember.Email.ToUpper();
         }
-
-        // if (userNameChanged)
-        // {
-        //     targetAppUser.UserName = updatedMember.UserName;
-        //     targetAppUser.NormalizedUserName = updatedMember.UserName.ToUpper();
-        // }
 
         IdentityResult result = await _userManager.UpdateAsync(targetAppUser);
         if (!result.Succeeded) return false;
@@ -601,7 +577,6 @@ public class ManagerRepository : IManagerRepository
 
         return courses is null
             ? null
-            // : Mappers.ConvertAppUserToLoggedInDto(appUser, token);
             : courses;
     }
 
@@ -624,9 +599,6 @@ public class ManagerRepository : IManagerRepository
 
     public async Task<Payment?> GetTargetPaymentByIdAsync(string targetPaymentId, CancellationToken cancellationToken)
     {
-        // if (!ObjectId.TryParse(targetPaymentId, out ObjectId paymentObjectId))
-        //     return null; // یا throw BadRequestException یا لاگ کردن
-
         AppUser? appUser = await _collectionAppUser
             .Find(doc => doc.EnrolledCourses.Any(ec => ec.Payments.Any(p => p.Id == targetPaymentId)))
             .FirstOrDefaultAsync(cancellationToken);

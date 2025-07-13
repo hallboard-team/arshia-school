@@ -17,7 +17,6 @@ public class AdminRepository : IAdminRepository
     }
     #endregion Vars and Constructor
 
-
     public async Task<LoggedInDto?> CreateAsync(RegisterDto registerDto, CancellationToken cancellationToken)
     {
         LoggedInDto loggedInDto = new();
@@ -55,44 +54,4 @@ public class AdminRepository : IAdminRepository
 
         return loggedInDto;
     }
-
-    // public async Task<IEnumerable<UserWithRoleDto>> GetUsersWithRolesAsync()
-    // {
-    //     List<UserWithRoleDto> usersWithRoles = [];
-
-    //     IEnumerable<AppUser> appUsers = _userManager.Users;
-
-    //     foreach (AppUser appUser in appUsers)
-    //     {
-    //         IEnumerable<string> roles = await _userManager.GetRolesAsync(appUser);
-
-    //         usersWithRoles.Add(
-    //             new UserWithRoleDto(
-    //                 UserName: appUser.UserName!,
-    //                 Roles: roles
-    //             )
-    //         );
-    //     }
-
-    //     return usersWithRoles;
-    // }
-    
-    // public async Task<UpdateResult?> SetTeacherRoleAsync(string targetStudentUserName, CancellationToken cancellationToken)
-    // {
-    //     ObjectId? studentId = await GetObjectIdByUserNameAsync(targetStudentUserName, cancellationToken);
-
-    //     if (studentId is null)
-    //         return null;
-
-    //     FilterDefinition<AppUser>? filterOld = Builders<AppUser>.Filter
-    //         .Where(appUser =>
-    //             appUser.Id == studentId && appUser.Roles.Any<AppRole>(role => role.Name == "student"));
-
-    //     UpdateDefinition<AppUser>? updateOld = Builders<AppUser>.Update
-    //         .Set(appUser => appUser.Roles.FirstMatchingElement().Name, "teacher");
-
-    //     return await _collectionAppUser.UpdateOneAsync(filterOld, updateOld, null, cancellationToken);
-
-    // }
-
 }

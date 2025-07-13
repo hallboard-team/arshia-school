@@ -1,11 +1,10 @@
 namespace api.Helpers;
 
-public class PagedList<T> : List<T> // Generic (Type Agnostic)
+public class PagedList<T> : List<T>
 {
     public PagedList() { }
-    
+
     // set props values
-    //inja az private taghri dadam be public
     public PagedList(IEnumerable<T> items, int itemsCount, int pageNumber, int pageSize)
     {
         CurrentPage = pageNumber;

@@ -1,15 +1,13 @@
-using api.Models.Helpers;
-
 namespace api.Controllers;
 
-[Authorize(Policy = "RequiredTeacherRole")]   
+[Authorize(Policy = "RequiredTeacherRole")]
 public class TeacherController(ITeacherRepository _teacherRepository, ITokenService _tokenService) : BaseApiController
 {
     [HttpGet("get-course")]
     public async Task<ActionResult<List<Course>>> GetCourse(CancellationToken cancellationToken)
     {
-        string? token = null; 
-        
+        string? token = null;
+
         bool isTokenValid = HttpContext.Request.Headers.TryGetValue("Authorization", out var authHeader);
 
         if (isTokenValid)
@@ -30,9 +28,9 @@ public class TeacherController(ITeacherRepository _teacherRepository, ITokenServ
     [HttpPost("add-attendence/{targetCourseTitle}")]
     public async Task<ActionResult<ShowStudentStatusDto>> Add(AddStudentStatusDto teacherInput, string targetCourseTitle, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(teacherInput.UserName)) 
-        
-        return BadRequest("یوزرنیم خالی است.");
+        if (string.IsNullOrEmpty(teacherInput.UserName))
+
+            return BadRequest("یوزرنیم خالی است.");
 
         ShowStudentStatusDto showStudentStatusDto = await _teacherRepository.AddAsync(teacherInput, targetCourseTitle, cancellationToken);
 
@@ -40,15 +38,6 @@ public class TeacherController(ITeacherRepository _teacherRepository, ITokenServ
             return BadRequest("ثبت حضور و غیاب انجام نشد. دانش‌آموز یافت نشد یا قبلاً ثبت شده است.");
 
         return Ok(showStudentStatusDto);
-        // if (teacherInput.UserName is null) return BadRequest("یوزرنیم خالی است.");
-
-        // ShowStudentStatusDto? showStudentStatusDto = await _teacherRepository.AddAsync(teacherInput, cancellationToken);
-
-        // // if (teacherInput.AbsentOrPresent is null) return null;
-        // if (showStudentStatusDto is null)
-        //     return BadRequest("failed!");
-
-        // return showStudentStatusDto;
     }
 
     [HttpDelete("remove-attendence/{targetUserName}/{targetCourseTitle}")]
@@ -74,12 +63,12 @@ public class TeacherController(ITeacherRepository _teacherRepository, ITokenServ
     {
         string? userIdHashed = User.GetHashedUserId();
 
-        if(userIdHashed is null)
+        if (userIdHashed is null)
             return null;
 
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(userIdHashed, cancellationToken);
 
-        if (userId is null) 
+        if (userId is null)
             return Unauthorized("You are unauthorized. Login again.");
 
         PagedList<AppUser> pagedAppUsers = await _teacherRepository.GetAllAsync(paginationParams, targetTitle, userIdHashed, cancellationToken);
@@ -107,12 +96,11 @@ public class TeacherController(ITeacherRepository _teacherRepository, ITokenServ
         Dictionary<ObjectId, bool> absences = await _teacherRepository.CheckIsAbsentAsync(studentIds, courseId.Value, cancellationToken);
 
         List<MemberDto> memberDtos = [];
-        
+
         bool isAbsent;
         foreach (AppUser appUser in pagedAppUsers)
         {
             isAbsent = absences.ContainsKey(appUser.Id) && absences[appUser.Id];
-            // isAbsent = await _teacherRepository.CheckIsAbsentAsync(studentIds, courseId.Value, cancellationToken);
 
             memberDtos.Add(Mappers.ConvertAppUserToMemberDto(appUser, isAbsent));
         }

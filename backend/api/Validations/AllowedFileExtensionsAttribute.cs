@@ -10,7 +10,6 @@ public class AllowedFileExtensionsAttribute : ValidationAttribute
             if (!IsFileValid(file))
             {
 
-                // get only allowed extensions to show
                 string? keys = null;
                 foreach (var key in _fileSignatures.Keys)
                 {
