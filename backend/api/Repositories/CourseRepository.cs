@@ -53,13 +53,13 @@ public class CourseRepository : ICourseRepository
             paginationParams.PageSize, cancellationToken);
     }
 
-    public async Task<List<string>> GetProfessorNamesByIdsAsync(List<ObjectId> professorIds, CancellationToken cancellationToken)
+    public async Task<List<string?>> GetProfessorUserNamesByIdsAsync(List<ObjectId> professorIds, CancellationToken cancellationToken)
     {
-        List<AppUser> professorNames = await _collectionAppUser
+        List<AppUser> professorUserNames = await _collectionAppUser
             .Find(professor => professorIds.Contains(professor.Id))
             .ToListAsync(cancellationToken);
 
-        return professorNames.Select(p => p.Name).ToList();
+        return professorUserNames.Select(p => p.NormalizedUserName).ToList();
     }
 
     public async Task<bool> UpdateCourseAsync(
@@ -157,9 +157,9 @@ public class CourseRepository : ICourseRepository
         //     return null;
 
         var professorIds = course.ProfessorsIds;
-        var professorNames = await _collectionAppUser
+        var professorUserNames = await _collectionAppUser
             .Find(doc => professorIds.Contains(doc.Id))
-            .Project(doc => doc.Name) // فقط نام‌ها را نگه می‌داریم
+            .Project(doc => doc.NormalizedUserName)
             .ToListAsync(cancellationToken);
 
         // return course is not null ? Mappers.ConvertCourseToShowCourseDto(course, professorNames) : null;
@@ -172,7 +172,7 @@ public class CourseRepository : ICourseRepository
             HoursPerClass = course.HoursPerClass,
             Start = course.Start,
             IsStarted = course.IsStarted,
-            ProfessorNames = professorNames
+            ProfessorUserNames = professorUserNames
         };
     }
 }

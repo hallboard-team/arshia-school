@@ -18,14 +18,14 @@ public class CourseController(ICourseRepository _courseRepository) : BaseApiCont
             ? Ok(showCourseDto)
             : BadRequest("add-course failed try again.");
     }
-    
+
     [AllowAnonymous]
     [HttpGet("get-all-courses")]
     public async Task<ActionResult<IEnumerable<ShowCourseDto>>> GetAll([FromQuery] PaginationParams paginationParams, CancellationToken cancellationToken)
     {
         PagedList<Course> pagedCourses = await _courseRepository.GetAllAsync(paginationParams, cancellationToken);
 
-        if (pagedCourses.Count == 0) 
+        if (pagedCourses.Count == 0)
             return NoContent();
 
         PaginationHeader paginationHeader = new(
@@ -41,14 +41,14 @@ public class CourseController(ICourseRepository _courseRepository) : BaseApiCont
 
         foreach (Course course in pagedCourses)
         {
-            List<string> professorNames = await _courseRepository
-                .GetProfessorNamesByIdsAsync(course.ProfessorsIds, cancellationToken);
+            List<string?> professorUserNames = await _courseRepository
+                .GetProfessorUserNamesByIdsAsync(course.ProfessorsIds, cancellationToken);
 
             showCourseDtos.Add(new ShowCourseDto
             {
                 Id = course.Id.ToString(),
                 Title = course.Title,
-                ProfessorNames = professorNames, 
+                ProfessorUserNames = professorUserNames,
                 Tuition = course.Tuition,
                 Hours = course.Hours,
                 HoursPerClass = course.HoursPerClass,
@@ -68,7 +68,7 @@ public class CourseController(ICourseRepository _courseRepository) : BaseApiCont
 
         return IsSuccess
             ? Ok(new { message = "Course has been updated successfully." })
-            : BadRequest("Update failed. Try again later.");            
+            : BadRequest("Update failed. Try again later.");
     }
 
     [HttpPost("add-professor/{targetCourseTitle}/{professorUserName}")]
