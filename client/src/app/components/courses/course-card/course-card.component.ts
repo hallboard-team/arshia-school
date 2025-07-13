@@ -40,7 +40,6 @@ export class CourseCardComponent implements OnInit {
     this.loggedInUserSig = this._accountService.loggedInUserSig;
 
     if (this.courseIn?.start) {
-      // تبدیل تاریخ میلادی به شمسی
       this.shamsiStartDate = moment(this.courseIn.start).format('jYYYY/jMM/jDD');
     }
   }

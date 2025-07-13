@@ -1,14 +1,15 @@
 .card-items {
     width: 250px;
+    height: 400px;
     border-radius: 15px;
     background: linear-gradient(145deg, #f0f0f0, #cacaca);
     box-shadow: 5px 5px 10px #b1b1b1,
         -5px -5px 10px #ffffff;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 10px;
     padding: 1rem;
 
     .course-title {
@@ -19,6 +20,8 @@
     .text {
         color: black;
         font-size: 15px;
+        margin: 0;
+        padding: 0;
     }
 
     .div-start-day {
@@ -37,6 +40,31 @@
             color: red;
         }
     }
+
+    .div-professors-name {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        align-items: flex-end;
+
+        .teachers-name {
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .result-teachers-name {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-end;
+
+            span {
+                border-radius: 4px;
+            }
+        }
+    }
+
 
     .teachers-name {
         color: black;

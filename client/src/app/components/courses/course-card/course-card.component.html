@@ -8,7 +8,14 @@
         <span class="title">📅 تاریخ شروع دوره</span>
         <span class="result">{{ shamsiStartDate }}</span>
     </div>
-    <span class="teachers-name">اسم اساتید: {{courseIn.professorNames}}</span>
+
+    <div class="div-professors-name">
+        <span class="teachers-name">اسم اساتید:</span>
+        <div class="result-teachers-name">
+            <span *ngFor="let name of courseIn.professorNames">{{ name }}</span>
+        </div>
+    </div>
+
     @if (courseIn.isStarted == 'true') {
     <span class="text-isStarted-true">در حال اجرا ✅</span>
     }@else {
