@@ -304,12 +304,6 @@
                         color: black;
                         font-weight: 100;
                     }
-
-                    // .information-women {
-                    //     font-size: 15px;
-                    //     color: rgb(255, 0, 170);
-                    //     font-weight: 500;
-                    // }
                 }
 
                 .div-add-or-remove-teacher-btn {
@@ -322,40 +316,51 @@
                     margin-top: 1rem;
 
                     .button {
-                        height: 50px;
-                        width: 50px;
-                        border: none;
-                        border-radius: 50%;
-                        background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                        box-shadow: 5px 5px 10px #696969,
-                            -5px -5px 10px #ffffff;
                         display: flex;
-                        justify-content: center;
                         align-items: center;
-                        transition: ease-in 0.3s;
-                    }
-
-                    .button.add-professor mat-icon {
-                        color: blue;
-                    }
-
-                    .button.delete-professor mat-icon {
-                        color: red;
-                    }
-
-                    .button mat-icon {
-                        // margin-right: 8px; 
-                        font-size: 24px;
-                    }
-
-                    .button:hover mat-icon {
-                        font-size: 26px;
-                    }
-
-                    .button:hover {
+                        justify-content: center;
+                        border: none;
+                        padding: 8px;
+                        border-radius: 8px;
                         cursor: pointer;
-                        transform: scale(1.02);
-                        transition: ease-in 0.3s;
+                        transition: background 0.3s ease, transform 0.2s ease;
+
+                        mat-icon {
+                            font-size: 20px;
+                            transition: transform 0.2s ease;
+                        }
+
+                        &:hover {
+                            transform: scale(1.05);
+                        }
+
+                        &:disabled {
+                            opacity: 0.6;
+                            cursor: not-allowed;
+                        }
+                    }
+
+                    .add-professor {
+                        background: #4caf50;
+                        color: white;
+
+                        &:hover {
+                            background: #43a047;
+                        }
+                    }
+
+                    .delete-professor {
+                        background: #f44336;
+                        color: white;
+
+                        &:hover {
+                            background: #e53935;
+                        }
+                    }
+
+                    .spinner-icon {
+                        width: 20px;
+                        height: 20px;
                     }
                 }
             }

@@ -1,7 +1,7 @@
 export interface Course {
     // id: string;
     title: string,
-    // professorNames: string[],
+    professorUserNames: string[],
     tuition: number,
     hours: number,
     hoursPerClass: DoubleRange,

@@ -103,11 +103,26 @@
                 <span>جنسیت: <span class="information">مرد</span></span>
 
                 <div class="div-add-or-remove-teacher-btn">
-                    <button class="button add-professor" (click)="addProfessor(teacher)">
-                        <mat-icon>add</mat-icon>
+                    <button class="button add-professor" *ngIf="!professorUserNames.includes(teacher.userName)"
+                        (click)="addProfessor(teacher)">
+
+                        <ng-container>
+                            <mat-icon>person_add</mat-icon>
+                        </ng-container>
+                        <ng-template #loadingAdd>
+                            <mat-spinner class="spinner-icon" diameter="20"></mat-spinner>
+                        </ng-template>
                     </button>
-                    <button class="button delete-professor" (click)="removeProfessor(teacher)">
-                        <mat-icon>delete</mat-icon>
+
+                    <button class="button delete-professor" *ngIf="professorUserNames.includes(teacher.userName)"
+                        (click)="removeProfessor(teacher)">
+
+                        <ng-container>
+                            <mat-icon>person_remove</mat-icon>
+                        </ng-container>
+                        <ng-template #loadingDelete>
+                            <mat-spinner class="spinner-icon" diameter="20"></mat-spinner>
+                        </ng-template>
                     </button>
                 </div>
             </div>

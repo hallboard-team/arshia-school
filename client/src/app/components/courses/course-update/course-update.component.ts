@@ -22,7 +22,7 @@ import {
   NgPersianDatepickerModule
 } from '../../../../../projects/ng-persian-datepicker/src/public-api';
 import moment from 'moment-jalaali';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-course-update',
   standalone: true,
@@ -31,7 +31,7 @@ import moment from 'moment-jalaali';
     ReactiveFormsModule, MatRadioModule, MatIconModule,
     MatCardModule, MatFormFieldModule, MatInputModule,
     MatButtonModule, CurrencyFormatterDirective,
-    NgPersianDatepickerModule
+    NgPersianDatepickerModule, MatProgressSpinnerModule
   ],
   templateUrl: './course-update.component.html',
   styleUrl: './course-update.component.scss'
@@ -58,6 +58,7 @@ export class CourseUpdateComponent implements OnInit {
   uiTodayBtnEnable: boolean = true;
 
   shamsiDisplayDate: string = '';
+  professorUserNames: string[] = [];
 
   ngOnInit(): void {
     this.getCourse();
@@ -77,9 +78,6 @@ export class CourseUpdateComponent implements OnInit {
   get TitleCtrl(): AbstractControl {
     return this.courseEditFg.get('titleCtrl') as FormControl;
   }
-  // get ProfessorUserNameCtrl(): AbstractControl {
-  //   return this.courseEditFg.get('professorUserNameCtrl') as FormControl;
-  // }
   get TuitionCtrl(): AbstractControl {
     return this.courseEditFg.get('tuitionCtrl') as FormControl;
   }
@@ -104,6 +102,7 @@ export class CourseUpdateComponent implements OnInit {
         this._courseService.getByTitle(courseTitle)?.pipe(take(1)).subscribe(course => {
           if (course) {
             this.course = course;
+            this.professorUserNames = course.professorUserNames;
 
             this.initControllersValues(course);
           }
@@ -176,7 +175,6 @@ export class CourseUpdateComponent implements OnInit {
     if (this.course && courseTitle) {
       let updatedCourse: CourseUpdate = {
         title: this.TitleCtrl.value,
-        // professorUserName: this.ProfessorUserNameCtrl.value,
         tuition: this.TuitionCtrl.value,
         hours: this.HoursCtrl.value,
         hoursPerClass: this.HoursPerClassCtrl.value,
@@ -229,6 +227,7 @@ export class CourseUpdateComponent implements OnInit {
             verticalPosition: 'bottom',
             duration: 10000
           });
+          this.professorUserNames.push(teacher.userName);
         },
         error: (err) => {
           this._matSnackBar.open("خطا در اضافه کردن مدرس به دوره", "Close", {
@@ -252,6 +251,7 @@ export class CourseUpdateComponent implements OnInit {
             verticalPosition: 'bottom',
             duration: 10000
           });
+          this.professorUserNames = this.professorUserNames.filter(u => u !== teacher.userName);
         },
         error: (err) => {
           this._matSnackBar.open("خطا در حذف کردن مدرس از دوره", "Close", {
@@ -292,5 +292,9 @@ export class CourseUpdateComponent implements OnInit {
     divBtnGetTeachers.forEach((element) => {
       (element as HTMLElement).style.display = "flex";
     });
+  }
+
+  isTeacherInCourse(teacher: Teacher): boolean {
+    return this.professorUserNames.includes(teacher.userName);
   }
 }
