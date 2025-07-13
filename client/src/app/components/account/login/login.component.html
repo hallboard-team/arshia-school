@@ -11,7 +11,6 @@
     <form class="login-form" [formGroup]="loginFg" (ngSubmit)="loginFg.valid && login()">
       <div class="content">
         <span class="title">به آکادمی طلوع فناوری خوش آمدید</span>
-        <!-- <p class="matn-sepanta">به سپتابپیوندید و با متد های آمریکایی بیاموزید</p> -->
 
         <mat-form-field appearance="outline">
           <mat-label>ایمیل</mat-label>
@@ -58,7 +57,6 @@
           <span>رمز عبور خودرا فراموش کردید؟</span>
           <a href="">بازیابی رمزعبور</a>
         </div>
-
 
         <mat-error>{{wrongUsernameOrPassword}}.</mat-error>
       </div>

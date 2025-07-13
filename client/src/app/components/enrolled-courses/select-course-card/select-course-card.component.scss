@@ -1,8 +1,4 @@
 .card-items {
-    // border-radius: 10px;
-    // background: #e0e0e0;
-    // box-shadow: inset 5px 5px 10px #cecece,
-    //     inset -5px -5px 10px #f2f2f2;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -19,6 +15,7 @@
         color: green;
         font-size: 14px;
     }
+
     .text-isStarted-false {
         color: red;
         font-size: 14px;
@@ -30,13 +27,14 @@
     .main-section {
         .background-card {
             flex-direction: row;
-            
+
             .card-items {
                 width: 50%;
             }
         }
     }
 }
+
 @media (min-width: 1150px) {
     .main-section {
         .background-card {

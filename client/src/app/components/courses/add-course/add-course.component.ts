@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Validators, FormControl, FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddCourse } from '../../../models/course.model';
 import { CourseService } from '../../../services/course.service';
@@ -12,7 +12,6 @@ import { AutoFocusDirective } from '../../../directives/auto-focus.directive';
 import { NavbarComponent } from '../../navbar/navbar.component';
 import {
   defaultTheme,
-  IActiveDate,
   IDatepickerTheme,
   NgPersianDatepickerModule
 } from '../../../../../projects/ng-persian-datepicker/src/public-api';
@@ -37,7 +36,6 @@ moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
   styleUrl: './add-course.component.scss'
 })
 export class AddCourseComponent {
-
   fb = inject(FormBuilder);
   private _courseService = inject(CourseService);
   private _matSnackBar = inject(MatSnackBar);

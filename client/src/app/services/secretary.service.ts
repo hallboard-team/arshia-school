@@ -12,12 +12,11 @@ import { RegisterUser } from '../models/register-user.model';
 })
 export class SecretaryService {
   private readonly _http = inject(HttpClient);
-  router = inject(Router);
-  platformId = inject(PLATFORM_ID); 
   private snackBar = inject(MatSnackBar);
-  
   private readonly _managerapiUrl = environment.apiUrl + 'manager/';
   private readonly _secretaryapiUrl = environment.apiUrl + 'secretary/';
+  router = inject(Router);
+  platformId = inject(PLATFORM_ID);
 
   loggedInUserSig = signal<LoggedInUser | null>(null);
 

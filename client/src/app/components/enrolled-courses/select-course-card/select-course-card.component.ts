@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { ShowCourse } from '../../../models/course.model';
 import { LoggedInUser } from '../../../models/logged-in-user.model';
 import { AccountService } from '../../../services/account.service';
-import { MatDivider, MatDividerModule } from '@angular/material/divider';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-select-course-card',
@@ -20,11 +20,11 @@ import { MatDivider, MatDividerModule } from '@angular/material/divider';
 })
 export class SelectCourseCardComponent {
   @Input('selectCourseInput') courseIn: ShowCourse | undefined;
-  
+
   private _accountService = inject(AccountService);
-    
+
   loggedInUserSig: Signal<LoggedInUser | null> | undefined;
-    
+
   ngOnInit(): void {
     this.loggedInUserSig = this._accountService.loggedInUserSig;
   }

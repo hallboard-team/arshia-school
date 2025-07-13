@@ -1,8 +1,7 @@
-import { Component, inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Course } from '../../models/course.model';
 import { TeacherService } from '../../services/teacher.service';
-import { response } from 'express';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { Member } from '../../models/member.model';
 import { CommonModule } from '@angular/common';
@@ -23,7 +22,6 @@ export class TeacherComponent implements OnInit, OnDestroy {
   teacherService = inject(TeacherService);
 
   courses$: Observable<Course[] | null> | undefined;
-  // courses: Course[] | undefined;
   courses: (Course & { shamsiStart: string })[] | undefined;
 
   subscribed: Subscription | undefined;
@@ -31,7 +29,6 @@ export class TeacherComponent implements OnInit, OnDestroy {
   students: Member[] = [];
   selectedCourse: string | null = null;
   shamsiStartDate: string = '';
-
 
   ngOnInit(): void {
     this.getAllCourses();

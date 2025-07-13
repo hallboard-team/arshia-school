@@ -13,7 +13,6 @@ import { LoggedInUser } from '../../../models/logged-in-user.model';
 import { AccountService } from '../../../services/account.service';
 import { CourseService } from '../../../services/course.service';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LoginUser } from '../../../models/login-user.model';
 import { AddEnrolledCourse } from '../../../models/add-enrolled-course.model';
 import { ManagerService } from '../../../services/manager.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -34,7 +33,7 @@ import { MatSelectModule } from '@angular/material/select';
     SelectCourseCardComponent, MatSnackBarModule,
     MatInputModule, MatButtonModule, MatTabsModule,
     MatRadioModule, MatSelectModule
-],
+  ],
   templateUrl: './enrolled-course.component.html',
   styleUrl: './enrolled-course.component.scss'
 })
@@ -44,30 +43,27 @@ export class EnrolledCourseComponent {
   private _managerService = inject(ManagerService);
   private _route = inject(ActivatedRoute);
   private _matSnackBar = inject(MatSnackBar);
+  fb = inject(FormBuilder);
 
   courses$: Observable<Course[] | null> | undefined;
-  
+
   subscribed: Subscription | undefined;
-   
   pagination: Pagination | undefined;
-  // courses: Course[] | undefined;
   showCourses: ShowCourse[] | undefined;
   courseParams: CourseParams | undefined;
-  
   pageSizeOptions = [5, 10, 25];
   pageEvent: PageEvent | undefined;
-  
+
   loggedInUserSig: Signal<LoggedInUser | null> | undefined;
-  fb = inject(FormBuilder);
   memberUserName: string | null = this._route.snapshot.paramMap.get('memberUserName');
-  
+
   ngOnInit(): void {
     this.courseParams = new CourseParams();
     this.loggedInUserSig = this._accountService.loggedInUserSig;
-  
+
     this.getAll();
   }
-  
+
   ngOnDestroy(): void {
     this.subscribed?.unsubscribe();
   }
@@ -86,7 +82,7 @@ export class EnrolledCourseComponent {
 
   get TitleCourseCtrl(): FormControl {
     return this.addEnrolledCourseFg.get('titleCourseCtrl') as FormControl;
-  }    
+  }
   get NumberOfPaymentsCtrl(): FormControl {
     return this.addEnrolledCourseFg.get('numberOfPaymentsCtrl') as FormControl;
   }
@@ -96,14 +92,14 @@ export class EnrolledCourseComponent {
 
   get TitleCourseUpdateCtrl(): FormControl {
     return this.updateEnrolledCourseFg.get('titleCourseUpdateCtrl') as FormControl;
-  }    
+  }
   get PaidAmountUpdateCtrl(): FormControl {
     return this.updateEnrolledCourseFg.get('paidAmountUpdateCtrl') as FormControl;
   }
   get MethodCtrl(): FormControl {
     return this.updateEnrolledCourseFg.get('methodCtrl') as FormControl;
   }
-    
+
   addEnrolledCourse(): void {
     const memberUserName: string | null = this._route.snapshot.paramMap.get('memberUserName');
 
@@ -121,14 +117,14 @@ export class EnrolledCourseComponent {
             verticalPosition: 'bottom',
             duration: 10000
           });
-        }, 
+        },
         error: (err) => {
           this._matSnackBar.open("در اضافه کردن دوره مشکل به وجود آمده", "Close", {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
             duration: 10000
           });
-        } 
+        }
       })
     }
   }
@@ -150,18 +146,18 @@ export class EnrolledCourseComponent {
             verticalPosition: 'bottom',
             duration: 10000
           });
-        }, 
+        },
         error: (err) => {
           this._matSnackBar.open("در اضافه کردن دوره مشکل به وجود آمده", "Close", {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
             duration: 10000
           });
-        } 
+        }
       })
     }
   }
-  
+
   getAll(): void {
     if (this.courseParams)
       this.subscribed = this._courseService.getAll(this.courseParams).subscribe({

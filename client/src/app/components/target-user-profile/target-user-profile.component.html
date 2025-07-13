@@ -102,18 +102,6 @@
                             }
                         </mat-form-field>
 
-                        <!-- <mat-form-field appearance="outline">
-                            <mat-label>تاریخ تولد</mat-label>
-                            <input class="input" formControlName="targetDateOfBirthCtrl" [min]="minDate" [max]="maxDate"
-                                matInput [matDatepicker]="dp3" matInput>
-                            <mat-hint>بین {{minDate.getFullYear()}} تا {{maxDate.getFullYear()}}</mat-hint>
-                            <mat-datepicker-toggle matIconSuffix [for]="dp3"></mat-datepicker-toggle>
-                            <mat-datepicker #dp3 touchUi disabled="false"></mat-datepicker>
-                            @if (TargetDateOfBirthCtrl.hasError('required')) {
-                            <mat-error>فرم رو پرکنید</mat-error>
-                            }
-                        </mat-form-field> -->
-
                         <mat-form-field appearance="outline">
                             <mat-label>تاریخ تولد</mat-label>
                             <input class="input" [value]="shamsiDisplayDate" readonly (click)="openDatePicker()"
@@ -140,10 +128,6 @@
                 @if (courses && targetUserProfile) {
                 <ng-container>
                     <div class="div-courses">
-                        <!-- <div class="div-title-course">
-                            <span class="title-course">دوره‌های شما</span>
-                        </div> -->
-
                         @if (!loading) {
                         <div class="course-container">
                             @if (error) {
@@ -267,17 +251,7 @@
                                 </mat-select>
                                 <mat-error *ngIf="TitleCourseCtrl.hasError('required')">!این فیلد خالی است</mat-error>
                             </mat-form-field>
-                            <!-- 
-                            
-                            <mat-form-field appearance="outline">
-                                <mat-label>مبلغ پرداختی</mat-label>
-                                <input type="text" formControlName="paidAmountUpdateCtrl" label="paid amount" matInput
-                                    appCurrencyFormatter>
-                                <span matSuffix class="suffix-text">تومان</span>
-                                @if (PaidAmountCtrl.hasError('required')) {
-                                <mat-error>!این فیلد خالی است</mat-error>
-                                }
-                            </mat-form-field> -->
+
                             <mat-form-field appearance="outline">
                                 <mat-label>مبلغ پرداختی</mat-label>
                                 <input type="text" formControlName="paidAmountUpdateCtrl" matInput appCurrencyFormatter>
@@ -286,7 +260,6 @@
                                 <mat-error>!این فیلد خالی است</mat-error>
                                 }
                             </mat-form-field>
-
 
                             <div class="radio-inputs">
                                 <mat-radio-group class="radio-group" aria-label="Select an option"

@@ -26,13 +26,11 @@
         .content {
             padding: 1rem;
             width: 90%;
-
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             gap: 2rem;
-
             border-radius: 5px;
             background: linear-gradient(145deg, #f0f0f0, #cacaca);
             box-shadow: 5px 5px 10px #a4a4a4,
@@ -139,7 +137,6 @@
         button {
             margin-top: 10px;
             height: 40px;
-            // width: 150px;
             border: none;
             border-radius: 15px;
             padding: 10px 20px;
@@ -164,7 +161,6 @@
 
     .div-get-all-teachers {
         width: 100%;
-
         display: none;
         flex-direction: column;
         justify-content: center;
@@ -283,8 +279,6 @@
                     height: 60px;
                     width: 60px;
                     border-radius: 50%;
-                    // box-shadow: 0 0 10px black;
-                    // border-radius: 50px;
                     background: linear-gradient(145deg, #f0f0f0, #cacaca);
                     box-shadow: 5px 5px 10px #696969,
                         -5px -5px 10px #ffffff;
@@ -371,10 +365,6 @@
 ::ng-deep mat-form-field {
     height: 40px !important;
 
-    // mat-label {
-    //     direction: rtl;
-    //     text-align: right;
-    // }
     .mat-mdc-text-field-wrapper {
         padding: 0px !important;
     }

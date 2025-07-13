@@ -79,7 +79,6 @@ export class TargetMemberEnrolledCourseComponent implements OnInit {
       this._managerService.getTargetUserEnrolledCourse(memberUserName, courseTitle)
         .subscribe({
           next: (response) => {
-            // console.log(response);
             response.payments.forEach(p => p.id = p.id.toString());
 
             this.enrolledCourse = response;

@@ -1,6 +1,4 @@
-// enrolled-course.model.ts
 export interface EnrolledCourse {
-    // courseId: string;
     courseTitle: string;
     courseTuition: number;
     numberOfPayments: number;
@@ -17,9 +15,9 @@ export interface Payment {
     amount: number;
     paidOn: string;
     method: string;
-    photo: Photo | null;  // Assuming Photo is another object
+    photo: Photo | null;
 }
-  
+
 export interface Photo {
     url_165: string;
     url_256: string;

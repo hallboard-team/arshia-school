@@ -6,6 +6,4 @@ export interface UserProfile {
     lastName: string;
     age: number;
     gender: string;
-    // password: string;
-    // enrolledCourses: string[];
 }

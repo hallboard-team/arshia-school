@@ -1,6 +1,6 @@
 <header>
     <nav>
-      <app-navbar />
+        <app-navbar />
     </nav>
 </header>
 
@@ -13,17 +13,10 @@
         }
     </div>
     @if (pagination && memberParams) {
-    <mat-paginator #paginator (page)="handlePageEvent($event)" 
-        [length]="pagination.totalItems"
-        [pageSize]="memberParams.pageSize" 
-        [disabled]="false" 
-        [showFirstLastButtons]="true"
-        [pageSizeOptions]="true ? pageSizeOptions : []" 
-        [hidePageSize]="false"
-        [pageIndex]="memberParams.pageNumber - 1" 
-        aria-label="Select page" 
-        class="paginator">
-        <!-- pageIndex must start from 0 -->
+    <mat-paginator #paginator (page)="handlePageEvent($event)" [length]="pagination.totalItems"
+        [pageSize]="memberParams.pageSize" [disabled]="false" [showFirstLastButtons]="true"
+        [pageSizeOptions]="true ? pageSizeOptions : []" [hidePageSize]="false" [pageIndex]="memberParams.pageNumber - 1"
+        aria-label="Select page" class="paginator">
     </mat-paginator>
     }
 </section>

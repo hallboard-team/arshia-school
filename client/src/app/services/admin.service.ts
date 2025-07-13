@@ -1,11 +1,10 @@
-import { Injectable, Input, PLATFORM_ID, inject, signal } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 import { RegisterUser } from '../models/register-user.model';
-import { Observable, map, take } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { LoggedInUser } from '../models/logged-in-user.model';
 import { environment } from '../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { ApiResponse } from '../models/helpers/apiResponse.model';
 import { isPlatformBrowser } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -15,9 +14,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class AdminService {
   http = inject(HttpClient);
   router = inject(Router);
-  platformId = inject(PLATFORM_ID); 
+  platformId = inject(PLATFORM_ID);
   private snackBar = inject(MatSnackBar);
-  
+
   private readonly baseApiUrl = environment.apiUrl + 'admin/';
 
   loggedInUserSig = signal<LoggedInUser | null>(null);
@@ -33,7 +32,7 @@ export class AdminService {
           this.navigateToReturnUrl();
 
           return adminResponse;
-        } 
+        }
 
         return null;
       })
@@ -50,9 +49,9 @@ export class AdminService {
   }
 
   setLoggedInUserRoles(loggedInUser: LoggedInUser): void {
-    loggedInUser.roles = []; 
+    loggedInUser.roles = [];
 
-    const roles: string | string[] = JSON.parse(atob(loggedInUser.token.split('.')[1])).role; 
+    const roles: string | string[] = JSON.parse(atob(loggedInUser.token.split('.')[1])).role;
 
     Array.isArray(roles) ? loggedInUser.roles = roles : loggedInUser.roles.push(roles);
   }
@@ -69,5 +68,4 @@ export class AdminService {
         localStorage.removeItem('returnUrl');
     }
   }
-  
 }

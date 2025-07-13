@@ -34,7 +34,6 @@ export class LoginComponent {
   wrongUsernameOrPassword: string | undefined;
   hidePassword: boolean = true;
 
-  //#region FormGroup
   loginFg: FormGroup = this.fb.group({
     emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
     passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]]
@@ -47,9 +46,7 @@ export class LoginComponent {
   get PasswordCtrl(): FormControl {
     return this.loginFg.get('passwordCtrl') as FormControl;
   }
-  //#endregion FormGroup
 
-  //#region Methods
   login(): void {
     let loginUser: LoginUser = {
       email: this.EmailCtrl.value,
@@ -65,5 +62,4 @@ export class LoginComponent {
       }
     })
   }
-  // #endregion Methods
 }

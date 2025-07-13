@@ -3,15 +3,13 @@ import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { MemberParams } from '../models/helpers/member-params';
 import { PaginatedResult } from '../models/helpers/paginatedResult';
-import { map, Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Member } from '../models/member.model';
 import { PaginationHandler } from '../extensions/paginationHandler';
 import { UserProfile } from '../models/user-profile.model';
 import { LoggedInUser } from '../models/logged-in-user.model';
-import { HashedUserId } from '../models/helpers/hashed-user-id.model';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { RegisterUser } from '../models/register-user.model';
 import { ApiResponse } from '../models/helpers/apiResponse.model';
 import { MemberUpdate } from '../models/member-update.model';
 import { Course } from '../models/course.model';
@@ -24,15 +22,13 @@ import { EnrolledCourse } from '../models/helpers/enrolled-course.model';
 })
 export class MemberService {
   private _http = inject(HttpClient);
-  router = inject(Router);
-
   private readonly _baseApiUrl = environment.apiUrl + 'member/';
   private readonly _apiUrl = environment.apiUrl + 'manager/';
-
   private snackBar = inject(MatSnackBar);
   private paginationHandler = new PaginationHandler();
+  router = inject(Router);
   memberCache = new Map<string, PaginatedResult<Member[]>>();
-  platformId = inject(PLATFORM_ID); 
+  platformId = inject(PLATFORM_ID);
 
   loggedInUserSig = signal<LoggedInUser | null>(null);
 
@@ -68,19 +64,19 @@ export class MemberService {
 
     return this._http.get<Course[]>(this._baseApiUrl + 'get-course', { headers });
   }
-  
+
   updateUser(memberUpdate: MemberUpdate): Observable<ApiResponse> {
     return this._http.put<ApiResponse>(this._baseApiUrl, memberUpdate);
   }
 
-  getEnrolledCourse(courseTitle: string):Observable<EnrolledCourse> {
+  getEnrolledCourse(courseTitle: string): Observable<EnrolledCourse> {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     });
 
-    return this._http.get<EnrolledCourse>(this._baseApiUrl + 'get-enrolled-course/' + courseTitle, {headers});
-  } 
-  
+    return this._http.get<EnrolledCourse>(this._baseApiUrl + 'get-enrolled-course/' + courseTitle, { headers });
+  }
+
   private getHttpParams(memberParams: MemberParams): HttpParams {
     let params = new HttpParams();
 

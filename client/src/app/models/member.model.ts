@@ -7,7 +7,6 @@ export interface Member {
     gender: string;
     age: number;
     isAbsent: boolean;
-    // password: string;
 }
 
 export interface ShowMember {

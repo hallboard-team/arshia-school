@@ -5,7 +5,4 @@ export interface RegisterMember {
     confirmPassword: string;
     phoneNum: string;
     dateOfBirth: string | undefined;
-    // name: string;
-    // lastName: string;
-    // gender: string;
 }

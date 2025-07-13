@@ -4,19 +4,15 @@ import { AddCourse, Course, CourseUpdate, ShowCourse } from '../models/course.mo
 import { PaginatedResult } from '../models/helpers/paginatedResult';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Member } from '../models/member.model';
 import { PaginationHandler } from '../extensions/paginationHandler';
 import { environment } from '../../environments/environment.development';
-import { TitleCasePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CourseService {
   private _http = inject(HttpClient);
-
   private readonly _baseApiUrl = environment.apiUrl + 'course/';
-
   private paginationHandler = new PaginationHandler();
 
   getAll(courseParams: CourseParams): Observable<PaginatedResult<ShowCourse[]>> {

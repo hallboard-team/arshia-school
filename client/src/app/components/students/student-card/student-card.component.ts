@@ -1,11 +1,10 @@
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnInit, Signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Member } from '../../../models/member.model';
-// import { NgPersianDatepickerModule } from 'ng-persian-datepicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TeacherService } from '../../../services/teacher.service';
 import { LoggedInUser } from '../../../models/logged-in-user.model';
@@ -21,7 +20,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     RouterModule, MatSlideToggleModule,
     MatCardModule, MatIconModule,
     ReactiveFormsModule
-    // NgPersianDatepickerModule
   ],
   templateUrl: './student-card.component.html',
   styleUrl: './student-card.component.scss'
@@ -38,20 +36,16 @@ export class StudentCardComponent implements OnInit {
   isExpanded: boolean = false;
   message: string = '';
 
-  // مقدار پیش‌فرض برای تاریخ، زمان فعلی (UTC)
   selectedDate: string = new Date().toISOString().split("T")[0];
   attendenceStatus: { [userName: string]: boolean } = {};
 
   ngOnInit(): void {
     this.loggedInUserSig = this._accountService.loggedInUserSig;
 
-    // console.log('THE LOGGED-IN USER:', this.loggedInUserSig()?.userName);
     console.log(this.studentIn);
 
     if (this.studentIn)
       this.attendenceStatus[this.studentIn.userName] = this.studentIn.isAbsent;
-
-    // this.getAbsentStatus();
 
     const persianDate = new Date();
     this.selectedDate = moment(persianDate).format('jYYYY/jMM/jDD');
@@ -68,9 +62,7 @@ export class StudentCardComponent implements OnInit {
 
       this._teacherService.addAttendence(attendanceData, courseTitle).subscribe({
         next: response => {
-          // console.log("✅ حضور و غیاب ثبت شد:", response);
           this.attendenceStatus[userName] = true;
-          // alert("حضور و غیاب ثبت شد.");
           this._snack.open(`غایب شد ${userName}`, 'close', {
             duration: 7000,
             horizontalPosition: 'center',
@@ -83,13 +75,9 @@ export class StudentCardComponent implements OnInit {
             horizontalPosition: 'center',
             verticalPosition: 'top'
           });
-          // alert("❌ خطا در ثبت حضور و غیاب!");
-          // console.error(err);
         }
       });
     }
-
-
   }
 
   removeAttendence(userName: string) {

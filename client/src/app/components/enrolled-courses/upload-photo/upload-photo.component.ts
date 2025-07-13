@@ -60,8 +60,6 @@ export class UploadPhotoComponent implements OnInit {
             console.log(response);
             this.payment = response;
             this.initializeUploader();
-            // this.dataSource = response.payments || [];
-            // this.setGalleryImages();
           },
           error: (err) => {
             console.log('پرداخت مورد نظر پیدا نشد', err);
@@ -100,15 +98,6 @@ export class UploadPhotoComponent implements OnInit {
         }
       }
     }
-    // this.uploader.onSuccessItem = (item, response, status, headers) => {
-    //   if (response) {
-    //     const photo: Photo = JSON.parse(response);
-
-    //     if (photo) {
-    //       this.payment?.photo.push(photo);
-    //     }
-    //   }
-    // }
   }
 
   deletePhotoComp(url_165In: string): void {
@@ -119,7 +108,7 @@ export class UploadPhotoComponent implements OnInit {
       .subscribe({
         next: (response: ApiResponse) => {
           if (response && this.payment) {
-            this.payment.photo = null; // چون فقط یه عکس داریم
+            this.payment.photo = null;
             this.snackBar.open(response.message, 'Close', {
               horizontalPosition: 'center',
               verticalPosition: 'bottom',
@@ -129,20 +118,4 @@ export class UploadPhotoComponent implements OnInit {
         }
       });
   }
-
-  // deletePhotoComp(url_165In: string, index: number): void {
-  //   const targetPaymentId: string | null = this._route.snapshot.paramMap.get('targetPaymentId');
-
-  //   this._managerService.deletePhoto(url_165In, targetPaymentId)
-  //     .pipe(take(1))
-  //     .subscribe({
-  //       next: (response: ApiResponse) => {
-  //         if (response && this.payment) {
-  //           this.payment.photo.splice(index, 1);
-
-  //           this.snackBar.open(response.message, 'Close', { horizontalPosition: 'center', verticalPosition: 'bottom', duration: 7000 });
-  //         }
-  //       }
-  //     })
-  // }
 }

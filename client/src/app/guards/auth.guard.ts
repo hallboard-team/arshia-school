@@ -9,7 +9,7 @@ export const authGuard: CanActivateFn = (route, state) => {
   const platformId = inject(PLATFORM_ID);
 
   if (isPlatformBrowser(platformId)) {
-    const loggedInUserStr : string | null = localStorage.getItem('loggedInUser');
+    const loggedInUserStr: string | null = localStorage.getItem('loggedInUser');
 
     // user is logged-in
     if (loggedInUserStr) {

@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { getEnvironmentData } from 'worker_threads';
 import { MemberService } from '../../../services/member.service';
 import { EnrolledCourse } from '../../../models/helpers/enrolled-course.model';
 import { environment } from '../../../../environments/environment.development';
@@ -45,8 +44,6 @@ export class MemberEnrolledCourseComponent implements OnInit {
     ref.load(this.images);
     this.lightbox.open(index, 'paymentGallery');
   }
-
-  // constructor(private lightbox: Lightbox) {}
 
   ngOnInit() {
     this.getEnrolledCourse();

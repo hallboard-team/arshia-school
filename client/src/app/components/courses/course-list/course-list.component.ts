@@ -2,12 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit, Signal } from '@angular/core';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { Observable, Subscription } from 'rxjs';
-import { MemberParams } from '../../../models/helpers/member-params';
 import { PaginatedResult } from '../../../models/helpers/paginatedResult';
 import { Pagination } from '../../../models/helpers/pagination';
-import { Member } from '../../../models/member.model';
-import { MemberService } from '../../../services/member.service';
-import { MemberCardComponent } from '../../members/member-card/member-card.component';
 import { CourseService } from '../../../services/course.service';
 import { Course, ShowCourse } from '../../../models/course.model';
 import { CourseParams } from '../../../models/helpers/course-params';
@@ -33,12 +29,9 @@ export class CourseListComponent implements OnInit, OnDestroy {
   courses$: Observable<Course[] | null> | undefined;
 
   subscribed: Subscription | undefined;
-
   pagination: Pagination | undefined;
-  // courses: Course[] | undefined;
   showCourses: ShowCourse[] | undefined;
   courseParams: CourseParams | undefined;
-
   pageSizeOptions = [5, 10, 25];
   pageEvent: PageEvent | undefined;
 

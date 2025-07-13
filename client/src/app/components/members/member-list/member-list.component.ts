@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable, Subscription } from 'rxjs';
 import { Member } from '../../../models/member.model';
@@ -22,8 +22,8 @@ import { MatSliderModule } from '@angular/material/slider';
   standalone: true,
   imports: [
     CommonModule, MemberCardComponent, MatPaginatorModule,
-    NavbarComponent, MatFormFieldModule, MatInputModule, 
-    MatSelectModule, MatButtonModule,MatSliderModule,
+    NavbarComponent, MatFormFieldModule, MatInputModule,
+    MatSelectModule, MatButtonModule, MatSliderModule,
     FormsModule, ReactiveFormsModule,
   ],
   templateUrl: './member-list.component.html',
@@ -31,32 +31,27 @@ import { MatSliderModule } from '@angular/material/slider';
 })
 export class MemberListComponent {
   private _memberService = inject(MemberService);
-    
-  members: Member[] | undefined;
-  students$: Observable<Member[] | null> | undefined;
-  pagination: Pagination | undefined;
-    
-  memberParams: MemberParams | undefined;
-  subscribed: Subscription | undefined;
-  
-  pageSizeOptions = [5, 10, 25];
-  pageEvent: PageEvent | undefined;
-
-  // orderOptions: string[] = ['lastActive', 'created', 'age'];
-  // orderOptionsView: string[] = ['Last Active', 'Created', 'Age'];
-  readonly minAge: number = 18;
-  readonly maxAge: number = 99;
-    
   private _route = inject(ActivatedRoute);
   private _fB = inject(FormBuilder);
 
+  members: Member[] | undefined;
+  students$: Observable<Member[] | null> | undefined;
+  pagination: Pagination | undefined;
+
+  memberParams: MemberParams | undefined;
+  subscribed: Subscription | undefined;
+
+  pageSizeOptions = [5, 10, 25];
+  pageEvent: PageEvent | undefined;
+
+  readonly minAge: number = 18;
+  readonly maxAge: number = 99;
+
   filterFg = this._fB.group({
     searchCtrl: ['', []],
-    minAgeCtrl: [this.minAge, []], // magic nubmers
+    minAgeCtrl: [this.minAge, []],
     maxAgeCtrl: [this.maxAge, []]
   });
-
-  // Angular Change Detection
 
   get SearchCtrl(): FormControl {
     return this.filterFg.get('searchCtrl') as FormControl;
@@ -69,17 +64,17 @@ export class MemberListComponent {
   get MaxAgeCtrl(): AbstractControl {
     return this.filterFg.get('maxAgeCtrl') as FormControl;
   }
-    
+
   ngOnInit(): void {
     this.memberParams = new MemberParams();
-  
+
     this.getAll();
   }
-  
+
   ngOnDestroy(): void {
     this.subscribed?.unsubscribe();
   }
-  
+
   getAll(): void {
     if (this.memberParams)
       this.subscribed = this._memberService.getAllMembers(this.memberParams).subscribe({

@@ -1,8 +1,6 @@
 <section class="section-upload-photo">
     <section class="top">
-        <!-- <div *ngIf="payment?.photo === null" class="div-empty-album">
-            <mat-error>Your album is empty. You may upload a photo.</mat-error>
-        </div> -->
+
         <ng-container *ngIf="payment?.photo; else noPhoto">
             <div class="gallery">
                 <div class="photos">
@@ -50,47 +48,6 @@
             </mat-card>
         </div>
         }
-        <!-- <div class="gallery" *ngIf="payment?.photo as photo">
-            <div class="photos">
-                <img [ngSrc]="photoUrl + photo.url_256" width="265" height="265" [alt]="payment?.method + ' photo'"
-                    priority />
-                <div class="buttons">
-                    <button mat-stroked-button color="primary" [disabled]="true">
-                        انتخاب عکس
-                    </button>
-                    <button (click)="deletePhotoComp(photo.url_165)" mat-mini-fab color="warn">
-                        <mat-icon>delete</mat-icon>
-                    </button>
-                </div>
-            </div>
-
-            @if(loggedInUserSig && loggedInUserSig()) {
-            @if(loggedInUserSig()?.roles?.includes('manager')) {
-            <div class="upload-photo-area">
-                <mat-card ng2FileDrop (fileOver)="fileOverBase($event)" (click)="fileInput.click()"
-                    [uploader]="uploader" [ngClass]="{
-                                'nv-file-not-over': !hasBaseDropZoneOver,
-                                'nv-file-over': hasBaseDropZoneOver
-                                }">
-
-                    <mat-card-header>
-                        <mat-card-title>اضافه کردن عکس</mat-card-title>
-                        <mat-card-subtitle>کلیک کنید یا دراپ کنید</mat-card-subtitle>
-                    </mat-card-header>
-
-                    <mat-card-content>
-                        <mat-icon>cloud_upload</mat-icon>
-                    </mat-card-content>
-
-                    <mat-card-actions>
-                        <button type="button" mat-raised-button>انتخاب عکس</button>
-                        <input multiple type="file" #fileInput ng2FileSelect [uploader]="uploader" id="file">
-                    </mat-card-actions>
-                </mat-card>
-            </div>
-            }
-            }
-        </div> -->
     </section>
 
     @if (uploader && uploader.queue && uploader.queue.length) {

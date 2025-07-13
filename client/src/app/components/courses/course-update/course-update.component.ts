@@ -23,6 +23,7 @@ import {
 } from '../../../../../projects/ng-persian-datepicker/src/public-api';
 import moment from 'moment-jalaali';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 @Component({
   selector: 'app-course-update',
   standalone: true,
@@ -39,12 +40,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 export class CourseUpdateComponent implements OnInit {
   private _courseService = inject(CourseService);
   private _managerService = inject(ManagerService);
-
   private _matSnackBar = inject(MatSnackBar);
   private _fb = inject(FormBuilder);
   private _route = inject(ActivatedRoute);
   private _platformId = inject(PLATFORM_ID);
-  // isLoading = true;
 
   course: Course | undefined;
   teachers: Teacher[] = [];
@@ -67,7 +66,6 @@ export class CourseUpdateComponent implements OnInit {
 
   courseEditFg: FormGroup = this._fb.group({
     titleCtrl: ['',],
-    // professorUserNameCtrl: ['', ],
     tuitionCtrl: ['',],
     hoursCtrl: ['',],
     hoursPerClassCtrl: ['',],
@@ -120,10 +118,8 @@ export class CourseUpdateComponent implements OnInit {
 
     this.HoursCtrl.setValue(course.hours);
     this.HoursPerClassCtrl.setValue(course.hoursPerClass);
-
     this.StartCtrl.setValue(course.start);
     this.shamsiDisplayDate = moment(course.start).format('jYYYY/jMM/jDD');
-
     this.IsStartedCtrl.setValue(course.isStarted);
   }
 
@@ -204,7 +200,6 @@ export class CourseUpdateComponent implements OnInit {
     this._managerService.getTeachers().subscribe({
       next: (data) => {
         this.teachers = data;
-        // this.isLoading = false;
       },
       error: (error) => {
         this._matSnackBar.open("خطا در دریافت مدرسین", "Close", {

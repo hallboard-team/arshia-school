@@ -39,11 +39,10 @@ moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 export class ManageerPannelComponent implements OnInit, OnDestroy {
   private snackBar = inject(MatSnackBar);
   private deleteSubscription: Subscription | undefined;
+  fb = inject(FormBuilder);
 
   accountService = inject(AccountService);
   managerService = inject(ManagerService);
-
-  fb = inject(FormBuilder);
 
   minDate = new Date();
   maxDate = new Date();
@@ -70,14 +69,11 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   hideTeacherPassword: boolean = true;
   hideTeacherConfirmPassword: boolean = true;
 
-  //#region auto-run methods
   constructor() {
     this.loggedInUser = this.accountService.loggedInUserSig();
   }
 
   ngOnInit(): void {
-    // this.showAllUsersWithRoles();
-
     const currentYear = new Date().getFullYear();
     this.minDate = new Date(currentYear - 99, 0, 1); // not older than 99 years
     this.maxDate = new Date(currentYear - 15, 0, 1); // not earlier than 15 years
@@ -86,7 +82,6 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.deleteSubscription?.unsubscribe();
   }
-  //#endregion auto-run methods
 
   addSecretaryFg = this.fb.group({
     emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
@@ -279,31 +274,6 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
       this.passowrdsNotMatch = true;
     }
   }
-
-  // showAllUsersWithRoles(): void {
-  //   this.managerService.getUsersWithRoles()
-  //     .pipe(
-  //       take(1)
-  //     ).subscribe({
-  //       next: users => this.usersWithRoles = users
-  //     });
-  // }
-
-  // deleteUser(i: number, userName: string): void {
-  //   this.deleteSubscription = this.managerService.deleteUser(userName)
-  //     .subscribe({
-  //       next: (response: ApiResponse) => {
-  //         this.snackBar.open(response.message, "Close", { horizontalPosition: "center", verticalPosition: "bottom", duration: 7000 });
-
-  //         if (this.usersWithRoles)
-  //           this.usersWithRoles = [
-  //             ...this.usersWithRoles.slice(0, i),
-  //             ...this.usersWithRoles.slice(i + 1)
-  //           ];
-  //       }
-  //     }
-  //     );
-  // }
 
   private getDateOnly(dob: string | null): string | undefined {
     if (!dob) return undefined;

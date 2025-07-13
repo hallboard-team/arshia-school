@@ -3,10 +3,8 @@ nav {
     flex-direction: row-reverse;
     justify-content: space-between;
     align-items: center;
-
     height: 5.5rem;
     width: 100%;
-
     background-color: #e0e0e0;
     position: relative;
     z-index: 100;
@@ -23,7 +21,6 @@ nav {
         perspective: 1000px;
 
         .div-links {
-            // background-color: yellow;
             height: 100%;
             width: 100%;
             padding: 10px;
@@ -32,7 +29,6 @@ nav {
             align-items: center;
             transition: all 0.5s ease-in-out;
             transform-style: preserve-3d;
-            // box-shadow: rgba(5, 71, 17, 0) 40px 50px 25px -40px, rgba(5, 71, 17, 0.2) 0px 25px 25px -5px;
 
             .div-transsform-style {
                 display: flex;
@@ -40,8 +36,6 @@ nav {
                 transform-style: preserve-3d;
 
                 .btn {
-                    // --color: #00A97F;
-                    // --color2: rgb(10, 25, 30);
                     padding: 5px;
                     background-color: transparent;
                     border-radius: 6px;
@@ -198,11 +192,9 @@ nav {
                     -5px -5px 10px #ffffff;
                 padding: 1rem;
                 width: 90%;
-
                 position: absolute;
                 left: 5%;
                 top: 8rem;
-
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -260,7 +252,6 @@ nav {
 
                     button {
                         width: 90%;
-                        // height: 8%;
                         background: linear-gradient(145deg, #f0f0f0, #cacaca);
                         box-shadow: 5px 5px 10px #797979,
                             -5px -5px 10px #ffffff;
@@ -368,7 +359,6 @@ nav {
                         bottom: 0;
                         padding: 0.75rem 0;
                         margin: 0 0 0 1.85rem;
-                        // color: #282936;
                         color: hsl(345deg 100% 47%);
                         font-weight: 700;
                         line-height: 1.6;
@@ -398,7 +388,6 @@ nav {
         position: absolute;
         top: 8rem;
         left: 5%;
-        // left: -100%;
         z-index: 100;
         border-radius: 10px;
         background: linear-gradient(145deg, #f0f0f0, #cacaca);
@@ -487,7 +476,6 @@ nav {
 
         .bottom {
             width: 100%;
-            // height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -497,7 +485,6 @@ nav {
 
             button {
                 width: 90%;
-                // height: 8%;
                 background: linear-gradient(145deg, #f0f0f0, #cacaca);
                 box-shadow: 5px 5px 10px #797979,
                     -5px -5px 10px #ffffff;
@@ -527,7 +514,6 @@ nav {
 
     .left {
         margin-left: 5px;
-
         display: flex;
         gap: 1rem;
         justify-content: center;
@@ -597,11 +583,9 @@ nav {
                     -5px -5px 10px #ffffff;
                 padding: 1rem;
                 width: 90%;
-
                 position: absolute;
                 left: 5%;
                 top: 6rem;
-
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -659,7 +643,6 @@ nav {
 
                     button {
                         width: 90%;
-                        // height: 8%;
                         background: linear-gradient(145deg, #f0f0f0, #cacaca);
                         box-shadow: 5px 5px 10px #797979,
                             -5px -5px 10px #ffffff;
@@ -767,7 +750,6 @@ nav {
                         bottom: 0;
                         padding: 0.75rem 0;
                         margin: 0 0 0 1.85rem;
-                        // color: #282936;
                         color: hsl(345deg 100% 47%);
                         font-weight: 700;
                         line-height: 1.6;
@@ -794,7 +776,6 @@ nav {
         .div-logo {
             height: 90%;
             width: 120px;
-
             display: flex;
             justify-content: center;
             align-items: center;
@@ -819,7 +800,6 @@ nav {
     position: fixed;
     top: 0;
     left: 0;
-
     display: flex;
     justify-content: center;
     align-items: center;

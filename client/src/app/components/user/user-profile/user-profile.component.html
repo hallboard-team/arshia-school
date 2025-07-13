@@ -49,11 +49,6 @@
                                     placeHolder="ایمیل جدید را وارد کنید" matInput>
                             </mat-form-field>
 
-                            <!-- <mat-form-field appearance="outline">
-                                <mat-label>نام کاربری</mat-label>
-                                <input class="input" type="userName" formControlName="userNameCtrl" label="UserName" placeHolder="نام کاربری جدید خودرا وارد کنید" matInput> 
-                            </mat-form-field> -->
-
                             <mat-form-field appearance="outline">
                                 <mat-label>رمز قدیمی</mat-label>
                                 <input class="input" type="password" formControlName="currentPasswordCtrl"
@@ -120,9 +115,11 @@
                                 <div class="div-button-show-classmate">
                                     <button [routerLink]="['/students-card/' + course.title]">مشاهده دانشجویان</button>
                                     <button [routerLink]="['/attendences-card/' + course.title]">دیدن حضور و
-                                        غیاب</button>
+                                        غیاب
+                                    </button>
                                     <button [routerLink]="['/' + 'member-enrolled-course/' + course.title]">مشاهده
-                                        پرداخت ها</button>
+                                        پرداخت ها
+                                    </button>
                                 </div>
                             </div>
                             }

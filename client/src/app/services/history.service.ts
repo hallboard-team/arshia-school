@@ -9,7 +9,6 @@ import { BehaviorSubject } from 'rxjs';
 export class HistoryService {
   private history: string[] = [];
   private future: string[] = [];
-
   private canGoBackSubject = new BehaviorSubject<boolean>(false);
   private canGoForwardSubject = new BehaviorSubject<boolean>(false);
 
@@ -24,7 +23,7 @@ export class HistoryService {
 
         if (this.history.length === 0 || this.history[this.history.length - 1] !== url) {
           this.history.push(url);
-          this.future = []; // clear forward
+          this.future = [];
           this.updateSubjects();
         }
       });
@@ -39,7 +38,7 @@ export class HistoryService {
     if (this.history.length > 1) {
       const current = this.history.pop();
       if (current) this.future.unshift(current);
-      this.updateSubjects(); // Make sure this is called
+      this.updateSubjects();
       return this.history[this.history.length - 1];
     }
     return null;
@@ -50,7 +49,7 @@ export class HistoryService {
       const next = this.future.shift();
       if (next) {
         this.history.push(next);
-        this.updateSubjects(); // Make sure this is called
+        this.updateSubjects();
         return next;
       }
     }

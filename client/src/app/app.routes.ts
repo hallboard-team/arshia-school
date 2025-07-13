@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/account/login/login.component';
-import { RegisterComponent } from './components/account/register/register.component';
 import { HomeComponent } from './components/home/home.component';
 import { authGuard } from './guards/auth.guard';
 import { authLoggedInGuard } from './guards/auth-logged-in.guard';
@@ -85,63 +84,9 @@ export const routes: Routes = [
         runGuardsAndResolvers: 'always',
         canActivate: [authLoggedInGuard],
         children: [
-            { path: 'account/login', component: LoginComponent },
-            { path: 'account/register', component: RegisterComponent },
+            { path: 'account/login', component: LoginComponent }
         ]
     },
 
     { path: '**', component: NotFoundComponent, pathMatch: 'full' }
 ];
-
-// export const routes: Routes = [
-//     { path: '', component: HomeComponent },
-//     { path: 'home', component: HomeComponent },
-//     {
-//         path: '',
-//         runGuardsAndResolvers: 'always',
-//         canActivate: [authGuard],
-//         children: [
-//             { path: 'manager-panel', component: ManageerPannelComponent },
-//             { path: 'teacher-panel', component: TeacherComponent },
-//             { path: 'students-card/:courseTitle', component: StudentListComponent },
-//             { path: 'demo', component: DemoComponent },
-//             { path: 'profile', component: UserProfileComponent },
-//             { path: 'courses', component: CourseListComponent },
-//             { path: 'course-card', component: CourseCardComponent },
-//             { path: 'update-course/:courseTitle', component: CourseUpdateComponent },
-//             { path: 'add-course', component: AddCourseComponent },
-//             { path: 'attendences', component: AttendenceCardComponent },
-//             { path: 'attendences-card/:courseTitle', component: AttendenceListComponent },
-//             { path: 'members', component: MemberListComponent },
-//             { path: 'member-card', component: MemberCardComponent },
-//             { path: 'edit-member/:memberEmail', component: EditMemberComponent },
-//             { path: 'target-user-profile/:memberUserName', component: TargetUserProfileComponent },
-//             // { path: 'select-courses/:memberUserName', component: SelectCourseListComponent },
-//             // { path: 'select-course-card', component: SelectCourseCardComponent },
-//             // { path: 'select-courses/:memberUserName', component: SelectCourseListComponent },
-//             { path: 'enrolled-course/:memberUserName', component: EnrolledCourseComponent },
-//             { path: 'member-enrolled-course/:courseTitle', component: MemberEnrolledCourseComponent },
-//             { path: 'target-member-enrolled-course/:memberUserName/:courseTitle', component: TargetMemberEnrolledCourseComponent },
-//             { path: 'target-payment/:targetPaymentId', component: UploadPhotoComponent },
-//             // { path: 'منشی', component: SecretaryComponent },
-//             // { path: 'معلم', component: TeacherComponent },
-//             // { path: 'user/user-edit', component: UserEditComponent },
-//             { path: 'about', component: AboutUsComponent },
-//             { path: 'contact-us', component: ContactUsComponent },
-//             { path: 'not-found', component: NotFoundComponent }
-
-//             // { path: 'no-access', component: NoAccessComponent }
-//         ]
-//     },
-//     {
-//         path: '',
-//         runGuardsAndResolvers: 'always',
-//         canActivate: [authLoggedInGuard],
-//         children: [
-//             { path: 'account/login', component: LoginComponent },
-//             { path: 'account/register', component: RegisterComponent },
-//         ]
-//     }
-//     // { path: 'server-error', component: ServerErrorComponent },
-//     // { path: '**', component: NotFoundComponent, pathMatch: 'full' }
-// ];

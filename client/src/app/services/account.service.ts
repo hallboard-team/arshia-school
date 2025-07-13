@@ -12,7 +12,6 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class AccountService {
-  //#region injects and variables
   http = inject(HttpClient);
   router = inject(Router);
   platformId = inject(PLATFORM_ID);
@@ -21,9 +20,6 @@ export class AccountService {
 
   loggedInUserSig = signal<LoggedInUser | null>(null);
 
-  //#endregion injects and variables
-
-  // #region methods
   loginUser(userInput: LoginUser): Observable<LoggedInUser | null> {
     return this.http.post<LoggedInUser>(this.baseApiUrl + 'login', userInput).pipe(
       map(userResponse => {
@@ -92,5 +88,4 @@ export class AccountService {
         localStorage.removeItem('returnUrl');
     }
   }
-  //#endregion methods
 }

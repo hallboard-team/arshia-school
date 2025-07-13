@@ -12,17 +12,14 @@ export class PaginationHandler {
         return this.http.get<T>(url, { observe: 'response', params })
             .pipe(
                 map(response => {
-                    // get the Pagination
                     const pagination: string | null = response.headers.get('Pagination');
 
                     if (pagination)
                         paginatedResult.pagination = JSON.parse(pagination); // api's response pagination values
 
-                    // get the body
                     if (response.body)
                         paginatedResult.body = response.body // api's response body
 
-                    // return pagination + body
                     return paginatedResult;
                 })
             );

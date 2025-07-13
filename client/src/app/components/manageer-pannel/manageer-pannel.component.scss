@@ -17,7 +17,6 @@
             justify-content: center;
             align-items: center;
             gap: 3rem;
-
             border-radius: 10px;
             background: linear-gradient(145deg, #f0f0f0, #cacaca);
             box-shadow: 5px 5px 10px #5a5a5a,
@@ -47,11 +46,9 @@
                     .radio-button {
                         height: 60px;
                         width: 100px;
-
                         display: flex;
                         justify-content: center;
                         align-items: center;
-
                         border-radius: 10px;
                         background: linear-gradient(145deg, #f0f0f0, #cacaca);
                         box-shadow: 5px 5px 10px #5a5a5a,
@@ -88,11 +85,6 @@
                     color: red;
                     font-size: 12px;
                 }
-
-                // input.input[type="password"],
-                // input.input[type="text"] {
-                //     text-align: center;
-                // }
             }
 
             .div-btn-add {
@@ -164,10 +156,6 @@
 ::ng-deep mat-form-field {
     height: 40px !important;
 
-    // mat-label {
-    //     direction: rtl;
-    //     text-align: right;
-    // }
     .mat-mdc-text-field-wrapper {
         padding: 0px !important;
     }

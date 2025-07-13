@@ -1,6 +1,6 @@
 <header>
     <nav>
-      <app-navbar />
+        <app-navbar />
     </nav>
 </header>
 
@@ -12,35 +12,38 @@
     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
         <mat-tab label="اضافه کردن دوره">
             <div class="div-enrolled-course">
-                <form class="enrolled-form" [formGroup]="addEnrolledCourseFg" (ngSubmit)="addEnrolledCourseFg.valid && addEnrolledCourse()">
+                <form class="enrolled-form" [formGroup]="addEnrolledCourseFg"
+                    (ngSubmit)="addEnrolledCourseFg.valid && addEnrolledCourse()">
                     <div class="content">
                         <mat-form-field appearance="outline">
                             <mat-label>اسم دوره</mat-label>
                             <mat-select formControlName="titleCourseCtrl">
-                              <mat-option *ngFor="let course of showCourses" [value]="course.title">
-                                {{ course.title }}
-                              </mat-option>
+                                <mat-option *ngFor="let course of showCourses" [value]="course.title">
+                                    {{ course.title }}
+                                </mat-option>
                             </mat-select>
                             <mat-error *ngIf="TitleCourseCtrl.hasError('required')">!این فیلد خالی است</mat-error>
                         </mat-form-field>
-                          
+
                         <mat-form-field appearance="outline">
                             <mat-label>تعداد اقساط</mat-label>
-                            <input autoFocusDir type="number" formControlName="numberOfPaymentsCtrl" label="number of payments" matInput>
+                            <input autoFocusDir type="number" formControlName="numberOfPaymentsCtrl"
+                                label="number of payments" matInput>
                             @if (NumberOfPaymentsCtrl.hasError('required')) {
                             <mat-error>!این فیلد خالی است</mat-error>
                             }
                         </mat-form-field>
-                  
+
                         <mat-form-field appearance="outline">
                             <mat-label>مبلغ پرداختی</mat-label>
                             <input type="number" formControlName="paidAmountCtrl" label="paid amount" matInput>
                             @if (PaidAmountCtrl.hasError('required')) {
-                                <mat-error>!این فیلد خالی است</mat-error>
+                            <mat-error>!این فیلد خالی است</mat-error>
                             }
                         </mat-form-field>
-                  
-                        <button class="button-enrolled" type="submit" [disabled]="addEnrolledCourseFg.invalid">ثبت اطلاعات</button>
+
+                        <button class="button-enrolled" type="submit" [disabled]="addEnrolledCourseFg.invalid">ثبت
+                            اطلاعات</button>
                     </div>
                 </form>
             </div>
@@ -48,74 +51,56 @@
 
         <mat-tab label="پرداخت شهریه">
             <div class="div-enrolled-course">
-                <form class="enrolled-form" [formGroup]="updateEnrolledCourseFg" (ngSubmit)="updateEnrolledCourseFg.valid && updateEnrolledCourse()">
+                <form class="enrolled-form" [formGroup]="updateEnrolledCourseFg"
+                    (ngSubmit)="updateEnrolledCourseFg.valid && updateEnrolledCourse()">
                     <div class="content">
                         <mat-form-field appearance="outline">
                             <mat-label>اسم دوره</mat-label>
                             <mat-select formControlName="titleCourseCtrl">
-                              <mat-option *ngFor="let course of showCourses" [value]="course.title">
-                                {{ course.title }}
-                              </mat-option>
+                                <mat-option *ngFor="let course of showCourses" [value]="course.title">
+                                    {{ course.title }}
+                                </mat-option>
                             </mat-select>
                             <mat-error *ngIf="TitleCourseCtrl.hasError('required')">!این فیلد خالی است</mat-error>
                         </mat-form-field>
-        
+
                         <mat-form-field appearance="outline">
                             <mat-label>مبلغ پرداختی</mat-label>
                             <input type="number" formControlName="paidAmountUpdateCtrl" label="paid amount" matInput>
                             @if (PaidAmountCtrl.hasError('required')) {
-                                <mat-error>!این فیلد خالی است</mat-error>
+                            <mat-error>!این فیلد خالی است</mat-error>
                             }
                         </mat-form-field>
 
                         <div class="radio-inputs">
-                            <mat-radio-group class="radio-group" aria-label="Select an option" formControlName="methodCtrl">
-                              <mat-radio-button class="radio-button" value="kartkhan">
-                                <div class="div-radio-items">
-                                    <span>کارت خوان</span>
-                                    <img src="../assets/images/iconKartKhon.png" alt="">
-                                </div>
-                              </mat-radio-button>
-                              <mat-radio-button class="radio-button" value="naghdi">
-                                <div class="div-radio-items">
-                                    <span>نقدی</span>
-                                    <img src="../assets/images/iconNaghdi.png" alt="">
-                                </div>
-                              </mat-radio-button>
-                              <mat-radio-button class="radio-button" value="kart-be-kart">
-                                <div class="div-radio-items">
-                                    <span>کارت به کارت</span>
-                                    <img src="../assets/images/iconKartBeKart.png" alt="">
-                                </div>
-                              </mat-radio-button>
+                            <mat-radio-group class="radio-group" aria-label="Select an option"
+                                formControlName="methodCtrl">
+                                <mat-radio-button class="radio-button" value="kartkhan">
+                                    <div class="div-radio-items">
+                                        <span>کارت خوان</span>
+                                        <img src="../assets/images/iconKartKhon.png" alt="">
+                                    </div>
+                                </mat-radio-button>
+                                <mat-radio-button class="radio-button" value="naghdi">
+                                    <div class="div-radio-items">
+                                        <span>نقدی</span>
+                                        <img src="../assets/images/iconNaghdi.png" alt="">
+                                    </div>
+                                </mat-radio-button>
+                                <mat-radio-button class="radio-button" value="kart-be-kart">
+                                    <div class="div-radio-items">
+                                        <span>کارت به کارت</span>
+                                        <img src="../assets/images/iconKartBeKart.png" alt="">
+                                    </div>
+                                </mat-radio-button>
                             </mat-radio-group>
                         </div>
-                  
-                        <button class="button-enrolled" type="submit" [disabled]="updateEnrolledCourseFg.invalid">ثبت اطلاعات</button>
+
+                        <button class="button-enrolled" type="submit" [disabled]="updateEnrolledCourseFg.invalid">ثبت
+                            اطلاعات</button>
                     </div>
                 </form>
             </div>
         </mat-tab>
     </mat-tab-group>
-
-    <!-- <div class="div-select-course">
-        <div class="courses">
-            @for (course of showCourses; track $index) {
-            <app-select-course-card [selectCourseInput]="course"></app-select-course-card>
-            }
-        </div>
-        @if (pagination && courseParams) {
-        <mat-paginator #paginator (page)="handlePageEvent($event)" 
-            [length]="pagination.totalItems"
-            [pageSize]="courseParams.pageSize" 
-            [disabled]="false" 
-            [showFirstLastButtons]="true"
-            [pageSizeOptions]="true ? pageSizeOptions : []" 
-            [hidePageSize]="false"
-            [pageIndex]="courseParams.pageNumber - 1" 
-            aria-label="Select page" 
-            class="paginator">
-        </mat-paginator>
-        }
-    </div> -->
 </section>

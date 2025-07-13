@@ -1,24 +1,20 @@
 export interface Course {
-    // id: string;
     title: string,
     professorUserNames: string[],
     tuition: number,
     hours: number,
     hoursPerClass: DoubleRange,
-    // hoursePerClass: number,
     days: number,
     start: Date,
     isStarted: string
 }
 
 export interface ShowCourse {
-    // id: string;
     title: string,
     professorNames: string[],
     tuition: number,
     hours: number,
     hoursPerClass: DoubleRange,
-    // hoursePerClass: number,
     days: number,
     start: Date,
     isStarted: string
@@ -26,7 +22,6 @@ export interface ShowCourse {
 
 export interface CourseUpdate {
     title: string,
-    // professorUserName: string,
     tuition: number,
     hours: number,
     hoursPerClass: DoubleRange,

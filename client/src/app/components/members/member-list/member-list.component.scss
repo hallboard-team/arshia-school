@@ -25,10 +25,6 @@
             color: rgba(0, 0, 0, 0.404);
         }
 
-        // mat-form-filed {
-        //     height: 40px !important;
-        // }
-
         .input-search {
             direction: rtl;
         }
@@ -65,7 +61,6 @@
 .div-cards-member {
     width: 100%;
     display: flex;
-    // flex-direction: column;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
@@ -73,10 +68,8 @@
 }
 
 .members-container {
-    // position: relative;
     min-height: 70dvh;
     margin-top: 2rem;
-
     display: flex;
     flex-direction: column;
     align-items: center;

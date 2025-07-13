@@ -1,14 +1,9 @@
-import { Component, forwardRef, inject, NgModule, OnInit, Signal } from '@angular/core';
+import { Component, inject, OnInit, Signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatStepHeader, MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
-import { CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
-import { CommonModule, NgTemplateOutlet } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment.development';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../navbar/navbar.component';
@@ -21,12 +16,11 @@ import { UserProfile } from '../../models/user-profile.model';
 import { Observable, Subscription } from 'rxjs';
 import { Course, ShowCourse } from '../../models/course.model';
 import { CourseParams } from '../../models/helpers/course-params';
-import { PaginatedResult } from '../../models/helpers/paginatedResult';
 import { CourseService } from '../../services/course.service';
 import { Pagination } from '../../models/helpers/pagination';
 import { MatSliderModule } from '@angular/material/slider';
 import { FooterComponent } from '../footer/footer.component';
-import { trigger, transition, style, animate, AnimationEvent } from '@angular/animations';
+import { trigger, transition, style, animate } from '@angular/animations';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -55,6 +49,7 @@ import { trigger, transition, style, animate, AnimationEvent } from '@angular/an
 export class HomeComponent implements OnInit {
   private accountService = inject(AccountService);
   public memberService = inject(MemberService);
+
   loggedInUserSig: Signal<LoggedInUser | null> | undefined;
   courseService = inject(CourseService);
   courses$: Observable<Course[] | null> | undefined;
@@ -137,7 +132,6 @@ export class HomeComponent implements OnInit {
 
     elements.forEach((element) => {
       (element as HTMLElement).style.display = "block";
-      // (element as HTMLElement).style.left = "5%"; 
     });
   }
 
@@ -145,19 +139,15 @@ export class HomeComponent implements OnInit {
     const elements = document.querySelectorAll('.hamburger-menu');
 
     elements.forEach((element) => {
-      // (element as HTMLElement).style.left = "-100%", 
       (element as HTMLElement).style.display = "none";
     });
   }
 
   openMenuDesctop() {
-    // document.body.style.backgroundColor = color; 
-
     const elements = document.querySelectorAll('.hamburger-menu');
 
     elements.forEach((element) => {
       (element as HTMLElement).style.display = "block";
-      // (element as HTMLElement).style.left = "5%"; 
     });
 
     const openMenu = document.querySelectorAll('.right-open-menu');
@@ -177,7 +167,6 @@ export class HomeComponent implements OnInit {
     const elements = document.querySelectorAll('.hamburger-menu');
 
     elements.forEach((element) => {
-      // (element as HTMLElement).style.left = "-100%", 
       (element as HTMLElement).style.display = "none";
     });
 

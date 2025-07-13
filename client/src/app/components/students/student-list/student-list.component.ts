@@ -8,7 +8,6 @@ import { PaginatedResult } from '../../../models/helpers/paginatedResult';
 import { Pagination } from '../../../models/helpers/pagination';
 import { Member } from '../../../models/member.model';
 import { TeacherService } from '../../../services/teacher.service';
-import { MemberCardComponent } from '../../members/member-card/member-card.component';
 import { StudentCardComponent } from '../student-card/student-card.component';
 import { NavbarComponent } from '../../navbar/navbar.component';
 
@@ -24,21 +23,20 @@ import { NavbarComponent } from '../../navbar/navbar.component';
 })
 export class StudentListComponent {
   private _teacherService = inject(TeacherService);
-  
+  private _route = inject(ActivatedRoute);
+
   students: Member[] | undefined;
   students$: Observable<Member[] | null> | undefined;
   pagination: Pagination | undefined;
-  
+
   memberParams: MemberParams | undefined;
   subscribed: Subscription | undefined;
 
   pageSizeOptions = [5, 10, 25];
   pageEvent: PageEvent | undefined;
-  
-  private _route = inject(ActivatedRoute);
-  
+
   courseTitle: string | null = this._route.snapshot.paramMap.get('courseTitle');
-  
+
   ngOnInit(): void {
     this.courseTitle = this.courseTitle;
 

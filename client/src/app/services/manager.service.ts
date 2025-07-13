@@ -1,20 +1,16 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { inject, Injectable, Input, PLATFORM_ID, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from 'express';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../environments/environment.development';
-// import { AddCorse } from '../models/add-corse.model';
 import { ApiResponse } from '../models/helpers/apiResponse.model';
 import { LoggedInUser } from '../models/logged-in-user.model';
 import { Member } from '../models/member.model';
 import { RegisterUser } from '../models/register-user.model';
-import { UserWithRole } from '../models/user-with-role.model';
 import { Teacher } from '../models/teacher.model';
 import { ManagerUpdateMemberDto } from '../models/manager-update-member.model';
 import { AddEnrolledCourse } from '../models/add-enrolled-course.model';
 import { UpdateEnrolledCourse } from '../models/update-enrolled-course.model';
-import { UserProfile } from '../models/user-profile.model';
 import { TargetUserProfile } from '../models/target-user-profile.model';
 import { Course } from '../models/course.model';
 import { EnrolledCourse, Payment } from '../models/helpers/enrolled-course.model';
@@ -128,38 +124,9 @@ export class ManagerService {
     return this._http.put(this._apiUrl + 'update-enrolledCourse/' + targetUserName, updateEnrolledCourse)
   }
 
-  // deletePhoto(url_165In: string, targetPaymentId: string | null): Observable<ApiResponse> {
-  //   let queryParams = new HttpParams().set('photoUrlIn', url_165In);
-
-  //   return this._http.put<ApiResponse>(this._apiUrl + 'delete-photo/' + targetPaymentId, null, { params: queryParams });
-  // }
   deletePhoto(url_165: string, paymentId: string | null): Observable<ApiResponse> {
     return this._http.delete<ApiResponse>(
       `${this._apiUrl}delete-photo/${paymentId}?photoUrlIn=${url_165}`
     );
   }
-
-  // getUsersWithRoles(): Observable<UserWithRole[]> {
-  //   return this.http.get<UserWithRole[]>(this.apiUrl + 'users-with-roles')
-  // }
-
-  // getUsersWithRole(followParams: FollowParams): Observable<PaginatedResult<Member[]>> {
-  //   // 3
-  //   let params = new HttpParams();
-
-  //   if (followParams) {
-  //     params = params.append('pageNumber', followParams.pageNumber);
-  //     params = params.append('pageSize', followParams.pageSize);
-  //     params = params.append('predicate', followParams.predicate);
-  //   }
-
-  //   // 4
-  //   // Use this generic method and make it reusable for all components. 
-  //   // console.log(followParams);
-  //   return this.paginationHandler.getPaginatedResult<Member[]>(this._apiUrl, params);
-  // }
-
-  // delete(memberUserName: string): Observable<ApiResponse> {
-  //   return this.http.delete<ApiResponse>(this.apiUrl + 'deleteMember/' + memberUserName);
-  // }
 }

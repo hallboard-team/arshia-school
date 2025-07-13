@@ -5,7 +5,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
   providedIn: 'root'
 })
 export class LoadingService {
-
   private spinnerService = inject(NgxSpinnerService);
 
   loading() {

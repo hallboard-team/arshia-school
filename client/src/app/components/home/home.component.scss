@@ -61,7 +61,6 @@ main {
                     align-items: center;
                     flex-direction: row-reverse;
                     gap: 5px;
-
                     animation: pulse-background 2s ease-in-out infinite;
 
                     img {
@@ -121,7 +120,6 @@ main {
                     background-color: rgb(116, 116, 255);
                 }
             }
-
         }
     }
 
@@ -164,7 +162,6 @@ main {
                     background: linear-gradient(145deg, #f0f0f0, #fff);
                     box-shadow: 5px 5px 10px #bebebe,
                         -5px -5px 10px #ffffff;
-
                     position: absolute;
                     top: -20px;
 
@@ -430,7 +427,6 @@ main {
                     border-radius: 50%;
                     height: 40px;
                     width: 40px;
-                    // margin-right: 80px;
                     display: flex;
                     justify-content: center;
                     align-items: center;
@@ -530,9 +526,7 @@ main {
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                // box-shadow: 0 0 10px black;
                 padding-bottom: 10px;
-                // border-radius: 5px;
 
                 .div-bg-title-img {
                     width: 90%;
@@ -753,7 +747,6 @@ main {
                             border: none;
                             border-radius: 15px;
                             color: #fff;
-                            // background-color: blue;
                             padding: 10px 20px;
                             background-color: rgb(52, 52, 255);
                             width: 80%;
@@ -818,7 +811,6 @@ main {
 
         .div-title-about {
             width: 100%;
-
             display: flex;
             justify-content: end;
             align-items: center;
@@ -889,7 +881,6 @@ main {
                 overflow: hidden;
                 display: flex;
                 justify-content: center;
-
                 position: relative;
 
                 .slide-track {
@@ -904,7 +895,6 @@ main {
                         flex-direction: column;
                         justify-content: center;
                         align-items: center;
-
                         min-width: 100%;
                         padding: 1rem;
                         box-sizing: border-box;
@@ -958,14 +948,6 @@ main {
                 }
             }
 
-            // .button-nav {
-            //     font-size: 1.1rem;
-            //     background: none;
-            //     cursor: pointer;
-            //     border-radius: 50%;
-            //     background-color: #fff;
-            //     border: 1px solid rgba(0, 0, 0, 0.37);
-            // }
             .button-nav {
                 font-size: 1.1rem;
                 cursor: pointer;
@@ -1196,7 +1178,6 @@ main {
             }
 
             .div-slider-courses {
-
                 .div-bg-course-from-backend {
                     width: 40%;
 
@@ -1206,7 +1187,6 @@ main {
 
                     .div-title-course {
                         width: 80%;
-                        // width: 45%;
                     }
 
                     .div-time-buttonStart {

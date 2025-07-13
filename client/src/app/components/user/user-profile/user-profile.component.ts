@@ -1,4 +1,4 @@
-import { CommonModule, isPlatformBrowser, NgOptimizedImage } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, PLATFORM_ID, Signal } from '@angular/core';
 import { MemberService } from '../../../services/member.service';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -20,11 +20,9 @@ import { AutoFocusDirective } from '../../../directives/auto-focus.directive';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { AccountService } from '../../../services/account.service';
 import { ManagerService } from '../../../services/manager.service';
-import { ManagerUpdateMemberDto } from '../../../models/manager-update-member.model';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { AddEnrolledCourse } from '../../../models/add-enrolled-course.model';
 import { MatSelectModule } from '@angular/material/select';
 import { CourseParams } from '../../../models/helpers/course-params';
 import { CourseService } from '../../../services/course.service';
@@ -80,14 +78,10 @@ export class UserProfileComponent implements OnInit {
     this.courseParams = new CourseParams();
 
     this.getProfile();
-    // this.getLoggedInProfile();
-    // this.getCourse();
-    // this.getAllCours();
   }
 
   memberEditFg: FormGroup = this._fb.group({
     emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
-    // userNameCtrl: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(30)]],
     currentPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]]
@@ -97,9 +91,6 @@ export class UserProfileComponent implements OnInit {
   get EmailCtrl(): AbstractControl {
     return this.memberEditFg.get('emailCtrl') as FormControl;
   }
-  // get UserNameCtrl(): AbstractControl {
-  //   return this.memberEditFg.get('userNameCtrl') as FormControl;
-  // }
   get CurrentPasswordCtrl(): AbstractControl {
     return this.memberEditFg.get('currentPasswordCtrl') as FormControl;
   }
@@ -144,7 +135,6 @@ export class UserProfileComponent implements OnInit {
 
   initControllersValues(showMember: ShowMember) {
     this.EmailCtrl.setValue(showMember.email);
-    // this.UserNameCtrl.setValue(showMember.userName);
     this.CurrentPasswordCtrl.setValue(showMember.currentPassword);
     this.PasswordCtrl.setValue(showMember.password);
     this.ConfirmPasswordCtrl.setValue(showMember.confirmPasword);
@@ -154,7 +144,6 @@ export class UserProfileComponent implements OnInit {
     if (this.profile) {
       let updatedMember: MemberUpdate = {
         email: this.EmailCtrl.value,
-        // userName: this.UserNameCtrl.value,
         currentPassword: this.CurrentPasswordCtrl.value,
         password: this.PasswordCtrl.value,
         confirmPassword: this.ConfirmPasswordCtrl.value

@@ -4,15 +4,8 @@
     src: url('assets/fonts/Vazir.woff2') format('woff2'),
         url('assets/fonts/Vazir.woff') format('woff');
     font-weight: bold;
-    // font-style: normal;
     font-display: swap;
 }
-
-// @font-face {
-//     font-family: 'Bold';
-//     src: url('assets/fonts/Mj_Saudi\ Arabia\ XL_0.TTF') format('TTF');
-//     font-weight: bold;
-// }
 
 body {
     width: 100%;
@@ -24,6 +17,3 @@ body {
 *::after {
     box-sizing: border-box;
 }
-
-// html, body { height: 100%; }
-// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

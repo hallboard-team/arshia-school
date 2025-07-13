@@ -58,7 +58,6 @@ export class TargetUserProfileComponent implements OnInit {
   courses: Course[] | null = [];
   shamsiCourses: (Course & { shamsiStart: string })[] = [];
   courseTitles: string[] | null = [];
-  // courses$: Observable<Course[] | null> | undefined;
   member: Member | undefined;
 
   showCourses: ShowCourse[] | undefined;
@@ -89,15 +88,10 @@ export class TargetUserProfileComponent implements OnInit {
     this.minDate = new Date(currentYear - 99, 0, 1);
     this.maxDate = new Date(currentYear - 15, 0, 1);
 
-    // this.loggedInUserSig = this._accountService.loggedInUserSig;
-    // this.courseParams = new CourseParams();
-
     this.getTargetUserProfile();
     this.getTargetUserCourse();
     this.getTargetCourseTitles();
-    // this.getTargetUserCourse();
     this.courseParams = new CourseParams();
-    // this.loggedInUserSig = this._accountService.loggedInUserSig;
 
     this.getAll();
   }
@@ -138,13 +132,9 @@ export class TargetUserProfileComponent implements OnInit {
     methodCtrl: ['', [Validators.required]]
   })
 
-  //update user
   get TargetEmailCtrl(): AbstractControl {
     return this.targetMemberEditFg.get('targetEmailCtrl') as FormControl;
   }
-  // get TargetUserNameCtrl(): AbstractControl {
-  //   return this.targetMemberEditFg.get('targetUserNameCtrl') as FormControl;
-  // }
   get TargetNameCtrl(): AbstractControl {
     return this.targetMemberEditFg.get('targetNameCtrl') as FormControl;
   }

@@ -51,16 +51,6 @@
             }
             <span class="student-userName">نام کاربری: {{studentIn.userName}}</span>
             <span class="student-phone">📞شماره تلفن: {{ studentIn.phoneNum }}</span>
-
-            <!-- <span class="title-absent-present-student">حضور و غیاب دانشجو</span>
-                        <div class="attendance-section">
-                           
-                            <span class="selected-date">📅 تاریخ انتخاب‌شده: {{ selectedDate }}</span>
-                            <div class="attendance-buttons">
-                                <button (click)="markAttendance('حاضر')" class="present-btn">✅ حاضر</button>
-                                <button (click)="markAttendance('غایب')" class="absent-btn">❌ غایب</button>
-                            </div>
-                        </div> -->
         </div>
     </div>
 </div>
@@ -72,7 +62,6 @@
     @if (studentIn.gender == 'male') {
     <img class="photo-profile" src="../assets/images/menProfilePhoto1.png" alt="">
     }@else {
-    <!-- <img src="../assets/images/femial-profilePhoto1.png" alt=""> -->
     <img class="photo-profile" src="../assets/images/femailProfilePhoto2.png" alt="">
     }
     <span class="name-last-name-p">نام: {{studentIn.name}}</span>
@@ -82,7 +71,6 @@
     }@else {
     <span class="gender-p">جنسیت: زن</span>
     }
-    <!-- <span>{{studentIn.email}}</span> -->
 </div>
 }
 }

@@ -4,7 +4,7 @@ import { LoadingService } from '../services/loading.service';
 import { delay, finalize } from 'rxjs';
 
 export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
-  const loadingService = inject(LoadingService);
+    const loadingService = inject(LoadingService);
 
     loadingService.loading(); // loading starts
 
