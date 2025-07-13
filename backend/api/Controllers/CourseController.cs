@@ -44,11 +44,15 @@ public class CourseController(ICourseRepository _courseRepository) : BaseApiCont
             List<string?> professorUserNames = await _courseRepository
                 .GetProfessorUserNamesByIdsAsync(course.ProfessorsIds, cancellationToken);
 
+            List<string?> professorNames = await _courseRepository
+                .GetProfessorNamesByIdsAsync(course.ProfessorsIds, cancellationToken);
+
             showCourseDtos.Add(new ShowCourseDto
             {
                 Id = course.Id.ToString(),
                 Title = course.Title,
                 ProfessorUserNames = professorUserNames,
+                ProfessorNames = professorNames,
                 Tuition = course.Tuition,
                 Hours = course.Hours,
                 HoursPerClass = course.HoursPerClass,

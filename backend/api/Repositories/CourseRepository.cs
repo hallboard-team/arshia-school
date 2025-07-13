@@ -62,6 +62,15 @@ public class CourseRepository : ICourseRepository
         return professorUserNames.Select(p => p.NormalizedUserName).ToList();
     }
 
+    public async Task<List<string?>> GetProfessorNamesByIdsAsync(List<ObjectId> professorIds, CancellationToken cancellationToken)
+    {
+        List<AppUser> professors = await _collectionAppUser
+            .Find(professor => professorIds.Contains(professor.Id))
+            .ToListAsync(cancellationToken);
+
+        return professors.Select(p => $"{p.Name} {p.LastName}").ToList();
+    }
+
     public async Task<bool> UpdateCourseAsync(
         UpdateCourseDto updateCourseDto, string targetCourseTitle,
         CancellationToken cancellationToken)
