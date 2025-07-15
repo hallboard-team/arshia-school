@@ -19,6 +19,7 @@ nav {
         justify-content: center;
         align-items: center;
         perspective: 1000px;
+        height: 5.5rem;
 
         .div-links {
             height: 100%;
@@ -50,7 +51,7 @@ nav {
                     font-family: 'Roboto', 'Segoe UI', sans-serif;
                     text-transform: uppercase;
                     background: #e0e0e0;
-                    box-shadow: inset 5px 5px 10px #a6a6a6,
+                    box-shadow: inset 5px 5px 10px #a6a6a685,
                         inset -5px -5px 10px #ffffff;
                     height: 40px;
                     width: 80px;
@@ -68,7 +69,8 @@ nav {
                     left: 25%;
                     z-index: -1;
                     transition: .5s ease-out;
-                    background-color: #02fee1;
+                    // background-color: #02fee1;
+                    background-color: rgb(52, 52, 255);
                 }
 
                 .btn::before {
@@ -95,6 +97,19 @@ nav {
                 }
             }
 
+        }
+
+        .div-logo {
+            height: 80%;
+            width: 125px;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+
+            img {
+                height: 100%;
+                width: 100%;
+            }
         }
     }
 
@@ -128,11 +143,163 @@ nav {
             box-shadow: inset 5px 5px 10px #696969,
                 inset -5px -5px 10px #ffffff;
         }
+    }
+
+    .hamburger-menu {
+        width: 90%;
+        position: absolute;
+        top: 8rem;
+        left: 5%;
+        z-index: 100;
+        border-radius: 10px;
+        background: linear-gradient(145deg, #f0f0f0, #cacaca);
+        box-shadow: 5px 5px 10px #b1b1b1,
+            -5px -5px 10px #ffffff;
+        display: none;
+        flex-direction: column;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+
+        .top {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            width: 100%;
+
+            .Btn {
+                margin-right: 1rem;
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                width: 45px;
+                height: 45px;
+                border: none;
+                border-radius: 50%;
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
+                transition-duration: .3s;
+                background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                box-shadow: 5px 5px 10px #5a5a5a,
+                    -5px -5px 10px #ffffff;
+
+                .sign {
+                    width: 100%;
+                    transition-duration: .3s;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .sign svg {
+                    width: 17px;
+                }
+
+                .sign svg path {
+                    fill: red;
+                }
+
+                .text {
+                    position: absolute;
+                    left: 0%;
+                    width: 0%;
+                    opacity: 0;
+                    color: red;
+                    font-size: 1.2em;
+                    font-weight: 600;
+                    transition-duration: .3s;
+                }
+            }
+
+            .Btn:hover {
+                width: 125px;
+                border-radius: 40px;
+                transition-duration: .3s;
+            }
+
+            .Btn:hover .sign {
+                width: 30%;
+                transition-duration: .3s;
+                padding-right: 40px;
+            }
+
+            .Btn:hover .text {
+                opacity: 1;
+                width: 70%;
+                transition-duration: .3s;
+                padding-left: 30px;
+            }
+
+            .Btn:active {
+                transform: translate(2px, 2px);
+            }
+        }
+
+        .div-logo {
+            height: 50px;
+            width: 30%;
+            margin-left: 35%;
+            justify-content: center;
+            align-items: center;
+
+            img {
+                height: 100%;
+                width: 100%;
+            }
+        }
+
+        .bottom {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+
+            button {
+                width: 90%;
+                background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                box-shadow: 5px 5px 10px #797979,
+                    -5px -5px 10px #ffffff;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 1rem 2rem;
+                border: none;
+                border-radius: 10px;
+                transition: ease-in-out 0.5s;
+
+                span {
+                    color: black;
+                    font-size: 15px;
+                    z-index: 2;
+                    font-weight: bold;
+                }
+            }
+
+            button:hover {
+                transform: scale(1.08);
+                transition: ease-in 0.25s;
+            }
+        }
+    }
+
+    .left {
+        margin-left: 5px;
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row-reverse;
 
         .div-btns {
             display: flex;
             justify-content: center;
             align-items: center;
+            margin-left: 1rem;
 
             .profile {
                 border-radius: 50%;
@@ -158,10 +325,10 @@ nav {
 
             .btn-login {
                 height: 45px;
-                width: 120px;
+                width: 110px;
                 font-weight: bold;
-                font-size: 13px;
-                color: black;
+                font-size: 14px;
+                color: #fff;
                 padding: 10px;
                 border: none;
                 border-radius: 10px;
@@ -169,8 +336,9 @@ nav {
                 cursor: pointer;
                 overflow: hidden;
                 transition: all 0.2s ease;
-                background: linear-gradient(225deg, #f0f0f0, #cacaca);
-                box-shadow: -5px 5px 10px #5a5a5a,
+                background-color: rgba(52, 52, 255, 0.849);
+                // background: linear-gradient(225deg, #f0f0f0, #cacaca);
+                box-shadow: -5px 5px 10px #5a5a5a9a,
                     5px -5px 10px #ffffff;
             }
 
@@ -272,397 +440,6 @@ nav {
                     }
 
                     button:hover {
-                        transform: scale(1.1);
-                        transition: ease-in-out 0.5s;
-                    }
-                }
-
-                .div-btn-log-out {
-                    display: flex;
-                    justify-content: center;
-                    flex-direction: column;
-                    gap: 10px;
-                    align-items: center;
-
-                    .desc {
-                        width: 90%;
-                        font-size: 13px;
-                        color: rgba(0, 0, 0, 0.486);
-                        direction: rtl;
-                    }
-
-                    button {
-                        position: relative;
-                        display: inline-block;
-                        cursor: pointer;
-                        outline: none;
-                        border: 0;
-                        vertical-align: middle;
-                        text-decoration: none;
-                        background: transparent;
-                        padding: 0;
-                        font-size: inherit;
-                        font-family: inherit;
-                    }
-
-                    button.exit {
-                        width: 7rem;
-                        height: auto;
-                    }
-
-                    button.exit .circle {
-                        transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-                        position: relative;
-                        display: block;
-                        margin: 0;
-                        width: 2.5rem;
-                        height: 2.5rem;
-                        background: hsl(345deg 100% 47%);
-                        border-radius: 1.625rem;
-                    }
-
-                    button.exit .circle .icon {
-                        transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-                        position: absolute;
-                        top: 0;
-                        bottom: 0;
-                        margin: auto;
-                        background: #fff;
-                    }
-
-                    button.exit .circle .icon.arrow {
-                        transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-                        left: 0.625rem;
-                        width: 1.125rem;
-                        height: 0.125rem;
-                        background: none;
-                    }
-
-                    button.exit .circle .icon.arrow::before {
-                        position: absolute;
-                        content: "";
-                        top: -0.29rem;
-                        right: 0.0625rem;
-                        width: 0.625rem;
-                        height: 0.625rem;
-                        border-top: 0.125rem solid #fff;
-                        border-right: 0.125rem solid #fff;
-                        transform: rotate(45deg);
-                    }
-
-                    button.exit .button-text {
-                        transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-                        position: absolute;
-                        top: -5px;
-                        left: 0;
-                        right: 0;
-                        bottom: 0;
-                        padding: 0.75rem 0;
-                        margin: 0 0 0 1.85rem;
-                        color: hsl(345deg 100% 47%);
-                        font-weight: 700;
-                        line-height: 1.6;
-                        text-align: center;
-                        text-transform: uppercase;
-                    }
-
-                    button:hover .circle {
-                        width: 100%;
-                    }
-
-                    button:hover .circle .icon.arrow {
-                        background: #fff;
-                        transform: translate(1rem, 0);
-                    }
-
-                    button:hover .button-text {
-                        color: #fff;
-                    }
-                }
-            }
-        }
-    }
-
-    .hamburger-menu {
-        width: 90%;
-        position: absolute;
-        top: 8rem;
-        left: 5%;
-        z-index: 100;
-        border-radius: 10px;
-        background: linear-gradient(145deg, #f0f0f0, #cacaca);
-        box-shadow: 5px 5px 10px #b1b1b1,
-            -5px -5px 10px #ffffff;
-        display: none;
-        flex-direction: column;
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-
-        .top {
-            margin-top: 10px;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            width: 100%;
-
-            .Btn {
-                margin-right: 1rem;
-                display: flex;
-                align-items: center;
-                justify-content: flex-start;
-                width: 45px;
-                height: 45px;
-                border: none;
-                border-radius: 50%;
-                cursor: pointer;
-                position: relative;
-                overflow: hidden;
-                transition-duration: .3s;
-                background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                box-shadow: 5px 5px 10px #5a5a5a,
-                    -5px -5px 10px #ffffff;
-
-                .sign {
-                    width: 100%;
-                    transition-duration: .3s;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-
-                .sign svg {
-                    width: 17px;
-                }
-
-                .sign svg path {
-                    fill: red;
-                }
-
-                .text {
-                    position: absolute;
-                    left: 0%;
-                    width: 0%;
-                    opacity: 0;
-                    color: red;
-                    font-size: 1.2em;
-                    font-weight: 600;
-                    transition-duration: .3s;
-                }
-            }
-
-            .Btn:hover {
-                width: 125px;
-                border-radius: 40px;
-                transition-duration: .3s;
-            }
-
-            .Btn:hover .sign {
-                width: 30%;
-                transition-duration: .3s;
-                padding-right: 40px;
-            }
-
-            .Btn:hover .text {
-                opacity: 1;
-                width: 70%;
-                transition-duration: .3s;
-                padding-left: 30px;
-            }
-
-            .Btn:active {
-                transform: translate(2px, 2px);
-            }
-        }
-
-        .bottom {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
-            margin-top: 1.5rem;
-
-            button {
-                width: 90%;
-                background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                box-shadow: 5px 5px 10px #797979,
-                    -5px -5px 10px #ffffff;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                padding: 1rem 2rem;
-                border: none;
-                border-radius: 10px;
-                transition: ease-in-out 0.5s;
-
-                span {
-                    color: black;
-                    font-size: 15px;
-                    z-index: 2;
-                    font-weight: bold;
-                }
-            }
-
-            button:hover {
-                transform: scale(1.08);
-                transition: ease-in 0.25s;
-            }
-        }
-    }
-
-    .left {
-        margin-left: 5px;
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        align-items: center;
-        flex-direction: row-reverse;
-
-        .div-btns {
-            display: none;
-            justify-content: center;
-            align-items: center;
-
-            .profile {
-                border-radius: 50%;
-                border: none;
-                height: 40px;
-                width: 40px;
-                background: linear-gradient(225deg, #f0f0f0, #cacaca);
-                box-shadow: 0 0 10px black;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-
-                span {
-                    font-size: 22px;
-                    font-weight: bold;
-                    color: black;
-                }
-            }
-
-            .profile:hover {
-                cursor: pointer;
-            }
-
-            .btn-login {
-                height: 45px;
-                width: 120px;
-                font-weight: bold;
-                font-size: 13px;
-                color: black;
-                padding: 10px;
-                border: none;
-                border-radius: 10px;
-                position: relative;
-                cursor: pointer;
-                overflow: hidden;
-                transition: all 0.2s ease;
-                background: linear-gradient(225deg, #f0f0f0, #cacaca);
-                box-shadow: -5px 5px 10px #5a5a5a,
-                    5px -5px 10px #ffffff;
-            }
-
-            .btn-login:active {
-                will-change: transform;
-                transform: perspective(80px) rotateX(5deg) rotateY(1deg) translateY(3px) scale(0.96);
-                transition: all .1s ease-in-out 0s;
-            }
-
-            .btn-login:hover {
-                transition: all 0.2s ease;
-                scale: 1.05;
-            }
-
-            .div-open-profile {
-                border-radius: 10px;
-                background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                box-shadow: 5px 5px 10px #b1b1b1,
-                    -5px -5px 10px #ffffff;
-                padding: 1rem;
-                width: 90%;
-                position: absolute;
-                left: 5%;
-                top: 6rem;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-direction: column;
-                gap: 1rem;
-
-                .div-button-back-page {
-                    width: 100%;
-                    display: flex;
-                    justify-content: flex-end;
-                    align-items: center;
-
-                    .back-to-page {
-                        height: 40px;
-                        width: 40px;
-                        border-radius: 50%;
-                        border: none;
-                        background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                        box-shadow: 5px 5px 10px #b1b1b1,
-                            -5px -5px 10px #ffffff;
-
-                        mat-icon {
-                            color: red;
-                            font-weight: bold;
-                        }
-                    }
-
-                    .back-to-page {
-                        cursor: pointer;
-                    }
-                }
-
-                .div-description-of-user {
-                    display: flex;
-                    width: 100%;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 1rem;
-
-                    span {
-                        direction: rtl;
-                        font-size: 15px;
-                        color: black;
-                    }
-                }
-
-                .div-routes {
-                    width: 100%;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 15px;
-
-                    button {
-                        width: 90%;
-                        background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                        box-shadow: 5px 5px 10px #797979,
-                            -5px -5px 10px #ffffff;
-                        cursor: pointer;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        padding: 1rem 2rem;
-                        border: none;
-                        border-radius: 10px;
-                        transition: ease-in-out 0.5s;
-
-                        span {
-                            color: black;
-                            font-size: 14px;
-                            z-index: 2;
-                        }
-                    }
-
-                    button:hover {
                         transition: ease-in-out 0.5s;
                         transform: scale(1.1);
                     }
@@ -770,19 +547,6 @@ nav {
                         color: #fff;
                     }
                 }
-            }
-        }
-
-        .div-logo {
-            height: 90%;
-            width: 120px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            img {
-                height: 100%;
-                width: 100%;
             }
         }
 
@@ -826,7 +590,11 @@ nav {
         justify-content: space-between;
 
         .div-menu-button {
-            margin-right: 1rem;
+            display: none;
+        }
+
+        .right {
+            display: flex;
         }
 
         .left {

@@ -1,5 +1,10 @@
 <nav>
     <section class="right">
+        <div class="div-logo">
+            <img [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive"
+                src="../assets/images/logo-tolou-fanavariRS.png" alt="">
+        </div>
+
         <div class="div-links">
             <div class="div-transsform-style">
                 <button class="btn" [routerLink]="['/' + 'courses']" routerLinkActive #rla="routerLinkActive">
@@ -19,71 +24,6 @@
         <button class="menu-button" (click)="openMenu()">
             <mat-icon>menu</mat-icon>
         </button>
-
-        <div class="div-btns">
-            @if (loggedInUserSig && loggedInUserSig(); as user) {
-            <button class="profile" (click)="openProfile()">
-                <span>{{loggedInUserSig()?.name?.charAt(0)?.toUpperCase()}}</span>
-            </button>
-            }
-            @else {
-            <button class="btn-login" routerLink="/account/login">
-                <span class="text">ورود</span>
-            </button>
-            }
-
-            <div class="div-open-profile" *ngIf="showProfile">
-                <div class="div-button-back-page">
-                    <button class="back-to-page" (click)="closeProfile()">
-                        <mat-icon>close</mat-icon>
-                    </button>
-                </div>
-
-                <div class="div-description-of-user">
-                    <span>نام: {{loggedInUserSig && loggedInUserSig()?.name}}</span>
-                    <span>نام کاربری: {{loggedInUserSig && loggedInUserSig()?.userName}}</span>
-                    <span>ایمیل: {{loggedInUserSig && loggedInUserSig()?.email}}</span>
-                </div>
-
-                <div class="div-routes">
-                    <button [routerLink]="['/' + 'profile']" routerLinkActive
-                        #rla="routerLinkActive"><span>پروفایل</span></button>
-
-                    @if (
-                    loggedInUserSig &&
-                    loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
-                    loggedInUserSig()?.roles?.includes('manager')
-                    ) {
-                    <button [routerLink]="['/' + 'manager-panel']"><span>پنل-مدیر</span></button>
-                    }
-
-                    @if (
-                    loggedInUserSig &&
-                    loggedInUserSig()?.roles?.includes('manager')
-                    ) {
-                    <button [routerLink]="['/' + 'members']"><span>کاربران</span></button>
-                    }
-
-                    @if (
-                    loggedInUserSig &&
-                    loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
-                    loggedInUserSig()?.roles?.includes('teacher')
-                    ) {
-                    <button [routerLink]="['/' + 'teacher-panel']"><span>پنل-معلم</span></button>
-                    }
-                </div>
-
-                <div class="div-btn-log-out">
-                    <span class="desc">شما وارد حساب کاربری شده اید میخواهید خارج بشید؟</span>
-                    <button class="exit" (click)="logout()">
-                        <span class="circle" aria-hidden="true">
-                            <span class="icon arrow"></span>
-                        </span>
-                        <span class="button-text">خروج</span>
-                    </button>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="hamburger-menu">
@@ -99,6 +39,11 @@
 
                 <div class="text">خروج</div>
             </button>
+        </div>
+
+        <div class="div-logo">
+            <img [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive"
+                src="../assets/images/logo-tolou-fanavariRS.png" alt="">
         </div>
 
         <div class="bottom">
@@ -173,11 +118,6 @@
                     </button>
                 </div>
             </div>
-        </div>
-
-        <div class="div-logo">
-            <img [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive"
-                src="../assets/images/logo-tolou-fanavariRS.png" alt="">
         </div>
     </section>
 </nav>
