@@ -9,11 +9,29 @@ ssl/
 #wwwroot
 storage/
 obj/
+# Build results
+bin/
 
-node_modules/
+# NuGet
+*.nupkg
+*.snupkg
+project.lock.json
+project.assets.json
+project.nuget.cache
+*.nuget.props
+*.nuget.targets
+*.csproj.nuget.g.props
+*.csproj.nuget.g.targets
+*.dg
+.nuget/
 
-.angular/
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
 .vscode/
+
 
 # User-specific files
 *.rsuser
