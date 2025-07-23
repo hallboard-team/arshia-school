@@ -3,13 +3,13 @@ name: Azure Static Web Apps CI/CD
 on:
   push:
     branches:
-      - cicd
+      - ssr
     paths:
       - 'client/**'
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
-      - cicd
+      - ssr
     paths:
       - 'client/**'
 
