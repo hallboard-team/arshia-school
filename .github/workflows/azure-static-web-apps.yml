@@ -18,6 +18,9 @@ jobs:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
+    defaults:
+      run:
+        working-directory: ./client # <--- Set default working directory for the job
     steps:
       - uses: actions/checkout@v3
         with:
@@ -26,15 +29,15 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20.11.1 # Ensure this matches your env.NODE_VERSION
+          node-version: 20.11.1
 
       - name: Install dependencies
-        run: npm install --prefix client --legacy-peer-deps # Use --prefix if your app is in 'client' subdir
+        run: npm install --legacy-peer-deps # No --prefix needed now
 
       - name: Build and Prerender Angular App
-        run: npm run build:prerender --prefix client # This command should trigger the SSR and prerender build
+        run: ng build --ssr # Directly call ng build --ssr
         env:
-          NODE_OPTIONS: --max_old_space_size=8192 # Optional: Increase memory for large builds
+          NODE_OPTIONS: --max_old_space_size=8192
 
       - name: Deploy to Azure Static Web Apps
         id: builddeploy
@@ -43,20 +46,9 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GRAY_SAND_0000A630F }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          app_location: "client"
+          app_location: "client" # Still relative to repo root
           api_location: ""
-          output_location: "dist/client/browser" # This will point to the prerendered output
-          # SWA will automatically detect the server output based on Angular's prerendered structure.
-          # For prerendered apps, the 'output_location' usually points to the browser build output,
-          # and SWA infers the server assets from the build artifacts.
-          # You might not need a specific 'app_artifact_location' for the server if it's all within the 'dist' structure.
-          # If your 'server' output is in a different top-level folder, you might need app_artifact_location: "dist/client".
-          # However, Angular's default prerendering places the static files within the browser output,
-          # and the server function (if any) is typically deployed separately or inferred.
-          # For a truly full SSR (not just prerendering), Azure SWA has specific config, but for prerendering,
-          # it mostly relies on the `output_location` pointing to the generated static files.
-
-      ###### End of Repository/Build Configurations ######
+          output_location: "dist/client/browser" # Still relative to app_location
 
   cleanup:
     runs-on: ubuntu-latest
