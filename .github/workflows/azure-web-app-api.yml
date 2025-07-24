@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Azure Web App - API
+name: Build, deploy and clean ASP.Net Core / api app to Azure Web App - da-api-mr
 
 on:
   push:
@@ -16,11 +16,13 @@ on:
     paths:
       - 'backend/**'
 
-  workflow_dispatch: # This line adds the manual trigger option
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # This is required for actions/checkout
 
     steps:
       - uses: actions/checkout@v4
@@ -32,6 +34,7 @@ jobs:
           include-prerelease: true
 
       - name: dotnet publish
+        # Make sure this path (./backend/dating-app.sln) is correct for your project structure
         run: dotnet publish ./backend/SepantaProject.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
@@ -47,23 +50,33 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
+    permissions:
+      id-token: write # <--- IMPORTANT: Required for requesting the JWT for OIDC login
+      contents: read # This is required for actions/checkout (implicitly used by download-artifact)
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: .net-app
 
+      # Add the Azure Login step here, using the secrets from your new setup
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          # These secrets should be configured in your GitHub repository's secrets
+          # (Settings -> Secrets and variables -> Actions -> Repository secrets)
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6ADE688D43F2454A922DD09DFD14DEFC }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9491EA51411E45E3991801662A644BFA }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_12052D0712044E37AD3336D2A933C218 }}
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'school-api'
+          app-name: 'arshia-school-api' # Ensure this is the correct app name for your existing API project
           slot-name: 'Production'
           package: .
-#          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2706DEB79BA64D12BFFB60412AC994FA }}
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6ADE688D43F2454A922DD09DFD14DEFC }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9491EA51411E45E3991801662A644BFA }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_12052D0712044E37AD3336D2A933C218 }}
 
   cleanup:
     runs-on: ubuntu-latest
