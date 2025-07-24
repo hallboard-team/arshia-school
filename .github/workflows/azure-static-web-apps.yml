@@ -48,7 +48,7 @@ jobs:
           action: "upload"
           app_location: "client" # Still relative to repo root
           api_location: ""
-          output_location: "dist/client/browser" # Still relative to app_location
+          output_location: "client/dist/client/browser" # Still relative to app_location
 
   cleanup:
     runs-on: ubuntu-latest
