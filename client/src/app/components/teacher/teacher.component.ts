@@ -10,13 +10,12 @@ import moment from 'moment-jalaali';
 moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
 @Component({
-  selector: 'app-teacher',
-  standalone: true,
-  imports: [
-    NavbarComponent, CommonModule, RouterModule
-  ],
-  templateUrl: './teacher.component.html',
-  styleUrl: './teacher.component.scss'
+    selector: 'app-teacher',
+    imports: [
+        NavbarComponent, CommonModule, RouterModule
+    ],
+    templateUrl: './teacher.component.html',
+    styleUrl: './teacher.component.scss'
 })
 export class TeacherComponent implements OnInit, OnDestroy {
   teacherService = inject(TeacherService);

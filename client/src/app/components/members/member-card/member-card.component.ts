@@ -11,14 +11,13 @@ import { AccountService } from '../../../services/account.service';
 import { MemberService } from '../../../services/member.service';
 
 @Component({
-  selector: 'app-member-card',
-  standalone: true,
-  imports: [
-    CommonModule, RouterModule, MatButtonModule,
-    MatCardModule, MatIconModule
-  ],
-  templateUrl: './member-card.component.html',
-  styleUrl: './member-card.component.scss'
+    selector: 'app-member-card',
+    imports: [
+        CommonModule, RouterModule, MatButtonModule,
+        MatCardModule, MatIconModule
+    ],
+    templateUrl: './member-card.component.html',
+    styleUrl: './member-card.component.scss'
 })
 export class MemberCardComponent {
   @Input('memberInput') memberIn: Member | undefined;

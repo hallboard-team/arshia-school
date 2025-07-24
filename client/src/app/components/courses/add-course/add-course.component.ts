@@ -22,18 +22,17 @@ import { HttpClient } from '@angular/common/http';
 moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
 @Component({
-  selector: 'app-add-course',
-  standalone: true,
-  imports: [
-    CommonModule, FormsModule,
-    ReactiveFormsModule, MatFormFieldModule, MatInputModule,
-    MatButtonModule, MatSnackBarModule,
-    AutoFocusDirective,
-    MatIconModule, NavbarComponent,
-    NgPersianDatepickerModule, CurrencyFormatterDirective
-  ],
-  templateUrl: './add-course.component.html',
-  styleUrl: './add-course.component.scss'
+    selector: 'app-add-course',
+    imports: [
+        CommonModule, FormsModule,
+        ReactiveFormsModule, MatFormFieldModule, MatInputModule,
+        MatButtonModule, MatSnackBarModule,
+        AutoFocusDirective,
+        MatIconModule, NavbarComponent,
+        NgPersianDatepickerModule, CurrencyFormatterDirective
+    ],
+    templateUrl: './add-course.component.html',
+    styleUrl: './add-course.component.scss'
 })
 export class AddCourseComponent {
   fb = inject(FormBuilder);

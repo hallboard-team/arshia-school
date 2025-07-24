@@ -32,19 +32,18 @@ import { CurrencyFormatterDirective } from '../../directives/currency-formatter.
 import { defaultTheme, IDatepickerTheme, NgPersianDatepickerModule } from '../../../../projects/ng-persian-datepicker/src/public-api';
 moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 @Component({
-  selector: 'app-target-user-profile',
-  standalone: true,
-  imports: [
-    CommonModule, FormsModule, ReactiveFormsModule,
-    MatCardModule, MatFormFieldModule, AutoFocusDirective,
-    MatInputModule, MatButtonModule, NavbarComponent,
-    RouterModule, MatTabsModule, MatNativeDateModule,
-    MatRadioModule, MatSnackBarModule, MatDatepickerModule,
-    MatSelectModule, CurrencyFormatterDirective,
-    NgPersianDatepickerModule
-  ],
-  templateUrl: './target-user-profile.component.html',
-  styleUrl: './target-user-profile.component.scss'
+    selector: 'app-target-user-profile',
+    imports: [
+        CommonModule, FormsModule, ReactiveFormsModule,
+        MatCardModule, MatFormFieldModule, AutoFocusDirective,
+        MatInputModule, MatButtonModule, NavbarComponent,
+        RouterModule, MatTabsModule, MatNativeDateModule,
+        MatRadioModule, MatSnackBarModule, MatDatepickerModule,
+        MatSelectModule, CurrencyFormatterDirective,
+        NgPersianDatepickerModule
+    ],
+    templateUrl: './target-user-profile.component.html',
+    styleUrl: './target-user-profile.component.scss'
 })
 export class TargetUserProfileComponent implements OnInit {
   private _managerService = inject(ManagerService);

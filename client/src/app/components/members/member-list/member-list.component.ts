@@ -18,16 +18,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 
 @Component({
-  selector: 'app-member-list',
-  standalone: true,
-  imports: [
-    CommonModule, MemberCardComponent, MatPaginatorModule,
-    NavbarComponent, MatFormFieldModule, MatInputModule,
-    MatSelectModule, MatButtonModule, MatSliderModule,
-    FormsModule, ReactiveFormsModule,
-  ],
-  templateUrl: './member-list.component.html',
-  styleUrl: './member-list.component.scss'
+    selector: 'app-member-list',
+    imports: [
+        CommonModule, MemberCardComponent, MatPaginatorModule,
+        NavbarComponent, MatFormFieldModule, MatInputModule,
+        MatSelectModule, MatButtonModule, MatSliderModule,
+        FormsModule, ReactiveFormsModule,
+    ],
+    templateUrl: './member-list.component.html',
+    styleUrl: './member-list.component.scss'
 })
 export class MemberListComponent {
   private _memberService = inject(MemberService);

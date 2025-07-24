@@ -15,15 +15,14 @@ import { AccountService } from '../../../services/account.service';
 import { ManagerService } from '../../../services/manager.service';
 
 @Component({
-  selector: 'app-member-enrolled-course',
-  standalone: true,
-  imports: [
-    NavbarComponent, MatTableModule, MatNativeDateModule,
-    MatIconModule, CommonModule, GalleryModule,
-    LightboxModule
-  ],
-  templateUrl: './member-enrolled-course.component.html',
-  styleUrl: './member-enrolled-course.component.scss'
+    selector: 'app-member-enrolled-course',
+    imports: [
+        NavbarComponent, MatTableModule, MatNativeDateModule,
+        MatIconModule, CommonModule, GalleryModule,
+        LightboxModule
+    ],
+    templateUrl: './member-enrolled-course.component.html',
+    styleUrl: './member-enrolled-course.component.scss'
 })
 export class MemberEnrolledCourseComponent implements OnInit {
   private _route = inject(ActivatedRoute);

@@ -16,15 +16,14 @@ import moment from 'moment-jalaali';
 moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
 @Component({
-  selector: 'app-target-member-enrolled-course',
-  standalone: true,
-  imports: [
-    NavbarComponent, MatTableModule, MatNativeDateModule,
-    MatIconModule, CommonModule, GalleryModule,
-    LightboxModule, RouterModule
-  ],
-  templateUrl: './target-member-enrolled-course.component.html',
-  styleUrl: './target-member-enrolled-course.component.scss'
+    selector: 'app-target-member-enrolled-course',
+    imports: [
+        NavbarComponent, MatTableModule, MatNativeDateModule,
+        MatIconModule, CommonModule, GalleryModule,
+        LightboxModule, RouterModule
+    ],
+    templateUrl: './target-member-enrolled-course.component.html',
+    styleUrl: './target-member-enrolled-course.component.scss'
 })
 export class TargetMemberEnrolledCourseComponent implements OnInit {
   private _route = inject(ActivatedRoute);

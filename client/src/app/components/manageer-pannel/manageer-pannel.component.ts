@@ -23,18 +23,17 @@ import { defaultTheme, IDatepickerTheme, NgPersianDatepickerModule } from '../..
 moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
 @Component({
-  selector: 'app-manageer-pannel',
-  standalone: true,
-  imports: [
-    MatTabsModule, CommonModule, FormsModule,
-    ReactiveFormsModule, MatFormFieldModule, MatInputModule,
-    MatButtonModule, MatSnackBarModule, MatRadioModule,
-    MatDatepickerModule, MatNativeDateModule, AutoFocusDirective,
-    MatTableModule, MatIconModule, NavbarComponent,
-    NgPersianDatepickerModule
-  ],
-  templateUrl: './manageer-pannel.component.html',
-  styleUrl: './manageer-pannel.component.scss'
+    selector: 'app-manageer-pannel',
+    imports: [
+        MatTabsModule, CommonModule, FormsModule,
+        ReactiveFormsModule, MatFormFieldModule, MatInputModule,
+        MatButtonModule, MatSnackBarModule, MatRadioModule,
+        MatDatepickerModule, MatNativeDateModule, AutoFocusDirective,
+        MatTableModule, MatIconModule, NavbarComponent,
+        NgPersianDatepickerModule
+    ],
+    templateUrl: './manageer-pannel.component.html',
+    styleUrl: './manageer-pannel.component.scss'
 })
 export class ManageerPannelComponent implements OnInit, OnDestroy {
   private snackBar = inject(MatSnackBar);

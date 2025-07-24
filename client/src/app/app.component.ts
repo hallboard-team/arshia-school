@@ -8,14 +8,13 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { LightboxModule } from 'ngx-lightbox';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    RouterModule, RouterOutlet, NgxSpinnerModule,
-    NavbarComponent, FooterComponent, LightboxModule
-  ],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+    selector: 'app-root',
+    imports: [
+        RouterModule, RouterOutlet, NgxSpinnerModule,
+        NavbarComponent, FooterComponent, LightboxModule
+    ],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
   private accountService = inject(AccountService);

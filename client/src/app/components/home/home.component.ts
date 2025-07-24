@@ -22,29 +22,27 @@ import { MatSliderModule } from '@angular/material/slider';
 import { FooterComponent } from '../footer/footer.component';
 import { trigger, transition, style, animate } from '@angular/animations';
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [
-    MatButtonModule, MatIconModule,
-    RouterModule, MatInputModule, MatDividerModule,
-    FormsModule, NavbarComponent, MatMenuModule,
-    MatToolbarModule, MatSliderModule, CommonModule,
-    FooterComponent
-  ],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
-  animations: [
-    trigger('slideAnimation', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateX({{ enterFrom }})' }),
-        animate('200ms ease', style({ opacity: 1, transform: 'translateX(0)' }))
-      ], { params: { enterFrom: '100%' } }),
-
-      transition(':leave', [
-        animate('200ms ease', style({ opacity: 0, transform: 'translateX({{ leaveTo }})' }))
-      ], { params: { leaveTo: '-100%' } })
-    ])
-  ]
+    selector: 'app-home',
+    imports: [
+        MatButtonModule, MatIconModule,
+        RouterModule, MatInputModule, MatDividerModule,
+        FormsModule, NavbarComponent, MatMenuModule,
+        MatToolbarModule, MatSliderModule, CommonModule,
+        FooterComponent
+    ],
+    templateUrl: './home.component.html',
+    styleUrl: './home.component.scss',
+    animations: [
+        trigger('slideAnimation', [
+            transition(':enter', [
+                style({ opacity: 0, transform: 'translateX({{ enterFrom }})' }),
+                animate('200ms ease', style({ opacity: 1, transform: 'translateX(0)' }))
+            ], { params: { enterFrom: '100%' } }),
+            transition(':leave', [
+                animate('200ms ease', style({ opacity: 0, transform: 'translateX({{ leaveTo }})' }))
+            ], { params: { leaveTo: '-100%' } })
+        ])
+    ]
 })
 export class HomeComponent implements OnInit {
   private accountService = inject(AccountService);

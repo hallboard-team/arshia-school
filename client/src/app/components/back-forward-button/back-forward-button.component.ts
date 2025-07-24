@@ -5,13 +5,12 @@ import { CommonModule } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-back-forward-button',
-  standalone: true,
-  imports: [
-    CommonModule, MatIcon
-  ],
-  templateUrl: './back-forward-button.component.html',
-  styleUrl: './back-forward-button.component.scss'
+    selector: 'app-back-forward-button',
+    imports: [
+        CommonModule, MatIcon
+    ],
+    templateUrl: './back-forward-button.component.html',
+    styleUrl: './back-forward-button.component.scss'
 })
 export class BackForwardButtonComponent {
   history = inject(HistoryService);

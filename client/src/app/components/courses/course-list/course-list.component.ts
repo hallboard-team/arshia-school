@@ -14,14 +14,13 @@ import { LoggedInUser } from '../../../models/logged-in-user.model';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-course-list',
-  standalone: true,
-  imports: [
-    CommonModule, MatPaginatorModule, CourseCardComponent,
-    NavbarComponent, RouterModule
-  ],
-  templateUrl: './course-list.component.html',
-  styleUrl: './course-list.component.scss'
+    selector: 'app-course-list',
+    imports: [
+        CommonModule, MatPaginatorModule, CourseCardComponent,
+        NavbarComponent, RouterModule
+    ],
+    templateUrl: './course-list.component.html',
+    styleUrl: './course-list.component.scss'
 })
 export class CourseListComponent implements OnInit, OnDestroy {
   private _accountService = inject(AccountService);

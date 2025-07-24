@@ -15,16 +15,15 @@ import { NavbarComponent } from '../../navbar/navbar.component';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [
-    CommonModule, FormsModule, ReactiveFormsModule,
-    MatFormFieldModule, MatInputModule, MatButtonModule,
-    MatSnackBarModule, AutoFocusDirective, MatTabsModule,
-    NavbarComponent, MatIconModule
-  ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+    selector: 'app-login',
+    imports: [
+        CommonModule, FormsModule, ReactiveFormsModule,
+        MatFormFieldModule, MatInputModule, MatButtonModule,
+        MatSnackBarModule, AutoFocusDirective, MatTabsModule,
+        NavbarComponent, MatIconModule
+    ],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.scss'
 })
 export class LoginComponent {
   accountService = inject(AccountService);

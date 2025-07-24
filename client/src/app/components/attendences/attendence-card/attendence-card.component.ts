@@ -10,15 +10,14 @@ import moment from 'jalali-moment';
 import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
-  selector: 'app-attendence-card',
-  standalone: true,
-  imports: [
-    CommonModule, FormsModule, MatCardModule,
-    RouterModule, MatTableModule,
-    MatCardModule, MatIconModule, MatNativeDateModule
-  ],
-  templateUrl: './attendence-card.component.html',
-  styleUrl: './attendence-card.component.scss'
+    selector: 'app-attendence-card',
+    imports: [
+        CommonModule, FormsModule, MatCardModule,
+        RouterModule, MatTableModule,
+        MatCardModule, MatIconModule, MatNativeDateModule
+    ],
+    templateUrl: './attendence-card.component.html',
+    styleUrl: './attendence-card.component.scss'
 })
 export class AttendenceCardComponent {
   @Input('attendenceInput') attendenceIn: Attendence[] = [];

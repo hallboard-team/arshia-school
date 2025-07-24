@@ -14,14 +14,13 @@ import { AttendenceCardComponent } from "../attendence-card/attendence-card.comp
 import { ManagerService } from '../../../services/manager.service';
 
 @Component({
-  selector: 'app-attendence-list',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatPaginatorModule, NavbarComponent, AttendenceCardComponent
-  ],
-  templateUrl: './attendence-list.component.html',
-  styleUrl: './attendence-list.component.scss'
+    selector: 'app-attendence-list',
+    imports: [
+        CommonModule,
+        MatPaginatorModule, NavbarComponent, AttendenceCardComponent
+    ],
+    templateUrl: './attendence-list.component.html',
+    styleUrl: './attendence-list.component.scss'
 })
 export class AttendenceListComponent implements OnInit, OnDestroy {
   memberService = inject(MemberService);

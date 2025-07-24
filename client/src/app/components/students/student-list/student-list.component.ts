@@ -12,14 +12,13 @@ import { StudentCardComponent } from '../student-card/student-card.component';
 import { NavbarComponent } from '../../navbar/navbar.component';
 
 @Component({
-  selector: 'app-student-list',
-  standalone: true,
-  imports: [
-    CommonModule,
-    StudentCardComponent, MatPaginatorModule, NavbarComponent
-  ],
-  templateUrl: './student-list.component.html',
-  styleUrl: './student-list.component.scss'
+    selector: 'app-student-list',
+    imports: [
+        CommonModule,
+        StudentCardComponent, MatPaginatorModule, NavbarComponent
+    ],
+    templateUrl: './student-list.component.html',
+    styleUrl: './student-list.component.scss'
 })
 export class StudentListComponent {
   private _teacherService = inject(TeacherService);

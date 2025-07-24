@@ -9,14 +9,13 @@ import { AccountService } from '../../../services/account.service';
 import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
-  selector: 'app-select-course-card',
-  standalone: true,
-  imports: [
-    CommonModule, RouterModule, MatDividerModule,
-    MatCardModule, MatIconModule
-  ],
-  templateUrl: './select-course-card.component.html',
-  styleUrl: './select-course-card.component.scss'
+    selector: 'app-select-course-card',
+    imports: [
+        CommonModule, RouterModule, MatDividerModule,
+        MatCardModule, MatIconModule
+    ],
+    templateUrl: './select-course-card.component.html',
+    styleUrl: './select-course-card.component.scss'
 })
 export class SelectCourseCardComponent {
   @Input('selectCourseInput') courseIn: ShowCourse | undefined;

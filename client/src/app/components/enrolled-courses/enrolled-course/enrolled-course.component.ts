@@ -25,17 +25,16 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 
 @Component({
-  selector: 'app-enrolled-course',
-  standalone: true,
-  imports: [
-    CommonModule, MatPaginatorModule, ReactiveFormsModule,
-    NavbarComponent, RouterModule, MatFormFieldModule,
-    SelectCourseCardComponent, MatSnackBarModule,
-    MatInputModule, MatButtonModule, MatTabsModule,
-    MatRadioModule, MatSelectModule
-  ],
-  templateUrl: './enrolled-course.component.html',
-  styleUrl: './enrolled-course.component.scss'
+    selector: 'app-enrolled-course',
+    imports: [
+        CommonModule, MatPaginatorModule, ReactiveFormsModule,
+        NavbarComponent, RouterModule, MatFormFieldModule,
+        SelectCourseCardComponent, MatSnackBarModule,
+        MatInputModule, MatButtonModule, MatTabsModule,
+        MatRadioModule, MatSelectModule
+    ],
+    templateUrl: './enrolled-course.component.html',
+    styleUrl: './enrolled-course.component.scss'
 })
 export class EnrolledCourseComponent {
   private _accountService = inject(AccountService);

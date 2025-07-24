@@ -16,15 +16,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
-  selector: 'app-upload-photo',
-  standalone: true,
-  imports: [
-    CommonModule, NgOptimizedImage, RouterModule,
-    MatIconModule, FileUploadModule,
-    MatButtonModule, MatCardModule, MatFormFieldModule
-  ],
-  templateUrl: './upload-photo.component.html',
-  styleUrl: './upload-photo.component.scss'
+    selector: 'app-upload-photo',
+    imports: [
+        CommonModule, NgOptimizedImage, RouterModule,
+        MatIconModule, FileUploadModule,
+        MatButtonModule, MatCardModule, MatFormFieldModule
+    ],
+    templateUrl: './upload-photo.component.html',
+    styleUrl: './upload-photo.component.scss'
 })
 export class UploadPhotoComponent implements OnInit {
   private _route = inject(ActivatedRoute);

@@ -10,14 +10,13 @@ import moment from 'moment-jalaali';
 moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
 @Component({
-  selector: 'app-course-card',
-  standalone: true,
-  imports: [
-    CommonModule, RouterModule,
-    MatCardModule, MatIconModule
-  ],
-  templateUrl: './course-card.component.html',
-  styleUrl: './course-card.component.scss'
+    selector: 'app-course-card',
+    imports: [
+        CommonModule, RouterModule,
+        MatCardModule, MatIconModule
+    ],
+    templateUrl: './course-card.component.html',
+    styleUrl: './course-card.component.scss'
 })
 export class CourseCardComponent implements OnInit {
   @Input('courseInput') courseIn: ShowCourse | undefined;

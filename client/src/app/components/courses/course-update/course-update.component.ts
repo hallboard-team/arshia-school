@@ -25,17 +25,16 @@ import moment from 'moment-jalaali';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
-  selector: 'app-course-update',
-  standalone: true,
-  imports: [
-    CommonModule, FormsModule, NavbarComponent,
-    ReactiveFormsModule, MatRadioModule, MatIconModule,
-    MatCardModule, MatFormFieldModule, MatInputModule,
-    MatButtonModule, CurrencyFormatterDirective,
-    NgPersianDatepickerModule, MatProgressSpinnerModule
-  ],
-  templateUrl: './course-update.component.html',
-  styleUrl: './course-update.component.scss'
+    selector: 'app-course-update',
+    imports: [
+        CommonModule, FormsModule, NavbarComponent,
+        ReactiveFormsModule, MatRadioModule, MatIconModule,
+        MatCardModule, MatFormFieldModule, MatInputModule,
+        MatButtonModule, CurrencyFormatterDirective,
+        NgPersianDatepickerModule, MatProgressSpinnerModule
+    ],
+    templateUrl: './course-update.component.html',
+    styleUrl: './course-update.component.scss'
 })
 export class CourseUpdateComponent implements OnInit {
   private _courseService = inject(CourseService);

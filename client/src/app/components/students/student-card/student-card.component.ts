@@ -13,16 +13,15 @@ import moment from 'moment-jalaali';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
-  selector: 'app-student-card',
-  standalone: true,
-  imports: [
-    CommonModule, FormsModule, MatCardModule,
-    RouterModule, MatSlideToggleModule,
-    MatCardModule, MatIconModule,
-    ReactiveFormsModule
-  ],
-  templateUrl: './student-card.component.html',
-  styleUrl: './student-card.component.scss'
+    selector: 'app-student-card',
+    imports: [
+        CommonModule, FormsModule, MatCardModule,
+        RouterModule, MatSlideToggleModule,
+        MatCardModule, MatIconModule,
+        ReactiveFormsModule
+    ],
+    templateUrl: './student-card.component.html',
+    styleUrl: './student-card.component.scss'
 })
 export class StudentCardComponent implements OnInit {
   @Input('studentInput') studentIn: Member | undefined;

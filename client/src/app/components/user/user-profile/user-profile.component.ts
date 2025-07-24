@@ -31,18 +31,17 @@ import { Pagination } from '../../../models/helpers/pagination';
 import moment from 'moment-jalaali';
 
 @Component({
-  selector: 'app-user-profile',
-  standalone: true,
-  imports: [
-    CommonModule, FormsModule, ReactiveFormsModule,
-    MatCardModule, MatFormFieldModule, AutoFocusDirective,
-    MatInputModule, MatButtonModule, NavbarComponent,
-    RouterModule, MatTabsModule, MatNativeDateModule,
-    MatRadioModule, MatSnackBarModule, MatDatepickerModule,
-    MatSelectModule
-  ],
-  templateUrl: './user-profile.component.html',
-  styleUrl: './user-profile.component.scss'
+    selector: 'app-user-profile',
+    imports: [
+        CommonModule, FormsModule, ReactiveFormsModule,
+        MatCardModule, MatFormFieldModule, AutoFocusDirective,
+        MatInputModule, MatButtonModule, NavbarComponent,
+        RouterModule, MatTabsModule, MatNativeDateModule,
+        MatRadioModule, MatSnackBarModule, MatDatepickerModule,
+        MatSelectModule
+    ],
+    templateUrl: './user-profile.component.html',
+    styleUrl: './user-profile.component.scss'
 })
 export class UserProfileComponent implements OnInit {
   private _accountService = inject(AccountService);

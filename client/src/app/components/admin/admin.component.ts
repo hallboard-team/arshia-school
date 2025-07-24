@@ -12,17 +12,16 @@ import { AutoFocusDirective } from '../../directives/auto-focus.directive';
 import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
-  selector: 'app-admin',
-  standalone: true,
-  imports: [
-    CommonModule, FormsModule, ReactiveFormsModule,
-    MatFormFieldModule, MatInputModule, MatButtonModule,
-    MatSnackBarModule, MatRadioModule,
-    MatDatepickerModule, MatNativeDateModule, AutoFocusDirective,
-    MatTabsModule
-  ],
-  templateUrl: './admin.component.html',
-  styleUrl: './admin.component.scss'
+    selector: 'app-admin',
+    imports: [
+        CommonModule, FormsModule, ReactiveFormsModule,
+        MatFormFieldModule, MatInputModule, MatButtonModule,
+        MatSnackBarModule, MatRadioModule,
+        MatDatepickerModule, MatNativeDateModule, AutoFocusDirective,
+        MatTabsModule
+    ],
+    templateUrl: './admin.component.html',
+    styleUrl: './admin.component.scss'
 })
 export class AdminComponent {
 

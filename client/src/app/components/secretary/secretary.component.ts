@@ -12,16 +12,15 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { AutoFocusDirective } from '../../directives/auto-focus.directive';
 
 @Component({
-  selector: 'app-secretary',
-  standalone: true,
-  imports: [
-    MatTabsModule, CommonModule, FormsModule,
-    ReactiveFormsModule, MatFormFieldModule, MatInputModule,
-    MatButtonModule, MatSnackBarModule, MatRadioModule,
-    MatDatepickerModule, MatNativeDateModule, AutoFocusDirective
-  ],
-  templateUrl: './secretary.component.html',
-  styleUrl: './secretary.component.scss'
+    selector: 'app-secretary',
+    imports: [
+        MatTabsModule, CommonModule, FormsModule,
+        ReactiveFormsModule, MatFormFieldModule, MatInputModule,
+        MatButtonModule, MatSnackBarModule, MatRadioModule,
+        MatDatepickerModule, MatNativeDateModule, AutoFocusDirective
+    ],
+    templateUrl: './secretary.component.html',
+    styleUrl: './secretary.component.scss'
 })
 export class SecretaryComponent {
 
