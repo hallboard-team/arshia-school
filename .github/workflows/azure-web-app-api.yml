@@ -60,7 +60,10 @@ jobs:
           app-name: 'school-api'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2706DEB79BA64D12BFFB60412AC994FA }}
+#          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2706DEB79BA64D12BFFB60412AC994FA }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6ADE688D43F2454A922DD09DFD14DEFC }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9491EA51411E45E3991801662A644BFA }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_12052D0712044E37AD3336D2A933C218 }}
 
   cleanup:
     runs-on: ubuntu-latest
