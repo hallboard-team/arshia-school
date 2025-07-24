@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "api", "api\api.csproj", "{A6134779-70DF-4666-9FB7-4932DA2C8492}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "image-processing", "image-processing\image-processing.csproj", "{C45CC0B8-F442-46DD-BB5A-70CB14A2EB42}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "image-processing", "image-processing\image-processing.csproj", "{8BC686E6-9198-4438-9569-D55195FD03A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{A6134779-70DF-4666-9FB7-4932DA2C8492}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6134779-70DF-4666-9FB7-4932DA2C8492}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6134779-70DF-4666-9FB7-4932DA2C8492}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C45CC0B8-F442-46DD-BB5A-70CB14A2EB42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C45CC0B8-F442-46DD-BB5A-70CB14A2EB42}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C45CC0B8-F442-46DD-BB5A-70CB14A2EB42}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C45CC0B8-F442-46DD-BB5A-70CB14A2EB42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BC686E6-9198-4438-9569-D55195FD03A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BC686E6-9198-4438-9569-D55195FD03A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BC686E6-9198-4438-9569-D55195FD03A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BC686E6-9198-4438-9569-D55195FD03A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
