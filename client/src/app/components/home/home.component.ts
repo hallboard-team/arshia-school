@@ -72,8 +72,11 @@ export class HomeComponent implements OnInit {
   };
 
   slides = [
-    { name: 'ارشیا رضایی', course: 'دوره پروژه محور FullStack', image: 'assets/images/profile-icon1.png', description: 'من به تیم شما بابت پشتیبانی عالیتان از وبسایتتان تشکر میکنم. سوالات و مشکلات من به سرعت پاسخ داده میشن و همیشه یه راه حل مناسب برای هر مشکل پیدا میکنید این امر بسیار قابل ارزش است.' },
-    { name: 'ملیکا جعفری', course: 'دوره پروژه محور ICDL', image: 'assets/images/profile-icon2.png', description: 'من به تیم شما بابت پشتیبانی عالیتان از وبسایتتان تشکر میکنم. سوالات و مشکلات من به سرعت پاسخ داده میشن و همیشه یه راه حل مناسب برای هر مشکل پیدا میکنید این امر بسیار قابل ارزش است.' },
+    {
+      name: 'امیرعلی حسین پور', course: 'دوره پروژه محور FullStack', image: 'assets/images/profile-icon1.png',
+      description: 'از بین دوره هایی که گذروندم مثل ICDL, Wordpress, Photoshop دوره FullStack رو دوست درم چون هدفم اینه برنامه نویس بشم، وبه ساده ترین شکل مهاجرت کنم چون پول زیادی در برنامه نویسی هست و نسبت به رشته های دیگه آسون تره'
+    },
+    { name: 'آتنا عطائی', course: 'دوره Wordpress', image: 'assets/images/profile-icon2.png', description: 'دوره وردپرس برای من جذاب بود چون تدریس استاد عالی بود، استاد ملاجان باعث شدن که به وردپرس علاقمند بشم بازار کارش خوبه و درآمد خوبی هم داره' }
   ];
 
   sliderCourses = [
