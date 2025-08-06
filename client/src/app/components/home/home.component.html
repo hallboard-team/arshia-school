@@ -81,7 +81,7 @@
 
         <div class="div-bg-course">
             <div class="div-course">
-                <div class="left-item" [routerLink]="['courses']" routerLinkActive #rla="routerLinkActive">
+                <div class="left-item" [routerLink]="['/courses']" routerLinkActive #rla="routerLinkActive">
                     <mat-icon>north_west</mat-icon>
                 </div>
                 <div class="center-item">
@@ -110,13 +110,13 @@
                 </div>
                 <div class="div-title-course">
                     <div class="right">
-                        <span class="span-done">تکمیل شده</span>
+                        <!-- <span class="span-done">تکمیل شده</span> -->
                         <span class="span-title">دوره پروژه محور</span>
                         <span class="span-title-from-ts">{{sliderCourses.nameTitleCourse}}</span>
                     </div>
 
                     <div class="left">
-                        <div class="bg-icon" [routerLink]="['courses']" routerLinkActive #rla="routerLinkActive">
+                        <div class="bg-icon" [routerLink]="['/courses']" routerLinkActive #rla="routerLinkActive">
                             <mat-icon>chevron_left</mat-icon>
                         </div>
                     </div>
@@ -144,7 +144,7 @@
                         </div>
                     </div>
                     <div class="bottom">
-                        <button class="btn-click-course" [routerLink]="['courses']" routerLinkActive
+                        <button class="btn-click-course" [routerLink]="['/courses']" routerLinkActive
                             #rla="routerLinkActive">
                             <mat-icon class="icon-after-hover">
                                 keyboard_backspace
