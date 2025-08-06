@@ -22,27 +22,27 @@ import { MatSliderModule } from '@angular/material/slider';
 import { FooterComponent } from '../footer/footer.component';
 import { trigger, transition, style, animate } from '@angular/animations';
 @Component({
-    selector: 'app-home',
-    imports: [
-        MatButtonModule, MatIconModule,
-        RouterModule, MatInputModule, MatDividerModule,
-        FormsModule, NavbarComponent, MatMenuModule,
-        MatToolbarModule, MatSliderModule, CommonModule,
-        FooterComponent
-    ],
-    templateUrl: './home.component.html',
-    styleUrl: './home.component.scss',
-    animations: [
-        trigger('slideAnimation', [
-            transition(':enter', [
-                style({ opacity: 0, transform: 'translateX({{ enterFrom }})' }),
-                animate('200ms ease', style({ opacity: 1, transform: 'translateX(0)' }))
-            ], { params: { enterFrom: '100%' } }),
-            transition(':leave', [
-                animate('200ms ease', style({ opacity: 0, transform: 'translateX({{ leaveTo }})' }))
-            ], { params: { leaveTo: '-100%' } })
-        ])
-    ]
+  selector: 'app-home',
+  imports: [
+    MatButtonModule, MatIconModule,
+    RouterModule, MatInputModule, MatDividerModule,
+    FormsModule, NavbarComponent, MatMenuModule,
+    MatToolbarModule, MatSliderModule, CommonModule,
+    FooterComponent
+  ],
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.scss',
+  animations: [
+    trigger('slideAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateX({{ enterFrom }})' }),
+        animate('200ms ease', style({ opacity: 1, transform: 'translateX(0)' }))
+      ], { params: { enterFrom: '100%' } }),
+      transition(':leave', [
+        animate('200ms ease', style({ opacity: 0, transform: 'translateX({{ leaveTo }})' }))
+      ], { params: { leaveTo: '-100%' } })
+    ])
+  ]
 })
 export class HomeComponent implements OnInit {
   private accountService = inject(AccountService);
@@ -72,14 +72,18 @@ export class HomeComponent implements OnInit {
   };
 
   slides = [
-    { name: 'ارشیا رضایی', course: 'دوره پروژه محور FullStack', image: 'assets/images/profile-icon1.png', description: 'من به تیم شما بابت پشتیبانی عالیتان از وبسایتتان تشکر میکنم. سوالات و مشکلات من به سرعت پاسخ داده میشن و همیشه یه راه حل مناسب برای هر مشکل پیدا میکنید این امر بسیار قابل ارزش است.' },
-    { name: 'ملیکا جعفری', course: 'دوره پروژه محور ICDL', image: 'assets/images/profile-icon2.png', description: 'من به تیم شما بابت پشتیبانی عالیتان از وبسایتتان تشکر میکنم. سوالات و مشکلات من به سرعت پاسخ داده میشن و همیشه یه راه حل مناسب برای هر مشکل پیدا میکنید این امر بسیار قابل ارزش است.' },
+    {
+      name: 'امیرعلی حسین پور', course: 'دوره پروژه محور FullStack', image: 'assets/images/profile-icon1.png',
+      description: 'از بین دوره هایی که گذروندم مثل ICDL, Wordpress, Photoshop دوره FullStack رو دوست درم چون هدفم اینه برنامه نویس بشم، وبه ساده ترین شکل مهاجرت کنم چون پول زیادی در برنامه نویسی هست و نسبت به رشته های دیگه آسون تره'
+    },
+    { name: 'آتنا عطائی', course: 'دوره Wordpress', image: 'assets/images/profile-icon2.png', description: 'دوره وردپرس برای من جذاب بود چون تدریس استاد عالی بود، استاد ملاجان باعث شدن که به وردپرس علاقمند بشم بازار کارش خوبه و درآمد خوبی هم داره' }
   ];
 
   sliderCourses = [
-    { nameTitleCourse: 'Full-Stack', image: 'assets/images/background-full-stack3-RS.jpg', chapter: '2', hourse: '300', teacher: ' وحید حیاطی پور' },
-    { nameTitleCourse: 'C#', image: 'assets/images/background-full-stack2.jpg', chapter: '4', hourse: '400', teacher: 'پارسا جعفری' },
-    { nameTitleCourse: 'Angular', image: 'assets/images/background-full-stack4.jpg', chapter: '2', hourse: '200', teacher: 'ارشیا رضایی' },
+    { nameTitleCourse: 'Full-Stack-1', image: 'assets/images/full-stackPhoto.jpg', chapter: '-', hourse: '150', teacher: 'ارشیا رضایی , وحید حیاطی پور' },
+    { nameTitleCourse: 'Full-Stack-2', image: 'assets/images/full-stackPhoto.jpg', chapter: '-', hourse: '150', teacher: 'پارسا جعفری , وحید حیاطی پور' },
+    { nameTitleCourse: 'Wordpress', image: 'assets/images/wordpressPhoto.jpg', chapter: '-', hourse: '60', teacher: 'مهدی ملاجان' },
+    { nameTitleCourse: 'ICDL', image: 'assets/images/icdlPhoto.jpg', chapter: '-', hourse: '65', teacher: 'خانم محمودی' },
   ];
 
   currentIndex = 0;
