@@ -2,7 +2,7 @@ namespace api.Extensions;
 
 public static class ApplicationServiceExtensions
 {
-    public static IServiceCollection AddApplicationService(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddApplicationService(this IServiceCollection services, IConfiguration configuration, IHostEnvironment env)
     {
         #region MongoDbSettings
         ///// get values from this file: appsettings.Development.json /////
@@ -25,8 +25,23 @@ public static class ApplicationServiceExtensions
         #region Cors: baraye ta'eede Angular HttpClient requests
         services.AddCors(options =>
             {
-                options.AddDefaultPolicy(policy =>
-                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200"));
+              if (env.IsDevelopment())
+              {
+                options.AddDefaultPolicy(
+                  policy => policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().
+                    AllowCredentials()
+                );
+              }
+              else
+              {
+                options.AddDefaultPolicy(
+                  policy => policy.WithOrigins(
+                    "https://gray-sand-0000a630f.2.azurestaticapps.net",
+                    "https://domain.com",
+                    "https://www.domain.com"
+                  ).AllowAnyHeader().AllowAnyMethod().AllowCredentials()
+                );
+              }
             });
         #endregion Cors
 

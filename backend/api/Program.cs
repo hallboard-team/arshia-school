@@ -4,7 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddApplicationService(builder.Configuration);
+builder.Services.AddApplicationService(builder.Configuration, builder.Environment);
 builder.Services.AddIdentityService(builder.Configuration);
 builder.Services.AddRepositoryServices();
 
@@ -13,7 +13,7 @@ var app = builder.Build();
 // Used a customized ExceptionMiddleware
 // app.UseMiddleware<ExceptionMiddleware>();
 
-// app.UseHttpsRedirection(); disable https/ssl for development only! 
+// app.UseHttpsRedirection(); disable https/ssl for development only!
 
 app.UseStaticFiles();
 
