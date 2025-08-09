@@ -3,7 +3,7 @@ import { Observable, map, take } from 'rxjs';
 import { LoginUser } from '../models/login-user.model';
 import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { LoggedInUser } from '../models/logged-in-user.model';
 import { ApiResponse } from '../models/helpers/apiResponse.model';
 import { HttpClient } from '@angular/common/http';

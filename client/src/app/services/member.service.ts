@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { MemberParams } from '../models/helpers/member-params';
 import { PaginatedResult } from '../models/helpers/paginatedResult';
 import { Observable } from 'rxjs';

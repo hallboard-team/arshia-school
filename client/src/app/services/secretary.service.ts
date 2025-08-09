@@ -3,7 +3,7 @@ import { inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { LoggedInUser } from '../models/logged-in-user.model';
 import { RegisterUser } from '../models/register-user.model';
 
