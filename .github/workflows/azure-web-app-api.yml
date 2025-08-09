@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Production' # <--- Crucial: This links to the Azure AD Federated Credential
+#      name: 'Production' # <--- Crucial: This links to the Azure AD Federated Credential
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     permissions:
