@@ -35,7 +35,7 @@ jobs:
         run: npm install --legacy-peer-deps # No --prefix needed now
 
       - name: Build and Prerender Angular App
-        run: npx ng build --ssr # Directly call ng build --ssr
+        run: npx ng build --ssr --configuration production # Directly call ng build --ssr
         env:
           NODE_OPTIONS: --max_old_space_size=8192
 
