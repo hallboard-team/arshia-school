@@ -31,7 +31,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.x'
-          include-prerelease: true # Keep this for .NET 9 if it's still in preview
 
       - name: dotnet publish
         # IMPORTANT: Adjust this path if your .sln or .csproj file is not directly in 'backend/'
