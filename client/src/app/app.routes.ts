@@ -31,7 +31,6 @@ import { teacherGuard } from './guards/teacher.guard';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
-    { path: 'home', component: HomeComponent },
 
     // Public Routes (no login required)
     { path: 'about', component: AboutUsComponent },
