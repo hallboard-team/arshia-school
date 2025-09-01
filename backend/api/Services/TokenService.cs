@@ -47,10 +47,9 @@ public class TokenService : ITokenService
     var tokenHandler = new JwtSecurityTokenHandler();
 
     SecurityToken? securityToken = tokenHandler.CreateToken(tokenDescriptor);
-
-    if (securityToken is null) return null;
-
-    return tokenHandler.WriteToken(securityToken);
+    return securityToken is null
+      ? null
+      : tokenHandler.WriteToken(securityToken);
   }
 
   // /// <summary>
