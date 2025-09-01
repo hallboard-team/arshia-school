@@ -106,8 +106,8 @@ public class TokenService : ITokenService
       throw new ArgumentNullException($"{nameof(_tokenValue)}/Signing key is missing.");
 
     byte[] keyBytes = Convert.FromBase64String(tokenValue);
-    var key = new SymmetricSecurityKey(keyBytes);
+    var securityKey = new SymmetricSecurityKey(keyBytes);
 
-    return key ?? throw new ArgumentNullException($"{nameof(key)} cannot be null");
+    return securityKey ?? throw new ArgumentNullException($"{nameof(securityKey)} cannot be null");
   }
 }
