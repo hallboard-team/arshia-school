@@ -18,9 +18,9 @@ public class ManagerRepository : IManagerRepository
     {
         _client = client; // used for Session
         var database = client.GetDatabase(dbSettings.DatabaseName);
-        _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.collectionUsers);
-        _collectionCourse = database.GetCollection<Course>(AppVariablesExtensions.collectionCourses);
-        _collectionAttendence = database.GetCollection<Attendence>(AppVariablesExtensions.collectionAttendences);
+        _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.CollectionUsers);
+        _collectionCourse = database.GetCollection<Course>(AppVariablesExtensions.CollectionCourses);
+        _collectionAttendence = database.GetCollection<Attendence>(AppVariablesExtensions.CollectionAttendences);
 
         _userManager = userManager;
         _tokenService = tokenService;

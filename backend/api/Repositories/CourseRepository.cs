@@ -11,9 +11,9 @@ public class CourseRepository : ICourseRepository
     {
         _client = client;
         var database = client.GetDatabase(dbSettings.DatabaseName);
-        _collectionCourse = database.GetCollection<Course>(AppVariablesExtensions.collectionCourses);
+        _collectionCourse = database.GetCollection<Course>(AppVariablesExtensions.CollectionCourses);
 
-        _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.collectionUsers);
+        _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.CollectionUsers);
     }
     #endregion Vars and Constructor
 

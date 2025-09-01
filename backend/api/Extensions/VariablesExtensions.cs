@@ -3,29 +3,29 @@ namespace api.Extensions;
 public static class AppVariablesExtensions
 {
     public const string TokenKey = "TokenKey";
-    public const string collectionUsers = "users";
-    public const string collectionCourses = "courses";
-    public const string collectionAttendences = "attendences";
-    public const string collectionAttendencesDemo = "attendences";
-    public const string collectionFollows = "follows";
-    public const string collectionExceptionLogs = "exception-logs";
+    public const string CollectionUsers = "users";
+    public const string CollectionCourses = "courses";
+    public const string CollectionAttendences = "attendences";
+    public const string CollectionAttendencesDemo = "attendences";
+    public const string CollectionFollows = "follows";
+    public const string CollectionExceptionLogs = "exception-logs";
 
-    public readonly static string[] AppVersions = ["1", "1.0.2"];
+    public static readonly string[] AppVersions = ["1", "1.0.2"];
 
-    public readonly static AppRole[] roles = [
-            new() {Name = Roles.admin.ToString()},
-            new() {Name = Roles.manager.ToString()},
-            new() {Name = Roles.secretary.ToString()},
-            new() {Name = Roles.teacher.ToString()},
-            new() {Name = Roles.student.ToString()}
+    public static readonly AppRole[] roles = [
+            new() {Name = Roles.Admin.ToString()},
+            new() {Name = Roles.Manager.ToString()},
+            new() {Name = Roles.Secretary.ToString()},
+            new() {Name = Roles.Teacher.ToString()},
+            new() {Name = Roles.Student.ToString()}
         ];
 }
 
 public enum Roles
 {
-    admin,
-    manager,
-    secretary,
-    teacher,
-    student
+    Admin,
+    Manager,
+    Secretary,
+    Teacher,
+    Student
 }

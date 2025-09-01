@@ -23,7 +23,7 @@ public class SeedController : BaseApiController
     public async Task<ActionResult> CreateDummyMembers()
     {
         #region If databaseExists
-        // Stop if database already exists using its status
+        // Stop if a database already exists using its status
         // https://stackoverflow.com/a/53803908/3944285
         var command = "{ dbStats: 1, scale: 1 }";
         var dbStats = await _database.RunCommandAsync<BsonDocument>(command);

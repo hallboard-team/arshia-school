@@ -12,9 +12,9 @@ public class TeacherRepository : ITeacherRepository
     public TeacherRepository(IMongoClient client, ITokenService tokenService, IMyMongoDbSettings dbSettings, UserManager<AppUser> userManager)
     {
         var database = client.GetDatabase(dbSettings.DatabaseName);
-        _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.collectionUsers);
-        _collectionAttendence = database.GetCollection<Attendence>(AppVariablesExtensions.collectionAttendences);
-        _collectionCourse = database.GetCollection<Course>(AppVariablesExtensions.collectionCourses);
+        _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.CollectionUsers);
+        _collectionAttendence = database.GetCollection<Attendence>(AppVariablesExtensions.CollectionAttendences);
+        _collectionCourse = database.GetCollection<Course>(AppVariablesExtensions.CollectionCourses);
 
         _userManager = userManager;
         _tokenService = tokenService;

@@ -10,7 +10,7 @@ public class AdminRepository : IAdminRepository
     public AdminRepository(IMongoClient client, ITokenService tokenService, IMyMongoDbSettings dbSettings, UserManager<AppUser> userManager)
     {
         var database = client.GetDatabase(dbSettings.DatabaseName);
-        _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.collectionUsers);
+        _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.CollectionUsers);
 
         _userManager = userManager;
         _tokenService = tokenService;
