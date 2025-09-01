@@ -2,101 +2,113 @@ namespace api.Services;
 
 public class TokenService : ITokenService
 {
-    private readonly IMongoCollection<AppUser> _collection;
-    private readonly SymmetricSecurityKey? _key;
-    private readonly UserManager<AppUser> _userManager;
+  private readonly IMongoCollection<AppUser> _collection;
+  private readonly string? _tokenValue;
+  private readonly UserManager<AppUser> _userManager;
 
-    public TokenService(IConfiguration config, IMongoClient client, IMyMongoDbSettings dbSettings, UserManager<AppUser> userManager)
+  public TokenService(
+    IConfiguration config, IMongoClient client, IMyMongoDbSettings dbSettings, UserManager<AppUser> userManager
+  )
+  {
+    IMongoDatabase? database = client.GetDatabase(dbSettings.DatabaseName);
+    _collection = database.GetCollection<AppUser>(AppVariablesExtensions.CollectionUsers);
+
+    _tokenValue = config.GetValue<string>(AppVariablesExtensions.TokenKey);
+
+    _userManager = userManager;
+  }
+
+  public async Task<string?> CreateToken(AppUser appUser, CancellationToken cancellationToken)
+  {
+    SymmetricSecurityKey key = GenerateAndGetKey(_tokenValue);
+
+    string? userIdHashed = await GenerateAndStoreHashedId(appUser.Id, cancellationToken);
+
+    if (string.IsNullOrEmpty(userIdHashed))
+      return null;
+
+    var claims = new List<Claim>
     {
-        var database = client.GetDatabase(dbSettings.DatabaseName);
-        _collection = database.GetCollection<AppUser>(AppVariablesExtensions.collectionUsers);
+      new(JwtRegisteredClaimNames.NameId, userIdHashed)
+    };
 
-        string? tokenValue = config.GetValue<string>(AppVariablesExtensions.TokenKey);
+    IList<string>? roles = await _userManager.GetRolesAsync(appUser);
+    claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
-        _ = tokenValue ?? throw new ArgumentNullException("tokenValue cannot be null", nameof(tokenValue));
+    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
-        _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenValue!));
-
-        _userManager = userManager;
-    }
-
-    public async Task<string?> CreateToken(AppUser appUser, CancellationToken cancellationToken)
+    var tokenDescriptor = new SecurityTokenDescriptor
     {
-        _ = _key ?? throw new ArgumentNullException("_key cannot be null", nameof(_key));
+      Subject = new ClaimsIdentity(claims),
+      Expires = DateTime.Now.AddDays(value: 7),
+      SigningCredentials = creds
+    };
 
-        string? userIdHashed = await GenerateAndStoreHashedId(appUser.Id, cancellationToken);
+    var tokenHandler = new JwtSecurityTokenHandler();
 
-        if (string.IsNullOrEmpty(userIdHashed))
-            return null;
+    SecurityToken? securityToken = tokenHandler.CreateToken(tokenDescriptor);
 
-        var claims = new List<Claim> {
-            new Claim(JwtRegisteredClaimNames.NameId, userIdHashed)
-        };
+    if (securityToken is null) return null;
 
-        IList<string>? roles = await _userManager.GetRolesAsync(appUser);
-        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+    return tokenHandler.WriteToken(securityToken);
+  }
 
-        var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
+  // /// <summary>
+  // /// Gets a string hashedUserId of the token and returns the user's actual ObjectId from DB
+  // /// OR returns null if conversion failes.
+  // /// </summary>
+  // /// <param name="userIdHashed"></param>
+  // /// <param name="cancellationToken"></param>
+  // /// <returns>Decrypted AppUser valid ObjedId OR null</returns>
+  public async Task<ObjectId?> GetActualUserIdAsync(string? hashedUserId, CancellationToken cancellationToken)
+  {
+    if (hashedUserId is null) return null;
 
-        var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.Now.AddDays(7),
-            SigningCredentials = creds
-        };
+    ObjectId? userId = await _collection.AsQueryable().Where(appUser => appUser.IdentifierHash == hashedUserId).
+      Select(appUser => appUser.Id).SingleOrDefaultAsync(cancellationToken);
 
-        var tokenHandler = new JwtSecurityTokenHandler();
-
-        SecurityToken? securityToken = tokenHandler.CreateToken(tokenDescriptor);
-
-        if (securityToken is null) return null;
-
-        return tokenHandler.WriteToken(securityToken);
-    }
+    return ValidationsExtensions.ValidateObjectId(userId);
+  }
 
 
-    /// <summary>
-    /// Creates a new ObjectId, hashes it, and stores its value 
-    /// into the appUser's doc using the userId param.
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="cancellationToken"></param>
-    /// <param name="jtiValue"></param>
-    /// <returns>string: identifierHash</returns>
-    private async Task<string?> GenerateAndStoreHashedId(ObjectId userId, CancellationToken cancellationToken, string? jtiValue = null)
-    {
-        string newObjectId = ObjectId.GenerateNewId().ToString();
+  /// <summary>
+  ///   Creates a new ObjectId, hashes it, and stores its value
+  ///   into the appUser's doc using the userId param.
+  /// </summary>
+  /// <param name="userId"></param>
+  /// <param name="cancellationToken"></param>
+  /// <param name="jtiValue"></param>
+  /// <returns>string: identifierHash</returns>
+  private async Task<string?> GenerateAndStoreHashedId(
+    ObjectId userId, CancellationToken cancellationToken, string? jtiValue = null
+  )
+  {
+    var newObjectId = ObjectId.GenerateNewId().ToString();
 
-        string identifierHash = BCrypt.Net.BCrypt.HashPassword(newObjectId);
+    string identifierHash = BCrypt.Net.BCrypt.HashPassword(newObjectId);
 
-        UpdateDefinition<AppUser> updatedSecuredToken = Builders<AppUser>.Update
-            .Set(appUser => appUser.IdentifierHash, identifierHash);
+    UpdateDefinition<AppUser> updatedSecuredToken = Builders<AppUser>.Update.Set(
+      appUser => appUser.IdentifierHash, identifierHash
+    );
 
-        UpdateResult updateResult = await _collection.UpdateOneAsync<AppUser>(appUser =>
-            appUser.Id == userId, updatedSecuredToken, null, cancellationToken);
+    UpdateResult updateResult = await _collection.UpdateOneAsync(
+      appUser => appUser.Id == userId, updatedSecuredToken, options: null, cancellationToken
+    );
 
-        if (updateResult.ModifiedCount == 1)
-            return identifierHash;
+    if (updateResult.ModifiedCount == 1)
+      return identifierHash;
 
-        return null;
-    }
+    return null;
+  }
 
-    // /// <summary>
-    // /// Gets a string hashedUserId of the token and returns the user's actual ObjectId from DB
-    // /// OR returns null if conversion failes.
-    // /// </summary>
-    // /// <param name="userIdHashed"></param>
-    // /// <param name="cancellationToken"></param>
-    // /// <returns>Decrypted AppUser valid ObjedId OR null</returns>
-    public async Task<ObjectId?> GetActualUserIdAsync(string? hashedUserId, CancellationToken cancellationToken)
-    {
-        if (hashedUserId is null) return null;
+  private SymmetricSecurityKey GenerateAndGetKey(string? tokenValue)
+  {
+    if (string.IsNullOrWhiteSpace(tokenValue))
+      throw new ArgumentNullException($"{nameof(_tokenValue)}/Signing key is missing.");
 
-        ObjectId? userId = await _collection.AsQueryable()
-            .Where(appUser => appUser.IdentifierHash == hashedUserId)
-            .Select(appUser => appUser.Id)
-            .SingleOrDefaultAsync(cancellationToken);
+    byte[] keyBytes = Convert.FromBase64String(tokenValue);
+    var key = new SymmetricSecurityKey(keyBytes);
 
-        return ValidationsExtensions.ValidateObjectId(userId);
-    }
+    return key ?? throw new ArgumentNullException($"{nameof(key)} cannot be null");
+  }
 }
