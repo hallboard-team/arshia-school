@@ -1,7 +1,7 @@
-import { Component, inject, OnInit, Signal } from '@angular/core';
+import { Component, inject, OnInit, PLATFORM_ID, Signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
@@ -21,6 +21,7 @@ import { Pagination } from '../../models/helpers/pagination';
 import { MatSliderModule } from '@angular/material/slider';
 import { FooterComponent } from '../footer/footer.component';
 import { trigger, transition, style, animate } from '@angular/animations';
+
 @Component({
   selector: 'app-home',
   imports: [
@@ -47,6 +48,11 @@ import { trigger, transition, style, animate } from '@angular/animations';
 export class HomeComponent implements OnInit {
   private accountService = inject(AccountService);
   public memberService = inject(MemberService);
+  private platformId = inject(PLATFORM_ID);
+  private autoTimerId: any = null;
+
+  autoplayDelay = 4000;
+  loop = true;
 
   loggedInUserSig: Signal<LoggedInUser | null> | undefined;
   courseService = inject(CourseService);
@@ -89,16 +95,54 @@ export class HomeComponent implements OnInit {
   currentIndex = 0;
   currentIndexCourse = 0;
 
-  next() {
+  private startAuto(): void {
+    this.clearAuto();
+    this.autoTimerId = setInterval(() => {
+      this.next(true);
+    }, this.autoplayDelay);
+  }
+
+  private clearAuto(): void {
+    if (this.autoTimerId) {
+      clearInterval(this.autoTimerId);
+      this.autoTimerId = null;
+    }
+  }
+
+  pauseAuto(): void {
+    this.clearAuto();
+  }
+
+  resumeAuto(): void {
+    if (isPlatformBrowser(this.platformId) && !this.autoTimerId) {
+      this.startAuto();
+    }
+  }
+
+  private handleVisibility = () => {
+    if (document.hidden) this.pauseAuto();
+    else this.resumeAuto();
+  };
+
+  next(fromAuto = false) {
     if (this.currentIndex < this.slides.length - 1) {
       this.currentIndex++;
+    } else if (this.loop) {
+      this.currentIndex = 0;
+    }
+
+    if (!fromAuto) {
+      this.startAuto();
     }
   }
 
   prev() {
     if (this.currentIndex > 0) {
       this.currentIndex--;
+    } else if (this.loop) {
+      this.currentIndex = this.slides.length - 1;
     }
+    this.startAuto();
   }
 
   setDirection(dir: 'next' | 'prev') {

@@ -180,9 +180,8 @@
             </div>
         </div>
 
-        <div class="slider-wrapper">
-            <button class="button-nav" [disabled]="currentIndex === 0" [class.disabled]="currentIndex === 0"
-                (click)="prev()">❮</button>
+        <div class="slider-wrapper" (mouseenter)="pauseAuto()" (mouseleave)="resumeAuto()">
+            <button class="button-nav" (click)="prev()">❮</button>
 
             <div class="slider-window">
                 <div class="slide-track" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
@@ -201,9 +200,9 @@
                 </div>
             </div>
 
-            <button class="button-nav" [disabled]="currentIndex === slides.length - 1"
-                [class.disabled]="currentIndex === slides.length - 1" (click)="next()">❯</button>
+            <button class="button-nav" (click)="next()">❯</button>
         </div>
+
     </section>
 
     <div class="div-footer">
