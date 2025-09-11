@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { LoggedInUser } from '../../../models/logged-in-user.model';
 import { Router } from '@angular/router';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AutoFocusDirective } from '../../../directives/auto-focus.directive';
 import { AccountService } from '../../../services/account.service';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -15,20 +15,21 @@ import { NavbarComponent } from '../../navbar/navbar.component';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-    selector: 'app-login',
-    imports: [
-        CommonModule, FormsModule, ReactiveFormsModule,
-        MatFormFieldModule, MatInputModule, MatButtonModule,
-        MatSnackBarModule, AutoFocusDirective, MatTabsModule,
-        NavbarComponent, MatIconModule
-    ],
-    templateUrl: './login.component.html',
-    styleUrl: './login.component.scss'
+  selector: 'app-login',
+  imports: [
+    CommonModule, FormsModule, ReactiveFormsModule,
+    MatFormFieldModule, MatInputModule, MatButtonModule,
+    MatSnackBarModule, AutoFocusDirective, MatTabsModule,
+    NavbarComponent, MatIconModule
+  ],
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss'
 })
 export class LoginComponent {
   accountService = inject(AccountService);
   fb = inject(FormBuilder);
   private router = inject(Router);
+  private snack = inject(MatSnackBar);
 
   wrongUsernameOrPassword: string | undefined;
   hidePassword: boolean = true;
@@ -57,7 +58,23 @@ export class LoginComponent {
         console.log(LoggedInUser);
       },
       error: err => {
+        let msg = err?.error?.message ?? err?.error;
+
+        if (msg === 'Wrong email or password') {
+          msg = 'ایمیل یا رمز عبور نادرست است';
+        }
+
+        msg ||= 'خطا در ورود، دوباره تلاش کنید';
+
         this.wrongUsernameOrPassword = err.error;
+
+        this.snack.open(msg, 'باشه', {
+          duration: 4000,
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          panelClass: ['snack-error'],
+          direction: 'rtl'
+        });
       }
     })
   }
