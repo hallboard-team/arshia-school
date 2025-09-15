@@ -71,7 +71,7 @@ export class LoginComponent {
         this.snack.open(msg, 'باشه', {
           duration: 4000,
           horizontalPosition: 'center',
-          verticalPosition: 'bottom',
+          verticalPosition: 'top',
           panelClass: ['snack-error'],
           direction: 'rtl'
         });
