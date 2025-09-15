@@ -68,8 +68,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loggedInUserSig = this.accountService.loggedInUserSig;
-
-    console.log('THE LOGGED-IN USER:', this.loggedInUserSig()?.userName);
   }
 
   direction: { value: string, params: { enterFrom: string, leaveTo: string } } = {
