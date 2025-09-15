@@ -17,15 +17,15 @@ import { UserProfile } from '../../models/user-profile.model';
 import { BackForwardButtonComponent } from '../back-forward-button/back-forward-button.component';
 
 @Component({
-    selector: 'app-navbar',
-    imports: [
-        CommonModule, RouterModule, NgOptimizedImage,
-        MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule,
-        MatDividerModule, MatListModule, MatTabsModule,
-        MatSlideToggleModule, FormsModule, BackForwardButtonComponent
-    ],
-    templateUrl: './navbar.component.html',
-    styleUrl: './navbar.component.scss'
+  selector: 'app-navbar',
+  imports: [
+    CommonModule, RouterModule, NgOptimizedImage,
+    MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule,
+    MatDividerModule, MatListModule, MatTabsModule,
+    MatSlideToggleModule, FormsModule, BackForwardButtonComponent
+  ],
+  templateUrl: './navbar.component.html',
+  styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent {
   public accountService = inject(AccountService);
