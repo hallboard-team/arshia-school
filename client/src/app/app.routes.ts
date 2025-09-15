@@ -28,6 +28,7 @@ import { managerGuard } from './guards/manager.guard';
 import { secretaryGuard } from './guards/secretary.guard';
 import { studentGuard } from './guards/student.guard';
 import { teacherGuard } from './guards/teacher.guard';
+import { RecoveryComponent } from './components/recovery/recovery.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -37,6 +38,7 @@ export const routes: Routes = [
     { path: 'about', component: AboutUsComponent },
     { path: 'contact-us', component: ContactUsComponent },
     { path: 'courses', component: CourseListComponent },
+    { path: 'recovery', component: RecoveryComponent },
 
     // Authentication Required Routes
     {
