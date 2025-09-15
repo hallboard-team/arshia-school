@@ -1,0 +1,128 @@
+.uc {
+    min-height: 100dvh;
+    padding: clamp(16px, 4vw, 24px);
+}
+
+.uc__card {
+    width: min(640px, 96vw);
+    padding: clamp(16px, 5vw, 32px);
+    border-radius: clamp(14px, 3vw, 20px);
+}
+
+.uc__icon {
+    width: clamp(64px, 16vw, 96px);
+    height: clamp(64px, 16vw, 96px);
+    margin-bottom: clamp(12px, 3vw, 18px);
+}
+
+.uc__title {
+    font-size: clamp(18px, 5vw, 28px);
+    margin: 6px 0 4px;
+}
+
+.uc__subtitle {
+    font-size: clamp(13px, 3.6vw, 16px);
+    line-height: 1.8;
+    margin: 0 auto clamp(14px, 3.6vw, 18px);
+    max-width: 60ch;
+}
+
+.uc__progress {
+    height: clamp(8px, 2.2vw, 10px);
+    margin: clamp(14px, 3.6vw, 18px) auto clamp(6px, 2vw, 8px);
+    max-width: min(420px, 86vw);
+}
+
+.uc__actions {
+    margin-top: clamp(14px, 3.6vw, 18px);
+    gap: clamp(8px, 2.4vw, 12px);
+    padding-inline: 2px;
+}
+
+.btn {
+    min-height: 44px;
+    padding: 10px clamp(12px, 3.6vw, 16px);
+    border-radius: clamp(10px, 2.8vw, 12px);
+    font-size: clamp(14px, 3.8vw, 16px);
+    flex: 1 1 auto;
+    max-width: 360px;
+
+    @media (max-width: 480px) {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+.uc__tape {
+    bottom: env(safe-area-inset-bottom, 8px);
+
+    span {
+        padding: 6px clamp(6px, 2.4vw, 10px);
+        margin: 0 clamp(2px, 1.2vw, 4px);
+        font-size: clamp(10px, 3vw, 12px);
+        border-radius: clamp(6px, 1.6vw, 8px);
+    }
+
+    @media (max-height: 520px) {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) {
+    .uc__card {
+        width: min(720px, 92vw);
+    }
+
+    .uc__actions {
+        justify-content: center;
+    }
+
+    .btn {
+        flex: 0 0 auto;
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    .uc {
+        --bg: var(--background, #f7fafc);
+        --text: var(--foreground, #0f172a);
+        --card: rgba(15, 23, 42, 0.04);
+        --ring: rgba(30, 144, 255, 0.25);
+    }
+
+    .btn--ghost {
+        border-color: rgba(15, 23, 42, 0.16);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .uc__icon,
+    .uc__bar,
+    .uc__card {
+        animation: none !important;
+    }
+}
+
+@media (forced-colors: active) {
+
+    .uc__card,
+    .btn,
+    .btn--ghost,
+    .uc__progress {
+        border: 1px solid ButtonText;
+    }
+
+    .btn {
+        background: ButtonFace;
+        color: ButtonText;
+    }
+
+    .uc__progress {
+        background: Canvas;
+    }
+}
+
+:host([dir="ltr"]) .uc {
+    direction: ltr;
+}
