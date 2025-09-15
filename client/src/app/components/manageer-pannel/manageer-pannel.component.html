@@ -15,7 +15,7 @@
 
             <mat-radio-group class="radio-group" aria-label="Select an option" formControlName="genderCtrl">
               <mat-radio-button class="radio-button" value="male">مرد</mat-radio-button>
-              <mat-radio-button class="radio-button" value="femaile">زن</mat-radio-button>
+              <mat-radio-button class="radio-button" value="female">زن</mat-radio-button>
             </mat-radio-group>
           </div>
 
@@ -89,10 +89,6 @@
           <div class="div-btn-add">
             <button type="submit" [disabled]="addSecretaryFg.invalid" mat-raised-button color="primary">ثبت نام</button>
           </div>
-
-          <mat-error *ngIf="passowrdsNotMatch" class="mat-caption mat-warn">
-            رمز عبور و تکرار آن یکسان نیستند.
-          </mat-error>
         </div>
       </form>
     </mat-tab>
@@ -104,7 +100,7 @@
             <span class="title">ثبت نام دانشجو</span>
             <mat-radio-group class="radio-group" aria-label="Select an option" formControlName="genderCtrl">
               <mat-radio-button class="radio-button" value="male">مرد</mat-radio-button>
-              <mat-radio-button class="radio-button" value="femaile">زن</mat-radio-button>
+              <mat-radio-button class="radio-button" value="female">زن</mat-radio-button>
             </mat-radio-group>
           </div>
 
@@ -173,10 +169,6 @@
             [uiTodayBtnEnable]="uiTodayBtnEnable">
           </ng-persian-datepicker>
 
-          <mat-error *ngIf="passowrdsNotMatch" class="text-danger text-center">رمز عبور و تکرار آن یکسان
-            نیستند.
-          </mat-error>
-
           <div class="div-btn-add">
             <button type="submit" [disabled]="addStudentFg.invalid" mat-raised-button color="primary">ثبت نام</button>
           </div>
@@ -193,7 +185,7 @@
 
             <mat-radio-group class="radio-group" aria-label="Select an option" formControlName="genderCtrl">
               <mat-radio-button class="radio-button" value="male">مرد</mat-radio-button>
-              <mat-radio-button class="radio-button" value="femaile">زن</mat-radio-button>
+              <mat-radio-button class="radio-button" value="female">زن</mat-radio-button>
             </mat-radio-group>
           </div>
 
@@ -201,8 +193,8 @@
             <mat-label>ایمیل</mat-label>
             <input class="input" autoFocusDir type="email" formControlName="emailCtrl" matInput>
             <mat-hint>ایمیل خودرا وارد کنید</mat-hint>
-            <mat-error *ngIf="TeacherNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
-            <mat-error *ngIf="TeacherNameCtrl.hasError('pattern')">ایمیل رو به درستی وارد کنید</mat-error>
+            <mat-error *ngIf="TeacherEmailCtrl.hasError('required')">این فیلد الزامی است</mat-error>
+            <mat-error *ngIf="TeacherEmailCtrl.hasError('pattern')">ایمیل را به‌درستی وارد کنید</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
