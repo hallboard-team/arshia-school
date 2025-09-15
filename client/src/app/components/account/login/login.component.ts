@@ -54,28 +54,33 @@ export class LoginComponent {
     }
 
     this.accountService.loginUser(loginUser).subscribe({
-      next: (LoggedInUser: LoggedInUser | null) => {
-        console.log(LoggedInUser);
+      next: (loggedIn: LoggedInUser | null) => {
+        if (loggedIn) {
+          this.snack.open(`خوش آمدی ${loggedIn.userName} !`, 'باشه', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['snack-success'],
+            direction: 'rtl',
+          });
+          this.router.navigateByUrl('/');
+        }
       },
       error: err => {
         let msg = err?.error?.message ?? err?.error;
-
-        if (msg === 'Wrong email or password') {
-          msg = 'ایمیل یا رمز عبور نادرست است';
-        }
-
+        if (msg === 'Wrong email or password') msg = 'ایمیل یا رمز عبور نادرست است';
         msg ||= 'خطا در ورود، دوباره تلاش کنید';
 
-        this.wrongUsernameOrPassword = err.error;
+        this.wrongUsernameOrPassword = err?.error;
 
         this.snack.open(msg, 'باشه', {
           duration: 4000,
           horizontalPosition: 'center',
-          verticalPosition: 'bottom',
+          verticalPosition: 'top',
           panelClass: ['snack-error'],
-          direction: 'rtl'
+          direction: 'rtl',
         });
       }
-    })
+    });
   }
 }
