@@ -27,7 +27,7 @@ export class AccountService {
       map(userResponse => {
         if (userResponse) {
           this.setCurrentUser(userResponse);
-          this.navigateToReturnUrl();
+          this.navigateAfterLogin(userResponse);
 
           this.snack.open(`خوش آمدی ${userResponse.userName} !`, 'باشه', {
             duration: 3000,
@@ -39,7 +39,6 @@ export class AccountService {
 
           return userResponse;
         }
-
         return null;
       })
     );
@@ -89,15 +88,40 @@ export class AccountService {
     });
   }
 
-  private navigateToReturnUrl(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const returnUrl = localStorage.getItem('returnUrl');
-      if (returnUrl) {
-        this.router.navigate([returnUrl]);
-      } else {
-        this.router.navigate(['home']);
-      }
+  private navigateAfterLogin(user: LoggedInUser): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    const returnUrl = localStorage.getItem('returnUrl');
+    if (returnUrl) {
+      this.router.navigate([returnUrl]);
       localStorage.removeItem('returnUrl');
+      return;
+    }
+
+    const target = this.getDefaultDashboardPath(user);
+    this.router.navigate([target]);
+  }
+
+  private getDefaultDashboardPath(user: LoggedInUser): string {
+    const roles = (user.roles || []).map(r => r?.toLowerCase());
+
+    if (roles.includes('manager')) return '/manager-panel';
+    if (roles.includes('teacher')) return '/teacher-panel';
+    if (roles.includes('secretary')) return '/secretary-panel';
+    // if (roles.includes('student')) return `/enrolled-course/${user.userName}`;
+
+    return '/profile';
+  }
+
+  private navigateToReturnUrl(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    const returnUrl = localStorage.getItem('returnUrl');
+    if (returnUrl) {
+      this.router.navigate([returnUrl]);
+      localStorage.removeItem('returnUrl');
+    } else {
+      this.router.navigate(['home']);
     }
   }
 }

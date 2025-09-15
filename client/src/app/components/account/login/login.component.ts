@@ -54,9 +54,6 @@ export class LoginComponent {
     }
 
     this.accountService.loginUser(loginUser).subscribe({
-      next: (loggedInUser: LoggedInUser | null) => {
-        console.log('Logged in as:', loggedInUser?.userName);
-      },
       error: err => {
         let msg = err?.error?.message ?? err?.error;
 
