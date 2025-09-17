@@ -14,7 +14,13 @@ export const authLoggedInGuard: CanActivateFn = (route, state) => {
 
       router.navigate(['home']);
 
-      snackbar.open('You are already logged in', 'Close', { horizontalPosition: 'center', duration: 7000 })
+      snackbar.open('شما قبلاً وارد شده‌اید', 'باشه', {
+        duration: 4000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['snack-info'],
+        direction: 'rtl'
+      });
 
       return false; // Block the component
     }
