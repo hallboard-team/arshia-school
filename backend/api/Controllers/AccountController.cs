@@ -12,7 +12,7 @@ public class AccountController(IAccountRepository _accountRepository) : BaseApiC
         return !string.IsNullOrEmpty(loggedInDto.Token)
             ? Ok(loggedInDto)
             : loggedInDto.IsWrongCreds //inja shart BadRequest ro minevisim
-            ? BadRequest("Wrong email or password")
+            ? Unauthorized("Wrong email or password")
             : BadRequest("Registration has failed try again.");
     }
 
