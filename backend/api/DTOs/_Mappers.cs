@@ -30,6 +30,20 @@ public static class Mappers
         };
     }
 
+    public static RegisteredUserDto ConvertAppUserToRegisteredDto(AppUser appUser)
+    {
+        return new RegisteredUserDto
+        {
+            UserName = appUser.UserName,
+            Email = appUser.Email,
+            Name = appUser.Name,
+            LastName = appUser.LastName,
+            PhoneNum = appUser.PhoneNum,
+            Gender = appUser.Gender,
+            DateOfBirth = appUser.DateOfBirth
+        };
+    }
+
     public static MemberDto ConvertAppUserToMemberDto(AppUser appUser, bool isAbsent)
     {
         return new MemberDto(

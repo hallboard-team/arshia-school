@@ -69,167 +69,156 @@ public class ManagerRepository : IManagerRepository
         return newUserName;
     }
 
-    public async Task<LoggedInDto?> CreateSecretaryAsync(RegisterDto registerDto, CancellationToken cancellationToken)
+    public async Task<RegisteredUserDto?> CreateSecretaryAsync(RegisterDto registerDto, CancellationToken cancellationToken)
     {
-        LoggedInDto loggedInDto = new();
+        var dto = new RegisteredUserDto();
 
-        bool doasePhoneNumEixst = await _collectionAppUser
+        var existingByEmail = await _userManager.FindByEmailAsync(registerDto.Email);
+        if (existingByEmail is not null)
+        {
+            dto.Errors.Add("این ایمیل قبلاً ثبت شده است.");
+            return dto;
+        }
+
+        bool doesPhoneNumExist = await _collectionAppUser
             .Find<AppUser>(doc => doc.PhoneNum == registerDto.PhoneNum)
             .AnyAsync(cancellationToken);
-
-        if (doasePhoneNumEixst)
+        if (doesPhoneNumExist)
         {
-            loggedInDto.Errors.Add("شماره تلفن وارد شده قبلاً ثبت شده است.");
-            return loggedInDto;
+            dto.Errors.Add("شماره تلفن وارد شده قبلاً ثبت شده است.");
+            return dto;
         }
 
         string uniqueUsername = await GenerateUniqueUsernameAsync(cancellationToken);
 
-        AppUser appUser = new AppUser
+        var appUser = new AppUser
         {
             Email = registerDto.Email,
             UserName = uniqueUsername,
             DateOfBirth = registerDto.DateOfBirth,
-            Name = registerDto.Name.Trim(),
-            LastName = registerDto.LastName.Trim(),
+            Name = registerDto.Name?.Trim(),
+            LastName = registerDto.LastName?.Trim(),
             PhoneNum = registerDto.PhoneNum,
-            Gender = registerDto.Gender.ToLower()
+            Gender = registerDto.Gender?.ToLower()
         };
 
-        IdentityResult? userCreatedResult = await _userManager.CreateAsync(appUser, registerDto.Password);
-
-        if (userCreatedResult.Succeeded)
+        var createRes = await _userManager.CreateAsync(appUser, registerDto.Password);
+        if (!createRes.Succeeded)
         {
-            IdentityResult? roleResult = await _userManager.AddToRoleAsync(appUser, "secretary");
-
-            if (!roleResult.Succeeded)
-                return loggedInDto;
-
-            string? token = await _tokenService.CreateToken(appUser, cancellationToken);
-
-            if (!string.IsNullOrEmpty(token))
-            {
-                return Mappers.ConvertAppUserToLoggedInDto(appUser, token);
-            }
-        }
-        else
-        {
-            foreach (IdentityError error in userCreatedResult.Errors)
-            {
-                loggedInDto.Errors.Add(error.Description);
-            }
+            foreach (var e in createRes.Errors) dto.Errors.Add(e.Description);
+            return dto;
         }
 
-        return loggedInDto;
+        var roleRes = await _userManager.AddToRoleAsync(appUser, "secretary");
+        if (!roleRes.Succeeded)
+        {
+            foreach (var e in roleRes.Errors) dto.Errors.Add(e.Description);
+            return dto;
+        }
+
+        return Mappers.ConvertAppUserToRegisteredDto(appUser);
     }
 
-    public async Task<LoggedInDto?> CreateStudentAsync(RegisterDto registerDto, CancellationToken cancellationToken)
+    public async Task<RegisteredUserDto?> CreateStudentAsync(RegisterDto registerDto, CancellationToken cancellationToken)
     {
-        LoggedInDto loggedInDto = new();
+        var dto = new RegisteredUserDto();
 
-        bool doasePhoneNumEixst = await _collectionAppUser
+        var existingByEmail = await _userManager.FindByEmailAsync(registerDto.Email);
+        if (existingByEmail is not null)
+        {
+            dto.Errors.Add("این ایمیل قبلاً ثبت شده است.");
+            return dto;
+        }
+
+        bool doesPhoneNumExist = await _collectionAppUser
             .Find<AppUser>(doc => doc.PhoneNum == registerDto.PhoneNum)
             .AnyAsync(cancellationToken);
-
-        if (doasePhoneNumEixst)
+        if (doesPhoneNumExist)
         {
-            loggedInDto.Errors.Add("شماره تلفن وارد شده قبلاً ثبت شده است.");
-            return loggedInDto;
+            dto.Errors.Add("شماره تلفن وارد شده قبلاً ثبت شده است.");
+            return dto;
         }
 
         string uniqueUsername = await GenerateUniqueUsernameAsync(cancellationToken);
 
-        AppUser appUser = new AppUser
+        var appUser = new AppUser
         {
             Email = registerDto.Email,
             UserName = uniqueUsername,
             DateOfBirth = registerDto.DateOfBirth,
-            Name = registerDto.Name.Trim(),
-            LastName = registerDto.LastName.Trim(),
+            Name = registerDto.Name?.Trim(),
+            LastName = registerDto.LastName?.Trim(),
             PhoneNum = registerDto.PhoneNum,
-            Gender = registerDto.Gender.ToLower()
+            Gender = registerDto.Gender?.ToLower()
         };
 
-        IdentityResult? userCreatedResult = await _userManager.CreateAsync(appUser, registerDto.Password);
-
-        if (userCreatedResult.Succeeded)
+        var createRes = await _userManager.CreateAsync(appUser, registerDto.Password);
+        if (!createRes.Succeeded)
         {
-            IdentityResult? roleResult = await _userManager.AddToRoleAsync(appUser, "student");
-
-            if (!roleResult.Succeeded)
-                return loggedInDto;
-
-            string? token = await _tokenService.CreateToken(appUser, cancellationToken);
-
-            if (!string.IsNullOrEmpty(token))
-            {
-                return Mappers.ConvertAppUserToLoggedInDto(appUser, token);
-            }
-        }
-        else
-        {
-            foreach (IdentityError error in userCreatedResult.Errors)
-            {
-                loggedInDto.Errors.Add(error.Description);
-            }
+            foreach (var e in createRes.Errors) dto.Errors.Add(e.Description);
+            return dto;
         }
 
-        return loggedInDto;
+        var roleRes = await _userManager.AddToRoleAsync(appUser, "student");
+        if (!roleRes.Succeeded)
+        {
+            foreach (var e in roleRes.Errors) dto.Errors.Add(e.Description);
+            return dto;
+        }
+
+        return Mappers.ConvertAppUserToRegisteredDto(appUser);
     }
 
-    public async Task<LoggedInDto?> CreateTeacherAsync(RegisterDto registerDto, CancellationToken cancellationToken)
+    public async Task<RegisteredUserDto?> CreateTeacherAsync(RegisterDto registerDto, CancellationToken cancellationToken)
     {
-        LoggedInDto loggedInDto = new();
+        var dto = new RegisteredUserDto();
 
-        bool doasePhoneNumEixst = await _collectionAppUser
+        var existingByEmail = await _userManager.FindByEmailAsync(registerDto.Email);
+        if (existingByEmail is not null)
+        {
+            dto.Errors.Add("این ایمیل قبلاً ثبت شده است.");
+            return dto;
+        }
+
+        bool doesPhoneNumExist = await _collectionAppUser
             .Find<AppUser>(doc => doc.PhoneNum == registerDto.PhoneNum)
             .AnyAsync(cancellationToken);
-
-        if (doasePhoneNumEixst)
+        if (doesPhoneNumExist)
         {
-            loggedInDto.Errors.Add("شماره تلفن وارد شده قبلاً ثبت شده است.");
-            return loggedInDto;
+            dto.Errors.Add("شماره تلفن وارد شده قبلاً ثبت شده است.");
+            return dto;
         }
 
         string uniqueUsername = await GenerateUniqueUsernameAsync(cancellationToken);
 
-        AppUser appUser = new AppUser
+        var appUser = new AppUser
         {
             Email = registerDto.Email,
             UserName = uniqueUsername,
             DateOfBirth = registerDto.DateOfBirth,
-            Name = registerDto.Name.Trim(),
-            LastName = registerDto.LastName.Trim(),
+            Name = registerDto.Name?.Trim(),
+            LastName = registerDto.LastName?.Trim(),
             PhoneNum = registerDto.PhoneNum,
-            Gender = registerDto.Gender.ToLower()
+            Gender = registerDto.Gender?.ToLower()
         };
 
-        IdentityResult? userCreatedResult = await _userManager.CreateAsync(appUser, registerDto.Password);
-
-        if (userCreatedResult.Succeeded)
+        var createRes = await _userManager.CreateAsync(appUser, registerDto.Password);
+        if (!createRes.Succeeded)
         {
-            IdentityResult? roleResult = await _userManager.AddToRoleAsync(appUser, "teacher");
-
-            if (!roleResult.Succeeded)
-                return loggedInDto;
-
-            string? token = await _tokenService.CreateToken(appUser, cancellationToken);
-
-            if (!string.IsNullOrEmpty(token))
-            {
-                return Mappers.ConvertAppUserToLoggedInDto(appUser, token);
-            }
-        }
-        else
-        {
-            foreach (IdentityError error in userCreatedResult.Errors)
-            {
-                loggedInDto.Errors.Add(error.Description);
-            }
+            foreach (var e in createRes.Errors) dto.Errors.Add(e.Description);
+            return dto;
         }
 
-        return loggedInDto;
+        var roleRes = await _userManager.AddToRoleAsync(appUser, "teacher");
+        if (!roleRes.Succeeded)
+        {
+            foreach (var e in roleRes.Errors) dto.Errors.Add(e.Description);
+            return dto;
+        }
+
+        return Mappers.ConvertAppUserToRegisteredDto(appUser);
     }
+
 
     public async Task<AppUser?> GetByIdAsync(ObjectId? userId, CancellationToken cancellationToken)
     {
