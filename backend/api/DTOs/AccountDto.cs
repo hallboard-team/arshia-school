@@ -12,6 +12,18 @@ public record RegisterDto(
     string Gender
 );
 
+public class RegisteredUserDto
+{
+    public string? Email { get; init; }
+    public string? UserName { get; init; }
+    public string? Name { get; init; }
+    public string? LastName { get; init; }
+    public string? PhoneNum { get; init; }
+    public string? Gender { get; init; }
+    public DateOnly DateOfBirth { get; init; }
+    public List<string> Errors { get; init; } = [];
+}
+
 public record LoginDto(
     [MaxLength(50), RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$", ErrorMessage ="فرمت ایمیل درست وارد نشده")]
     string Email,

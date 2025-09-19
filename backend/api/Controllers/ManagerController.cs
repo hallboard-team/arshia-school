@@ -4,48 +4,49 @@ namespace api.Controllers;
 public class ManagerController(IManagerRepository _managerRepository, ITokenService _tokenService) : BaseApiController
 {
     [HttpPost("create-secretary")]
-    public async Task<ActionResult<LoggedInDto>> CreateSecretary(RegisterDto managerInput, CancellationToken cancellationToken)
+    public async Task<ActionResult<RegisteredUserDto>> CreateSecretary(RegisterDto managerInput, CancellationToken cancellationToken)
     {
         if (managerInput.Password != managerInput.ConfirmPassword)
-            return BadRequest("پسوردها درست نیستند");
+            return BadRequest("رمز عبور و تکرار آن یکسان نیست.");
 
-        LoggedInDto? loggedInDto = await _managerRepository.CreateSecretaryAsync(managerInput, cancellationToken);
+        RegisteredUserDto? dto = await _managerRepository.CreateSecretaryAsync(managerInput, cancellationToken);
 
-        return !string.IsNullOrEmpty(loggedInDto.Token)
-            ? Ok(loggedInDto)
-            : loggedInDto.Errors.Count != 0
-            ? BadRequest(loggedInDto.Errors)
-            : BadRequest("Registration has failed. Try again or contact the support.");
+        if (dto is null)
+            return BadRequest("خطا در ثبت‌نام منشی.");
+
+        if (dto.Errors is { Count: > 0 })
+            return BadRequest(dto.Errors);
+
+        return Ok(dto);
     }
 
     [HttpPost("create-student")]
-    public async Task<ActionResult<LoggedInDto>> CreateStudent(RegisterDto managerInput, CancellationToken cancellationToken)
+    public async Task<ActionResult<RegisteredUserDto>> CreateStudent(RegisterDto managerInput, CancellationToken cancellationToken)
     {
         if (managerInput.Password != managerInput.ConfirmPassword)
-            return BadRequest("پسوردها درست نیستند");
+            return BadRequest("رمز عبور و تکرار آن یکسان نیست.");
 
-        LoggedInDto? loggedInDto = await _managerRepository.CreateStudentAsync(managerInput, cancellationToken);
+        RegisteredUserDto dto = await _managerRepository.CreateStudentAsync(managerInput, cancellationToken);
 
-        return !string.IsNullOrEmpty(loggedInDto.Token)
-            ? Ok(loggedInDto)
-            : loggedInDto.Errors.Count != 0
-            ? BadRequest(loggedInDto.Errors)
-            : BadRequest("Registration has failed. Try again or contact the support.");
+        if (dto.Errors.Count > 0) return BadRequest(dto.Errors);
+        return Ok(dto);
     }
 
     [HttpPost("create-teacher")]
-    public async Task<ActionResult<LoggedInDto>> CreateTeacher(RegisterDto managerInput, CancellationToken cancellationToken)
+    public async Task<ActionResult<RegisteredUserDto>> CreateTeacher(RegisterDto managerInput, CancellationToken cancellationToken)
     {
         if (managerInput.Password != managerInput.ConfirmPassword)
-            return BadRequest("پسوردها درست نیستند");
+            return BadRequest("رمز عبور و تکرار آن یکسان نیست.");
 
-        LoggedInDto? loggedInDto = await _managerRepository.CreateTeacherAsync(managerInput, cancellationToken);
+        RegisteredUserDto? dto = await _managerRepository.CreateTeacherAsync(managerInput, cancellationToken);
 
-        return !string.IsNullOrEmpty(loggedInDto.Token)
-            ? Ok(loggedInDto)
-            : loggedInDto.Errors.Count != 0
-            ? BadRequest(loggedInDto.Errors)
-            : BadRequest("Registration has failed. Try again or contact the support.");
+        if (dto is null)
+            return BadRequest("خطا در ثبت‌نام مدرس.");
+
+        if (dto.Errors is { Count: > 0 })
+            return BadRequest(dto.Errors);
+
+        return Ok(dto);
     }
 
     [HttpGet]
