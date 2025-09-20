@@ -26,7 +26,9 @@
         </button>
     </div>
 
-    <div class="hamburger-menu">
+    <div class="backdrop" *ngIf="showMobileMenu" (click)="closeMenu()"></div>
+
+    <div class="hamburger-menu" *ngIf="showMobileMenu" (click)="$event.stopPropagation()">
         <div class="top">
             <button class="Btn" (click)="closeMenu()">
                 <div class="sign">
@@ -56,7 +58,7 @@
     <section class="left">
         <div class="div-btns">
             @if (loggedInUserSig && loggedInUserSig(); as user) {
-            <button class="profile" (click)="openProfile()">
+            <button class="profile" (click)="toggleProfile($event)">
                 <span>{{loggedInUserSig()?.name?.charAt(0)?.toUpperCase()}}</span>
             </button>
             }
@@ -66,7 +68,9 @@
             </button>
             }
 
-            <div class="div-open-profile" *ngIf="showProfile">
+            <div class="profile-backdrop" *ngIf="showProfile" (click)="closeProfile()"></div>
+
+            <div class="div-open-profile" *ngIf="showProfile" #profilePanel (click)="$event.stopPropagation()">
                 <div class="div-button-back-page">
                     <button class="back-to-page" (click)="closeProfile()">
                         <mat-icon>close</mat-icon>

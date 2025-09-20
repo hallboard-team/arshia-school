@@ -47,6 +47,9 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   minDate = new Date();
   maxDate = new Date();
 
+  minDobTs!: number;
+  maxDobTs!: number;
+
   passowrdsNotMatch: boolean | undefined;
   loggedInUser: LoggedInUser | null | undefined;
 
@@ -73,9 +76,18 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const currentYear = new Date().getFullYear();
-    this.minDate = new Date(currentYear - 99, 0, 1);
-    this.maxDate = new Date(currentYear - 15, 0, 1);
+    const today = new Date();
+
+    const maxDob = new Date(
+      today.getFullYear() - 11, today.getMonth(), today.getDate()
+    );
+
+    const minDob = new Date(
+      today.getFullYear() - 99, today.getMonth(), today.getDate()
+    );
+
+    this.maxDobTs = maxDob.getTime();
+    this.minDobTs = minDob.getTime();
   }
 
   ngOnDestroy(): void {
