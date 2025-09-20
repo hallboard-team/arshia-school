@@ -7,8 +7,9 @@
     --ring: rgba(30, 144, 255, 0.35);
 
     min-height: 100dvh;
-    display: grid;
-    place-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 24px;
     background: var(--bg);
     direction: rtl;
@@ -281,8 +282,4 @@
     .uc__progress {
         background: Canvas;
     }
-}
-
-:host([dir="ltr"]) .uc {
-    direction: ltr;
 }
