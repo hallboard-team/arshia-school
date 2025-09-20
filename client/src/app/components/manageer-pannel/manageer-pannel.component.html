@@ -65,9 +65,9 @@
             <mat-error *ngIf="SecretaryLastNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: ۳۰ حرف</mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" class="phone-field" floatLabel="always">
             <mat-label>شماره موبایل</mat-label>
-            <span matPrefix dir="ltr">+98&nbsp;</span>
+            <span matPrefix dir="ltr" class="phone-label">+98&nbsp;</span>
             <input class="input" type="tel" maxlength="10" matInput formControlName="phoneNumCtrl" dir="ltr">
             <mat-error *ngIf="SecretaryPhoneNumCtrl.hasError('required')">فرم رو پرکنید</mat-error>
             <mat-error *ngIf="SecretaryPhoneNumCtrl.hasError('pattern')">شماره موبایل باید ۱۰ رقم و بدون ۰
@@ -148,9 +148,9 @@
             <mat-error *ngIf="StudentLastNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: ۳۰ حرف</mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" class="phone-field" floatLabel="always">
             <mat-label>شماره موبایل</mat-label>
-            <span matPrefix dir="ltr">+98&nbsp;</span>
+            <span matPrefix dir="ltr" class="phone-label">+98&nbsp;</span>
             <input class="input" type="tel" maxlength="10" matInput formControlName="phoneNumCtrl" dir="ltr">
             <mat-error *ngIf="StudentPhoneNumCtrl.hasError('required')">فرم رو پرکنید</mat-error>
             <mat-error *ngIf="StudentPhoneNumCtrl.hasError('pattern')">شماره موبایل باید ۱۰ رقم و بدون ۰
@@ -233,9 +233,9 @@
             <mat-error *ngIf="TeacherLastNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: ۳۰ حرف</mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" class="phone-field" floatLabel="always">
             <mat-label>شماره موبایل</mat-label>
-            <span matPrefix dir="ltr">+98&nbsp;</span>
+            <span matPrefix dir="ltr" class="phone-label">+98&nbsp;</span>
             <input class="input" type="tel" maxlength="10" matInput formControlName="phoneNumCtrl" dir="ltr">
             <mat-error *ngIf="TeacherPhoneNumCtrl.hasError('required')">فرم رو پرکنید</mat-error>
             <mat-error *ngIf="TeacherPhoneNumCtrl.hasError('pattern')">شماره موبایل باید ۱۰ رقم و بدون ۰
