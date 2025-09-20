@@ -8,7 +8,8 @@ public record RegisterDto(
     [Length(0, 30)] string LastName,
     [RegularExpression(@"^98\d{10}$", ErrorMessage = "فرمت شماره تلفن معتبر نیست")]
     string? PhoneNum,
-    DateOnly DateOfBirth, // Prevent from 1/1/1
+    [BirthDateRange(MinYears = 11, MaxYears = 99)]
+    DateOnly DateOfBirth,
     string Gender
 );
 
