@@ -124,7 +124,6 @@ nav {
         flex-direction: row-reverse;
         gap: 1rem;
         margin-right: 10px;
-        background-color: green;
 
         .menu-button {
             border: none;
@@ -366,14 +365,21 @@ nav {
                 scale: 1.05;
             }
 
+            .profile-backdrop {
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, .35);
+                z-index: 950;
+            }
+
             .div-open-profile {
                 border-radius: 10px;
                 background: linear-gradient(145deg, #f0f0f0, #cacaca);
                 box-shadow: 5px 5px 10px #b1b1b1,
-                    -5px -5px 10px #ffffff;
+                    -5px -5px 10px #ffffff9c;
                 padding: 1rem;
                 width: 90%;
-                position: absolute;
+                position: fixed;
                 left: 5%;
                 top: 8rem;
                 display: flex;
@@ -381,6 +387,7 @@ nav {
                 justify-content: center;
                 flex-direction: column;
                 gap: 1rem;
+                z-index: 980;
 
                 .div-button-back-page {
                     width: 100%;

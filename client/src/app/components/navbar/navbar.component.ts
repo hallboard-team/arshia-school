@@ -1,4 +1,4 @@
-import { Component, Signal, inject } from '@angular/core';
+import { Component, ElementRef, HostListener, Signal, ViewChild, inject } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
@@ -39,6 +39,8 @@ export class NavbarComponent {
   showProfile = false;
   showMobileMenu = false;
 
+  @ViewChild('profilePanel') profilePanel!: ElementRef<HTMLElement>;
+
   ngOnInit(): void {
     this.loggedInUserSig = this.accountService.loggedInUserSig;
   }
@@ -49,22 +51,12 @@ export class NavbarComponent {
   }
 
   openMenu() {
-    // const elements = document.querySelectorAll('.hamburger-menu');
-
-    // elements.forEach((element) => {
-    //   (element as HTMLElement).style.display = "block";
-    // });
     this.showMobileMenu = true;
     document.body.style.overflow = 'hidden';
     document.body.classList.add('menu-open');
   }
 
   closeMenu() {
-    // const elements = document.querySelectorAll('.hamburger-menu');
-
-    // elements.forEach((element) => {
-    //   (element as HTMLElement).style.display = "none";
-    // });
     this.showMobileMenu = false;
     document.body.style.overflow = '';
     document.body.classList.remove('menu-open');
@@ -76,5 +68,26 @@ export class NavbarComponent {
 
   closeProfile() {
     this.showProfile = false;
+    if (!this.showMobileMenu) document.body.style.overflow = '';
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocClick(ev: MouseEvent) {
+    if (!this.showProfile) return;
+    const target = ev.target as Node;
+    const panel = this.profilePanel?.nativeElement;
+    if (panel && !panel.contains(target)) {
+      this.closeProfile();
+    }
+  }
+
+  toggleProfile(ev: MouseEvent) {
+    ev.stopPropagation();
+    this.showProfile = !this.showProfile;
+    if (this.showProfile) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      if (!this.showMobileMenu) document.body.style.overflow = '';
+    }
   }
 }
