@@ -205,6 +205,7 @@
               (click)="hideTeacherPassword = !hideTeacherPassword">
               <mat-icon>{{ hideTeacherPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
             </button>
+            <mat-error *ngIf="TeacherPasswordCtrl.hasError('required')">فرم رو پرکنید</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -215,6 +216,7 @@
               (click)="hideTeacherConfirmPassword = !hideTeacherConfirmPassword">
               <mat-icon>{{ hideTeacherConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
             </button>
+            <mat-error *ngIf="TeacherConfirmPasswordCtrl.hasError('required')">فرم رو پرکنید</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
