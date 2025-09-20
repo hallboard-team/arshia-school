@@ -56,6 +56,7 @@ export class NavbarComponent {
     // });
     this.showMobileMenu = true;
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('menu-open');
   }
 
   closeMenu() {
@@ -66,6 +67,7 @@ export class NavbarComponent {
     // });
     this.showMobileMenu = false;
     document.body.style.overflow = '';
+    document.body.classList.remove('menu-open');
   }
 
   openProfile() {
