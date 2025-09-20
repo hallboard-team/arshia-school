@@ -165,3 +165,30 @@
         padding: 0px !important;
     }
 }
+
+::ng-deep mat-form-field.phone-field .mat-mdc-form-field-infix {
+    padding-inline-start: 48px !important;
+}
+
+::ng-deep mat-form-field.phone-field .mat-mdc-form-field-prefix {
+    direction: ltr;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-inline-start: 4px;
+    padding-inline-end: 4px;
+    font-weight: 700;
+    opacity: .9;
+}
+
+::ng-deep mat-form-field.phone-field input.mat-mdc-input-element {
+    text-align: left;
+}
+
+::ng-deep mat-form-field.phone-field .mat-mdc-text-field-wrapper {
+    padding: 0 12px;
+}
+
+::ng-deep mat-form-field.phone-field .phone-label {
+    margin-left: 10px;
+}
