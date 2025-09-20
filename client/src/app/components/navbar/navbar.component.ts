@@ -37,6 +37,7 @@ export class NavbarComponent {
   error: string | null = null;
 
   showProfile = false;
+  showMobileMenu = false;
 
   ngOnInit(): void {
     this.loggedInUserSig = this.accountService.loggedInUserSig;
@@ -48,19 +49,23 @@ export class NavbarComponent {
   }
 
   openMenu() {
-    const elements = document.querySelectorAll('.hamburger-menu');
+    // const elements = document.querySelectorAll('.hamburger-menu');
 
-    elements.forEach((element) => {
-      (element as HTMLElement).style.display = "block";
-    });
+    // elements.forEach((element) => {
+    //   (element as HTMLElement).style.display = "block";
+    // });
+    this.showMobileMenu = true;
+    document.body.style.overflow = 'hidden';
   }
 
   closeMenu() {
-    const elements = document.querySelectorAll('.hamburger-menu');
+    // const elements = document.querySelectorAll('.hamburger-menu');
 
-    elements.forEach((element) => {
-      (element as HTMLElement).style.display = "none";
-    });
+    // elements.forEach((element) => {
+    //   (element as HTMLElement).style.display = "none";
+    // });
+    this.showMobileMenu = false;
+    document.body.style.overflow = '';
   }
 
   openProfile() {

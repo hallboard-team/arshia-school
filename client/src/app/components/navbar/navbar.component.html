@@ -26,7 +26,9 @@
         </button>
     </div>
 
-    <div class="hamburger-menu">
+    <div class="backdrop" *ngIf="showMobileMenu" (click)="closeMenu()"></div>
+
+    <div class="hamburger-menu" *ngIf="showMobileMenu" (click)="$event.stopPropagation()">
         <div class="top">
             <button class="Btn" (click)="closeMenu()">
                 <div class="sign">

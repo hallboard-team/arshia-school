@@ -124,6 +124,7 @@ nav {
         flex-direction: row-reverse;
         gap: 1rem;
         margin-right: 10px;
+        background-color: green;
 
         .menu-button {
             border: none;
@@ -151,15 +152,15 @@ nav {
 
     .hamburger-menu {
         width: 90%;
-        position: absolute;
+        position: fixed;
         top: 8rem;
         left: 5%;
-        z-index: 100;
+        z-index: 1000;
         border-radius: 10px;
         background: linear-gradient(145deg, #f0f0f0, #cacaca);
         box-shadow: 5px 5px 10px #b1b1b1,
             -5px -5px 10px #ffffff;
-        display: none;
+        display: flex;
         flex-direction: column;
         padding-top: 2rem;
         padding-bottom: 2rem;
@@ -289,6 +290,13 @@ nav {
                 transition: ease-in 0.25s;
             }
         }
+    }
+
+    .backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, .35);
+        z-index: 900;
     }
 
     .left {
