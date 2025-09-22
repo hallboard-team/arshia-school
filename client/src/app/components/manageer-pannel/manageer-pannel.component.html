@@ -191,10 +191,21 @@
 
           <mat-form-field appearance="outline">
             <mat-label>ایمیل</mat-label>
-            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" matInput>
+            <input class="input" matInput type="email" formControlName="emailCtrl" maxlength="50">
+
             <mat-hint>ایمیل خودرا وارد کنید</mat-hint>
-            <mat-error *ngIf="TeacherEmailCtrl.hasError('required')">این فیلد الزامی است</mat-error>
-            <mat-error *ngIf="TeacherEmailCtrl.hasError('pattern')">ایمیل را به‌درستی وارد کنید</mat-error>
+
+            <mat-error *ngIf="TeacherEmailCtrl.hasError('required')">
+              این فیلد الزامی است
+            </mat-error>
+            <mat-error *ngIf="TeacherEmailCtrl.hasError('pattern')">
+              ایمیل را به‌درستی وارد کنید
+            </mat-error>
+            <mat-error *ngIf="TeacherEmailCtrl.hasError('maxlength')">
+              حداکثر ۵۰ کاراکتر
+            </mat-error>
+
+            <mat-hint align="end">{{ (TeacherEmailCtrl.value?.length || 0) }}/50</mat-hint>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
