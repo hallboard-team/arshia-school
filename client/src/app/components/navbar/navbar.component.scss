@@ -252,6 +252,10 @@ nav {
                 height: 100%;
                 width: 100%;
             }
+
+            img:hover {
+                cursor: pointer;
+            }
         }
 
         .bottom {
@@ -579,6 +583,7 @@ nav {
 .div-buttons-navigation {
     background-color: #e0e0e0;
     width: 100%;
+    inset-inline: 0;
     margin-top: 5.5rem;
     z-index: 50;
     position: fixed;
