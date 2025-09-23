@@ -14,15 +14,18 @@
 
         <mat-form-field appearance="outline">
           <mat-label>ایمیل</mat-label>
-          <input autoFocusDir type="email" formControlName="emailCtrl" label="email"
-            placeHolder="ایمیل خود را وارد کنید" matInput>
-          @if (EmailCtrl.hasError('required')) {
-          <mat-error>!این فیلد خالی است</mat-error>
-          }
-          @else if (EmailCtrl.hasError('pattern')) {
-          <mat-error>در انتخاب فرمت ایمیل دقت کنید</mat-error>
-          }
+          <input matInput type="email" formControlName="emailCtrl" maxlength="50" placeholder="ایمیل خود را وارد کنید"
+            autocomplete="email" />
+
+          <mat-hint>ایمیل خودرا وارد کنید</mat-hint>
+
+          <mat-error *ngIf="EmailCtrl.hasError('required')">این فیلد الزامی است</mat-error>
+          <mat-error *ngIf="EmailCtrl.hasError('pattern')">ایمیل را به‌درستی وارد کنید</mat-error>
+          <mat-error *ngIf="EmailCtrl.hasError('maxlength')">حداکثر ۵۰ کاراکتر</mat-error>
+
+          <mat-hint align="end">{{ (EmailCtrl.value?.length || 0) }}/50</mat-hint>
         </mat-form-field>
+
 
         <mat-form-field appearance="outline">
           <mat-label>رمز عبور</mat-label>
