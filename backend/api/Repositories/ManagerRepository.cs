@@ -219,7 +219,6 @@ public class ManagerRepository : IManagerRepository
         return Mappers.ConvertAppUserToRegisteredDto(appUser);
     }
 
-
     public async Task<AppUser?> GetByIdAsync(ObjectId? userId, CancellationToken cancellationToken)
     {
         AppUser? appUser = await _collectionAppUser.Find<AppUser>(doc

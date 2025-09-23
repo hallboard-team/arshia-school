@@ -4,8 +4,13 @@ public record RegisterDto(
     [MaxLength(50), RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$", ErrorMessage = "فرمت ایمیل درست وارد نشده")] string Email,
     [DataType(DataType.Password), Length(7, 20, ErrorMessage = "حداقل باید 7 و حداکثر باید 20 کاراکتر وارد بشه")] string Password,
     [DataType(DataType.Password), Length(7, 20)] string ConfirmPassword,
-    [Length(0, 30)] string Name,
-    [Length(0, 30)] string LastName,
+    [Required, MinLength(2, ErrorMessage = "نام حداقل ۲ کاراکتر است"), MaxLength(30),
+     RegularExpression(@"^[\p{L}\s'-]{2,30}$", ErrorMessage = "نام تنها از حروف تشکیل شود")]
+    string Name,
+
+    [Required, MinLength(2, ErrorMessage = "نام خانوادگی حداقل ۲ کاراکتر است"), MaxLength(30),
+     RegularExpression(@"^[\p{L}\s'-]{2,30}$", ErrorMessage = "نام خانوادگی تنها از حروف تشکیل شود")]
+    string LastName,
     [RegularExpression(@"^98\d{10}$", ErrorMessage = "فرمت شماره تلفن معتبر نیست")]
     string? PhoneNum,
     [BirthDateRange(MinYears = 11, MaxYears = 99)]
