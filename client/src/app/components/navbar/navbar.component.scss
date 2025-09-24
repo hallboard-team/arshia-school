@@ -13,6 +13,20 @@ nav {
     left: 0;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.301);
 
+    .brand {
+        display: flex;
+        align-items: center;
+        height: 50px;
+        margin-left: 50px;
+
+        img {
+            height: 100%;
+            width: auto;
+            display: block;
+            object-fit: contain;
+        }
+    }
+
     .right {
         display: none;
         flex-direction: row-reverse;
@@ -100,7 +114,7 @@ nav {
         }
 
         .div-logo {
-            height: 80%;
+            height: 50px;
             width: 125px;
             justify-content: center;
             align-items: center;
@@ -118,6 +132,7 @@ nav {
     }
 
     .div-menu-button {
+        // margin-inline-end: 10px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -618,12 +633,17 @@ nav {
             display: none;
         }
 
+        .brand {
+            display: none;
+        }
+
         .right {
             display: flex;
         }
 
         .left {
-            margin-left: 1rem;
+            margin-inline-start: 1rem;
+            order: 0;
         }
     }
 }

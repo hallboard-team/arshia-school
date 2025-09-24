@@ -37,10 +37,14 @@
 
           <mat-form-field appearance="outline">
             <mat-label>ایمیل</mat-label>
-            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" matInput>
+            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" matInput maxlength="50">
             <mat-hint>ایمیل خودرا وارد کنید</mat-hint>
+
             <mat-error *ngIf="SecretaryEmailCtrl.hasError('required')">فرم رو پرکنید</mat-error>
             <mat-error *ngIf="SecretaryEmailCtrl.hasError('pattern')">ایمیل رو به درستی وارد کنید</mat-error>
+            <mat-error *ngIf="SecretaryEmailCtrl.hasError('maxlength')">حداکثر ۵۰ کاراکتر</mat-error>
+
+            <mat-hint align="end">{{ (SecretaryEmailCtrl.value?.length || 0) }}/50</mat-hint>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="phone-field" floatLabel="always">
@@ -60,7 +64,10 @@
               (click)="hideSecretaryPassword = !hideSecretaryPassword">
               <mat-icon>{{ hideSecretaryPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
             </button>
+
             <mat-error *ngIf="SecretaryPasswordCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            <mat-error *ngIf="SecretaryPasswordCtrl.hasError('minlength')">حداقل ۷ کاراکتر</mat-error>
+            <mat-error *ngIf="SecretaryPasswordCtrl.hasError('maxlength')">حداکثر ۲۰ کاراکتر</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -71,7 +78,10 @@
               (click)="hideSecretaryConfirmPassword = !hideSecretaryConfirmPassword">
               <mat-icon>{{ hideSecretaryConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
             </button>
+
             <mat-error *ngIf="SecretaryConfirmPasswordCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            <mat-error *ngIf="SecretaryConfirmPasswordCtrl.hasError('minlength')">حداقل ۷ کاراکتر</mat-error>
+            <mat-error *ngIf="SecretaryConfirmPasswordCtrl.hasError('maxlength')">حداکثر ۲۰ کاراکتر</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -83,7 +93,7 @@
             [dateFormat]="'jYYYY/jMM/jDD'" [dateGregorianFormat]="'YYYY-MM-DD'" [(uiIsVisible)]="uiIsVisible"
             [uiTheme]="uiTheme" [uiYearView]="uiYearView" [uiMonthView]="uiMonthView"
             [uiHideAfterSelectDate]="uiHideAfterSelectDate" [uiHideOnOutsideClick]="uiHideOnOutsideClick"
-            [uiTodayBtnEnable]="uiTodayBtnEnable">
+            [uiTodayBtnEnable]="uiTodayBtnEnable" [dateMin]="minDobTs" [dateMax]="maxDobTs">
           </ng-persian-datepicker>
 
           <div class="div-btn-add">
@@ -122,10 +132,14 @@
 
           <mat-form-field appearance="outline">
             <mat-label>ایمیل</mat-label>
-            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" matInput>
+            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" matInput maxlength="50">
             <mat-hint>ایمیل خودرا وارد کنید</mat-hint>
+
             <mat-error *ngIf="StudentEmailCtrl.hasError('required')">فرم رو پرکنید</mat-error>
             <mat-error *ngIf="StudentEmailCtrl.hasError('pattern')">ایمیل رو به درستی وارد کنید</mat-error>
+            <mat-error *ngIf="StudentEmailCtrl.hasError('maxlength')">حداکثر ۵۰ کاراکتر</mat-error>
+
+            <mat-hint align="end">{{ (StudentEmailCtrl.value?.length || 0) }}/50</mat-hint>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="phone-field" floatLabel="always">
@@ -145,6 +159,10 @@
               (click)="hideStudentPassword = !hideStudentPassword">
               <mat-icon>{{ hideStudentPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
             </button>
+
+            <mat-error *ngIf="StudentPasswordCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            <mat-error *ngIf="StudentPasswordCtrl.hasError('minlength')">حداقل ۷ کاراکتر</mat-error>
+            <mat-error *ngIf="StudentPasswordCtrl.hasError('maxlength')">حداکثر ۲۰ کاراکتر</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -155,6 +173,10 @@
               (click)="hideStudentConfirmPassword = !hideStudentConfirmPassword">
               <mat-icon>{{ hideStudentConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
             </button>
+
+            <mat-error *ngIf="StudentConfirmPasswordCtrl.hasError('required')">فرم رو پرکنید</mat-error>
+            <mat-error *ngIf="StudentConfirmPasswordCtrl.hasError('minlength')">حداقل ۷ کاراکتر</mat-error>
+            <mat-error *ngIf="StudentConfirmPasswordCtrl.hasError('maxlength')">حداکثر ۲۰ کاراکتر</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -166,7 +188,7 @@
             [dateFormat]="'jYYYY/jMM/jDD'" [dateGregorianFormat]="'YYYY-MM-DD'" [(uiIsVisible)]="uiIsVisible"
             [uiTheme]="uiTheme" [uiYearView]="uiYearView" [uiMonthView]="uiMonthView"
             [uiHideAfterSelectDate]="uiHideAfterSelectDate" [uiHideOnOutsideClick]="uiHideOnOutsideClick"
-            [uiTodayBtnEnable]="uiTodayBtnEnable">
+            [uiTodayBtnEnable]="uiTodayBtnEnable" [dateMin]="minDobTs" [dateMax]="maxDobTs">
           </ng-persian-datepicker>
 
           <div class="div-btn-add">
