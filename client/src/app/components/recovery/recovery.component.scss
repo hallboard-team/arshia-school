@@ -59,24 +59,6 @@
         font-size: clamp(14px, 2.2vw, 16px);
     }
 
-    &__progress {
-        position: relative;
-        height: 10px;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.08);
-        overflow: hidden;
-        margin: 18px auto 8px;
-        max-width: 420px;
-
-        .uc__bar {
-            position: absolute;
-            inset: 0;
-            transform: translateX(-100%);
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-            animation: slide 1.4s linear infinite;
-        }
-    }
-
     &__actions {
         margin-top: 18px;
         display: flex;
@@ -269,17 +251,12 @@
 
     .uc__card,
     .btn,
-    .btn.btn--ghost,
-    .uc__progress {
+    .btn.btn--ghost {
         border: 1px solid ButtonText;
     }
 
     .btn {
         background: ButtonFace;
         color: ButtonText;
-    }
-
-    .uc__progress {
-        background: Canvas;
     }
 }
