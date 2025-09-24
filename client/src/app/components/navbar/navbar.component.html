@@ -1,30 +1,27 @@
 <nav>
     <section class="right">
         <div class="div-logo">
-            <img [routerLink]="['/']" routerLinkActive #rla="routerLinkActive"
-                src="../assets/images/logo-tolou-fanavariRS.png" alt="">
+            <img [routerLink]="['/']" src="../assets/images/logo-tolou-fanavariRS.png" alt="Tolou Fanavari">
         </div>
 
         <div class="div-links">
             <div class="div-transsform-style">
-                <button class="btn" [routerLink]="['/' + 'courses']" routerLinkActive #rla="routerLinkActive">
-                    دوره ها
-                </button>
-                <button class="btn" [routerLink]="['/' + 'about']" routerLinkActive #rla="routerLinkActive">
-                    درباره ما
-                </button>
-                <button class="btn" [routerLink]="['/' + 'contact-us']" routerLinkActive #rla="routerLinkActive">
-                    تماس باما
-                </button>
+                <button class="btn" [routerLink]="['/courses']">دوره ها</button>
+                <button class="btn" [routerLink]="['/about']">درباره ما</button>
+                <button class="btn" [routerLink]="['/contact-us']">تماس باما</button>
             </div>
         </div>
     </section>
 
     <div class="div-menu-button">
-        <button class="menu-button" (click)="openMenu()">
+        <button class="menu-button" (click)="openMenu()" aria-label="باز کردن منو">
             <mat-icon>menu</mat-icon>
         </button>
     </div>
+
+    <a class="brand" routerLink="/" aria-label="رفتن به صفحه اصلی">
+        <img src="../assets/images/logo-tolou-fanavariRS.png" alt="Tolou Fanavari" />
+    </a>
 
     <div class="backdrop" *ngIf="showMobileMenu" (click)="closeMenu()"></div>
 
@@ -38,20 +35,18 @@
                         </path>
                     </svg>
                 </div>
-
                 <div class="text">خروج</div>
             </button>
         </div>
 
         <div class="div-logo">
-            <img [routerLink]="['/' + 'home']" routerLinkActive #rla="routerLinkActive"
-                src="../assets/images/logo-tolou-fanavariRS.png" alt="">
+            <img [routerLink]="['/home']" src="../assets/images/logo-tolou-fanavariRS.png" alt="Tolou Fanavari">
         </div>
 
         <div class="bottom">
-            <button [routerLink]="['/' + 'courses']" routerLinkActive #rla="routerLinkActive">دوره ها</button>
-            <button [routerLink]="['/' + 'about']" routerLinkActive #rla="routerLinkActive">درباره ما</button>
-            <button [routerLink]="['/' + 'contact-us']" routerLinkActive #rla="routerLinkActive">تماس با ما</button>
+            <button [routerLink]="['/courses']">دوره ها</button>
+            <button [routerLink]="['/about']">درباره ما</button>
+            <button [routerLink]="['/contact-us']">تماس با ما</button>
         </div>
     </div>
 
@@ -61,8 +56,7 @@
             <button class="profile" (click)="toggleProfile($event)">
                 <span>{{loggedInUserSig()?.name?.charAt(0)?.toUpperCase()}}</span>
             </button>
-            }
-            @else {
+            } @else {
             <button class="btn-login" routerLink="/account/login">
                 <span class="text">ورود</span>
             </button>
@@ -72,9 +66,7 @@
 
             <div class="div-open-profile" *ngIf="showProfile" #profilePanel (click)="$event.stopPropagation()">
                 <div class="div-button-back-page">
-                    <button class="back-to-page" (click)="closeProfile()">
-                        <mat-icon>close</mat-icon>
-                    </button>
+                    <button class="back-to-page" (click)="closeProfile()"><mat-icon>close</mat-icon></button>
                 </div>
 
                 <div class="div-description-of-user">
@@ -84,40 +76,24 @@
                 </div>
 
                 <div class="div-routes">
-                    <button [routerLink]="['/' + 'profile']" routerLinkActive
-                        #rla="routerLinkActive"><span>پروفایل</span></button>
-
-                    @if (
-                    loggedInUserSig &&
-                    loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
-                    loggedInUserSig()?.roles?.includes('manager')
-                    ) {
-                    <button [routerLink]="['/' + 'manager-panel']"><span>پنل-مدیر</span></button>
+                    <button [routerLink]="['/profile']"><span>پروفایل</span></button>
+                    @if (loggedInUserSig && loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
+                    loggedInUserSig()?.roles?.includes('manager')) {
+                    <button [routerLink]="['/manager-panel']"><span>پنل-مدیر</span></button>
                     }
-
-                    @if (
-                    loggedInUserSig &&
-                    loggedInUserSig()?.roles?.includes('manager')
-                    ) {
-                    <button [routerLink]="['/' + 'members']"><span>کاربران</span></button>
+                    @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
+                    <button [routerLink]="['/members']"><span>کاربران</span></button>
                     }
-
-                    @if (
-                    loggedInUserSig &&
-                    loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
-                    loggedInUserSig()?.roles?.includes('teacher')
-                    ) {
-                    <button [routerLink]="['/' + 'teacher-panel']"><span>پنل-معلم</span></button>
+                    @if (loggedInUserSig && loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
+                    loggedInUserSig()?.roles?.includes('teacher')) {
+                    <button [routerLink]="['/teacher-panel']"><span>پنل-معلم</span></button>
                     }
-
                 </div>
 
                 <div class="div-btn-log-out">
                     <span class="desc">شما وارد حساب کاربری شده اید میخواهید خارج بشید؟</span>
                     <button class="exit" (click)="logout()">
-                        <span class="circle" aria-hidden="true">
-                            <span class="icon arrow"></span>
-                        </span>
+                        <span class="circle" aria-hidden="true"><span class="icon arrow"></span></span>
                         <span class="button-text">خروج</span>
                     </button>
                 </div>
