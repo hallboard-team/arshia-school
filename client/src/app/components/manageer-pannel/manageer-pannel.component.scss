@@ -154,10 +154,10 @@
 }
 
 ::ng-deep mat-form-field {
-    height: 40px !important;
+    height: 48px !important;
 
     .mat-mdc-text-field-wrapper {
-        padding: 0px !important;
+        padding: 0 !important;
     }
 
     .mat-mdc-form-field-infix {
@@ -166,8 +166,13 @@
     }
 }
 
-::ng-deep mat-form-field.phone-field .mat-mdc-form-field-infix {
-    padding-inline-start: 48px !important;
+::ng-deep mat-form-field .mat-mdc-form-field-infix {
+    direction: rtl;
+    text-align: right;
+    padding-inline: 12px !important;
+    padding-block: 8px !important;
+    min-height: 40px;
+    overflow: visible;
 }
 
 ::ng-deep mat-form-field.phone-field .mat-mdc-form-field-prefix {
@@ -182,6 +187,7 @@
 }
 
 ::ng-deep mat-form-field.phone-field input.mat-mdc-input-element {
+    line-height: 1.5;
     text-align: left;
 }
 

@@ -23,16 +23,16 @@
             <mat-label>نام</mat-label>
             <input class="input" type="text" formControlName="nameCtrl" matInput>
             <mat-error *ngIf="SecretaryNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
-            <mat-error *ngIf="SecretaryNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل :۲ حرف</mat-error>
-            <mat-error *ngIf="SecretaryNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: ۳۰ حرف</mat-error>
+            <mat-error *ngIf="SecretaryNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل: 2 حرف</mat-error>
+            <mat-error *ngIf="SecretaryNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: 30 حرف</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>نام خانوادگی</mat-label>
             <input class="input" type="text" formControlName="lastNameCtrl" matInput>
             <mat-error *ngIf="SecretaryLastNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
-            <mat-error *ngIf="SecretaryLastNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل :۲ حرف</mat-error>
-            <mat-error *ngIf="SecretaryLastNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: ۳۰ حرف</mat-error>
+            <mat-error *ngIf="SecretaryLastNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل: 2 حرف</mat-error>
+            <mat-error *ngIf="SecretaryLastNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: 30 حرف</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -42,7 +42,7 @@
 
             <mat-error *ngIf="SecretaryEmailCtrl.hasError('required')">فرم رو پرکنید</mat-error>
             <mat-error *ngIf="SecretaryEmailCtrl.hasError('pattern')">ایمیل رو به درستی وارد کنید</mat-error>
-            <mat-error *ngIf="SecretaryEmailCtrl.hasError('maxlength')">حداکثر ۵۰ کاراکتر</mat-error>
+            <mat-error *ngIf="SecretaryEmailCtrl.hasError('maxlength')">حداکثر 50 کاراکتر</mat-error>
 
             <mat-hint align="end">{{ (SecretaryEmailCtrl.value?.length || 0) }}/50</mat-hint>
           </mat-form-field>
@@ -52,7 +52,7 @@
             <span matPrefix dir="ltr" class="phone-label">+98&nbsp;</span>
             <input class="input" type="tel" maxlength="10" matInput formControlName="phoneNumCtrl" dir="ltr">
             <mat-error *ngIf="SecretaryPhoneNumCtrl.hasError('required')">فرم رو پرکنید</mat-error>
-            <mat-error *ngIf="SecretaryPhoneNumCtrl.hasError('pattern')">شماره موبایل باید ۱۰ رقم و بدون ۰
+            <mat-error *ngIf="SecretaryPhoneNumCtrl.hasError('pattern')">شماره موبایل باید 10 رقم و بدون 0
               باشد</mat-error>
           </mat-form-field>
 
@@ -66,8 +66,8 @@
             </button>
 
             <mat-error *ngIf="SecretaryPasswordCtrl.hasError('required')">فرم رو پرکنید</mat-error>
-            <mat-error *ngIf="SecretaryPasswordCtrl.hasError('minlength')">حداقل ۷ کاراکتر</mat-error>
-            <mat-error *ngIf="SecretaryPasswordCtrl.hasError('maxlength')">حداکثر ۲۰ کاراکتر</mat-error>
+            <mat-error *ngIf="SecretaryPasswordCtrl.hasError('minlength')">حداقل 7 کاراکتر</mat-error>
+            <mat-error *ngIf="SecretaryPasswordCtrl.hasError('maxlength')">حداکثر 20 کاراکتر</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -80,8 +80,8 @@
             </button>
 
             <mat-error *ngIf="SecretaryConfirmPasswordCtrl.hasError('required')">فرم رو پرکنید</mat-error>
-            <mat-error *ngIf="SecretaryConfirmPasswordCtrl.hasError('minlength')">حداقل ۷ کاراکتر</mat-error>
-            <mat-error *ngIf="SecretaryConfirmPasswordCtrl.hasError('maxlength')">حداکثر ۲۰ کاراکتر</mat-error>
+            <mat-error *ngIf="SecretaryConfirmPasswordCtrl.hasError('minlength')">حداقل 7 کاراکتر</mat-error>
+            <mat-error *ngIf="SecretaryConfirmPasswordCtrl.hasError('maxlength')">حداکثر 20 کاراکتر</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -118,16 +118,16 @@
             <mat-label>نام</mat-label>
             <input class="input" type="text" formControlName="nameCtrl" matInput>
             <mat-error *ngIf="StudentNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
-            <mat-error *ngIf="StudentNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل :۲ حرف</mat-error>
-            <mat-error *ngIf="StudentNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: ۳۰ حرف</mat-error>
+            <mat-error *ngIf="StudentNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل: 2 حرف</mat-error>
+            <mat-error *ngIf="StudentNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: 30 حرف</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>نام خانوادگی</mat-label>
             <input class="input" type="text" formControlName="lastNameCtrl" matInput>
             <mat-error *ngIf="StudentLastNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
-            <mat-error *ngIf="StudentLastNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل :۲ حرف‍</mat-error>
-            <mat-error *ngIf="StudentLastNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: ۳۰ حرف</mat-error>
+            <mat-error *ngIf="StudentLastNameCtrl.hasError('minlength')">خیلی کوتاه حداقل: 2 حرف</mat-error>
+            <mat-error *ngIf="StudentLastNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: 30 حرف</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -137,7 +137,7 @@
 
             <mat-error *ngIf="StudentEmailCtrl.hasError('required')">فرم رو پرکنید</mat-error>
             <mat-error *ngIf="StudentEmailCtrl.hasError('pattern')">ایمیل رو به درستی وارد کنید</mat-error>
-            <mat-error *ngIf="StudentEmailCtrl.hasError('maxlength')">حداکثر ۵۰ کاراکتر</mat-error>
+            <mat-error *ngIf="StudentEmailCtrl.hasError('maxlength')">حداکثر 50 کاراکتر</mat-error>
 
             <mat-hint align="end">{{ (StudentEmailCtrl.value?.length || 0) }}/50</mat-hint>
           </mat-form-field>
@@ -147,7 +147,7 @@
             <span matPrefix dir="ltr" class="phone-label">+98&nbsp;</span>
             <input class="input" type="tel" maxlength="10" matInput formControlName="phoneNumCtrl" dir="ltr">
             <mat-error *ngIf="StudentPhoneNumCtrl.hasError('required')">فرم رو پرکنید</mat-error>
-            <mat-error *ngIf="StudentPhoneNumCtrl.hasError('pattern')">شماره موبایل باید ۱۰ رقم و بدون ۰
+            <mat-error *ngIf="StudentPhoneNumCtrl.hasError('pattern')">شماره موبایل باید 10 رقم و بدون 0
               باشد</mat-error>
           </mat-form-field>
 
@@ -161,8 +161,8 @@
             </button>
 
             <mat-error *ngIf="StudentPasswordCtrl.hasError('required')">فرم رو پرکنید</mat-error>
-            <mat-error *ngIf="StudentPasswordCtrl.hasError('minlength')">حداقل ۷ کاراکتر</mat-error>
-            <mat-error *ngIf="StudentPasswordCtrl.hasError('maxlength')">حداکثر ۲۰ کاراکتر</mat-error>
+            <mat-error *ngIf="StudentPasswordCtrl.hasError('minlength')">حداقل 7 کاراکتر</mat-error>
+            <mat-error *ngIf="StudentPasswordCtrl.hasError('maxlength')">حداکثر 20 کاراکتر</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -175,8 +175,8 @@
             </button>
 
             <mat-error *ngIf="StudentConfirmPasswordCtrl.hasError('required')">فرم رو پرکنید</mat-error>
-            <mat-error *ngIf="StudentConfirmPasswordCtrl.hasError('minlength')">حداقل ۷ کاراکتر</mat-error>
-            <mat-error *ngIf="StudentConfirmPasswordCtrl.hasError('maxlength')">حداکثر ۲۰ کاراکتر</mat-error>
+            <mat-error *ngIf="StudentConfirmPasswordCtrl.hasError('minlength')">حداقل 7 کاراکتر</mat-error>
+            <mat-error *ngIf="StudentConfirmPasswordCtrl.hasError('maxlength')">حداکثر 20 کاراکتر</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -215,16 +215,16 @@
             <mat-label>نام</mat-label>
             <input class="input" type="text" formControlName="nameCtrl" matInput>
             <mat-error *ngIf="TeacherNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
-            <mat-error *ngIf="TeacherNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل :۲ حرف</mat-error>
-            <mat-error *ngIf="TeacherNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: ۳۰ حرف</mat-error>
+            <mat-error *ngIf="TeacherNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل: 2 حرف</mat-error>
+            <mat-error *ngIf="TeacherNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: 30 حرف</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>نام خانوادگی</mat-label>
             <input class="input" type="text" formControlName="lastNameCtrl" matInput>
             <mat-error *ngIf="TeacherLastNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
-            <mat-error *ngIf="TeacherLastNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل :۲ حرف</mat-error>
-            <mat-error *ngIf="TeacherLastNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: ۳۰ حرف</mat-error>
+            <mat-error *ngIf="TeacherLastNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل: 2 حرف</mat-error>
+            <mat-error *ngIf="TeacherLastNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: 30 حرف</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -240,7 +240,7 @@
               ایمیل را به‌درستی وارد کنید
             </mat-error>
             <mat-error *ngIf="TeacherEmailCtrl.hasError('maxlength')">
-              حداکثر ۵۰ کاراکتر
+              حداکثر 50 کاراکتر
             </mat-error>
 
             <mat-hint align="end">{{ (TeacherEmailCtrl.value?.length || 0) }}/50</mat-hint>
@@ -251,7 +251,7 @@
             <span matPrefix dir="ltr" class="phone-label">+98&nbsp;</span>
             <input class="input" type="tel" maxlength="10" matInput formControlName="phoneNumCtrl" dir="ltr">
             <mat-error *ngIf="TeacherPhoneNumCtrl.hasError('required')">فرم رو پرکنید</mat-error>
-            <mat-error *ngIf="TeacherPhoneNumCtrl.hasError('pattern')">شماره موبایل باید ۱۰ رقم و بدون ۰
+            <mat-error *ngIf="TeacherPhoneNumCtrl.hasError('pattern')">شماره موبایل باید 10 رقم و بدون 0
               باشد</mat-error>
           </mat-form-field>
 
@@ -265,8 +265,8 @@
             </button>
 
             <mat-error *ngIf="TeacherPasswordCtrl.hasError('required')">فرم رو پرکنید</mat-error>
-            <mat-error *ngIf="TeacherPasswordCtrl.hasError('minlength')">حداقل ۷ کاراکتر</mat-error>
-            <mat-error *ngIf="TeacherPasswordCtrl.hasError('maxlength')">حداکثر ۲۰ کاراکتر</mat-error>
+            <mat-error *ngIf="TeacherPasswordCtrl.hasError('minlength')">حداقل 7 کاراکتر</mat-error>
+            <mat-error *ngIf="TeacherPasswordCtrl.hasError('maxlength')">حداکثر 20 کاراکتر</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -279,8 +279,8 @@
             </button>
 
             <mat-error *ngIf="TeacherConfirmPasswordCtrl.hasError('required')">فرم رو پرکنید</mat-error>
-            <mat-error *ngIf="TeacherConfirmPasswordCtrl.hasError('minlength')">حداقل ۷ کاراکتر</mat-error>
-            <mat-error *ngIf="TeacherConfirmPasswordCtrl.hasError('maxlength')">حداکثر ۲۰ کاراکتر</mat-error>
+            <mat-error *ngIf="TeacherConfirmPasswordCtrl.hasError('minlength')">حداقل 7 کاراکتر</mat-error>
+            <mat-error *ngIf="TeacherConfirmPasswordCtrl.hasError('maxlength')">حداکثر 20 کاراکتر</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
