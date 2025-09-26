@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -44,16 +44,12 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   accountService = inject(AccountService);
   managerService = inject(ManagerService);
 
-  minDate = new Date();
-  maxDate = new Date();
-
   minDobTs!: number;
   maxDobTs!: number;
 
   passowrdsNotMatch: boolean | undefined;
   loggedInUser: LoggedInUser | null | undefined;
 
-  uiIsVisible = true;
   uiTheme: IDatepickerTheme = defaultTheme;
   uiYearView = true;
   uiMonthView = true;
@@ -61,13 +57,18 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   uiHideOnOutsideClick = false;
   uiTodayBtnEnable = true;
 
-  shamsiDisplayDate = '';
+  shamsiDisplayDateStu = '';
+  shamsiDisplayDateTea = '';
+  shamsiDisplayDateSec = '';
+
+  uiIsVisibleStu = false;
+  uiIsVisibleTea = false;
+  uiIsVisibleSec = false;
+
   hideSecretaryPassword = true;
   hideSecretaryConfirmPassword = true;
-
   hideStudentPassword = true;
   hideStudentConfirmPassword = true;
-
   hideTeacherPassword = true;
   hideTeacherConfirmPassword = true;
 
@@ -77,15 +78,8 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const today = new Date();
-
-    const maxDob = new Date(
-      today.getFullYear() - 11, today.getMonth(), today.getDate()
-    );
-
-    const minDob = new Date(
-      today.getFullYear() - 99, today.getMonth(), today.getDate()
-    );
-
+    const maxDob = new Date(today.getFullYear() - 11, today.getMonth(), today.getDate());
+    const minDob = new Date(today.getFullYear() - 99, today.getMonth(), today.getDate());
     this.maxDobTs = maxDob.getTime();
     this.minDobTs = minDob.getTime();
   }
@@ -210,6 +204,34 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
       .slice(0, 10);
   }
 
+  private resetForm(fg: FormGroup, kind: 'student' | 'teacher' | 'secretary'): void {
+    fg.reset();
+    fg.markAsPristine();
+    fg.markAsUntouched();
+    fg.updateValueAndValidity();
+
+    if (kind === 'student') this.shamsiDisplayDateStu = '';
+    if (kind === 'teacher') this.shamsiDisplayDateTea = '';
+    if (kind === 'secretary') this.shamsiDisplayDateSec = '';
+
+    if (kind === 'student') this.uiIsVisibleStu = false;
+    if (kind === 'teacher') this.uiIsVisibleTea = false;
+    if (kind === 'secretary') this.uiIsVisibleSec = false;
+
+    if (kind === 'student') {
+      this.hideStudentPassword = true;
+      this.hideStudentConfirmPassword = true;
+    }
+    if (kind === 'teacher') {
+      this.hideTeacherPassword = true;
+      this.hideTeacherConfirmPassword = true;
+    }
+    if (kind === 'secretary') {
+      this.hideSecretaryPassword = true;
+      this.hideSecretaryConfirmPassword = true;
+    }
+  }
+
   // ------------------ Submit handlers ------------------
   addStudent(): void {
     if (this.StudentPasswordCtrl.value !== this.StudentConfirmPasswordCtrl.value) {
@@ -233,7 +255,10 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     };
 
     this.managerService.createStudent(registerUser).subscribe({
-      next: _ => this.openSnack('دانشجو با موفقیت ثبت شد.', 'success'),
+      next: _ => {
+        this.openSnack('دانشجو با موفقیت ثبت شد.', 'success');
+        this.resetForm(this.addStudentFg, 'student');
+      },
       error: err => this.openSnack(this.translateServerError(err), 'error')
     });
   }
@@ -260,7 +285,10 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     };
 
     this.managerService.createSecretary(registerUser).subscribe({
-      next: _ => this.openSnack('منشی با موفقیت ثبت شد.', 'success'),
+      next: _ => {
+        this.openSnack('منشی با موفقیت ثبت شد.', 'success');
+        this.resetForm(this.addSecretaryFg, 'secretary');
+      },
       error: err => this.openSnack(this.translateServerError(err), 'error')
     });
   }
@@ -287,27 +315,30 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     };
 
     this.managerService.createTeacher(registerUser).subscribe({
-      next: _ => this.openSnack('مدرس با موفقیت ثبت شد.', 'success'),
+      next: _ => {
+        this.openSnack('مدرس با موفقیت ثبت شد.', 'success');
+        this.resetForm(this.addTeacherFg, 'teacher');
+      },
       error: err => this.openSnack(this.translateServerError(err), 'error')
     });
   }
 
   // ------------------ Date pickers ------------------
   onStudentDateSelect(event: { shamsi: string; gregorian: string; timestamp: number; }): void {
-    this.shamsiDisplayDate = event.shamsi;
+    this.shamsiDisplayDateStu = event.shamsi;
     this.StudentDateOfBirthCtrl.setValue(new Date(event.gregorian));
-    this.uiIsVisible = false;
+    this.uiIsVisibleStu = false;
   }
 
   onTeacherDateSelect(event: { shamsi: string; gregorian: string; timestamp: number; }): void {
-    this.shamsiDisplayDate = event.shamsi;
+    this.shamsiDisplayDateTea = event.shamsi;
     this.TeacherDateOfBirthCtrl.setValue(new Date(event.gregorian));
-    this.uiIsVisible = false;
+    this.uiIsVisibleTea = false;
   }
 
   onSecretaryDateSelect(event: { shamsi: string; gregorian: string; timestamp: number; }): void {
-    this.shamsiDisplayDate = event.shamsi;
+    this.shamsiDisplayDateSec = event.shamsi;
     this.SecretaryDateOfBirthCtrl.setValue(new Date(event.gregorian));
-    this.uiIsVisible = false;
+    this.uiIsVisibleSec = false;
   }
 }

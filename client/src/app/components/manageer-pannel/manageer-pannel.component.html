@@ -6,6 +6,7 @@
 
 <section id="main-section">
   <mat-tab-group>
+    <!-- SECRETARY -->
     <mat-tab label="ثبت نام منشی">
       <form class="register-form" [formGroup]="addSecretaryFg" (ngSubmit)="addSecretary()">
         <div class="content">
@@ -86,11 +87,11 @@
 
           <mat-form-field appearance="outline">
             <mat-label>تاریخ تولد</mat-label>
-            <input class="input" [value]="shamsiDisplayDate" readonly (click)="uiIsVisible = true" matInput />
+            <input class="input" [value]="shamsiDisplayDateSec" readonly (click)="uiIsVisibleSec = true" matInput />
           </mat-form-field>
 
           <ng-persian-datepicker [calendarIsGregorian]="false" (dateOnSelect)="onSecretaryDateSelect($event)"
-            [dateFormat]="'jYYYY/jMM/jDD'" [dateGregorianFormat]="'YYYY-MM-DD'" [(uiIsVisible)]="uiIsVisible"
+            [dateFormat]="'jYYYY/jMM/jDD'" [dateGregorianFormat]="'YYYY-MM-DD'" [(uiIsVisible)]="uiIsVisibleSec"
             [uiTheme]="uiTheme" [uiYearView]="uiYearView" [uiMonthView]="uiMonthView"
             [uiHideAfterSelectDate]="uiHideAfterSelectDate" [uiHideOnOutsideClick]="uiHideOnOutsideClick"
             [uiTodayBtnEnable]="uiTodayBtnEnable" [dateMin]="minDobTs" [dateMax]="maxDobTs">
@@ -103,6 +104,7 @@
       </form>
     </mat-tab>
 
+    <!-- STUDENT -->
     <mat-tab label="ثبت نام دانشجو">
       <form class="register-form" [formGroup]="addStudentFg" (ngSubmit)="addStudent()">
         <div class="content">
@@ -118,7 +120,7 @@
             <mat-label>نام</mat-label>
             <input class="input" type="text" formControlName="nameCtrl" matInput>
             <mat-error *ngIf="StudentNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
-            <mat-error *ngIf="StudentNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل: 2 حرف</mat-error>
+            <mat-error *ngIf="StudentNameCtrl.hasError('minlength')">خیلی کوتاه حداقل: 2 حرف</mat-error>
             <mat-error *ngIf="StudentNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: 30 حرف</mat-error>
           </mat-form-field>
 
@@ -181,11 +183,11 @@
 
           <mat-form-field appearance="outline">
             <mat-label>تاریخ تولد</mat-label>
-            <input class="input" [value]="shamsiDisplayDate" readonly (click)="uiIsVisible = true" matInput />
+            <input class="input" [value]="shamsiDisplayDateStu" readonly (click)="uiIsVisibleStu = true" matInput />
           </mat-form-field>
 
           <ng-persian-datepicker [calendarIsGregorian]="false" (dateOnSelect)="onStudentDateSelect($event)"
-            [dateFormat]="'jYYYY/jMM/jDD'" [dateGregorianFormat]="'YYYY-MM-DD'" [(uiIsVisible)]="uiIsVisible"
+            [dateFormat]="'jYYYY/jMM/jDD'" [dateGregorianFormat]="'YYYY-MM-DD'" [(uiIsVisible)]="uiIsVisibleStu"
             [uiTheme]="uiTheme" [uiYearView]="uiYearView" [uiMonthView]="uiMonthView"
             [uiHideAfterSelectDate]="uiHideAfterSelectDate" [uiHideOnOutsideClick]="uiHideOnOutsideClick"
             [uiTodayBtnEnable]="uiTodayBtnEnable" [dateMin]="minDobTs" [dateMax]="maxDobTs">
@@ -198,6 +200,7 @@
       </form>
     </mat-tab>
 
+    <!-- TEACHER -->
     <mat-tab label="ثبت نام مدرس">
       <form class="register-form" [formGroup]="addTeacherFg" (ngSubmit)="addTeacherFg.valid && addTeacher()">
         <div class="content">
@@ -230,18 +233,11 @@
           <mat-form-field appearance="outline">
             <mat-label>ایمیل</mat-label>
             <input class="input" matInput type="email" formControlName="emailCtrl" maxlength="50">
-
             <mat-hint>ایمیل خودرا وارد کنید</mat-hint>
 
-            <mat-error *ngIf="TeacherEmailCtrl.hasError('required')">
-              این فیلد الزامی است
-            </mat-error>
-            <mat-error *ngIf="TeacherEmailCtrl.hasError('pattern')">
-              ایمیل را به‌درستی وارد کنید
-            </mat-error>
-            <mat-error *ngIf="TeacherEmailCtrl.hasError('maxlength')">
-              حداکثر 50 کاراکتر
-            </mat-error>
+            <mat-error *ngIf="TeacherEmailCtrl.hasError('required')">این فیلد الزامی است</mat-error>
+            <mat-error *ngIf="TeacherEmailCtrl.hasError('pattern')">ایمیل را به‌درستی وارد کنید</mat-error>
+            <mat-error *ngIf="TeacherEmailCtrl.hasError('maxlength')">حداکثر 50 کاراکتر</mat-error>
 
             <mat-hint align="end">{{ (TeacherEmailCtrl.value?.length || 0) }}/50</mat-hint>
           </mat-form-field>
@@ -285,11 +281,11 @@
 
           <mat-form-field appearance="outline">
             <mat-label>تاریخ تولد</mat-label>
-            <input class="input" [value]="shamsiDisplayDate" readonly (click)="uiIsVisible = true" matInput />
+            <input class="input" [value]="shamsiDisplayDateTea" readonly (click)="uiIsVisibleTea = true" matInput />
           </mat-form-field>
 
           <ng-persian-datepicker [calendarIsGregorian]="false" (dateOnSelect)="onTeacherDateSelect($event)"
-            [dateFormat]="'jYYYY/jMM/jDD'" [dateGregorianFormat]="'YYYY-MM-DD'" [(uiIsVisible)]="uiIsVisible"
+            [dateFormat]="'jYYYY/jMM/jDD'" [dateGregorianFormat]="'YYYY-MM-DD'" [(uiIsVisible)]="uiIsVisibleTea"
             [uiTheme]="uiTheme" [uiYearView]="uiYearView" [uiMonthView]="uiMonthView"
             [uiHideAfterSelectDate]="uiHideAfterSelectDate" [uiHideOnOutsideClick]="uiHideOnOutsideClick"
             [uiTodayBtnEnable]="uiTodayBtnEnable" [dateMin]="minDobTs" [dateMax]="maxDobTs">
