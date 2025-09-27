@@ -22,23 +22,28 @@
 
           <mat-form-field appearance="outline">
             <mat-label>نام</mat-label>
-            <input class="input" type="text" formControlName="nameCtrl" matInput>
+            <input class="input" type="text" formControlName="nameCtrl" matInput dir="auto">
             <mat-error *ngIf="SecretaryNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
             <mat-error *ngIf="SecretaryNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل: 2 حرف</mat-error>
             <mat-error *ngIf="SecretaryNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: 30 حرف</mat-error>
+            <mat-error *ngIf="SecretaryNameCtrl.hasError('pattern')">فقط حروف فارسی/انگلیسی، فاصله و خط‌تیره مجاز
+              است.</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>نام خانوادگی</mat-label>
-            <input class="input" type="text" formControlName="lastNameCtrl" matInput>
+            <input class="input" type="text" formControlName="lastNameCtrl" matInput dir="auto">
             <mat-error *ngIf="SecretaryLastNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
             <mat-error *ngIf="SecretaryLastNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل: 2 حرف</mat-error>
             <mat-error *ngIf="SecretaryLastNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: 30 حرف</mat-error>
+            <mat-error *ngIf="SecretaryLastNameCtrl.hasError('pattern')">فقط حروف فارسی/انگلیسی، فاصله و خط‌تیره مجاز
+              است.</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>ایمیل</mat-label>
-            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" matInput maxlength="50">
+            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" matInput maxlength="50"
+              dir="auto">
             <mat-hint>ایمیل خودرا وارد کنید</mat-hint>
 
             <mat-error *ngIf="SecretaryEmailCtrl.hasError('required')">فرم رو پرکنید</mat-error>
@@ -60,7 +65,7 @@
           <mat-form-field appearance="outline">
             <mat-label>رمز عبور</mat-label>
             <input class="input" [type]="hideSecretaryPassword ? 'password' : 'text'" formControlName="passwordCtrl"
-              matInput>
+              matInput dir="auto">
             <button mat-icon-button matSuffix tabindex="-1" type="button"
               (click)="hideSecretaryPassword = !hideSecretaryPassword">
               <mat-icon>{{ hideSecretaryPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
@@ -74,7 +79,7 @@
           <mat-form-field appearance="outline">
             <mat-label>تکرار رمز عبور</mat-label>
             <input class="input" [type]="hideSecretaryConfirmPassword ? 'password' : 'text'"
-              formControlName="confirmPasswordCtrl" matInput>
+              formControlName="confirmPasswordCtrl" matInput dir="auto">
             <button mat-icon-button matSuffix tabindex="-1" type="button"
               (click)="hideSecretaryConfirmPassword = !hideSecretaryConfirmPassword">
               <mat-icon>{{ hideSecretaryConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
@@ -118,23 +123,28 @@
 
           <mat-form-field appearance="outline">
             <mat-label>نام</mat-label>
-            <input class="input" type="text" formControlName="nameCtrl" matInput>
+            <input class="input" type="text" formControlName="nameCtrl" matInput dir="auto">
             <mat-error *ngIf="StudentNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
             <mat-error *ngIf="StudentNameCtrl.hasError('minlength')">خیلی کوتاه حداقل: 2 حرف</mat-error>
             <mat-error *ngIf="StudentNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: 30 حرف</mat-error>
+            <mat-error *ngIf="StudentNameCtrl.hasError('pattern')">فقط حروف فارسی/انگلیسی، فاصله و خط‌تیره مجاز
+              است.</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>نام خانوادگی</mat-label>
-            <input class="input" type="text" formControlName="lastNameCtrl" matInput>
+            <input class="input" type="text" formControlName="lastNameCtrl" matInput dir="auto">
             <mat-error *ngIf="StudentLastNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
             <mat-error *ngIf="StudentLastNameCtrl.hasError('minlength')">خیلی کوتاه حداقل: 2 حرف</mat-error>
             <mat-error *ngIf="StudentLastNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: 30 حرف</mat-error>
+            <mat-error *ngIf="StudentLastNameCtrl.hasError('pattern')">فقط حروف فارسی/انگلیسی، فاصله و خط‌تیره مجاز
+              است.</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>ایمیل</mat-label>
-            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" matInput maxlength="50">
+            <input class="input" autoFocusDir type="email" formControlName="emailCtrl" matInput maxlength="50"
+              dir="auto">
             <mat-hint>ایمیل خودرا وارد کنید</mat-hint>
 
             <mat-error *ngIf="StudentEmailCtrl.hasError('required')">فرم رو پرکنید</mat-error>
@@ -156,7 +166,7 @@
           <mat-form-field appearance="outline">
             <mat-label>رمز عبور</mat-label>
             <input class="input" [type]="hideStudentPassword ? 'password' : 'text'" formControlName="passwordCtrl"
-              matInput>
+              matInput dir="auto">
             <button mat-icon-button matSuffix tabindex="-1" type="button"
               (click)="hideStudentPassword = !hideStudentPassword">
               <mat-icon>{{ hideStudentPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
@@ -170,7 +180,7 @@
           <mat-form-field appearance="outline">
             <mat-label>تکرار رمز عبور</mat-label>
             <input class="input" [type]="hideStudentConfirmPassword ? 'password' : 'text'"
-              formControlName="confirmPasswordCtrl" matInput>
+              formControlName="confirmPasswordCtrl" matInput dir="auto">
             <button mat-icon-button matSuffix tabindex="-1" type="button"
               (click)="hideStudentConfirmPassword = !hideStudentConfirmPassword">
               <mat-icon>{{ hideStudentConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
@@ -216,23 +226,27 @@
 
           <mat-form-field appearance="outline">
             <mat-label>نام</mat-label>
-            <input class="input" type="text" formControlName="nameCtrl" matInput>
+            <input class="input" type="text" formControlName="nameCtrl" matInput dir="auto">
             <mat-error *ngIf="TeacherNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
             <mat-error *ngIf="TeacherNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل: 2 حرف</mat-error>
             <mat-error *ngIf="TeacherNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: 30 حرف</mat-error>
+            <mat-error *ngIf="TeacherNameCtrl.hasError('pattern')">فقط حروف فارسی/انگلیسی، فاصله و خط‌تیره مجاز
+              است.</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>نام خانوادگی</mat-label>
-            <input class="input" type="text" formControlName="lastNameCtrl" matInput>
+            <input class="input" type="text" formControlName="lastNameCtrl" matInput dir="auto">
             <mat-error *ngIf="TeacherLastNameCtrl.hasError('required')">فرم رو پرکنید</mat-error>
             <mat-error *ngIf="TeacherLastNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل: 2 حرف</mat-error>
             <mat-error *ngIf="TeacherLastNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: 30 حرف</mat-error>
+            <mat-error *ngIf="TeacherLastNameCtrl.hasError('pattern')">فقط حروف فارسی/انگلیسی، فاصله و خط‌تیره مجاز
+              است.</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>ایمیل</mat-label>
-            <input class="input" matInput type="email" formControlName="emailCtrl" maxlength="50">
+            <input class="input" matInput type="email" formControlName="emailCtrl" maxlength="50" dir="auto">
             <mat-hint>ایمیل خودرا وارد کنید</mat-hint>
 
             <mat-error *ngIf="TeacherEmailCtrl.hasError('required')">این فیلد الزامی است</mat-error>
@@ -254,7 +268,7 @@
           <mat-form-field appearance="outline">
             <mat-label>رمز عبور</mat-label>
             <input class="input" [type]="hideTeacherPassword ? 'password' : 'text'" formControlName="passwordCtrl"
-              matInput>
+              matInput dir="auto">
             <button mat-icon-button matSuffix tabindex="-1" type="button"
               (click)="hideTeacherPassword = !hideTeacherPassword">
               <mat-icon>{{ hideTeacherPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
@@ -268,7 +282,7 @@
           <mat-form-field appearance="outline">
             <mat-label>تکرار رمز عبور</mat-label>
             <input class="input" [type]="hideTeacherConfirmPassword ? 'password' : 'text'"
-              formControlName="confirmPasswordCtrl" matInput>
+              formControlName="confirmPasswordCtrl" matInput dir="auto">
             <button mat-icon-button matSuffix tabindex="-1" type="button"
               (click)="hideTeacherConfirmPassword = !hideTeacherConfirmPassword">
               <mat-icon>{{ hideTeacherConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>

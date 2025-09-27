@@ -44,6 +44,8 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   accountService = inject(AccountService);
   managerService = inject(ManagerService);
 
+  private readonly NAME_REGEX = /^[\u0600-\u06FFa-zA-Z\s\u200c-]+$/;
+
   minDobTs!: number;
   maxDobTs!: number;
 
@@ -93,8 +95,8 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
     passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
-    nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validators.pattern(this.NAME_REGEX)]],
+    lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validators.pattern(this.NAME_REGEX)]],
     phoneNumCtrl: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
     dateOfBirthCtrl: ['', [Validators.required]],
     genderCtrl: ['', [Validators.required]]
@@ -104,8 +106,8 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
     passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
-    nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validators.pattern(this.NAME_REGEX)]],
+    lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validators.pattern(this.NAME_REGEX)]],
     phoneNumCtrl: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
     dateOfBirthCtrl: ['', [Validators.required]],
     genderCtrl: ['', [Validators.required]]
@@ -115,8 +117,8 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
     passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
-    nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validators.pattern(this.NAME_REGEX)]],
+    lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validators.pattern(this.NAME_REGEX)]],
     phoneNumCtrl: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
     dateOfBirthCtrl: ['', [Validators.required]],
     genderCtrl: ['', [Validators.required]]
@@ -153,7 +155,6 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   get StudentPhoneNumCtrl(): FormControl { return this.addStudentFg.get('phoneNumCtrl') as FormControl; }
   get StudentDateOfBirthCtrl(): FormControl { return this.addStudentFg.get('dateOfBirthCtrl') as FormControl; }
 
-  // ------------------ Helpers ------------------
   private openSnack(message: string, panel: 'success' | 'error' | 'info' = 'error'): void {
     const mapClass: Record<'success' | 'error' | 'info', string> = {
       success: 'snack-success',
@@ -171,6 +172,16 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   }
 
   private translateServerError(err: any): string {
+    const modelErrors = err?.error?.errors;
+    if (modelErrors && typeof modelErrors === 'object') {
+      const msgs: string[] = [];
+      for (const k of Object.keys(modelErrors)) {
+        const arr = modelErrors[k];
+        if (Array.isArray(arr)) msgs.push(...arr);
+      }
+      if (msgs.length) return msgs.join(' | ');
+    }
+
     const status = err?.status;
     const rawStr = (err?.error?.message ?? err?.error ?? err?.Message ?? err?.title ?? '').toString();
     const raw = rawStr.toLowerCase();
@@ -232,7 +243,6 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     }
   }
 
-  // ------------------ Submit handlers ------------------
   addStudent(): void {
     if (this.StudentPasswordCtrl.value !== this.StudentConfirmPasswordCtrl.value) {
       this.passowrdsNotMatch = true;
