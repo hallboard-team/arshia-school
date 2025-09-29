@@ -102,7 +102,6 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     this.deleteSubscription?.unsubscribe();
   }
 
-  // ------------------ Forms ------------------
   addSecretaryFg = this.fb.group({
     emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
     passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
@@ -136,7 +135,6 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     genderCtrl: ['', [Validators.required]]
   });
 
-  // ------------------ Getters ------------------
   get SecretaryGenderCtrl(): FormControl { return this.addSecretaryFg.get('genderCtrl') as FormControl; }
   get SecretaryEmailCtrl(): FormControl { return this.addSecretaryFg.get('emailCtrl') as FormControl; }
   get SecretaryPasswordCtrl(): FormControl { return this.addSecretaryFg.get('passwordCtrl') as FormControl; }
@@ -179,6 +177,67 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     });
   }
 
+  private extractServerMessages(err: any): string[] {
+    if (Array.isArray(err?.error)) return err.error.map((x: any) => x?.toString?.() ?? String(x));
+    if (Array.isArray(err?.error?.errors)) return err.error.errors.map((x: any) => x?.toString?.() ?? String(x));
+
+    const modelErrors = err?.error?.errors;
+    if (modelErrors && typeof modelErrors === 'object') {
+      const msgs: string[] = [];
+      for (const k of Object.keys(modelErrors)) {
+        const arr = modelErrors[k];
+        if (Array.isArray(arr)) msgs.push(...arr.map((x: any) => x?.toString?.() ?? String(x)));
+      }
+      if (msgs.length) return msgs;
+    }
+
+    const raw = (err?.error?.message ?? err?.error ?? err?.Message ?? err?.title)?.toString();
+    return raw ? [raw] : [];
+  }
+
+  private faMessage(s: string): string {
+    const m = s.toLowerCase();
+    if (m.includes('at least 8')) return 'رمز عبور باید حداقل ۸ کاراکتر باشد.';
+    if (m.includes('non alphanumeric')) return 'رمز عبور باید حداقل یک کاراکتر خاص مثل !@# داشته باشد.';
+    if (m.includes('uppercase')) return 'رمز عبور باید حداقل یک حرف بزرگ انگلیسی (A-Z) داشته باشد.';
+    if (m.includes('lowercase')) return 'رمز عبور باید حداقل یک حرف کوچک انگلیسی (a-z) داشته باشد.';
+    if (m.includes('digit') || m.includes('number')) return 'رمز عبور باید حداقل یک رقم داشته باشد.';
+    if (m.includes('passwords must match') || (m.includes('confirm') && m.includes('password')))
+      return 'رمز عبور و تکرار آن یکسان نیستند.';
+    if (m.includes('email')) return 'ایمیل معتبر نیست.';
+    return s;
+  }
+
+  private applyServerErrorsToForm(group: FormGroup, messages: string[]): void {
+    const markKeys = ['emailCtrl', 'passwordCtrl', 'confirmPasswordCtrl'];
+    markKeys.forEach(k => group.get(k)?.markAsTouched());
+
+    markKeys.forEach(k => {
+      const c = group.get(k);
+      if (!c) return;
+      const errs = { ...(c.errors || {}) };
+      delete (errs as any)['server'];
+      if (Object.keys(errs).length) c.setErrors(errs);
+      else c.setErrors(null);
+    });
+
+    const passMsgs = messages.filter(m => /password/i.test(m));
+    if (passMsgs.length) {
+      const msg = '• ' + passMsgs.map(m => this.faMessage(m)).join('\n• ');
+      const p = group.get('passwordCtrl'); const cp = group.get('confirmPasswordCtrl');
+      p?.setErrors({ ...(p?.errors || {}), server: msg });
+      cp?.setErrors({ ...(cp?.errors || {}), server: msg });
+    }
+
+    const emailMsgs = messages.filter(m => /email/i.test(m));
+    if (emailMsgs.length) {
+      const msg = '• ' + emailMsgs.map(m => this.faMessage(m)).join('\n• ');
+      const e = group.get('emailCtrl');
+      e?.setErrors({ ...(e?.errors || {}), server: msg });
+    }
+
+  }
+
   private translateServerError(err: any): string {
     const modelErrors = err?.error?.errors;
     if (modelErrors && typeof modelErrors === 'object') {
@@ -203,7 +262,6 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     if (status === 403) return 'اجازه دسترسی ندارید.';
     if (status === 404) return 'موردی یافت نشد.';
     if (status === 422) return 'اطلاعات واردشده معتبر نیست.';
-
     if (raw.includes('e11000') || raw.includes('duplicate') || raw.includes('unique') || (raw.includes('email') && raw.includes('exist')))
       return 'این ایمیل قبلاً ثبت شده است.';
     if (raw.includes('invalid') && raw.includes('email')) return 'ایمیل معتبر نیست.';
@@ -250,6 +308,7 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     }
   }
 
+  // ---------- submits ----------
   addStudent(): void {
     if (this.StudentPasswordCtrl.value !== this.StudentConfirmPasswordCtrl.value) {
       this.passowrdsNotMatch = true;
@@ -273,7 +332,15 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
 
     this.managerService.createStudent(registerUser).subscribe({
       next: _ => { this.openSnack('دانشجو با موفقیت ثبت شد.', 'success'); this.resetForm(this.addStudentFg, 'student'); },
-      error: err => this.openSnack(this.translateServerError(err), 'error')
+      error: err => {
+        const msgs = this.extractServerMessages(err);
+        if (msgs.length) {
+          this.applyServerErrorsToForm(this.addStudentFg, msgs);
+          this.openSnack('خطای اعتبارسنجی:\n• ' + msgs.map(m => this.faMessage(m)).join('\n• '), 'error');
+        } else {
+          this.openSnack(this.translateServerError(err), 'error');
+        }
+      }
     });
   }
 
@@ -300,7 +367,15 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
 
     this.managerService.createSecretary(registerUser).subscribe({
       next: _ => { this.openSnack('منشی با موفقیت ثبت شد.', 'success'); this.resetForm(this.addSecretaryFg, 'secretary'); },
-      error: err => this.openSnack(this.translateServerError(err), 'error')
+      error: err => {
+        const msgs = this.extractServerMessages(err);
+        if (msgs.length) {
+          this.applyServerErrorsToForm(this.addSecretaryFg, msgs);
+          this.openSnack('خطای اعتبارسنجی:\n• ' + msgs.map(m => this.faMessage(m)).join('\n• '), 'error');
+        } else {
+          this.openSnack(this.translateServerError(err), 'error');
+        }
+      }
     });
   }
 
@@ -327,7 +402,15 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
 
     this.managerService.createTeacher(registerUser).subscribe({
       next: _ => { this.openSnack('مدرس با موفقیت ثبت شد.', 'success'); this.resetForm(this.addTeacherFg, 'teacher'); },
-      error: err => this.openSnack(this.translateServerError(err), 'error')
+      error: err => {
+        const msgs = this.extractServerMessages(err);
+        if (msgs.length) {
+          this.applyServerErrorsToForm(this.addTeacherFg, msgs);
+          this.openSnack('خطای اعتبارسنجی:\n• ' + msgs.map(m => this.faMessage(m)).join('\n• '), 'error');
+        } else {
+          this.openSnack(this.translateServerError(err), 'error');
+        }
+      }
     });
   }
 

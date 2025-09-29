@@ -61,6 +61,7 @@
               <span *ngIf="SecretaryEmailCtrl.hasError('required')">فرم رو پرکنید</span>
               <span *ngIf="SecretaryEmailCtrl.hasError('pattern')">ایمیل رو به درستی وارد کنید</span>
               <span *ngIf="SecretaryEmailCtrl.hasError('maxlength')">حداکثر 50 کاراکتر</span>
+              <span *ngIf="SecretaryEmailCtrl.hasError('server')">{{ SecretaryEmailCtrl.getError('server') }}</span>
             </div>
           </div>
 
@@ -92,6 +93,8 @@
               <span *ngIf="SecretaryPasswordCtrl.hasError('required')">فرم رو پرکنید</span>
               <span *ngIf="SecretaryPasswordCtrl.hasError('minlength')">حداقل 7 کاراکتر</span>
               <span *ngIf="SecretaryPasswordCtrl.hasError('maxlength')">حداکثر 20 کاراکتر</span>
+              <span *ngIf="SecretaryPasswordCtrl.hasError('server')">{{ SecretaryPasswordCtrl.getError('server')
+                }}</span>
             </div>
           </div>
 
@@ -110,10 +113,12 @@
               <span *ngIf="SecretaryConfirmPasswordCtrl.hasError('required')">فرم رو پرکنید</span>
               <span *ngIf="SecretaryConfirmPasswordCtrl.hasError('minlength')">حداقل 7 کاراکتر</span>
               <span *ngIf="SecretaryConfirmPasswordCtrl.hasError('maxlength')">حداکثر 20 کاراکتر</span>
+              <span *ngIf="SecretaryConfirmPasswordCtrl.hasError('server')">{{
+                SecretaryConfirmPasswordCtrl.getError('server') }}</span>
             </div>
           </div>
 
-          <!-- dob (نمایشی است و خطای ولیدیشن ندارد) -->
+          <!-- dob -->
           <div class="form-item">
             <mat-form-field appearance="outline">
               <mat-label>تاریخ تولد</mat-label>
@@ -189,6 +194,7 @@
               <span *ngIf="StudentEmailCtrl.hasError('required')">فرم رو پرکنید</span>
               <span *ngIf="StudentEmailCtrl.hasError('pattern')">ایمیل رو به درستی وارد کنید</span>
               <span *ngIf="StudentEmailCtrl.hasError('maxlength')">حداکثر 50 کاراکتر</span>
+              <span *ngIf="StudentEmailCtrl.hasError('server')">{{ StudentEmailCtrl.getError('server') }}</span>
             </div>
           </div>
 
@@ -220,6 +226,7 @@
               <span *ngIf="StudentPasswordCtrl.hasError('required')">فرم رو پرکنید</span>
               <span *ngIf="StudentPasswordCtrl.hasError('minlength')">حداقل 7 کاراکتر</span>
               <span *ngIf="StudentPasswordCtrl.hasError('maxlength')">حداکثر 20 کاراکتر</span>
+              <span *ngIf="StudentPasswordCtrl.hasError('server')">{{ StudentPasswordCtrl.getError('server') }}</span>
             </div>
           </div>
 
@@ -238,6 +245,8 @@
               <span *ngIf="StudentConfirmPasswordCtrl.hasError('required')">فرم رو پرکنید</span>
               <span *ngIf="StudentConfirmPasswordCtrl.hasError('minlength')">حداقل 7 کاراکتر</span>
               <span *ngIf="StudentConfirmPasswordCtrl.hasError('maxlength')">حداکثر 20 کاراکتر</span>
+              <span *ngIf="StudentConfirmPasswordCtrl.hasError('server')">{{
+                StudentConfirmPasswordCtrl.getError('server') }}</span>
             </div>
           </div>
 
@@ -317,6 +326,7 @@
               <span *ngIf="TeacherEmailCtrl.hasError('required')">این فیلد الزامی است</span>
               <span *ngIf="TeacherEmailCtrl.hasError('pattern')">ایمیل را به‌درستی وارد کنید</span>
               <span *ngIf="TeacherEmailCtrl.hasError('maxlength')">حداکثر 50 کاراکتر</span>
+              <span *ngIf="TeacherEmailCtrl.hasError('server')">{{ TeacherEmailCtrl.getError('server') }}</span>
             </div>
           </div>
 
@@ -348,6 +358,7 @@
               <span *ngIf="TeacherPasswordCtrl.hasError('required')">فرم رو پرکنید</span>
               <span *ngIf="TeacherPasswordCtrl.hasError('minlength')">حداقل 7 کاراکتر</span>
               <span *ngIf="TeacherPasswordCtrl.hasError('maxlength')">حداکثر 20 کاراکتر</span>
+              <span *ngIf="TeacherPasswordCtrl.hasError('server')">{{ TeacherPasswordCtrl.getError('server') }}</span>
             </div>
           </div>
 
@@ -366,6 +377,8 @@
               <span *ngIf="TeacherConfirmPasswordCtrl.hasError('required')">فرم رو پرکنید</span>
               <span *ngIf="TeacherConfirmPasswordCtrl.hasError('minlength')">حداقل 7 کاراکتر</span>
               <span *ngIf="TeacherConfirmPasswordCtrl.hasError('maxlength')">حداکثر 20 کاراکتر</span>
+              <span *ngIf="TeacherConfirmPasswordCtrl.hasError('server')">{{
+                TeacherConfirmPasswordCtrl.getError('server') }}</span>
             </div>
           </div>
 
