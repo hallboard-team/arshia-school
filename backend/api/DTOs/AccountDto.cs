@@ -15,7 +15,7 @@ public record RegisterDto(
     string? PhoneNum,
     [BirthDateRange(MinYears = 11, MaxYears = 99)]
     DateOnly DateOfBirth,
-    string Gender
+    [Required] GenderType Gender
 );
 
 public class RegisteredUserDto
@@ -25,7 +25,7 @@ public class RegisteredUserDto
     public string? Name { get; init; }
     public string? LastName { get; init; }
     public string? PhoneNum { get; init; }
-    public string? Gender { get; init; }
+    public GenderType Gender { get; init; }
     public DateOnly DateOfBirth { get; init; }
     public List<string> Errors { get; init; } = [];
 }
@@ -45,7 +45,7 @@ public class LoggedInDto
     public string? Name { get; init; }
     public string? LastName { get; init; }
     public string? PhoneNum { get; init; }
-    public string? Gender { get; init; }
+    public GenderType Gender { get; init; }
     public DateOnly DateOfBirth { get; init; }
     public bool IsWrongCreds { get; set; }
     public List<string> Errors { get; init; } = [];
