@@ -7,32 +7,34 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-top: 2rem;
-        margin-bottom: 2rem;
+        margin: 2rem 0;
 
         .content {
             width: 90%;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
             align-items: center;
-            gap: 3rem;
+            padding: 1.5rem 1rem;
+
             border-radius: 10px;
             background: linear-gradient(145deg, #f0f0f0, #cacaca);
             box-shadow: 5px 5px 10px #5a5a5a, -5px -5px 10px #ffffff;
 
             .div-title-radio-input {
+                flex: 0 0 100%;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 width: 100%;
-                margin-top: 1rem;
+                margin-top: .5rem;
                 gap: 1rem;
 
                 .title {
                     font-size: 20px;
-                    color: black;
+                    color: #000;
                     font-weight: 800;
                 }
 
@@ -55,43 +57,66 @@
                 }
             }
 
-            mat-form-field {
-                width: 80%;
+            .form-item {
+                width: 90%;
+                max-width: 700px;
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                min-width: 0;
 
-                .input {
-                    padding: 10px;
-                    height: 54px;
+                mat-form-field {
+                    display: block;
                     width: 100%;
-                    border: none;
-                    border-radius: 10px;
-                    background: transparent;
-                    /* ⬅️ مهم */
-                    box-shadow: none;
-                    /* ⬅️ مهم */
+
+                    .input {
+                        padding: 10px;
+                        height: 54px;
+                        width: 100%;
+                        border: none;
+                        border-radius: 10px;
+                        background: transparent;
+                        box-shadow: none;
+                    }
+
+                    mat-label {
+                        font-size: 15px;
+                        font-weight: 800;
+                        color: #000;
+                    }
+
+                    mat-hint {
+                        font-size: 12px;
+                    }
+
+                    mat-error {
+                        color: #d32f2f;
+                        font-size: 12px;
+                        line-height: 1.6;
+                        display: block;
+                    }
                 }
 
-                mat-label {
-                    font-size: 15px;
-                    font-weight: 800;
-                    color: black;
-                }
-
-                mat-hint {
+                .field-error {
+                    margin-top: 6px;
+                    padding: 0 4px;
                     font-size: 12px;
-                }
-
-                mat-error {
-                    color: red;
-                    font-size: 12px;
+                    color: #d32f2f;
+                    line-height: 1.6;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2px;
+                    width: 100%;
                 }
             }
 
             .div-btn-add {
+                flex: 0 0 100%;
                 width: 100%;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                margin-bottom: 1rem;
+                margin: .5rem 0 1rem;
 
                 button {
                     border-radius: 10px;
@@ -105,46 +130,33 @@
 }
 
 @media (min-width: 768px) {
-    #main-section {
-        mat-tab-group {
-            width: 100%;
-        }
+    #main-section .register-form .content {
+        width: 90%;
+        flex-direction: row;
+        justify-content: center;
+        align-items: stretch;
+    }
 
-        .register-form {
-            width: 100%;
-
-            .content {
-                width: 90%;
-                flex-direction: row;
-                flex-wrap: wrap;
-
-                mat-form-field {
-                    width: 45%;
-                }
-            }
-        }
+    #main-section .register-form .content .form-item {
+        flex: 1 1 45%;
+        max-width: 45%;
+        width: auto;
     }
 }
 
 @media (min-width: 1200px) {
     #main-section {
-        margin-top: 0rem;
+        margin-top: 0;
+    }
 
-        mat-tab-group {
-            width: 100%;
-        }
+    #main-section .register-form .content {
+        width: 60%;
+        justify-content: space-between;
+    }
 
-        .register-form {
-            width: 100%;
-
-            .content {
-                width: 60%;
-
-                mat-form-field {
-                    width: 30%;
-                }
-            }
-        }
+    #main-section .register-form .content .form-item {
+        flex: 1 1 30%;
+        max-width: 30%;
     }
 }
 
@@ -161,7 +173,8 @@
     border-radius: 12px;
     background: #e0e0e0;
     box-shadow: inset 5px 5px 10px #cecece, inset -5px -5px 10px #f2f2f2;
-    padding: 0 0;
+    padding: 0;
+    overflow: visible;
 }
 
 ::ng-deep .mat-mdc-form-field-appearance-outline .mdc-notched-outline {
@@ -174,11 +187,31 @@
     padding: 12px 14px !important;
     min-height: 54px;
     width: 100%;
+    box-sizing: border-box;
+}
+
+::ng-deep .mdc-floating-label {
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: clip;
 }
 
 ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    position: relative;
+    bottom: 0;
+    margin-top: 6px;
     padding: 0 12px;
     height: auto;
+}
+
+::ng-deep .mdc-text-field--invalid .mdc-notched-outline__leading,
+::ng-deep .mdc-text-field--invalid .mdc-notched-outline__notch,
+::ng-deep .mdc-text-field--invalid .mdc-notched-outline__trailing {
+    border-color: transparent !important;
+}
+
+::ng-deep .mdc-text-field--invalid .mat-mdc-text-field-wrapper {
+    border: none !important;
 }
 
 ::ng-deep mat-form-field.phone-field .mat-mdc-form-field-prefix {

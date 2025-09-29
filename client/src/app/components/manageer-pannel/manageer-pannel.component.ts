@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, FormBuilder, Validators, FormControl, FormGroup } from '@angular/forms';
+import { Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import {
+  FormsModule, ReactiveFormsModule, FormBuilder, Validators,
+  FormControl, FormGroup, FormGroupDirective
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -19,7 +22,11 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { NavbarComponent } from '../navbar/navbar.component';
 import moment from 'moment-jalaali';
-import { defaultTheme, IDatepickerTheme, NgPersianDatepickerModule } from '../../../../projects/ng-persian-datepicker/src/public-api';
+import {
+  defaultTheme, IDatepickerTheme, NgPersianDatepickerModule
+} from '../../../../projects/ng-persian-datepicker/src/public-api';
+import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+
 moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
 @Component({
@@ -34,7 +41,8 @@ moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
     NgPersianDatepickerModule
   ],
   templateUrl: './manageer-pannel.component.html',
-  styleUrl: './manageer-pannel.component.scss'
+  styleUrl: './manageer-pannel.component.scss',
+  providers: [{ provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher }]
 })
 export class ManageerPannelComponent implements OnInit, OnDestroy {
   private snackBar = inject(MatSnackBar);
@@ -73,6 +81,10 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   hideStudentConfirmPassword = true;
   hideTeacherPassword = true;
   hideTeacherConfirmPassword = true;
+
+  @ViewChild('secForm', { read: FormGroupDirective }) secFormDir!: FormGroupDirective;
+  @ViewChild('stuForm', { read: FormGroupDirective }) stuFormDir!: FormGroupDirective;
+  @ViewChild('teachForm', { read: FormGroupDirective }) teachFormDir!: FormGroupDirective;
 
   constructor() {
     this.loggedInUser = this.accountService.loggedInUserSig();
@@ -125,7 +137,6 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   });
 
   // ------------------ Getters ------------------
-  // Secretary
   get SecretaryGenderCtrl(): FormControl { return this.addSecretaryFg.get('genderCtrl') as FormControl; }
   get SecretaryEmailCtrl(): FormControl { return this.addSecretaryFg.get('emailCtrl') as FormControl; }
   get SecretaryPasswordCtrl(): FormControl { return this.addSecretaryFg.get('passwordCtrl') as FormControl; }
@@ -135,7 +146,6 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   get SecretaryPhoneNumCtrl(): FormControl { return this.addSecretaryFg.get('phoneNumCtrl') as FormControl; }
   get SecretaryDateOfBirthCtrl(): FormControl { return this.addSecretaryFg.get('dateOfBirthCtrl') as FormControl; }
 
-  // Teacher
   get TeacherGenderCtrl(): FormControl { return this.addTeacherFg.get('genderCtrl') as FormControl; }
   get TeacherEmailCtrl(): FormControl { return this.addTeacherFg.get('emailCtrl') as FormControl; }
   get TeacherPasswordCtrl(): FormControl { return this.addTeacherFg.get('passwordCtrl') as FormControl; }
@@ -145,7 +155,6 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   get TeacherPhoneNumCtrl(): FormControl { return this.addTeacherFg.get('phoneNumCtrl') as FormControl; }
   get TeacherDateOfBirthCtrl(): FormControl { return this.addTeacherFg.get('dateOfBirthCtrl') as FormControl; }
 
-  // Student
   get StudentGenderCtrl(): FormControl { return this.addStudentFg.get('genderCtrl') as FormControl; }
   get StudentEmailCtrl(): FormControl { return this.addStudentFg.get('emailCtrl') as FormControl; }
   get StudentPasswordCtrl(): FormControl { return this.addStudentFg.get('passwordCtrl') as FormControl; }
@@ -161,7 +170,6 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
       error: 'snack-error',
       info: 'snack-info'
     };
-
     this.snackBar.open(message, 'باشه', {
       duration: 4000,
       horizontalPosition: 'center',
@@ -181,7 +189,6 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
       }
       if (msgs.length) return msgs.join(' | ');
     }
-
     const status = err?.status;
     const rawStr = (err?.error?.message ?? err?.error ?? err?.Message ?? err?.title ?? '').toString();
     const raw = rawStr.toLowerCase();
@@ -221,6 +228,10 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     fg.markAsUntouched();
     fg.updateValueAndValidity();
 
+    if (kind === 'student' && this.stuFormDir) this.stuFormDir.resetForm();
+    if (kind === 'teacher' && this.teachFormDir) this.teachFormDir.resetForm();
+    if (kind === 'secretary' && this.secFormDir) this.secFormDir.resetForm();
+
     if (kind === 'student') {
       this.shamsiDisplayDateStu = '';
       this.uiIsVisibleStu = false;
@@ -231,7 +242,7 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
       this.uiIsVisibleTea = false;
       this.hideTeacherPassword = true;
       this.hideTeacherConfirmPassword = true;
-    } else if (kind === 'secretary') {
+    } else {
       this.shamsiDisplayDateSec = '';
       this.uiIsVisibleSec = false;
       this.hideSecretaryPassword = true;
@@ -261,10 +272,7 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     };
 
     this.managerService.createStudent(registerUser).subscribe({
-      next: _ => {
-        this.openSnack('دانشجو با موفقیت ثبت شد.', 'success');
-        this.resetForm(this.addStudentFg, 'student');
-      },
+      next: _ => { this.openSnack('دانشجو با موفقیت ثبت شد.', 'success'); this.resetForm(this.addStudentFg, 'student'); },
       error: err => this.openSnack(this.translateServerError(err), 'error')
     });
   }
@@ -291,10 +299,7 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     };
 
     this.managerService.createSecretary(registerUser).subscribe({
-      next: _ => {
-        this.openSnack('منشی با موفقیت ثبت شد.', 'success');
-        this.resetForm(this.addSecretaryFg, 'secretary');
-      },
+      next: _ => { this.openSnack('منشی با موفقیت ثبت شد.', 'success'); this.resetForm(this.addSecretaryFg, 'secretary'); },
       error: err => this.openSnack(this.translateServerError(err), 'error')
     });
   }
@@ -321,15 +326,11 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     };
 
     this.managerService.createTeacher(registerUser).subscribe({
-      next: _ => {
-        this.openSnack('مدرس با موفقیت ثبت شد.', 'success');
-        this.resetForm(this.addTeacherFg, 'teacher');
-      },
+      next: _ => { this.openSnack('مدرس با موفقیت ثبت شد.', 'success'); this.resetForm(this.addTeacherFg, 'teacher'); },
       error: err => this.openSnack(this.translateServerError(err), 'error')
     });
   }
 
-  // ------------------ Date pickers ------------------
   onStudentDateSelect(event: { shamsi: string; gregorian: string; timestamp: number; }): void {
     this.shamsiDisplayDateStu = event.shamsi;
     this.StudentDateOfBirthCtrl.setValue(new Date(event.gregorian));
@@ -346,5 +347,9 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     this.shamsiDisplayDateSec = event.shamsi;
     this.SecretaryDateOfBirthCtrl.setValue(new Date(event.gregorian));
     this.uiIsVisibleSec = false;
+  }
+
+  showErr(ctrl: FormControl | null | undefined): boolean {
+    return !!ctrl && ctrl.invalid && (ctrl.dirty || ctrl.touched);
   }
 }
