@@ -221,23 +221,19 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     fg.markAsUntouched();
     fg.updateValueAndValidity();
 
-    if (kind === 'student') this.shamsiDisplayDateStu = '';
-    if (kind === 'teacher') this.shamsiDisplayDateTea = '';
-    if (kind === 'secretary') this.shamsiDisplayDateSec = '';
-
-    if (kind === 'student') this.uiIsVisibleStu = false;
-    if (kind === 'teacher') this.uiIsVisibleTea = false;
-    if (kind === 'secretary') this.uiIsVisibleSec = false;
-
     if (kind === 'student') {
+      this.shamsiDisplayDateStu = '';
+      this.uiIsVisibleStu = false;
       this.hideStudentPassword = true;
       this.hideStudentConfirmPassword = true;
-    }
-    if (kind === 'teacher') {
+    } else if (kind === 'teacher') {
+      this.shamsiDisplayDateTea = '';
+      this.uiIsVisibleTea = false;
       this.hideTeacherPassword = true;
       this.hideTeacherConfirmPassword = true;
-    }
-    if (kind === 'secretary') {
+    } else if (kind === 'secretary') {
+      this.shamsiDisplayDateSec = '';
+      this.uiIsVisibleSec = false;
       this.hideSecretaryPassword = true;
       this.hideSecretaryConfirmPassword = true;
     }
