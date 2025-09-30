@@ -118,20 +118,12 @@
             </div>
           </div>
 
-          <!-- dob -->
           <div class="form-item">
             <mat-form-field appearance="outline">
               <mat-label>تاریخ تولد</mat-label>
-              <input class="input" [value]="shamsiDisplayDateSec" readonly (click)="uiIsVisibleSec = true" matInput />
+              <input matInput placeholder="YYYY-MM-DD" [formControl]="SecretaryDateOfBirthCtrl">
             </mat-form-field>
           </div>
-
-          <ng-persian-datepicker [calendarIsGregorian]="false" (dateOnSelect)="onSecretaryDateSelect($event)"
-            [dateFormat]="'jYYYY/jMM/jDD'" [dateGregorianFormat]="'YYYY-MM-DD'" [(uiIsVisible)]="uiIsVisibleSec"
-            [uiTheme]="uiTheme" [uiYearView]="uiYearView" [uiMonthView]="uiMonthView"
-            [uiHideAfterSelectDate]="uiHideAfterSelectDate" [uiHideOnOutsideClick]="uiHideOnOutsideClick"
-            [uiTodayBtnEnable]="uiTodayBtnEnable" [dateMin]="minDobTs" [dateMax]="maxDobTs">
-          </ng-persian-datepicker>
 
           <div class="div-btn-add">
             <button type="submit" [disabled]="addSecretaryFg.invalid" mat-raised-button color="primary">ثبت نام</button>
@@ -250,20 +242,12 @@
             </div>
           </div>
 
-          <!-- dob -->
           <div class="form-item">
             <mat-form-field appearance="outline">
               <mat-label>تاریخ تولد</mat-label>
-              <input class="input" [value]="shamsiDisplayDateStu" readonly (click)="uiIsVisibleStu = true" matInput />
+              <input matInput placeholder="YYYY-MM-DD" [formControl]="StudentDateOfBirthCtrl">
             </mat-form-field>
           </div>
-
-          <ng-persian-datepicker [calendarIsGregorian]="false" (dateOnSelect)="onStudentDateSelect($event)"
-            [dateFormat]="'jYYYY/jMM/jDD'" [dateGregorianFormat]="'YYYY-MM-DD'" [(uiIsVisible)]="uiIsVisibleStu"
-            [uiTheme]="uiTheme" [uiYearView]="uiYearView" [uiMonthView]="uiMonthView"
-            [uiHideAfterSelectDate]="uiHideAfterSelectDate" [uiHideOnOutsideClick]="uiHideOnOutsideClick"
-            [uiTodayBtnEnable]="uiTodayBtnEnable" [dateMin]="minDobTs" [dateMax]="maxDobTs">
-          </ng-persian-datepicker>
 
           <div class="div-btn-add">
             <button type="submit" [disabled]="addStudentFg.invalid" mat-raised-button color="primary">ثبت نام</button>
@@ -382,20 +366,12 @@
             </div>
           </div>
 
-          <!-- dob -->
           <div class="form-item">
             <mat-form-field appearance="outline">
               <mat-label>تاریخ تولد</mat-label>
-              <input class="input" [value]="shamsiDisplayDateTea" readonly (click)="uiIsVisibleTea = true" matInput />
+              <input matInput placeholder="YYYY-MM-DD" [formControl]="TeacherDateOfBirthCtrl">
             </mat-form-field>
           </div>
-
-          <ng-persian-datepicker [calendarIsGregorian]="false" (dateOnSelect)="onTeacherDateSelect($event)"
-            [dateFormat]="'jYYYY/jMM/jDD'" [dateGregorianFormat]="'YYYY-MM-DD'" [(uiIsVisible)]="uiIsVisibleTea"
-            [uiTheme]="uiTheme" [uiYearView]="uiYearView" [uiMonthView]="uiMonthView"
-            [uiHideAfterSelectDate]="uiHideAfterSelectDate" [uiHideOnOutsideClick]="uiHideOnOutsideClick"
-            [uiTodayBtnEnable]="uiTodayBtnEnable" [dateMin]="minDobTs" [dateMax]="maxDobTs">
-          </ng-persian-datepicker>
 
           <div class="div-btn-add">
             <button type="submit" [disabled]="addTeacherFg.invalid" mat-raised-button color="primary">ثبت نام</button>

@@ -21,13 +21,7 @@ import { AccountService } from '../../services/account.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { NavbarComponent } from '../navbar/navbar.component';
-import moment from 'moment-jalaali';
-import {
-  defaultTheme, IDatepickerTheme, NgPersianDatepickerModule
-} from '../../../../projects/ng-persian-datepicker/src/public-api';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
-
-moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
 @Component({
   selector: 'app-manageer-pannel',
@@ -37,8 +31,7 @@ moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
     ReactiveFormsModule, MatFormFieldModule, MatInputModule,
     MatButtonModule, MatSnackBarModule, MatRadioModule,
     MatDatepickerModule, MatNativeDateModule, AutoFocusDirective,
-    MatTableModule, MatIconModule, NavbarComponent,
-    NgPersianDatepickerModule
+    MatTableModule, MatIconModule, NavbarComponent
   ],
   templateUrl: './manageer-pannel.component.html',
   styleUrl: './manageer-pannel.component.scss',
@@ -60,7 +53,6 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   passowrdsNotMatch: boolean | undefined;
   loggedInUser: LoggedInUser | null | undefined;
 
-  uiTheme: IDatepickerTheme = defaultTheme;
   uiYearView = true;
   uiMonthView = true;
   uiHideAfterSelectDate = false;
