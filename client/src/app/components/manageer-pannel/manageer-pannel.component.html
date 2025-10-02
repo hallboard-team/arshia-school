@@ -367,10 +367,13 @@
           </div>
 
           <div class="form-item">
-            <mat-form-field appearance="outline">
-              <mat-label>تاریخ تولد</mat-label>
-              <input matInput placeholder="YYYY-MM-DD" [formControl]="TeacherDateOfBirthCtrl">
-            </mat-form-field>
+            <!-- <mat-label class="mat-subtitle-2">تاریخ تولد</mat-label> -->
+            <app-datepicker formControlName="dateOfBirthCtrl" [minDate]="minDob" [maxDate]="maxDob">
+            </app-datepicker>
+
+            <div class="field-error" *ngIf="showErr(TeacherDateOfBirthCtrl)">
+              <span *ngIf="TeacherDateOfBirthCtrl.hasError('required')">تاریخ تولد الزامی است</span>
+            </div>
           </div>
 
           <div class="div-btn-add">

@@ -22,6 +22,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+import { DatepickerComponent } from '../../datepicker/datepicker.component';
+import moment from 'moment-jalaali';
 
 @Component({
   selector: 'app-manageer-pannel',
@@ -31,7 +33,7 @@ import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/materi
     ReactiveFormsModule, MatFormFieldModule, MatInputModule,
     MatButtonModule, MatSnackBarModule, MatRadioModule,
     MatDatepickerModule, MatNativeDateModule, AutoFocusDirective,
-    MatTableModule, MatIconModule, NavbarComponent
+    MatTableModule, MatIconModule, NavbarComponent, DatepickerComponent
   ],
   templateUrl: './manageer-pannel.component.html',
   styleUrl: './manageer-pannel.component.scss',
@@ -47,8 +49,8 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
 
   private readonly NAME_REGEX = /^[\u0600-\u06FFa-zA-Z\s\u200c-]+$/;
 
-  minDobTs!: number;
-  maxDobTs!: number;
+  minDob!: moment.Moment;
+  maxDob!: moment.Moment;
 
   passowrdsNotMatch: boolean | undefined;
   loggedInUser: LoggedInUser | null | undefined;
@@ -86,8 +88,9 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     const today = new Date();
     const maxDob = new Date(today.getFullYear() - 11, today.getMonth(), today.getDate());
     const minDob = new Date(today.getFullYear() - 99, today.getMonth(), today.getDate());
-    this.maxDobTs = maxDob.getTime();
-    this.minDobTs = minDob.getTime();
+
+    this.maxDob = moment().subtract(11, 'jYear').endOf('jYear');
+    this.minDob = moment().subtract(99, 'jYear').startOf('jYear');
   }
 
   ngOnDestroy(): void {
@@ -112,7 +115,7 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validators.pattern(this.NAME_REGEX)]],
     lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validators.pattern(this.NAME_REGEX)]],
     phoneNumCtrl: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
-    dateOfBirthCtrl: ['', [Validators.required]],
+    dateOfBirthCtrl: [null, [Validators.required]],
     genderCtrl: ['', [Validators.required]]
   });
 
@@ -300,6 +303,14 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     }
   }
 
+  private toGregorianDateOnly(v: any): string | undefined {
+    if (!v) return undefined;
+    if (typeof v?.format === 'function') return v.format('YYYY-MM-DD');
+    const d = new Date(v);
+    return new Date(d.setMinutes(d.getMinutes() - d.getTimezoneOffset()))
+      .toISOString().slice(0, 10);
+  }
+
   // ---------- submits ----------
   addStudent(): void {
     if (this.StudentPasswordCtrl.value !== this.StudentConfirmPasswordCtrl.value) {
@@ -379,7 +390,7 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     }
     this.passowrdsNotMatch = false;
 
-    const dob = this.getDateOnly(this.TeacherDateOfBirthCtrl.value);
+    const dob = this.toGregorianDateOnly(this.TeacherDateOfBirthCtrl.value);
 
     const registerUser: RegisterUser = {
       email: this.TeacherEmailCtrl.value,
