@@ -2,11 +2,17 @@ name: Azure Web App - API
 
 on:
   push:
-    branches: [ main ]
-    paths: [ 'backend/**' ]
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+
   pull_request:
-    branches: [ main ]
-    paths: [ 'backend/**' ]
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+
   workflow_dispatch:
 
 jobs:
@@ -14,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+
     steps:
       - uses: actions/checkout@v4
 
@@ -25,19 +32,20 @@ jobs:
       - name: Publish .NET App
         run: dotnet publish ./backend/SepantaProject.sln -c Release -o ./publish
 
-      - name: Upload publish folder (for deploy job)
+      - name: Upload publish folder
         uses: actions/upload-artifact@v4
         with:
           name: publish-folder
           path: ./publish
-          retention-days: 1   # keep only for 1 day
+          retention-days: 1
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      id-token: write   # required for OIDC login
+      id-token: write   # keep OIDC here (this was in your old working yaml)
       contents: read
+
     steps:
       - name: Download publish folder
         uses: actions/download-artifact@v4
