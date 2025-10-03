@@ -1,16 +1,24 @@
-import { Component, inject, OnInit, PLATFORM_ID, Signal } from '@angular/core';
+import {
+  Component, Inject, OnDestroy, OnInit, PLATFORM_ID, Signal, inject,
+  AfterViewInit, NgZone
+} from '@angular/core';
+import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
-import { NavbarComponent } from '../navbar/navbar.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSliderModule } from '@angular/material/slider';
+import { trigger, transition, style, animate } from '@angular/animations';
+
+import { NavbarComponent } from '../navbar/navbar.component';
+import { FooterComponent } from '../footer/footer.component';
+
 import { LoggedInUser } from '../../models/logged-in-user.model';
 import { AccountService } from '../../services/account.service';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MemberService } from '../../services/member.service';
 import { UserProfile } from '../../models/user-profile.model';
 import { Observable, Subscription } from 'rxjs';
@@ -18,9 +26,6 @@ import { Course, ShowCourse } from '../../models/course.model';
 import { CourseParams } from '../../models/helpers/course-params';
 import { CourseService } from '../../services/course.service';
 import { Pagination } from '../../models/helpers/pagination';
-import { MatSliderModule } from '@angular/material/slider';
-import { FooterComponent } from '../footer/footer.component';
-import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-home',
@@ -45,14 +50,21 @@ import { trigger, transition, style, animate } from '@angular/animations';
     ])
   ]
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private accountService = inject(AccountService);
   public memberService = inject(MemberService);
   private platformId = inject(PLATFORM_ID);
-  private autoTimerId: any = null;
+  private ngZone = inject(NgZone);
 
+  constructor(@Inject(DOCUMENT) private doc: Document) { }
+
+  private autoTimerId: any = null;
   autoplayDelay = 4000;
   loop = true;
+
+  private autoCourseTimerId: any = null;
+  autoplayCourseDelay = 4000;
+  private courseHoverPauseEnabled = false;
 
   loggedInUserSig: Signal<LoggedInUser | null> | undefined;
   courseService = inject(CourseService);
@@ -66,10 +78,6 @@ export class HomeComponent implements OnInit {
   pagination: Pagination | undefined;
   disableAnimation = false;
 
-  ngOnInit(): void {
-    this.loggedInUserSig = this.accountService.loggedInUserSig;
-  }
-
   direction: { value: string, params: { enterFrom: string, leaveTo: string } } = {
     value: '',
     params: { enterFrom: '100%', leaveTo: '-100%' }
@@ -77,69 +85,89 @@ export class HomeComponent implements OnInit {
 
   slides = [
     {
-      name: 'امیرعلی حسین پور', course: 'دوره پروژه محور FullStack', image: 'assets/images/profile-icon1.png',
-      description: 'از بین دوره هایی که گذروندم مثل ICDL, Wordpress, Photoshop دوره FullStack رو دوست درم چون هدفم اینه برنامه نویس بشم، وبه ساده ترین شکل مهاجرت کنم چون پول زیادی در برنامه نویسی هست و نسبت به رشته های دیگه آسون تره'
+      name: 'امیرعلی حسین پور',
+      course: 'دوره پروژه محور FullStack',
+      image: 'assets/images/profile-icon1.png',
+      description:
+        'از بین دوره هایی که گذروندم مثل ICDL, WordPress, Photoshop دوره FullStack رو دوست درم چون هدفم اینه برنامه نویس بشم...'
     },
-    { name: 'آتنا عطائی', course: 'دوره Wordpress', image: 'assets/images/profile-icon2.png', description: 'دوره وردپرس برای من جذاب بود چون تدریس استاد عالی بود، استاد ملاجان باعث شدن که به وردپرس علاقمند بشم بازار کارش خوبه و درآمد خوبی هم داره' }
+    {
+      name: 'آتنا عطائی',
+      course: 'دوره WordPress',
+      image: 'assets/images/profile-icon2.png',
+      description:
+        'دوره وردپرس برای من جذاب بود چون تدریس استاد عالی بود، استاد ملاجان باعث شدن که به وردپرس علاقمند بشم...'
+    }
   ];
 
   sliderCourses = [
-    { nameTitleCourse: 'Full-Stack-1', image: 'assets/images/full-stackPhoto.jpg', chapter: '-', hourse: '150', teacher: 'ارشیا رضایی , وحید حیاطی پور' },
-    { nameTitleCourse: 'Full-Stack-2', image: 'assets/images/full-stackPhoto.jpg', chapter: '-', hourse: '150', teacher: 'پارسا جعفری , وحید حیاطی پور' },
-    { nameTitleCourse: 'Wordpress', image: 'assets/images/wordpressPhoto.jpg', chapter: '-', hourse: '60', teacher: 'مهدی ملاجان' },
+    { nameTitleCourse: 'Full-Stack 1', image: 'assets/images/full-stackPhoto.jpg', chapter: '-', hourse: '150', teacher: 'ارشیا رضایی , وحید حیاتی پور' },
+    { nameTitleCourse: 'Full-Stack 2', image: 'assets/images/full-stackPhoto.jpg', chapter: '-', hourse: '150', teacher: 'پارسا جعفری , وحید حیاتی پور' },
+    { nameTitleCourse: 'WordPress', image: 'assets/images/wordpressPhoto.jpg', chapter: '-', hourse: '60', teacher: 'مهدی ملاجان' },
     { nameTitleCourse: 'ICDL', image: 'assets/images/icdlPhoto.jpg', chapter: '-', hourse: '65', teacher: 'خانم محمودی' },
   ];
 
   currentIndex = 0;
   currentIndexCourse = 0;
 
-  private startAuto(): void {
-    this.clearAuto();
-    this.autoTimerId = setInterval(() => {
-      this.next(true);
-    }, this.autoplayDelay);
+  ngOnInit(): void {
+    this.loggedInUserSig = this.accountService.loggedInUserSig;
   }
 
+  ngAfterViewInit(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    const win = this.doc.defaultView as Window;
+    win.requestAnimationFrame(() => {
+      setTimeout(() => {
+        if (this.slides.length > 1 && !this.autoTimerId) this.startAuto();
+
+        if (this.sliderCourses.length > 1 && !this.autoCourseTimerId) {
+          this.startCourseAuto();
+          setTimeout(() => { this.courseHoverPauseEnabled = true; }, this.autoplayCourseDelay + 25);
+        }
+
+        this.doc.addEventListener('visibilitychange', this.handleVisibility);
+        this.doc.addEventListener('visibilitychange', this.handleCourseVisibility);
+      }, 50);
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.clearAuto();
+      this.clearCourseAuto();
+      this.doc.removeEventListener('visibilitychange', this.handleVisibility);
+      this.doc.removeEventListener('visibilitychange', this.handleCourseVisibility);
+    }
+  }
+
+  private startAuto(): void {
+    this.clearAuto();
+    this.autoTimerId = setInterval(() => this.next(true), this.autoplayDelay);
+  }
   private clearAuto(): void {
     if (this.autoTimerId) {
       clearInterval(this.autoTimerId);
       this.autoTimerId = null;
     }
   }
-
-  pauseAuto(): void {
-    this.clearAuto();
-  }
-
+  pauseAuto(): void { this.clearAuto(); }
   resumeAuto(): void {
-    if (isPlatformBrowser(this.platformId) && !this.autoTimerId) {
-      this.startAuto();
-    }
+    if (isPlatformBrowser(this.platformId) && !this.autoTimerId) this.startAuto();
   }
-
   private handleVisibility = () => {
-    if (document.hidden) this.pauseAuto();
-    else this.resumeAuto();
+    if (this.doc.hidden) this.pauseAuto(); else this.resumeAuto();
   };
 
   next(fromAuto = false) {
-    if (this.currentIndex < this.slides.length - 1) {
-      this.currentIndex++;
-    } else if (this.loop) {
-      this.currentIndex = 0;
-    }
-
-    if (!fromAuto) {
-      this.startAuto();
-    }
+    if (this.currentIndex < this.slides.length - 1) this.currentIndex++;
+    else if (this.loop) this.currentIndex = 0;
+    if (!fromAuto) this.startAuto();
   }
-
   prev() {
-    if (this.currentIndex > 0) {
-      this.currentIndex--;
-    } else if (this.loop) {
-      this.currentIndex = this.slides.length - 1;
-    }
+    if (this.currentIndex > 0) this.currentIndex--;
+    else if (this.loop) this.currentIndex = this.slides.length - 1;
     this.startAuto();
   }
 
@@ -153,77 +181,76 @@ export class HomeComponent implements OnInit {
     };
   }
 
-  nextCourse() {
-    if (this.currentIndexCourse < this.sliderCourses.length - 1) {
-      this.setDirection('next');
-      this.currentIndexCourse++;
+  private startCourseAuto(): void {
+    this.clearCourseAuto();
+    this.autoCourseTimerId = setInterval(() => {
+      this.ngZone.run(() => this.nextCourseAuto());
+    }, this.autoplayCourseDelay);
+  }
+  private clearCourseAuto(): void {
+    if (this.autoCourseTimerId) {
+      clearInterval(this.autoCourseTimerId);
+      this.autoCourseTimerId = null;
     }
   }
 
-  prevCourse() {
-    if (this.currentIndexCourse > 0) {
-      this.setDirection('prev');
-      this.currentIndexCourse--;
-    }
+  pauseCourseAuto(): void {
+    if (!this.courseHoverPauseEnabled) return;
+    this.clearCourseAuto();
+  }
+  resumeCourseAuto(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    if (!this.autoCourseTimerId) this.startCourseAuto();
   }
 
-  logout(): void {
-    this.accountService.logout();
+  private handleCourseVisibility = () => {
+    if (this.doc.hidden) this.pauseCourseAuto(); else this.resumeCourseAuto();
+  };
+
+  private nextCourseAuto(): void {
+    this.setDirection('next');
+    this.currentIndexCourse = (this.currentIndexCourse + 1) % this.sliderCourses.length;
   }
+  nextCourse(): void {
+    this.setDirection('next');
+    this.currentIndexCourse = (this.currentIndexCourse + 1) % this.sliderCourses.length;
+    this.startCourseAuto();
+  }
+  prevCourse(): void {
+    this.setDirection('prev');
+    this.currentIndexCourse =
+      (this.currentIndexCourse - 1 + this.sliderCourses.length) % this.sliderCourses.length;
+    this.startCourseAuto();
+  }
+
+  logout(): void { this.accountService.logout(); }
 
   openMenu() {
-    const elements = document.querySelectorAll('.hamburger-menu');
-
-    elements.forEach((element) => {
-      (element as HTMLElement).style.display = "block";
-    });
+    if (!isPlatformBrowser(this.platformId)) return;
+    this.doc.querySelectorAll('.hamburger-menu')
+      .forEach(el => (el as HTMLElement).style.display = 'block');
   }
-
   closeMenu() {
-    const elements = document.querySelectorAll('.hamburger-menu');
-
-    elements.forEach((element) => {
-      (element as HTMLElement).style.display = "none";
-    });
+    if (!isPlatformBrowser(this.platformId)) return;
+    this.doc.querySelectorAll('.hamburger-menu')
+      .forEach(el => (el as HTMLElement).style.display = 'none');
   }
-
   openMenuDesctop() {
-    const elements = document.querySelectorAll('.hamburger-menu');
-
-    elements.forEach((element) => {
-      (element as HTMLElement).style.display = "block";
-    });
-
-    const openMenu = document.querySelectorAll('.right-open-menu');
-
-    openMenu.forEach((element) => {
-      (element as HTMLElement).style.display = "none";
-    });
-
-    const closeMenu = document.querySelectorAll('.right-close-menu');
-
-    closeMenu.forEach((element) => {
-      (element as HTMLElement).style.display = "flex";
-    });
+    if (!isPlatformBrowser(this.platformId)) return;
+    this.doc.querySelectorAll('.hamburger-menu')
+      .forEach(el => (el as HTMLElement).style.display = 'block');
+    this.doc.querySelectorAll('.right-open-menu')
+      .forEach(el => (el as HTMLElement).style.display = 'none');
+    this.doc.querySelectorAll('.right-close-menu')
+      .forEach(el => (el as HTMLElement).style.display = 'flex');
   }
-
   closeMenuDesctop() {
-    const elements = document.querySelectorAll('.hamburger-menu');
-
-    elements.forEach((element) => {
-      (element as HTMLElement).style.display = "none";
-    });
-
-    const openMenu = document.querySelectorAll('.right-open-menu');
-
-    openMenu.forEach((element) => {
-      (element as HTMLElement).style.display = "flex";
-    });
-
-    const closeMenu = document.querySelectorAll('.right-close-menu');
-
-    closeMenu.forEach((element) => {
-      (element as HTMLElement).style.display = "none";
-    });
+    if (!isPlatformBrowser(this.platformId)) return;
+    this.doc.querySelectorAll('.hamburger-menu')
+      .forEach(el => (el as HTMLElement).style.display = 'none');
+    this.doc.querySelectorAll('.right-open-menu')
+      .forEach(el => (el as HTMLElement).style.display = 'flex');
+    this.doc.querySelectorAll('.right-close-menu')
+      .forEach(el => (el as HTMLElement).style.display = 'none');
   }
 }

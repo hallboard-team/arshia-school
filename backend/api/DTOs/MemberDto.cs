@@ -4,7 +4,7 @@ public record MemberDto(
     string Name,
     string LastName,
     string? PhoneNum,
-    string Gender,
+    GenderType Gender,
     int Age,
     DateOnly DateOfBirth,
     bool IsAbsent

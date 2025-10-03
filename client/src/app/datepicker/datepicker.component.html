@@ -1,0 +1,7 @@
+<mat-form-field appearance="outline">
+  <mat-label>تاریخ تولد</mat-label>
+  <input matInput [matDatepicker]="picker" [value]="value" (dateChange)="onDateChange($event.value)" [min]="minDate"
+    [max]="maxDate" placeholder="انتخاب تاریخ" />
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>

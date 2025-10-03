@@ -27,23 +27,20 @@ import { CourseService } from '../../services/course.service';
 import { PaginatedResult } from '../../models/helpers/paginatedResult';
 import { PageEvent } from '@angular/material/paginator';
 import { Pagination } from '../../models/helpers/pagination';
-import moment from 'moment-jalaali';
 import { CurrencyFormatterDirective } from '../../directives/currency-formatter.directive';
-import { defaultTheme, IDatepickerTheme, NgPersianDatepickerModule } from '../../../../projects/ng-persian-datepicker/src/public-api';
-moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
+
 @Component({
-    selector: 'app-target-user-profile',
-    imports: [
-        CommonModule, FormsModule, ReactiveFormsModule,
-        MatCardModule, MatFormFieldModule, AutoFocusDirective,
-        MatInputModule, MatButtonModule, NavbarComponent,
-        RouterModule, MatTabsModule, MatNativeDateModule,
-        MatRadioModule, MatSnackBarModule, MatDatepickerModule,
-        MatSelectModule, CurrencyFormatterDirective,
-        NgPersianDatepickerModule
-    ],
-    templateUrl: './target-user-profile.component.html',
-    styleUrl: './target-user-profile.component.scss'
+  selector: 'app-target-user-profile',
+  imports: [
+    CommonModule, FormsModule, ReactiveFormsModule,
+    MatCardModule, MatFormFieldModule, AutoFocusDirective,
+    MatInputModule, MatButtonModule, NavbarComponent,
+    RouterModule, MatTabsModule, MatNativeDateModule,
+    MatRadioModule, MatSnackBarModule, MatDatepickerModule,
+    MatSelectModule, CurrencyFormatterDirective
+  ],
+  templateUrl: './target-user-profile.component.html',
+  styleUrl: './target-user-profile.component.scss'
 })
 export class TargetUserProfileComponent implements OnInit {
   private _managerService = inject(ManagerService);
@@ -73,7 +70,6 @@ export class TargetUserProfileComponent implements OnInit {
   pagination: Pagination | undefined;
 
   uiIsVisible: boolean = true;
-  uiTheme: IDatepickerTheme = defaultTheme;
   uiYearView: boolean = true;
   uiMonthView: boolean = true;
   uiHideAfterSelectDate: boolean = false;
@@ -199,12 +195,12 @@ export class TargetUserProfileComponent implements OnInit {
       this._managerService.getTargetUserCourses(memberUserName).subscribe({
         next: (data) => {
           this.courses = data;
-          if (data !== null) {
-            this.shamsiCourses = data.map(course => ({
-              ...course,
-              shamsiStart: moment(course.start).format('jYYYY/jMM/jDD')
-            }));
-          }
+          // if (data !== null) {
+          //   this.shamsiCourses = data.map(course => ({
+          //     ...course,
+          //     shamsiStart: moment(course.start).format('jYYYY/jMM/jDD')
+          //   }));
+          // }
           this.loading = false;
         },
         error: (err) => {
@@ -240,7 +236,7 @@ export class TargetUserProfileComponent implements OnInit {
     this.TargetGenderCtrl.setValue(targetUserProfile.gender);
 
     this.TargetDateOfBirthCtrl.setValue(targetUserProfile.dateOfBirth);
-    this.shamsiDisplayDate = moment(targetUserProfile.dateOfBirth).format('jYYYY/jMM/jDD');
+    // this.shamsiDisplayDate = moment(targetUserProfile.dateOfBirth).format('jYYYY/jMM/jDD');
   }
 
   updateTargetMember() {

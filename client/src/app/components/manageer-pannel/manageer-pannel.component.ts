@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import {
+  FormsModule, ReactiveFormsModule, FormBuilder, Validators,
+  FormControl, FormGroup, FormGroupDirective
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -18,9 +21,9 @@ import { AccountService } from '../../services/account.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+import { DatepickerComponent } from '../../datepicker/datepicker.component';
 import moment from 'moment-jalaali';
-import { defaultTheme, IDatepickerTheme, NgPersianDatepickerModule } from '../../../../projects/ng-persian-datepicker/src/public-api';
-moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
 @Component({
   selector: 'app-manageer-pannel',
@@ -30,11 +33,11 @@ moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
     ReactiveFormsModule, MatFormFieldModule, MatInputModule,
     MatButtonModule, MatSnackBarModule, MatRadioModule,
     MatDatepickerModule, MatNativeDateModule, AutoFocusDirective,
-    MatTableModule, MatIconModule, NavbarComponent,
-    NgPersianDatepickerModule
+    MatTableModule, MatIconModule, NavbarComponent, DatepickerComponent
   ],
   templateUrl: './manageer-pannel.component.html',
-  styleUrl: './manageer-pannel.component.scss'
+  styleUrl: './manageer-pannel.component.scss',
+  providers: [{ provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher }]
 })
 export class ManageerPannelComponent implements OnInit, OnDestroy {
   private snackBar = inject(MatSnackBar);
@@ -44,32 +47,38 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   accountService = inject(AccountService);
   managerService = inject(ManagerService);
 
-  minDate = new Date();
-  maxDate = new Date();
+  private readonly NAME_REGEX = /^[\u0600-\u06FFa-zA-Z\s\u200c-]+$/;
 
-  minDobTs!: number;
-  maxDobTs!: number;
+  minDob!: moment.Moment;
+  maxDob!: moment.Moment;
 
   passowrdsNotMatch: boolean | undefined;
   loggedInUser: LoggedInUser | null | undefined;
 
-  uiIsVisible = true;
-  uiTheme: IDatepickerTheme = defaultTheme;
   uiYearView = true;
   uiMonthView = true;
   uiHideAfterSelectDate = false;
   uiHideOnOutsideClick = false;
   uiTodayBtnEnable = true;
 
-  shamsiDisplayDate = '';
+  shamsiDisplayDateStu = '';
+  shamsiDisplayDateTea = '';
+  shamsiDisplayDateSec = '';
+
+  uiIsVisibleStu = false;
+  uiIsVisibleTea = false;
+  uiIsVisibleSec = false;
+
   hideSecretaryPassword = true;
   hideSecretaryConfirmPassword = true;
-
   hideStudentPassword = true;
   hideStudentConfirmPassword = true;
-
   hideTeacherPassword = true;
   hideTeacherConfirmPassword = true;
+
+  @ViewChild('secForm', { read: FormGroupDirective }) secFormDir!: FormGroupDirective;
+  @ViewChild('stuForm', { read: FormGroupDirective }) stuFormDir!: FormGroupDirective;
+  @ViewChild('teachForm', { read: FormGroupDirective }) teachFormDir!: FormGroupDirective;
 
   constructor() {
     this.loggedInUser = this.accountService.loggedInUserSig();
@@ -77,30 +86,23 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const today = new Date();
+    const maxDob = new Date(today.getFullYear() - 11, today.getMonth(), today.getDate());
+    const minDob = new Date(today.getFullYear() - 99, today.getMonth(), today.getDate());
 
-    const maxDob = new Date(
-      today.getFullYear() - 11, today.getMonth(), today.getDate()
-    );
-
-    const minDob = new Date(
-      today.getFullYear() - 99, today.getMonth(), today.getDate()
-    );
-
-    this.maxDobTs = maxDob.getTime();
-    this.minDobTs = minDob.getTime();
+    this.maxDob = moment().subtract(11, 'jYear').endOf('jYear');
+    this.minDob = moment().subtract(99, 'jYear').startOf('jYear');
   }
 
   ngOnDestroy(): void {
     this.deleteSubscription?.unsubscribe();
   }
 
-  // ------------------ Forms ------------------
   addSecretaryFg = this.fb.group({
     emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
     passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
-    nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validators.pattern(this.NAME_REGEX)]],
+    lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validators.pattern(this.NAME_REGEX)]],
     phoneNumCtrl: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
     dateOfBirthCtrl: ['', [Validators.required]],
     genderCtrl: ['', [Validators.required]]
@@ -110,10 +112,10 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
     passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
-    nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validators.pattern(this.NAME_REGEX)]],
+    lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validators.pattern(this.NAME_REGEX)]],
     phoneNumCtrl: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
-    dateOfBirthCtrl: ['', [Validators.required]],
+    dateOfBirthCtrl: [null, [Validators.required]],
     genderCtrl: ['', [Validators.required]]
   });
 
@@ -121,15 +123,13 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
     passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
-    nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validators.pattern(this.NAME_REGEX)]],
+    lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validators.pattern(this.NAME_REGEX)]],
     phoneNumCtrl: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
     dateOfBirthCtrl: ['', [Validators.required]],
     genderCtrl: ['', [Validators.required]]
   });
 
-  // ------------------ Getters ------------------
-  // Secretary
   get SecretaryGenderCtrl(): FormControl { return this.addSecretaryFg.get('genderCtrl') as FormControl; }
   get SecretaryEmailCtrl(): FormControl { return this.addSecretaryFg.get('emailCtrl') as FormControl; }
   get SecretaryPasswordCtrl(): FormControl { return this.addSecretaryFg.get('passwordCtrl') as FormControl; }
@@ -139,7 +139,6 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   get SecretaryPhoneNumCtrl(): FormControl { return this.addSecretaryFg.get('phoneNumCtrl') as FormControl; }
   get SecretaryDateOfBirthCtrl(): FormControl { return this.addSecretaryFg.get('dateOfBirthCtrl') as FormControl; }
 
-  // Teacher
   get TeacherGenderCtrl(): FormControl { return this.addTeacherFg.get('genderCtrl') as FormControl; }
   get TeacherEmailCtrl(): FormControl { return this.addTeacherFg.get('emailCtrl') as FormControl; }
   get TeacherPasswordCtrl(): FormControl { return this.addTeacherFg.get('passwordCtrl') as FormControl; }
@@ -149,7 +148,6 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   get TeacherPhoneNumCtrl(): FormControl { return this.addTeacherFg.get('phoneNumCtrl') as FormControl; }
   get TeacherDateOfBirthCtrl(): FormControl { return this.addTeacherFg.get('dateOfBirthCtrl') as FormControl; }
 
-  // Student
   get StudentGenderCtrl(): FormControl { return this.addStudentFg.get('genderCtrl') as FormControl; }
   get StudentEmailCtrl(): FormControl { return this.addStudentFg.get('emailCtrl') as FormControl; }
   get StudentPasswordCtrl(): FormControl { return this.addStudentFg.get('passwordCtrl') as FormControl; }
@@ -159,14 +157,12 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
   get StudentPhoneNumCtrl(): FormControl { return this.addStudentFg.get('phoneNumCtrl') as FormControl; }
   get StudentDateOfBirthCtrl(): FormControl { return this.addStudentFg.get('dateOfBirthCtrl') as FormControl; }
 
-  // ------------------ Helpers ------------------
   private openSnack(message: string, panel: 'success' | 'error' | 'info' = 'error'): void {
     const mapClass: Record<'success' | 'error' | 'info', string> = {
       success: 'snack-success',
       error: 'snack-error',
       info: 'snack-info'
     };
-
     this.snackBar.open(message, 'باشه', {
       duration: 4000,
       horizontalPosition: 'center',
@@ -176,7 +172,77 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     });
   }
 
+  private extractServerMessages(err: any): string[] {
+    if (Array.isArray(err?.error)) return err.error.map((x: any) => x?.toString?.() ?? String(x));
+    if (Array.isArray(err?.error?.errors)) return err.error.errors.map((x: any) => x?.toString?.() ?? String(x));
+
+    const modelErrors = err?.error?.errors;
+    if (modelErrors && typeof modelErrors === 'object') {
+      const msgs: string[] = [];
+      for (const k of Object.keys(modelErrors)) {
+        const arr = modelErrors[k];
+        if (Array.isArray(arr)) msgs.push(...arr.map((x: any) => x?.toString?.() ?? String(x)));
+      }
+      if (msgs.length) return msgs;
+    }
+
+    const raw = (err?.error?.message ?? err?.error ?? err?.Message ?? err?.title)?.toString();
+    return raw ? [raw] : [];
+  }
+
+  private faMessage(s: string): string {
+    const m = s.toLowerCase();
+    if (m.includes('at least 8')) return 'رمز عبور باید حداقل ۸ کاراکتر باشد.';
+    if (m.includes('non alphanumeric')) return 'رمز عبور باید حداقل یک کاراکتر خاص مثل !@# داشته باشد.';
+    if (m.includes('uppercase')) return 'رمز عبور باید حداقل یک حرف بزرگ انگلیسی (A-Z) داشته باشد.';
+    if (m.includes('lowercase')) return 'رمز عبور باید حداقل یک حرف کوچک انگلیسی (a-z) داشته باشد.';
+    if (m.includes('digit') || m.includes('number')) return 'رمز عبور باید حداقل یک رقم داشته باشد.';
+    if (m.includes('passwords must match') || (m.includes('confirm') && m.includes('password')))
+      return 'رمز عبور و تکرار آن یکسان نیستند.';
+    if (m.includes('email')) return 'ایمیل معتبر نیست.';
+    return s;
+  }
+
+  private applyServerErrorsToForm(group: FormGroup, messages: string[]): void {
+    const markKeys = ['emailCtrl', 'passwordCtrl', 'confirmPasswordCtrl'];
+    markKeys.forEach(k => group.get(k)?.markAsTouched());
+
+    markKeys.forEach(k => {
+      const c = group.get(k);
+      if (!c) return;
+      const errs = { ...(c.errors || {}) };
+      delete (errs as any)['server'];
+      if (Object.keys(errs).length) c.setErrors(errs);
+      else c.setErrors(null);
+    });
+
+    const passMsgs = messages.filter(m => /password/i.test(m));
+    if (passMsgs.length) {
+      const msg = '• ' + passMsgs.map(m => this.faMessage(m)).join('\n• ');
+      const p = group.get('passwordCtrl'); const cp = group.get('confirmPasswordCtrl');
+      p?.setErrors({ ...(p?.errors || {}), server: msg });
+      cp?.setErrors({ ...(cp?.errors || {}), server: msg });
+    }
+
+    const emailMsgs = messages.filter(m => /email/i.test(m));
+    if (emailMsgs.length) {
+      const msg = '• ' + emailMsgs.map(m => this.faMessage(m)).join('\n• ');
+      const e = group.get('emailCtrl');
+      e?.setErrors({ ...(e?.errors || {}), server: msg });
+    }
+
+  }
+
   private translateServerError(err: any): string {
+    const modelErrors = err?.error?.errors;
+    if (modelErrors && typeof modelErrors === 'object') {
+      const msgs: string[] = [];
+      for (const k of Object.keys(modelErrors)) {
+        const arr = modelErrors[k];
+        if (Array.isArray(arr)) msgs.push(...arr);
+      }
+      if (msgs.length) return msgs.join(' | ');
+    }
     const status = err?.status;
     const rawStr = (err?.error?.message ?? err?.error ?? err?.Message ?? err?.title ?? '').toString();
     const raw = rawStr.toLowerCase();
@@ -191,7 +257,6 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     if (status === 403) return 'اجازه دسترسی ندارید.';
     if (status === 404) return 'موردی یافت نشد.';
     if (status === 422) return 'اطلاعات واردشده معتبر نیست.';
-
     if (raw.includes('e11000') || raw.includes('duplicate') || raw.includes('unique') || (raw.includes('email') && raw.includes('exist')))
       return 'این ایمیل قبلاً ثبت شده است.';
     if (raw.includes('invalid') && raw.includes('email')) return 'ایمیل معتبر نیست.';
@@ -210,7 +275,43 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
       .slice(0, 10);
   }
 
-  // ------------------ Submit handlers ------------------
+  private resetForm(fg: FormGroup, kind: 'student' | 'teacher' | 'secretary'): void {
+    fg.reset();
+    fg.markAsPristine();
+    fg.markAsUntouched();
+    fg.updateValueAndValidity();
+
+    if (kind === 'student' && this.stuFormDir) this.stuFormDir.resetForm();
+    if (kind === 'teacher' && this.teachFormDir) this.teachFormDir.resetForm();
+    if (kind === 'secretary' && this.secFormDir) this.secFormDir.resetForm();
+
+    if (kind === 'student') {
+      this.shamsiDisplayDateStu = '';
+      this.uiIsVisibleStu = false;
+      this.hideStudentPassword = true;
+      this.hideStudentConfirmPassword = true;
+    } else if (kind === 'teacher') {
+      this.shamsiDisplayDateTea = '';
+      this.uiIsVisibleTea = false;
+      this.hideTeacherPassword = true;
+      this.hideTeacherConfirmPassword = true;
+    } else {
+      this.shamsiDisplayDateSec = '';
+      this.uiIsVisibleSec = false;
+      this.hideSecretaryPassword = true;
+      this.hideSecretaryConfirmPassword = true;
+    }
+  }
+
+  private toGregorianDateOnly(v: any): string | undefined {
+    if (!v) return undefined;
+    if (typeof v?.format === 'function') return v.format('YYYY-MM-DD');
+    const d = new Date(v);
+    return new Date(d.setMinutes(d.getMinutes() - d.getTimezoneOffset()))
+      .toISOString().slice(0, 10);
+  }
+
+  // ---------- submits ----------
   addStudent(): void {
     if (this.StudentPasswordCtrl.value !== this.StudentConfirmPasswordCtrl.value) {
       this.passowrdsNotMatch = true;
@@ -233,8 +334,16 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     };
 
     this.managerService.createStudent(registerUser).subscribe({
-      next: _ => this.openSnack('دانشجو با موفقیت ثبت شد.', 'success'),
-      error: err => this.openSnack(this.translateServerError(err), 'error')
+      next: _ => { this.openSnack('دانشجو با موفقیت ثبت شد.', 'success'); this.resetForm(this.addStudentFg, 'student'); },
+      error: err => {
+        const msgs = this.extractServerMessages(err);
+        if (msgs.length) {
+          this.applyServerErrorsToForm(this.addStudentFg, msgs);
+          this.openSnack('خطای اعتبارسنجی:\n• ' + msgs.map(m => this.faMessage(m)).join('\n• '), 'error');
+        } else {
+          this.openSnack(this.translateServerError(err), 'error');
+        }
+      }
     });
   }
 
@@ -260,8 +369,16 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     };
 
     this.managerService.createSecretary(registerUser).subscribe({
-      next: _ => this.openSnack('منشی با موفقیت ثبت شد.', 'success'),
-      error: err => this.openSnack(this.translateServerError(err), 'error')
+      next: _ => { this.openSnack('منشی با موفقیت ثبت شد.', 'success'); this.resetForm(this.addSecretaryFg, 'secretary'); },
+      error: err => {
+        const msgs = this.extractServerMessages(err);
+        if (msgs.length) {
+          this.applyServerErrorsToForm(this.addSecretaryFg, msgs);
+          this.openSnack('خطای اعتبارسنجی:\n• ' + msgs.map(m => this.faMessage(m)).join('\n• '), 'error');
+        } else {
+          this.openSnack(this.translateServerError(err), 'error');
+        }
+      }
     });
   }
 
@@ -273,7 +390,7 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     }
     this.passowrdsNotMatch = false;
 
-    const dob = this.getDateOnly(this.TeacherDateOfBirthCtrl.value);
+    const dob = this.toGregorianDateOnly(this.TeacherDateOfBirthCtrl.value);
 
     const registerUser: RegisterUser = {
       email: this.TeacherEmailCtrl.value,
@@ -287,27 +404,38 @@ export class ManageerPannelComponent implements OnInit, OnDestroy {
     };
 
     this.managerService.createTeacher(registerUser).subscribe({
-      next: _ => this.openSnack('مدرس با موفقیت ثبت شد.', 'success'),
-      error: err => this.openSnack(this.translateServerError(err), 'error')
+      next: _ => { this.openSnack('مدرس با موفقیت ثبت شد.', 'success'); this.resetForm(this.addTeacherFg, 'teacher'); },
+      error: err => {
+        const msgs = this.extractServerMessages(err);
+        if (msgs.length) {
+          this.applyServerErrorsToForm(this.addTeacherFg, msgs);
+          this.openSnack('خطای اعتبارسنجی:\n• ' + msgs.map(m => this.faMessage(m)).join('\n• '), 'error');
+        } else {
+          this.openSnack(this.translateServerError(err), 'error');
+        }
+      }
     });
   }
 
-  // ------------------ Date pickers ------------------
   onStudentDateSelect(event: { shamsi: string; gregorian: string; timestamp: number; }): void {
-    this.shamsiDisplayDate = event.shamsi;
+    this.shamsiDisplayDateStu = event.shamsi;
     this.StudentDateOfBirthCtrl.setValue(new Date(event.gregorian));
-    this.uiIsVisible = false;
+    this.uiIsVisibleStu = false;
   }
 
   onTeacherDateSelect(event: { shamsi: string; gregorian: string; timestamp: number; }): void {
-    this.shamsiDisplayDate = event.shamsi;
+    this.shamsiDisplayDateTea = event.shamsi;
     this.TeacherDateOfBirthCtrl.setValue(new Date(event.gregorian));
-    this.uiIsVisible = false;
+    this.uiIsVisibleTea = false;
   }
 
   onSecretaryDateSelect(event: { shamsi: string; gregorian: string; timestamp: number; }): void {
-    this.shamsiDisplayDate = event.shamsi;
+    this.shamsiDisplayDateSec = event.shamsi;
     this.SecretaryDateOfBirthCtrl.setValue(new Date(event.gregorian));
-    this.uiIsVisible = false;
+    this.uiIsVisibleSec = false;
+  }
+
+  showErr(ctrl: FormControl | null | undefined): boolean {
+    return !!ctrl && ctrl.invalid && (ctrl.dirty || ctrl.touched);
   }
 }

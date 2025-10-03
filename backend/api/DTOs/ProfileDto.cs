@@ -6,6 +6,6 @@ public record ProfileDto(
     string Name,
     string LastName,
     string? PhoneNum,
-    string Gender,
+    GenderType Gender,
     int Age
 );

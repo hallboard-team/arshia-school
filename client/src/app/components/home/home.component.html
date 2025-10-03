@@ -8,7 +8,8 @@
     <section class="sec-top">
         <div class="div-matn-top">
             <div class="div-takhfif">
-                <button>جشنواره تخفیف!
+                <button>
+                    جشنواره تخفیف!
                     <img src="../assets/images/icon-discount.png" alt="">
                 </button>
                 <span>به زودی:)</span>
@@ -21,13 +22,14 @@
                 </span>
             </div>
 
-            <span class="span-description">یادگیری برنامه‌نویسی آرزو نیست، فقط نیاز هست که تلاش و تمرین داشته باشید،
-                بقیه‌اش
-                با طلوع فناوری</span>
+            <span class="span-description">
+                یادگیری برنامه‌نویسی آرزو نیست، فقط نیاز هست که تلاش و تمرین داشته باشید،
+                بقیه‌اش با طلوع فناوری
+            </span>
 
             <div class="div-button-start">
-                <button class="button-start" [routerLink]="['contact-us']" routerLinkActive #rla="routerLinkActive">شروع
-                    یادگیری برنامه نویسی
+                <button class="button-start" [routerLink]="['contact-us']" routerLinkActive #rla="routerLinkActive">
+                    شروع یادگیری برنامه نویسی
                 </button>
             </div>
         </div>
@@ -35,7 +37,6 @@
         <div class="div-photo">
             <img src="../assets/images/homePhotoTitleRS.png" alt="">
         </div>
-
     </section>
 
     <section class="sec-center">
@@ -94,75 +95,70 @@
             </div>
         </div>
 
-        <div class="div-slider-courses">
-            <button class="button-nav" [class.disabled]="currentIndexCourse === 0" [disabled]="currentIndexCourse === 0"
-                (click)="prevCourse()">❮</button>
+        <div class="courses-slider" (mouseenter)="pauseCourseAuto()" (mouseleave)="resumeCourseAuto()">
+            <button class="nav prev" [disabled]="sliderCourses.length <= 1" (click)="prevCourse()">❮</button>
 
-            <div class="div-bg-course-from-backend"
-                *ngFor="let sliderCourses of sliderCourses.slice(currentIndexCourse, currentIndexCourse + 1)"
-                [@slideAnimation]="direction" [@.disabled]="disableAnimation" [@slideAnimation]="{
-                value: direction.value,
-                params: direction.params
-                }">
-                <div class="div-bg-title-img">
-                    <img [src]="sliderCourses.image" [alt]="sliderCourses.nameTitleCourse">
-                    <span class="span-course">دوره پروژه محور {{sliderCourses.nameTitleCourse}}</span>
-                </div>
-                <div class="div-title-course">
-                    <div class="right">
-                        <!-- <span class="span-done">تکمیل شده</span> -->
-                        <span class="span-title">دوره پروژه محور</span>
-                        <span class="span-title-from-ts">{{sliderCourses.nameTitleCourse}}</span>
-                    </div>
+            <div class="window">
+                <div class="track" [style.transform]="'translateX(-' + currentIndexCourse * 100 + '%)'">
+                    <div class="slide" *ngFor="let course of sliderCourses">
+                        <div class="div-bg-title-img">
+                            <img [src]="course.image" [alt]="course.nameTitleCourse" />
+                            <span class="span-course">دوره پروژه محور {{ course.nameTitleCourse }}</span>
+                        </div>
 
-                    <div class="left">
-                        <div class="bg-icon" [routerLink]="['/courses']" routerLinkActive #rla="routerLinkActive">
-                            <mat-icon>chevron_left</mat-icon>
+                        <div class="div-title-course">
+                            <div class="right">
+                                <span class="span-title">دوره پروژه محور</span>
+                                <span class="span-title-from-ts">{{ course.nameTitleCourse }}</span>
+                            </div>
+                            <div class="left">
+                                <div class="bg-icon" [routerLink]="['/courses']" routerLinkActive
+                                    #rla="routerLinkActive">
+                                    <mat-icon>north_west</mat-icon>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="div-time-buttonStart">
-                    <div class="top">
-                        <div class="div-matn">
-                            <span>ساعت {{sliderCourses.hourse}}</span>
-                            <mat-icon>schedule</mat-icon>
-                        </div>
-                        <div class="div-matn">
-                            <span>فصل {{sliderCourses.chapter}}</span>
-                            <mat-icon>file_copy</mat-icon>
-                        </div>
-                    </div>
-                    <div class="center">
-                        <div class="div-profile">
-                            <button>
-                                <mat-icon>person</mat-icon>
-                            </button>
-                        </div>
-                        <div class="div-teacher-name">
-                            <span class="span-title">مدرس دوره:</span>
-                            <span class="span-teacher-course">{{sliderCourses.teacher}}</span>
-                        </div>
-                    </div>
-                    <div class="bottom">
-                        <button class="btn-click-course" [routerLink]="['/courses']" routerLinkActive
-                            #rla="routerLinkActive">
-                            <mat-icon class="icon-after-hover">
-                                keyboard_backspace
-                            </mat-icon>
-                            <mat-icon class="icon-befor-hover">
-                                north_west
-                            </mat-icon>مشاهده دوره
-                        </button>
 
-                        <button class="btn-like">
-                            <mat-icon>favorite</mat-icon>
-                        </button>
+                        <div class="div-time-buttonStart">
+                            <div class="top">
+                                <div class="div-matn">
+                                    <span>ساعت {{ course.hourse }}</span>
+                                    <mat-icon>schedule</mat-icon>
+                                </div>
+                                <div class="div-matn">
+                                    <span>فصل {{ course.chapter }}</span>
+                                    <mat-icon>file_copy</mat-icon>
+                                </div>
+                            </div>
+
+                            <div class="center">
+                                <div class="div-profile">
+                                    <button><mat-icon>person</mat-icon></button>
+                                </div>
+                                <div class="div-teacher-name">
+                                    <span class="span-title">مدرس دوره:</span>
+                                    <span class="span-teacher-course">{{ course.teacher }}</span>
+                                </div>
+                            </div>
+
+                            <div class="bottom">
+                                <button class="btn-click-course" [routerLink]="['/courses']" routerLinkActive
+                                    #rla="routerLinkActive">
+                                    <mat-icon class="icon-after-hover">keyboard_backspace</mat-icon>
+                                    <mat-icon class="icon-befor-hover">north_west</mat-icon>
+                                    مشاهده دوره
+                                </button>
+
+                                <button class="btn-like">
+                                    <mat-icon>favorite</mat-icon>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <button class="button-nav" [class.disabled]="currentIndexCourse === sliderCourses.length - 1"
-                [disabled]="currentIndexCourse === sliderCourses.length - 1" (click)="nextCourse()">❯</button>
+            <button class="nav next" [disabled]="sliderCourses.length <= 1" (click)="nextCourse()">❯</button>
         </div>
     </section>
 
@@ -202,7 +198,6 @@
 
             <button class="button-nav" (click)="next()">❯</button>
         </div>
-
     </section>
 
     <div class="div-footer">

@@ -7,7 +7,6 @@ import { NavbarComponent } from '../../navbar/navbar.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import moment from 'jalali-moment';
 import { Lightbox, LightboxModule } from 'ng-gallery/lightbox';
 import { Gallery, GalleryItem, GalleryModule, ImageItem } from 'ng-gallery';
 import { CommonModule } from '@angular/common';
@@ -15,14 +14,14 @@ import { AccountService } from '../../../services/account.service';
 import { ManagerService } from '../../../services/manager.service';
 
 @Component({
-    selector: 'app-member-enrolled-course',
-    imports: [
-        NavbarComponent, MatTableModule, MatNativeDateModule,
-        MatIconModule, CommonModule, GalleryModule,
-        LightboxModule
-    ],
-    templateUrl: './member-enrolled-course.component.html',
-    styleUrl: './member-enrolled-course.component.scss'
+  selector: 'app-member-enrolled-course',
+  imports: [
+    NavbarComponent, MatTableModule, MatNativeDateModule,
+    MatIconModule, CommonModule, GalleryModule,
+    LightboxModule
+  ],
+  templateUrl: './member-enrolled-course.component.html',
+  styleUrl: './member-enrolled-course.component.scss'
 })
 export class MemberEnrolledCourseComponent implements OnInit {
   private _route = inject(ActivatedRoute);
@@ -48,9 +47,9 @@ export class MemberEnrolledCourseComponent implements OnInit {
     this.getEnrolledCourse();
   }
 
-  toJalali(date: string): string {
-    return moment(date).locale('fa').format('YYYY/MM/DD');
-  }
+  // toJalali(date: string): string {
+  //   return moment(date).locale('fa').format('YYYY/MM/DD');
+  // }
 
   formatCurrency(amount: number): string {
     return amount.toLocaleString('en-US') + ' تومان';

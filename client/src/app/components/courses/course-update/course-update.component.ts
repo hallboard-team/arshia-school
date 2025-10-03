@@ -16,25 +16,18 @@ import { Teacher } from '../../../models/teacher.model';
 import { NavbarComponent } from '../../navbar/navbar.component';
 import { MatIconModule } from '@angular/material/icon';
 import { CurrencyFormatterDirective } from '../../../directives/currency-formatter.directive';
-import {
-  defaultTheme,
-  IDatepickerTheme,
-  NgPersianDatepickerModule
-} from '../../../../../projects/ng-persian-datepicker/src/public-api';
-import moment from 'moment-jalaali';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
-    selector: 'app-course-update',
-    imports: [
-        CommonModule, FormsModule, NavbarComponent,
-        ReactiveFormsModule, MatRadioModule, MatIconModule,
-        MatCardModule, MatFormFieldModule, MatInputModule,
-        MatButtonModule, CurrencyFormatterDirective,
-        NgPersianDatepickerModule, MatProgressSpinnerModule
-    ],
-    templateUrl: './course-update.component.html',
-    styleUrl: './course-update.component.scss'
+  selector: 'app-course-update',
+  imports: [
+    CommonModule, FormsModule, NavbarComponent,
+    ReactiveFormsModule, MatRadioModule, MatIconModule,
+    MatCardModule, MatFormFieldModule, MatInputModule,
+    MatButtonModule, CurrencyFormatterDirective, MatProgressSpinnerModule
+  ],
+  templateUrl: './course-update.component.html',
+  styleUrl: './course-update.component.scss'
 })
 export class CourseUpdateComponent implements OnInit {
   private _courseService = inject(CourseService);
@@ -48,7 +41,6 @@ export class CourseUpdateComponent implements OnInit {
   teachers: Teacher[] = [];
 
   uiIsVisible: boolean = true;
-  uiTheme: IDatepickerTheme = defaultTheme;
   uiYearView: boolean = true;
   uiMonthView: boolean = true;
   uiHideAfterSelectDate: boolean = false;
@@ -118,7 +110,7 @@ export class CourseUpdateComponent implements OnInit {
     this.HoursCtrl.setValue(course.hours);
     this.HoursPerClassCtrl.setValue(course.hoursPerClass);
     this.StartCtrl.setValue(course.start);
-    this.shamsiDisplayDate = moment(course.start).format('jYYYY/jMM/jDD');
+    // this.shamsiDisplayDate = moment(course.start).format('jYYYY/jMM/jDD');
     this.IsStartedCtrl.setValue(course.isStarted);
   }
 

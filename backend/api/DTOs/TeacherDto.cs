@@ -3,5 +3,5 @@ public record TeacherDto(
     string Name,
     string LastName,
     string? PhoneNum,
-    string Gender
+    GenderType Gender
 );

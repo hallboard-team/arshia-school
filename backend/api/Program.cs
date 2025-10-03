@@ -1,4 +1,10 @@
+using api.Serializers;
+using backend.Serializers;
+using MongoDB.Bson.Serialization;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+BsonSerializerBootstrapper.RegisterOnce();
 
 // Add services to the container.
 

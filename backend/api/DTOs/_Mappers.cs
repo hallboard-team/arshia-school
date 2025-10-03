@@ -12,7 +12,7 @@ public static class Mappers
             Name = adminInput.Name.Trim(),
             LastName = adminInput.LastName.Trim(),
             PhoneNum = adminInput.PhoneNum,
-            Gender = adminInput.Gender.ToLower(),
+            Gender = adminInput.Gender,
         };
     }
 

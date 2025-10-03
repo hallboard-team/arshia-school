@@ -6,7 +6,7 @@ public record TargetMemberDto(
     string Name,
     string LastName,
     string? PhoneNum,
-    string Gender,
+    GenderType Gender,
     int Age,
     DateOnly DateOfBirth,
     List<EnrolledCourse> EnrolledCourses
