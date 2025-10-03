@@ -1,28 +1,25 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Azure Web App - API
 
 on:
   push:
     branches:
-      - main # <--- Ensure this is the correct branch for your API project deployment
+      - main
     paths:
-      - 'backend/**' # <--- Keep this if your API project is in a 'backend' subfolder
+      - 'backend/**'
 
   pull_request:
     branches:
-      - main # <--- Ensure this is the correct branch for your API project deployment
+      - main
     paths:
-      - 'backend/**' # <--- Keep this if your API project is in a 'backend' subfolder
+      - 'backend/**'
 
-  workflow_dispatch: # This line adds the manual trigger option
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read # This is required for actions/checkout
+      contents: read # Required for checkout
 
     steps:
       - uses: actions/checkout@v4
@@ -33,9 +30,6 @@ jobs:
           dotnet-version: '9.x'
 
       - name: dotnet publish
-        # IMPORTANT: Adjust this path if your .sln or .csproj file is not directly in 'backend/'
-        # For example, if your solution is 'backend/MyApi.sln', this is correct.
-        # If your API project is 'backend/src/MyApi/MyApi.csproj', you'd change the path accordingly.
         run: dotnet publish ./backend/SepantaProject.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
@@ -43,21 +37,22 @@ jobs:
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
+          retention-days: 1   # ✅ Auto-delete artifacts after 1 day to prevent quota issues
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      id-token: write # <--- IMPORTANT: Required for requesting the JWT for OIDC login
-      contents: read # Required for actions/checkout (implicitly used by download-artifact)
+      id-token: write   # ✅ Needed for OIDC
+      contents: read
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: .net-app
+          path: . # ✅ Ensures package deploys from the right place
 
-      # THIS IS THE AZURE OIDC LOGIN STEP WITH YOUR NEWLY GENERATED SECRETS
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -69,22 +64,14 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          # IMPORTANT: Make sure this app-name matches the Azure Web App you want to deploy to.
-          # The newly generated one was 'wa-arshia-api-school'.
-          # Your old one was 'da-api-mr'. You'll need to decide which app you're targeting.
-          app-name: 'wa-arshia-api-school' # <--- Using the app name from the new setup
+          app-name: 'wa-arshia-api-school'
           slot-name: 'Production'
-          package: . # Deploys the content of the downloaded artifact (.net-app)
+          package: . # ✅ deploys the downloaded artifact
 
+  # optional cleanup job if you want to aggressively wipe runner workspace
   cleanup:
     runs-on: ubuntu-latest
     needs: deploy
     steps:
       - name: Clean up artifacts and publish directory
-        # This step uses actions/checkout, which is typically for cleaning the repo
-        # on the runner. For cleaning artifacts on GitHub itself, the `upload-artifact`
-        # action has a 'retention-days' option or you can use other artifact actions.
-        # This step is fine for local runner cleanup.
-        uses: actions/checkout@v4
-        with:
-          clean: true
+        run: rm -rf ${{env.DOTNET_ROOT}}/myapp
