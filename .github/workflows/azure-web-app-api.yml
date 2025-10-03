@@ -7,15 +7,13 @@ on:
   pull_request:
     branches: [ main ]
     paths: [ 'backend/**' ]
-  workflow_dispatch: # This line adds the manual trigger option
+  workflow_dispatch:
 
 jobs:
-  build_and_deploy:
+  build:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
       contents: read
-
     steps:
       - uses: actions/checkout@v4
 
@@ -26,6 +24,26 @@ jobs:
 
       - name: Publish .NET App
         run: dotnet publish ./backend/SepantaProject.sln -c Release -o ./publish
+
+      - name: Upload publish folder (for deploy job)
+        uses: actions/upload-artifact@v4
+        with:
+          name: publish-folder
+          path: ./publish
+          retention-days: 1   # keep only for 1 day
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      id-token: write   # required for OIDC login
+      contents: read
+    steps:
+      - name: Download publish folder
+        uses: actions/download-artifact@v4
+        with:
+          name: publish-folder
+          path: ./publish
 
       - name: Login to Azure
         uses: azure/login@v2
