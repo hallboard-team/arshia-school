@@ -89,11 +89,11 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       course: 'دوره پروژه محور FullStack',
       image: 'assets/images/profile-icon1.png',
       description:
-        'از بین دوره هایی که گذروندم مثل ICDL, Wordpress, Photoshop دوره FullStack رو دوست درم چون هدفم اینه برنامه نویس بشم...'
+        'از بین دوره هایی که گذروندم مثل ICDL, WordPress, Photoshop دوره FullStack رو دوست درم چون هدفم اینه برنامه نویس بشم...'
     },
     {
       name: 'آتنا عطائی',
-      course: 'دوره Wordpress',
+      course: 'دوره WordPress',
       image: 'assets/images/profile-icon2.png',
       description:
         'دوره وردپرس برای من جذاب بود چون تدریس استاد عالی بود، استاد ملاجان باعث شدن که به وردپرس علاقمند بشم...'
@@ -101,9 +101,9 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   sliderCourses = [
-    { nameTitleCourse: 'Full-Stack-1', image: 'assets/images/full-stackPhoto.jpg', chapter: '-', hourse: '150', teacher: 'ارشیا رضایی , وحید حیاتی پور' },
-    { nameTitleCourse: 'Full-Stack-2', image: 'assets/images/full-stackPhoto.jpg', chapter: '-', hourse: '150', teacher: 'پارسا جعفری , وحید حیاتی پور' },
-    { nameTitleCourse: 'Wordpress', image: 'assets/images/wordpressPhoto.jpg', chapter: '-', hourse: '60', teacher: 'مهدی ملاجان' },
+    { nameTitleCourse: 'Full-Stack 1', image: 'assets/images/full-stackPhoto.jpg', chapter: '-', hourse: '150', teacher: 'ارشیا رضایی , وحید حیاتی پور' },
+    { nameTitleCourse: 'Full-Stack 2', image: 'assets/images/full-stackPhoto.jpg', chapter: '-', hourse: '150', teacher: 'پارسا جعفری , وحید حیاتی پور' },
+    { nameTitleCourse: 'WordPress', image: 'assets/images/wordpressPhoto.jpg', chapter: '-', hourse: '60', teacher: 'مهدی ملاجان' },
     { nameTitleCourse: 'ICDL', image: 'assets/images/icdlPhoto.jpg', chapter: '-', hourse: '65', teacher: 'خانم محمودی' },
   ];
 
