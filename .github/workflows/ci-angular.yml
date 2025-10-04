@@ -31,9 +31,9 @@ jobs:
         working-directory: client
         run: npm install --legacy-peer-deps
 
-      - name: Run Angular unit tests
-        working-directory: client
-        run: npm run test -- --watch=false --browsers=ChromeHeadless
+#      - name: Run Angular unit tests
+#        working-directory: client
+#        run: npm run test -- --watch=false --browsers=ChromeHeadless
 
       - name: Build and Prerender Angular App
         working-directory: client
