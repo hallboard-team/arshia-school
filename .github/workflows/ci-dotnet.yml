@@ -1,4 +1,4 @@
-name: Build and Test API
+name: Build and Test API - CI
 
 on:
   pull_request:
