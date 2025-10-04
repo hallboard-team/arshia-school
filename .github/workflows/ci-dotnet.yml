@@ -1,3 +1,6 @@
+# To enable caching, make sure to add
+  # <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile> under <PropertyGroup> in the .csproj file
+
 name: Build and Test API - CI
 
 on:
