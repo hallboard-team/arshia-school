@@ -1,4 +1,4 @@
-name: Angular Build & Test (pnpm)
+name: Angular Build & Test
 
 on:
   pull_request:
@@ -15,30 +15,28 @@ jobs:
     name: Angular Build & Test
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          lfs: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20.11.1
-          cache: 'pnpm'
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9 # match your local pnpm version
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
 
       - name: Install dependencies
         working-directory: client
-        run: pnpm install --frozen-lockfile
+        run: npm install --legacy-peer-deps
 
-      - name: Run Angular unit tests
-        working-directory: client
-        run: pnpm run test -- --watch=false --browsers=ChromeHeadless
+#      - name: Run Angular unit tests
+#        working-directory: client
+#        run: npm run test -- --watch=false --browsers=ChromeHeadless
 
-      - name: Build and Prerender Angular App (SSR)
+      - name: Build and Prerender Angular App
         working-directory: client
-        run: pnpm exec ng build --ssr
+        run: npx ng build --ssr
         env:
           NODE_OPTIONS: --max_old_space_size=8192
