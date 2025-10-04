@@ -1,0 +1,47 @@
+name: Build and Test API
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - release/*
+    paths:
+      - 'backend/**'
+      - '.github/workflows/ci-dotnet.yml'
+
+jobs:
+  dotnet-build-test:
+    runs-on: ubuntu-latest
+    name: .NET Build & Test
+
+    permissions:
+      contents: read # Required for checkout
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+          cache: true # speeds up restore between runs
+
+      - name: Restore dependencies
+        working-directory: backend
+        run: dotnet restore
+
+      - name: Build solution
+        working-directory: backend
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Run tests
+        working-directory: backend
+        run: dotnet test --configuration Release --no-build --verbosity normal --logger "trx;LogFileName=test_results.trx"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-test-results
+          path: backend/TestResults
