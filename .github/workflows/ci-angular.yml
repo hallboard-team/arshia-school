@@ -1,4 +1,4 @@
-name: Angular Build & Test
+name: Angular Build & Test (pnpm)
 
 on:
   pull_request:
@@ -24,7 +24,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20.11.1
-          cache: 'npm'
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9 # match your local pnpm version
 
       - name: Install dependencies
         working-directory: client
@@ -32,10 +37,10 @@ jobs:
 
       - name: Run Angular unit tests
         working-directory: client
-        run: npm run test -- --watch=false --browsers=ChromeHeadless
+        run: pnpm run test -- --watch=false --browsers=ChromeHeadless
 
       - name: Build and Prerender Angular App
         working-directory: client
-        run: npx ng build --ssr
+        run: pnpm exec ng build --ssr
         env:
           NODE_OPTIONS: --max_old_space_size=8192
