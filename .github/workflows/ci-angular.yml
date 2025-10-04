@@ -1,4 +1,4 @@
-name: Angular Build & Test
+name: Angular Build & Test - CI
 
 on:
   pull_request:
