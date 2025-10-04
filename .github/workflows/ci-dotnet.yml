@@ -26,6 +26,7 @@ jobs:
         with:
           dotnet-version: 9.0.x
           cache: true # speeds up restore between runs
+          cache-dependency-path: backend/**/packages.lock.json
 
       - name: Restore dependencies
         working-directory: backend
