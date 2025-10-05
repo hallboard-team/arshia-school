@@ -4,9 +4,6 @@
 name: Build and Test API - CI
 
 on:
-  push:
-    branches:
-      - develop
   pull_request:
     branches:
       - develop
