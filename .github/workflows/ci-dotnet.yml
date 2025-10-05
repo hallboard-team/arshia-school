@@ -1,6 +1,12 @@
 name: Build and Test API - CI
 
 on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'backend/**'
+      - '.github/workflows/ci-dotnet.yml'
   pull_request:
     branches:
       - develop
