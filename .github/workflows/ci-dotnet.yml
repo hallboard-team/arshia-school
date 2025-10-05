@@ -1,12 +1,12 @@
+# To enable caching, make sure to add
+  # <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile> under <PropertyGroup> in the .csproj file
+
 name: Build and Test API - CI
 
 on:
   push:
     branches:
       - develop
-    paths:
-      - 'backend/**'
-      - '.github/workflows/ci-dotnet.yml'
   pull_request:
     branches:
       - develop
@@ -32,6 +32,7 @@ jobs:
         with:
           dotnet-version: 9.0.x
           cache: true # speeds up restore between runs
+          cache-dependency-path: backend/**/packages.lock.json
 
       - name: Restore dependencies
         working-directory: backend
