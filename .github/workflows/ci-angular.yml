@@ -1,12 +1,6 @@
 name: Angular Build & Test - CI
 
 on:
-  push:
-    branches:
-      - develop
-    paths:
-      - 'client/**'
-      - '.github/workflows/ci-angular.yml'
   pull_request:
     branches:
       - develop
