@@ -1,4 +1,4 @@
-name: .NET & Angular CI/CD - Conditional
+name: .NET & Angular CD - Deploy to Azure
 
 on:
   pull_request:
@@ -8,35 +8,11 @@ on:
 
 jobs:
   # --------------------------------------------------------
-  # 🔹 Detect Changed Paths
-  # --------------------------------------------------------
-  changes:
-    name: Detect Changes - CI
-    runs-on: ubuntu-latest
-    outputs:
-      backend: ${{ steps.filter.outputs.backend }}
-      client: ${{ steps.filter.outputs.client }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Detect file changes
-        id: filter
-        uses: dorny/paths-filter@v3
-        with:
-          filters: |
-            backend:
-              - 'backend/**'
-            client:
-              - 'client/**'
-
-  # --------------------------------------------------------
-  # 🔹 .NET Build, Test, and Publish (CI)
+  # 🔹 .NET Build, Test, and Publish
   # --------------------------------------------------------
   dotnet-ci-cd:
-    name: .NET Build & Test - CI
+    name: .NET Build & Test - CD
     runs-on: ubuntu-latest
-    needs: changes
-    if: needs.changes.outputs.backend == 'true'
     permissions:
       contents: read
 
@@ -62,13 +38,6 @@ jobs:
         working-directory: backend
         run: dotnet test --configuration Release --no-build --verbosity normal --logger "trx;LogFileName=test_results.trx"
 
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: dotnet-test-results
-          path: backend/TestResults
-
       - name: Publish backend
         working-directory: backend
         run: dotnet publish ./SepantaProject.sln -c Release --no-build -o ${{ env.DOTNET_ROOT }}/myapp
@@ -81,15 +50,15 @@ jobs:
           retention-days: 1
 
   # --------------------------------------------------------
-  # 🔹 Deploy Backend to Azure (CD)
+  # 🔹 Deploy Backend to Azure Web App
   # --------------------------------------------------------
-  deploy:
-    name: Deploy Backend to Azure - CD
+  deploy-backend:
+    name: Deploy Backend to Azure
     runs-on: ubuntu-latest
     needs: dotnet-ci-cd
     if: needs.dotnet-ci-cd.result == 'success' && github.event.pull_request.merged == true
     permissions:
-      id-token: write   # ✅ Needed for OIDC
+      id-token: write
       contents: read
 
     steps:
@@ -109,7 +78,7 @@ jobs:
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_1F5E4BCD74334236B7A5CCF299960165 }}
 
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
+        id: deploy-backend
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'wa-arshia-api-school'
@@ -117,13 +86,11 @@ jobs:
           package: .
 
   # --------------------------------------------------------
-  # 🔹 Angular Build & Deploy (CI/CD)
+  # 🔹 Angular Build & Deploy to Azure SWA
   # --------------------------------------------------------
   angular-ci-cd:
-    name: Angular Build & Deploy - CI/CD
+    name: Angular Build & Deploy - CD
     runs-on: ubuntu-latest
-    needs: changes
-    if: needs.changes.outputs.client == 'true'
     permissions:
       contents: read
     defaults:
@@ -146,10 +113,6 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      # Uncomment to enable Angular unit tests
-      # - name: Run Angular unit tests
-      #   run: npm run test -- --watch=false --browsers=ChromeHeadless
-
       - name: Build and Prerender Angular App
         run: npx ng build --ssr
         env:
@@ -168,7 +131,7 @@ jobs:
           api_location: "dist/client/server"
 
   # --------------------------------------------------------
-  # 🔹 Close Pull Request (Azure SWA Cleanup)
+  # 🔹 Close PR (Azure SWA Cleanup)
   # --------------------------------------------------------
   close_pr:
     name: Close PR (Preview Cleanup)
