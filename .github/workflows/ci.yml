@@ -8,19 +8,41 @@ on:
 
 jobs:
   # -------------------------
+  # 🔹 Detect changed paths
+  # -------------------------
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      client: ${{ steps.filter.outputs.client }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Detect file changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+            client:
+              - 'client/**'
+
+  # -------------------------
   # 🔹 .NET Build & Test
   # -------------------------
   dotnet-build-test:
-    name: .NET Build & Test
+    name: .NET Build & Test - CI
     runs-on: ubuntu-latest
-    if: contains(toJson(github.event.pull_request.changed_files), 'backend/') || contains(github.event.pull_request.head.ref, 'backend')
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
 
     permissions:
       contents: read
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -52,9 +74,10 @@ jobs:
   # 🔹 Angular Build & Test
   # -------------------------
   angular-build-test:
-    name: Angular Build & Test
+    name: Angular Build & Test - CI
     runs-on: ubuntu-latest
-    if: contains(toJson(github.event.pull_request.changed_files), 'client/') || contains(github.event.pull_request.head.ref, 'client')
+    needs: changes
+    if: needs.changes.outputs.client == 'true'
 
     steps:
       - uses: actions/checkout@v4
