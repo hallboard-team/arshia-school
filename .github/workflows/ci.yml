@@ -15,7 +15,7 @@ jobs:
   # 🔹 Detect changed paths
   # -------------------------
   changes:
-    name: Detect Changes
+    name: Detect Changes - CI
     runs-on: ubuntu-latest
     outputs:
       backend: ${{ steps.filter.outputs.backend }}
