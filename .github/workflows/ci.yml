@@ -5,11 +5,12 @@ on:
     branches:
       - develop
       - release/*
+  workflow_dispatch:
 
 jobs:
-  # -------------------------
-  # 🔹 Detect changed paths
-  # -------------------------
+  # --------------------------------------------------------
+  # 🔹 Detect Changed Paths
+  # --------------------------------------------------------
   changes:
     name: Detect Changes - CI
     runs-on: ubuntu-latest
@@ -29,15 +30,14 @@ jobs:
             client:
               - 'client/**'
 
-  # -------------------------
+  # --------------------------------------------------------
   # 🔹 .NET Build & Test
-  # -------------------------
+  # --------------------------------------------------------
   dotnet-build-test:
     name: .NET Build & Test - CI
     runs-on: ubuntu-latest
     needs: changes
     if: needs.changes.outputs.backend == 'true'
-
     permissions:
       contents: read
 
@@ -70,15 +70,16 @@ jobs:
           name: dotnet-test-results
           path: backend/TestResults
 
-  # -------------------------
+  # --------------------------------------------------------
   # 🔹 Angular Build & Test
-  # -------------------------
+  # --------------------------------------------------------
   angular-build-test:
     name: Angular Build & Test - CI
     runs-on: ubuntu-latest
     needs: changes
     if: needs.changes.outputs.client == 'true'
-
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
         with:
@@ -96,7 +97,7 @@ jobs:
         working-directory: client
         run: npm install --legacy-peer-deps
 
-      # Uncomment to enable Angular tests
+      # Uncomment to enable Angular unit tests
       # - name: Run Angular unit tests
       #   working-directory: client
       #   run: npm run test -- --watch=false --browsers=ChromeHeadless
