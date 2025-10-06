@@ -1,0 +1,148 @@
+name: .NET & Angular CD - Deploy to Azure
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  # --------------------------------------------------------
+  # 🔹 .NET Build, Test, and Publish
+  # --------------------------------------------------------
+  dotnet-ci-cd:
+    name: .NET Build & Test - CD
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+          cache: true
+          cache-dependency-path: backend/**/packages.lock.json
+
+      - name: Restore dependencies
+        working-directory: backend
+        run: dotnet restore
+
+      - name: Build solution
+        working-directory: backend
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Run tests
+        working-directory: backend
+        run: dotnet test --configuration Release --no-build --verbosity normal --logger "trx;LogFileName=test_results.trx"
+
+      - name: Publish backend
+        working-directory: backend
+        run: dotnet publish ./SepantaProject.sln -c Release --no-build -o ${{ env.DOTNET_ROOT }}/myapp
+
+      - name: Upload artifact for deployment
+        uses: actions/upload-artifact@v4
+        with:
+          name: .net-app
+          path: ${{ env.DOTNET_ROOT }}/myapp
+          retention-days: 1
+
+  # --------------------------------------------------------
+  # 🔹 Deploy Backend to Azure Web App
+  # --------------------------------------------------------
+  deploy-backend:
+    name: Deploy Backend to Azure
+    runs-on: ubuntu-latest
+    needs: dotnet-ci-cd
+    if: needs.dotnet-ci-cd.result == 'success' && github.event.pull_request.merged == true
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-app
+          path: .
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_032917DF3B07488FA446A37DE1C9A28E }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_250FA19C80D64DA69821A2A1C72E6446 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_1F5E4BCD74334236B7A5CCF299960165 }}
+
+      - name: Deploy to Azure Web App
+        id: deploy-backend
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'wa-arshia-api-school'
+          slot-name: 'Production'
+          package: .
+
+  # --------------------------------------------------------
+  # 🔹 Angular Build & Deploy to Azure SWA
+  # --------------------------------------------------------
+  angular-ci-cd:
+    name: Angular Build & Deploy - CD
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: ./client
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          lfs: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.11.1
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Build and Prerender Angular App
+        run: npx ng build --ssr
+        env:
+          NODE_OPTIONS: --max_old_space_size=8192
+
+      - name: Deploy to Azure Static Web Apps
+        if: github.event.pull_request.merged == true
+        id: deploy-frontend
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GRAY_SAND_0000A630F }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: "client"
+          output_location: "dist/client/browser"
+          api_location: "dist/client/server"
+
+  # --------------------------------------------------------
+  # 🔹 Close PR (Azure SWA Cleanup)
+  # --------------------------------------------------------
+  close_pr:
+    name: Close PR (Preview Cleanup)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == false
+    permissions:
+      contents: read
+    steps:
+      - name: Close Pull Request
+        id: closepullrequest
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GRAY_SAND_0000A630F }}
+          action: "close"
