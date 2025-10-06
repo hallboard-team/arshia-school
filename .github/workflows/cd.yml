@@ -10,7 +10,7 @@ jobs:
   # --------------------------------------------------------
   # 🔹 .NET Build, Test, and Publish
   # --------------------------------------------------------
-  dotnet-ci-cd:
+  dotnet-build-test:
     name: .NET Build & Test - CD
     runs-on: ubuntu-latest
     permissions:
@@ -55,10 +55,10 @@ jobs:
   deploy-backend:
     name: Deploy Backend to Azure
     runs-on: ubuntu-latest
-    needs: dotnet-ci-cd
-    if: needs.dotnet-ci-cd.result == 'success' && github.event.pull_request.merged == true
+    needs: dotnet-build-test
+    if: needs.dotnet-build-test.result == 'success' && github.event.pull_request.merged == true
     permissions:
-      id-token: write
+      id-token: write   # ✅ Needed for OIDC
       contents: read
 
     steps:
@@ -86,10 +86,10 @@ jobs:
           package: .
 
   # --------------------------------------------------------
-  # 🔹 Angular Build & Deploy to Azure SWA
+  # 🔹 Angular Build & Test
   # --------------------------------------------------------
-  angular-ci-cd:
-    name: Angular Build & Deploy - CD
+  angular-build-test:
+    name: Angular Build & Test - CD
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -113,13 +113,43 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
+      # Optional: enable when unit tests exist
+      # - name: Run Angular unit tests
+      #   run: npm run test -- --watch=false --browsers=ChromeHeadless
+
       - name: Build and Prerender Angular App
         run: npx ng build --ssr
         env:
           NODE_OPTIONS: --max_old_space_size=8192
 
+      - name: Upload Angular dist for deployment
+        uses: actions/upload-artifact@v4
+        with:
+          name: angular-dist
+          path: client/dist/client
+          retention-days: 1
+
+  # --------------------------------------------------------
+  # 🔹 Deploy Angular to Azure Static Web Apps
+  # --------------------------------------------------------
+  deploy-frontend:
+    name: Deploy Angular to Azure Static Web Apps
+    runs-on: ubuntu-latest
+    needs: angular-build-test
+    if: needs.angular-build-test.result == 'success' && github.event.pull_request.merged == true
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download Angular dist
+        uses: actions/download-artifact@v4
+        with:
+          name: angular-dist
+          path: client/dist/client
+
       - name: Deploy to Azure Static Web Apps
-        if: github.event.pull_request.merged == true
         id: deploy-frontend
         uses: Azure/static-web-apps-deploy@v1
         with:
@@ -139,6 +169,7 @@ jobs:
     if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == false
     permissions:
       contents: read
+
     steps:
       - name: Close Pull Request
         id: closepullrequest
