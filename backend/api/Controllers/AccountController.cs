@@ -16,7 +16,7 @@ public class AccountController(IAccountRepository _accountRepository) : BaseApiC
             : BadRequest("Registration has failed try again.");
     }
 
-    [HttpGet
+    [HttpGet]
     public async Task<ActionResult<LoggedInDto>> ReloadLoggedInUser(CancellationToken cancellationToken)
     {
         // obtain token value
