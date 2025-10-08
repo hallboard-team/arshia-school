@@ -89,10 +89,11 @@
                 }
 
                 .div-phone-numbers {
+                    width: 100%;
                     display: flex;
                     justify-content: center;
-                    align-items: center;
-                    gap: 1rem;
+                    align-items: flex-start;
+                    gap: 4.5rem;
 
                     .right-side {
                         display: flex;
@@ -117,18 +118,17 @@
                             display: flex;
                             justify-content: center;
                             align-items: center;
-                            flex-direction: row-reverse;
                             gap: 5px;
                             flex-direction: column;
 
                             .title {
-                                font-size: 15px;
+                                font-size: 18px;
                                 color: black;
                                 direction: rtl;
                             }
 
                             .phone-number {
-                                font-size: 14px;
+                                font-size: 16px;
                                 color: rgba(0, 0, 0, 0.603);
                             }
                         }
@@ -162,13 +162,13 @@
                             flex-direction: column;
 
                             .title {
-                                font-size: 15px;
+                                font-size: 18px;
                                 color: black;
                                 direction: rtl;
                             }
 
                             .time {
-                                font-size: 14px;
+                                font-size: 16px;
                                 color: rgba(0, 0, 0, 0.603);
                             }
                         }
