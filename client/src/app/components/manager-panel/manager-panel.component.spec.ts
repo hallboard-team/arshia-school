@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ManageerPannelComponent } from './manageer-pannel.component';
+import { ManageerPannelComponent } from './manager-panel.component';
 
 describe('ManageerPannelComponent', () => {
   let component: ManageerPannelComponent;
@@ -10,7 +10,7 @@ describe('ManageerPannelComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ManageerPannelComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(ManageerPannelComponent);
     component = fixture.componentInstance;
