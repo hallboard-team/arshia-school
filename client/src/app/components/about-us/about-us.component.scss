@@ -1190,19 +1190,17 @@
                 width: 100%;
 
                 .div-photo {
-                    margin-top: 1rem;
-                    width: 95%;
-                    height: 250px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
+                    width: min(95%, 1000px);
+                    margin: 1rem auto 0;
+                    border-radius: 12px;
                     background: #e0e0e0;
                     border-radius: 10px;
 
                     img {
-                        height: 100%;
+                        display: block;
                         width: 100%;
-                        border-radius: 10px;
+                        height: 100%;
+                        object-fit: cover;
                     }
                 }
 
@@ -1396,6 +1394,8 @@
                         margin-left: 1rem;
                         width: 60%;
                         height: 400px;
+                        background-color: #ffffff00;
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.534);
 
                         img {
                             height: 95%;
