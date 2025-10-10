@@ -4,7 +4,6 @@ import { HomeComponent } from './components/home/home.component';
 import { authGuard } from './guards/auth.guard';
 import { authLoggedInGuard } from './guards/auth-logged-in.guard';
 import { MemberListComponent } from './components/members/member-list/member-list.component';
-import { ManageerPannelComponent } from './components/manageer-pannel/manageer-pannel.component';
 import { SecretaryComponent } from './components/secretary/secretary.component';
 import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
 import { AboutUsComponent } from './components/about-us/about-us.component';
@@ -29,6 +28,7 @@ import { secretaryGuard } from './guards/secretary.guard';
 import { studentGuard } from './guards/student.guard';
 import { teacherGuard } from './guards/teacher.guard';
 import { RecoveryComponent } from './components/recovery/recovery.component';
+import { ManagerPanelComponent } from './components/manager-panel/manager-panel.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -51,7 +51,7 @@ export const routes: Routes = [
             // Manager-only
             { path: 'target-user-profile/:memberUserName', component: TargetUserProfileComponent, canActivate: [managerGuard] },
             { path: 'members', component: MemberListComponent, canActivate: [managerGuard] },
-            { path: 'manager-panel', component: ManageerPannelComponent, canActivate: [managerGuard] },
+            { path: 'manager-panel', component: ManagerPanelComponent, canActivate: [managerGuard] },
             { path: 'add-course', component: AddCourseComponent, canActivate: [managerGuard] },
             { path: 'update-course/:courseTitle', component: CourseUpdateComponent, canActivate: [managerGuard] },
             { path: 'target-member-enrolled-course/:memberUserName/:courseTitle', component: TargetMemberEnrolledCourseComponent, canActivate: [managerGuard] },
