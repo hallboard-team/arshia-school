@@ -1,17 +1,17 @@
 import { Component, inject } from '@angular/core';
 import { Validators, FormControl, FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AddCourse } from '../../../models/course.model';
-import { CourseService } from '../../../services/course.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { AutoFocusDirective } from '../../../directives/auto-focus.directive';
-import { NavbarComponent } from '../../navbar/navbar.component';
-import { CurrencyFormatterDirective } from '../../../directives/currency-formatter.directive';
 import { HttpClient } from '@angular/common/http';
+import { AutoFocusDirective } from '../../../../directives/auto-focus.directive';
+import { CurrencyFormatterDirective } from '../../../../directives/currency-formatter.directive';
+import { NavbarComponent } from '../../../navbar/navbar.component';
+import { AddCourse } from '../../../../models/course.model';
+import { CourseService } from '../../../../services/course.service';
 
 @Component({
   selector: 'app-add-course',
@@ -22,10 +22,10 @@ import { HttpClient } from '@angular/common/http';
     AutoFocusDirective,
     MatIconModule, NavbarComponent, CurrencyFormatterDirective
   ],
-  templateUrl: './add-course.component.html',
-  styleUrl: './add-course.component.scss'
+  templateUrl: './course-create.component.html',
+  styleUrl: './course-create.component.scss'
 })
-export class AddCourseComponent {
+export class CourseCreateComponent {
   fb = inject(FormBuilder);
   private _courseService = inject(CourseService);
   private _matSnackBar = inject(MatSnackBar);
