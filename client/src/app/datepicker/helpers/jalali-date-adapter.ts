@@ -20,24 +20,25 @@ export class JalaliMomentDateAdapter extends MomentDateAdapter {
 
   // --- Core Jalali math (with local midnight) ---
   override getYear(date: Moment): number {
-    return date.jYear();
+    return moment(date).jYear();
   }
 
   override getYearName(date: Moment): string {
+    const m = moment(date);
     // Use Jalali year + Persian digits
     const faDigits = '۰۱۲۳۴۵۶۷۸۹';
-    return date
-      .jYear()
+    return m
+      .jYear() // Use the wrapped instance
       .toString()
       .replace(/\d/g, d => faDigits[+d]);
   }
 
   override getMonth(date: Moment): number {
-    return date.jMonth();
+    return moment(date).jMonth();
   }
 
   override getDate(date: Moment): number {
-    return date.jDate();
+    return moment(date).jDate();
   }
 
   // Persian digits helper

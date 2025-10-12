@@ -5,7 +5,7 @@
 </header>
 
 <div class="div-edit-course">
-    <form class="update-course-form" [formGroup]="courseEditFg" (ngSubmit)="courseEditFg.valid && updateCourse()">
+    <form class="update-course-form" [formGroup]="courseFg" (ngSubmit)="courseFg.valid && updateCourse()">
 
         <div class="div-title">
             <span class="title">تغییر در دوره موردنظر</span>
@@ -35,17 +35,9 @@
                     placeHolder="" matInput>
             </mat-form-field>
 
-            <!-- <mat-form-field appearance="outline">
-                <mat-label>تاریخ شروع دوره</mat-label>
-                <input class="input" [value]="shamsiDisplayDate" readonly (click)="openDatePicker()" matInput />
-            </mat-form-field>
-
-            <ng-persian-datepicker [calendarIsGregorian]="false" (dateOnSelect)="onDateSelect($event)"
-                [dateFormat]="'jYYYY/jMM/jDD'" [dateGregorianFormat]="'YYYY-MM-DD'" [(uiIsVisible)]="uiIsVisible"
-                [uiTheme]="uiTheme" [uiYearView]="uiYearView" [uiMonthView]="uiMonthView"
-                [uiHideAfterSelectDate]="uiHideAfterSelectDate" [uiHideOnOutsideClick]="uiHideOnOutsideClick"
-                [uiTodayBtnEnable]="uiTodayBtnEnable">
-            </ng-persian-datepicker> -->
+            <div>
+                <app-datepicker [formControl]="StartCtrl" [maxDate]="max" [minDate]="min"></app-datepicker>
+            </div>
 
             <div class="div-isStarted">
                 <span>دوره شروع شده است؟</span>
@@ -58,7 +50,7 @@
         </div>
 
         <div class="div-button-submit">
-            <button class="button-edit-course" type="submit" [disabled]="courseEditFg.invalid">ثبت تغییرات</button>
+            <button class="button-edit-course" type="submit" [disabled]="courseFg.invalid">ثبت تغییرات</button>
         </div>
     </form>
 
