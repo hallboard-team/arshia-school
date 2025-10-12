@@ -1,0 +1,37 @@
+<section class="courses-container">
+    <header>
+        <nav>
+            <app-navbar />
+        </nav>
+    </header>
+
+    <div class="div-title-course">
+        <span>دوره های آموزشگاه</span>
+    </div>
+    @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
+    <div class="div-btn-add-course">
+        <button class="add-btn" [routerLink]="['/add-course']">
+            <span class="icon-wrap" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24" role="img" focusable="false">
+                    <circle cx="12" cy="12" r="9" fill="none" stroke="#ff2f72" stroke-width="2" />
+                    <path d="M12 8v8M8 12h8" fill="none" stroke="#ff2f72" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </span>
+            <span class="label">اضافه کردن دوره جدید</span>
+        </button>
+    </div>
+    }
+
+    <div class="courses">
+        @for (course of showCourses; track $index) {
+        <app-course-card [courseInput]="course"></app-course-card>
+        }
+    </div>
+    @if (pagination && courseParams) {
+    <mat-paginator #paginator (page)="handlePageEvent($event)" [length]="pagination.totalItems"
+        [pageSize]="courseParams.pageSize" [disabled]="false" [showFirstLastButtons]="true"
+        [pageSizeOptions]="true ? pageSizeOptions : []" [hidePageSize]="false" [pageIndex]="courseParams.pageNumber - 1"
+        aria-label="Select page" class="paginator">
+    </mat-paginator>
+    }
+</section>
