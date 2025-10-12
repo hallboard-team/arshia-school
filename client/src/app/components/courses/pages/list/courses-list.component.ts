@@ -2,27 +2,28 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit, Signal } from '@angular/core';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { Observable, Subscription } from 'rxjs';
-import { PaginatedResult } from '../../../models/helpers/paginatedResult';
-import { Pagination } from '../../../models/helpers/pagination';
-import { CourseService } from '../../../services/course.service';
-import { Course, ShowCourse } from '../../../models/course.model';
-import { CourseParams } from '../../../models/helpers/course-params';
-import { CourseCardComponent } from "../course-card/course-card.component";
-import { NavbarComponent } from '../../navbar/navbar.component';
-import { AccountService } from '../../../services/account.service';
-import { LoggedInUser } from '../../../models/logged-in-user.model';
+
 import { RouterModule } from '@angular/router';
+import { Course, ShowCourse } from '../../../../models/course.model';
+import { CourseParams } from '../../../../models/helpers/course-params';
+import { PaginatedResult } from '../../../../models/helpers/paginatedResult';
+import { Pagination } from '../../../../models/helpers/pagination';
+import { LoggedInUser } from '../../../../models/logged-in-user.model';
+import { AccountService } from '../../../../services/account.service';
+import { CourseService } from '../../../../services/course.service';
+import { NavbarComponent } from '../../../navbar/navbar.component';
+import { CourseCardComponent } from '../../components/course-card/course-card.component';
 
 @Component({
-    selector: 'app-course-list',
-    imports: [
-        CommonModule, MatPaginatorModule, CourseCardComponent,
-        NavbarComponent, RouterModule
-    ],
-    templateUrl: './course-list.component.html',
-    styleUrl: './course-list.component.scss'
+  selector: 'app-course-list',
+  imports: [
+    CommonModule, MatPaginatorModule, CourseCardComponent,
+    NavbarComponent, RouterModule
+  ],
+  templateUrl: './courses-list.component.html',
+  styleUrl: './courses-list.component.scss'
 })
-export class CourseListComponent implements OnInit, OnDestroy {
+export class CoursesListComponent implements OnInit, OnDestroy {
   private _accountService = inject(AccountService);
   courseService = inject(CourseService);
   courses$: Observable<Course[] | null> | undefined;

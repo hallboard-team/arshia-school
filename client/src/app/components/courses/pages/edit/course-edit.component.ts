@@ -3,20 +3,20 @@ import { FormGroup, AbstractControl, FormControl, FormBuilder, FormsModule, Reac
 import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Course, CourseUpdate } from '../../../models/course.model';
-import { CourseService } from '../../../services/course.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
-import { ManagerService } from '../../../services/manager.service';
-import { Teacher } from '../../../models/teacher.model';
-import { NavbarComponent } from '../../navbar/navbar.component';
 import { MatIconModule } from '@angular/material/icon';
-import { CurrencyFormatterDirective } from '../../../directives/currency-formatter.directive';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CurrencyFormatterDirective } from '../../../../directives/currency-formatter.directive';
+import { Course, CourseUpdate } from '../../../../models/course.model';
+import { Teacher } from '../../../../models/teacher.model';
+import { CourseService } from '../../../../services/course.service';
+import { ManagerService } from '../../../../services/manager.service';
+import { NavbarComponent } from '../../../navbar/navbar.component';
 
 @Component({
   selector: 'app-course-update',
@@ -26,10 +26,10 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatCardModule, MatFormFieldModule, MatInputModule,
     MatButtonModule, CurrencyFormatterDirective, MatProgressSpinnerModule
   ],
-  templateUrl: './course-update.component.html',
-  styleUrl: './course-update.component.scss'
+  templateUrl: './course-edit.component.html',
+  styleUrl: './course-edit.component.scss'
 })
-export class CourseUpdateComponent implements OnInit {
+export class CourseEditComponent implements OnInit {
   private _courseService = inject(CourseService);
   private _managerService = inject(ManagerService);
   private _matSnackBar = inject(MatSnackBar);
