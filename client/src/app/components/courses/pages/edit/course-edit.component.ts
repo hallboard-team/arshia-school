@@ -17,6 +17,8 @@ import { Teacher } from '../../../../models/teacher.model';
 import { CourseService } from '../../../../services/course.service';
 import { ManagerService } from '../../../../services/manager.service';
 import { NavbarComponent } from '../../../navbar/navbar.component';
+import moment from 'moment-jalaali';
+import { DatepickerComponent } from '../../../../datepicker/datepicker.component';
 
 @Component({
   selector: 'app-course-update',
@@ -24,7 +26,8 @@ import { NavbarComponent } from '../../../navbar/navbar.component';
     CommonModule, FormsModule, NavbarComponent,
     ReactiveFormsModule, MatRadioModule, MatIconModule,
     MatCardModule, MatFormFieldModule, MatInputModule,
-    MatButtonModule, CurrencyFormatterDirective, MatProgressSpinnerModule
+    MatButtonModule, CurrencyFormatterDirective, MatProgressSpinnerModule,
+    DatepickerComponent
   ],
   templateUrl: './course-edit.component.html',
   styleUrl: './course-edit.component.scss'
@@ -40,47 +43,41 @@ export class CourseEditComponent implements OnInit {
   course: Course | undefined;
   teachers: Teacher[] = [];
 
-  uiIsVisible: boolean = true;
-  uiYearView: boolean = true;
-  uiMonthView: boolean = true;
-  uiHideAfterSelectDate: boolean = false;
-  uiHideOnOutsideClick: boolean = false;
-  uiTodayBtnEnable: boolean = true;
-
-  shamsiDisplayDate: string = '';
   professorUserNames: string[] = [];
+
+  min = moment().startOf('day');
+  max = moment().add(10, 'jYear').endOf('day');
 
   ngOnInit(): void {
     this.getCourse();
     console.log(this.course);
   }
 
-  courseEditFg: FormGroup = this._fb.group({
+  courseFg: FormGroup = this._fb.group({
     titleCtrl: ['',],
     tuitionCtrl: ['',],
     hoursCtrl: ['',],
     hoursPerClassCtrl: ['',],
-    startCtrl: ['',],
+    startCtrl: [null],
     isStartedCtrl: ['',]
   });
 
-  get TitleCtrl(): AbstractControl {
-    return this.courseEditFg.get('titleCtrl') as FormControl;
-  }
-  get TuitionCtrl(): AbstractControl {
-    return this.courseEditFg.get('tuitionCtrl') as FormControl;
-  }
-  get HoursCtrl(): AbstractControl {
-    return this.courseEditFg.get('hoursCtrl') as FormControl;
-  }
-  get HoursPerClassCtrl(): AbstractControl {
-    return this.courseEditFg.get('hoursPerClassCtrl') as FormControl;
-  }
-  get StartCtrl(): AbstractControl {
-    return this.courseEditFg.get('startCtrl') as FormControl;
-  }
-  get IsStartedCtrl(): AbstractControl {
-    return this.courseEditFg.get('isStartedCtrl') as FormControl;
+  get TitleCtrl(): FormControl { return this.courseFg.get('titleCtrl') as FormControl; }
+  get TuitionCtrl(): FormControl { return this.courseFg.get('tuitionCtrl') as FormControl; }
+  get HoursCtrl(): FormControl { return this.courseFg.get('hoursCtrl') as FormControl; }
+  get HoursPerClassCtrl(): FormControl { return this.courseFg.get('hoursPerClassCtrl') as FormControl; }
+  get StartCtrl(): FormControl { return this.courseFg.get('startCtrl') as FormControl; }
+  get IsStartedCtrl(): FormControl { return this.courseFg.get('isStartedCtrl') as FormControl; }
+
+  private toGregorianDateOnly(v: any): string | undefined {
+    if (!v) return undefined;
+    if (typeof v?.format === 'function') {
+      return v.locale('en').format('YYYY-MM-DD');
+    }
+    const d = new Date(v);
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate())
+      .toISOString()
+      .slice(0, 10);
   }
 
   getCourse(): void {
@@ -109,65 +106,37 @@ export class CourseEditComponent implements OnInit {
 
     this.HoursCtrl.setValue(course.hours);
     this.HoursPerClassCtrl.setValue(course.hoursPerClass);
-    this.StartCtrl.setValue(course.start);
-    // this.shamsiDisplayDate = moment(course.start).format('jYYYY/jMM/jDD');
+
+    const startMoment = course.start ? moment(course.start) : null;
+    this.StartCtrl.setValue(startMoment && startMoment.isValid() ? startMoment : null);
+
     this.IsStartedCtrl.setValue(course.isStarted);
-  }
-
-  onDateSelect(event: { shamsi: string; gregorian: string; timestamp: number }): void {
-    this.shamsiDisplayDate = event.shamsi;
-    this.StartCtrl.setValue(new Date(event.gregorian));
-    this.closeDatePicker();
-  }
-
-  openDatePicker() {
-    const elements = document.querySelectorAll('.div-background-date-picker');
-    const buttonClose = document.querySelectorAll('.close-date');
-    const buttonOpen = document.querySelectorAll('.open-date');
-
-    elements.forEach((element) => {
-      (element as HTMLElement).style.display = "flex";
-    });
-
-    buttonClose.forEach((element) => {
-      (element as HTMLElement).style.display = "flex";
-    });
-
-    buttonOpen.forEach((element) => {
-      (element as HTMLElement).style.display = "none";
-    });
-  }
-
-  closeDatePicker() {
-    const elements = document.querySelectorAll('.div-background-date-picker');
-    const buttonClose = document.querySelectorAll('.close-date');
-    const buttonOpen = document.querySelectorAll('.open-date');
-
-    elements.forEach((element) => {
-      (element as HTMLElement).style.display = "none";
-    });
-
-    buttonClose.forEach((element) => {
-      (element as HTMLElement).style.display = "none";
-    });
-
-    buttonOpen.forEach((element) => {
-      (element as HTMLElement).style.display = "flex";
-    });
   }
 
   updateCourse(): void {
     const courseTitle: string | null = this._route.snapshot.paramMap.get('courseTitle');
 
     if (this.course && courseTitle) {
-      let updatedCourse: CourseUpdate = {
+      const start = this.StartCtrl.value as any;
+
+      if (!start || !start.isBetween(this.min, this.max, undefined, '[]')) {
+        this._matSnackBar.open(
+          `تاریخ شروع دوره باید بین ${this.min.format('jYYYY/jMM/jDD')} و ${this.max.format('jYYYY/jMM/jDD')} باشد.`,
+          'Close',
+          { horizontalPosition: 'center', verticalPosition: 'bottom', duration: 8000 }
+        );
+        this.StartCtrl.markAsTouched();
+        return;
+      }
+
+      const updatedCourse: CourseUpdate = {
         title: this.TitleCtrl.value,
         tuition: this.TuitionCtrl.value,
         hours: this.HoursCtrl.value,
         hoursPerClass: this.HoursPerClassCtrl.value,
-        start: this.StartCtrl.value,
+        start: this.toGregorianDateOnly(start),
         isStarted: this.IsStartedCtrl.value,
-      }
+      };
 
       this._courseService.update(updatedCourse, courseTitle)
         .pipe(take(1))
@@ -175,11 +144,8 @@ export class CourseEditComponent implements OnInit {
           next: (course: Course) => {
             if (course) {
               this.course = course;
-
               this._matSnackBar.open("update successfull", "Close", {
-                horizontalPosition: 'center',
-                verticalPosition: 'bottom',
-                duration: 10000
+                horizontalPosition: 'center', verticalPosition: 'bottom', duration: 10000
               });
             }
           }

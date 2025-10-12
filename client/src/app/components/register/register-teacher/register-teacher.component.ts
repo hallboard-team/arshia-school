@@ -8,8 +8,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { ManagerService } from '../../../services/manager.service';
 import { RegisterUser } from '../../../models/register-user.model';
-import { DatepickerComponent } from '../../../datepicker/datepicker.component';
 import { MatIconModule } from "@angular/material/icon";
+import moment from 'moment-jalaali';
+import { DatepickerComponent } from '../../../datepicker/datepicker.component';
+
+const MIN_AGE = 11;
+const MAX_AGE = 90;
 
 @Component({
   selector: 'app-register-teacher',
@@ -17,9 +21,8 @@ import { MatIconModule } from "@angular/material/icon";
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule,
     MatFormFieldModule, MatInputModule, MatButtonModule,
-    MatSnackBarModule, MatRadioModule,
-    DatepickerComponent,
-    MatIconModule
+    MatSnackBarModule, MatRadioModule, MatIconModule,
+    DatepickerComponent
   ],
   templateUrl: './register-teacher.component.html',
   styleUrl: './register-teacher.component.scss'
@@ -36,10 +39,10 @@ export class RegisterTeacherComponent {
 
   @ViewChild('teachForm', { read: FormGroupDirective }) teachFormDir!: FormGroupDirective;
 
-  minDob: any;
-  maxDob: any;
+  min = moment().subtract(MAX_AGE, 'jYear').startOf('day');
+  max = moment().subtract(MIN_AGE, 'jYear').endOf('day');
 
-  addTeacherFg = this.fb.group({
+  teacherFg = this.fb.group({
     emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
     passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
@@ -50,14 +53,14 @@ export class RegisterTeacherComponent {
     genderCtrl: ['', [Validators.required]]
   });
 
-  get TeacherGenderCtrl(): FormControl { return this.addTeacherFg.get('genderCtrl') as FormControl; }
-  get TeacherEmailCtrl(): FormControl { return this.addTeacherFg.get('emailCtrl') as FormControl; }
-  get TeacherPasswordCtrl(): FormControl { return this.addTeacherFg.get('passwordCtrl') as FormControl; }
-  get TeacherConfirmPasswordCtrl(): FormControl { return this.addTeacherFg.get('confirmPasswordCtrl') as FormControl; }
-  get TeacherNameCtrl(): FormControl { return this.addTeacherFg.get('nameCtrl') as FormControl; }
-  get TeacherLastNameCtrl(): FormControl { return this.addTeacherFg.get('lastNameCtrl') as FormControl; }
-  get TeacherPhoneNumCtrl(): FormControl { return this.addTeacherFg.get('phoneNumCtrl') as FormControl; }
-  get TeacherDateOfBirthCtrl(): FormControl { return this.addTeacherFg.get('dateOfBirthCtrl') as FormControl; }
+  get TeacherGenderCtrl(): FormControl { return this.teacherFg.get('genderCtrl') as FormControl; }
+  get TeacherEmailCtrl(): FormControl { return this.teacherFg.get('emailCtrl') as FormControl; }
+  get TeacherPasswordCtrl(): FormControl { return this.teacherFg.get('passwordCtrl') as FormControl; }
+  get TeacherConfirmPasswordCtrl(): FormControl { return this.teacherFg.get('confirmPasswordCtrl') as FormControl; }
+  get TeacherNameCtrl(): FormControl { return this.teacherFg.get('nameCtrl') as FormControl; }
+  get TeacherLastNameCtrl(): FormControl { return this.teacherFg.get('lastNameCtrl') as FormControl; }
+  get TeacherPhoneNumCtrl(): FormControl { return this.teacherFg.get('phoneNumCtrl') as FormControl; }
+  get TeacherDateOfBirthCtrl(): FormControl { return this.teacherFg.get('dateOfBirthCtrl') as FormControl; }
 
   showErr(c: FormControl | null | undefined): boolean {
     return !!c && c.invalid && (c.dirty || c.touched);
@@ -67,21 +70,15 @@ export class RegisterTeacherComponent {
     this.snackBar.open(message, 'باشه', { duration: 4000, horizontalPosition: 'center', verticalPosition: 'top', panelClass: [panel === 'success' ? 'snack-success' : 'snack-error'], direction: 'rtl' });
   }
 
-  private toGregorianDateOnly(v: any): string | undefined {
-    if (!v) return undefined;
-    if (typeof v?.format === 'function') return v.format('YYYY-MM-DD');
-    const d = new Date(v);
-    return new Date(d.setMinutes(d.getMinutes() - d.getTimezoneOffset())).toISOString().slice(0, 10);
-  }
 
   private applyServerErrorsToForm(messages: string[]): void {
     const markKeys = ['emailCtrl', 'passwordCtrl', 'confirmPasswordCtrl'];
-    markKeys.forEach(k => this.addTeacherFg.get(k)?.markAsTouched());
+    markKeys.forEach(k => this.teacherFg.get(k)?.markAsTouched());
 
     const passMsgs = messages.filter(m => /password/i.test(m));
     if (passMsgs.length) {
       const msg = '• ' + passMsgs.join('\n• ');
-      const p = this.addTeacherFg.get('passwordCtrl'); const cp = this.addTeacherFg.get('confirmPasswordCtrl');
+      const p = this.teacherFg.get('passwordCtrl'); const cp = this.teacherFg.get('confirmPasswordCtrl');
       p?.setErrors({ ...(p?.errors || {}), server: msg });
       cp?.setErrors({ ...(cp?.errors || {}), server: msg });
     }
@@ -89,9 +86,20 @@ export class RegisterTeacherComponent {
     const emailMsgs = messages.filter(m => /email/i.test(m));
     if (emailMsgs.length) {
       const msg = '• ' + emailMsgs.join('\n• ');
-      const e = this.addTeacherFg.get('emailCtrl');
+      const e = this.teacherFg.get('emailCtrl');
       e?.setErrors({ ...(e?.errors || {}), server: msg });
     }
+  }
+
+  private toGregorianDateOnly(v: any): string | undefined {
+    if (!v) return undefined;
+    if (typeof v?.format === 'function') {
+      return v.locale('en').format('YYYY-MM-DD');
+    }
+    const d = new Date(v);
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate())
+      .toISOString()
+      .slice(0, 10);
   }
 
   addTeacher(): void {
@@ -100,13 +108,19 @@ export class RegisterTeacherComponent {
       return;
     }
 
-    const dob = this.toGregorianDateOnly(this.TeacherDateOfBirthCtrl.value);
+    const dob = this.TeacherDateOfBirthCtrl.value as any;
+    if (!dob || !dob.isBetween(this.min, this.max, undefined, '[]')) {
+      this.openSnack(`تاریخ تولد باید بین ${this.min.format('jYYYY/jMM/jDD')} و ${this.max.format('jYYYY/jMM/jDD')} باشد.`, 'error');
+      this.TeacherDateOfBirthCtrl.markAsTouched();
+      return;
+    }
+
     const payload: RegisterUser = {
       email: this.TeacherEmailCtrl.value,
       password: this.TeacherPasswordCtrl.value,
       confirmPassword: this.TeacherConfirmPasswordCtrl.value,
       gender: this.TeacherGenderCtrl.value,
-      dateOfBirth: dob,
+      dateOfBirth: this.toGregorianDateOnly(dob),
       name: this.TeacherNameCtrl.value,
       lastName: this.TeacherLastNameCtrl.value,
       phoneNum: '98' + this.TeacherPhoneNumCtrl.value
@@ -116,7 +130,7 @@ export class RegisterTeacherComponent {
       next: _ => {
         this.openSnack('مدرس با موفقیت ثبت شد.', 'success');
         this.teachFormDir?.resetForm();
-        this.addTeacherFg.reset();
+        this.teacherFg.reset();
       },
       error: err => {
         const msgs: string[] = Array.isArray(err?.error) ? err.error : (Array.isArray(err?.error?.errors) ? err.error.errors : []);

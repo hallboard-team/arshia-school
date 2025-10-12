@@ -1,4 +1,4 @@
-<form class="register-form" [formGroup]="addTeacherFg" (ngSubmit)="addTeacher()" #stuForm="ngForm">
+<form class="register-form" [formGroup]="teacherFg" (ngSubmit)="addTeacher()" #stuForm="ngForm">
     <div class="content">
         <div class="div-title-radio-input">
             <span class="title">ثبت نام مدرس</span>
@@ -108,15 +108,12 @@
             </div>
         </div>
 
-        <div class="form-item">
-            <mat-form-field appearance="outline">
-                <mat-label>تاریخ تولد</mat-label>
-                <input matInput placeholder="YYYY-MM-DD" [formControl]="TeacherDateOfBirthCtrl">
-            </mat-form-field>
+        <div>
+            <app-datepicker [formControl]="TeacherDateOfBirthCtrl" [maxDate]="max" [minDate]="min"></app-datepicker>
         </div>
 
         <div class="div-btn-add">
-            <button type="submit" [disabled]="addTeacherFg.invalid" mat-raised-button color="primary">ثبت نام</button>
+            <button type="submit" [disabled]="teacherFg.invalid" mat-raised-button color="primary">ثبت نام</button>
         </div>
     </div>
 </form>
