@@ -13,9 +13,6 @@ import { MatIconModule } from "@angular/material/icon";
 import moment from 'moment-jalaali';
 import { DatepickerComponent } from '../../../datepicker/datepicker.component';
 
-const MIN_AGE = 11;
-const MAX_AGE = 90;
-
 @Component({
   selector: 'app-register-secretary',
   standalone: true,
@@ -40,8 +37,11 @@ export class RegisterSecretaryComponent {
 
   @ViewChild('secForm', { read: FormGroupDirective }) secFormDir!: FormGroupDirective;
 
-  min = moment().subtract(MAX_AGE, 'jYear').startOf('day');
-  max = moment().subtract(MIN_AGE, 'jYear').endOf('day');
+  readonly minAge = 11;
+  readonly maxAge = 90;
+
+  min = moment().subtract(this.maxAge, 'jYear').startOf('day');
+  max = moment().subtract(this.minAge, 'jYear').endOf('day');
 
   secretaryFg = this.fb.group({
     emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
