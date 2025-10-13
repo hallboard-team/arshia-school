@@ -12,7 +12,7 @@ import { LoggedInUser } from '../../../../models/logged-in-user.model';
 import { AccountService } from '../../../../services/account.service';
 import { CourseService } from '../../../../services/course.service';
 import { NavbarComponent } from '../../../navbar/navbar.component';
-import { CourseCardComponent } from '../../components/course-card/course-card.component';
+import { CourseCardComponent } from '../../course-card/course-card.component';
 
 @Component({
   selector: 'app-course-list',
