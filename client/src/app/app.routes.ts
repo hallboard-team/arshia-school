@@ -4,19 +4,14 @@ import { HomeComponent } from './components/home/home.component';
 import { authGuard } from './guards/auth.guard';
 import { authLoggedInGuard } from './guards/auth-logged-in.guard';
 import { MemberListComponent } from './components/members/member-list/member-list.component';
-import { ManageerPannelComponent } from './components/manageer-pannel/manageer-pannel.component';
 import { SecretaryComponent } from './components/secretary/secretary.component';
 import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
 import { AboutUsComponent } from './components/about-us/about-us.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { TeacherComponent } from './components/teacher/teacher.component';
 import { StudentListComponent } from './components/students/student-list/student-list.component';
-import { CourseCardComponent } from './components/courses/course-card/course-card.component';
-import { CourseListComponent } from './components/courses/course-list/course-list.component';
 import { AttendenceListComponent } from './components/attendences/attendence-list/attendence-list.component';
 import { AttendenceCardComponent } from './components/attendences/attendence-card/attendence-card.component';
-import { CourseUpdateComponent } from './components/courses/course-update/course-update.component';
-import { AddCourseComponent } from './components/courses/add-course/add-course.component';
 import { MemberCardComponent } from './components/members/member-card/member-card.component';
 import { EnrolledCourseComponent } from './components/enrolled-courses/enrolled-course/enrolled-course.component';
 import { MemberEnrolledCourseComponent } from './components/enrolled-courses/member-enrolled-course/member-enrolled-course.component';
@@ -29,6 +24,11 @@ import { secretaryGuard } from './guards/secretary.guard';
 import { studentGuard } from './guards/student.guard';
 import { teacherGuard } from './guards/teacher.guard';
 import { RecoveryComponent } from './components/recovery/recovery.component';
+import { ManagerPanelComponent } from './components/manager-panel/manager-panel.component';
+import { CourseCreateComponent } from './components/courses/pages/create/course-create.component';
+import { CourseCardComponent } from './components/courses/components/course-card/course-card.component';
+import { CourseEditComponent } from './components/courses/pages/edit/course-edit.component';
+import { CoursesListComponent } from './components/courses/pages/list/courses-list.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -37,7 +37,7 @@ export const routes: Routes = [
     // Public Routes (no login required)
     { path: 'about', component: AboutUsComponent },
     { path: 'contact-us', component: ContactUsComponent },
-    { path: 'courses', component: CourseListComponent },
+    { path: 'courses', component: CoursesListComponent },
     { path: 'recovery', component: RecoveryComponent },
 
     // Authentication Required Routes
@@ -51,9 +51,9 @@ export const routes: Routes = [
             // Manager-only
             { path: 'target-user-profile/:memberUserName', component: TargetUserProfileComponent, canActivate: [managerGuard] },
             { path: 'members', component: MemberListComponent, canActivate: [managerGuard] },
-            { path: 'manager-panel', component: ManageerPannelComponent, canActivate: [managerGuard] },
-            { path: 'add-course', component: AddCourseComponent, canActivate: [managerGuard] },
-            { path: 'update-course/:courseTitle', component: CourseUpdateComponent, canActivate: [managerGuard] },
+            { path: 'manager-panel', component: ManagerPanelComponent, canActivate: [managerGuard] },
+            { path: 'add-course', component: CourseCreateComponent, canActivate: [managerGuard] },
+            { path: 'update-course/:courseTitle', component: CourseEditComponent, canActivate: [managerGuard] },
             { path: 'target-member-enrolled-course/:memberUserName/:courseTitle', component: TargetMemberEnrolledCourseComponent, canActivate: [managerGuard] },
             { path: 'target-payment/:targetPaymentId', component: UploadPhotoComponent, canActivate: [managerGuard] },
 

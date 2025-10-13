@@ -1,280 +1,255 @@
 .section-main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  width: 100%;
 
-    .div-background {
+  .div-background {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 8rem;
+
+    padding-inline: 16px;
+
+    .right,
+    .left {
+      width: 100%;
+      padding-inline: 8px;
+    }
+
+    .left {
+
+      .div-title-and-phone-numbers,
+      .div-location {
         width: 100%;
+        max-width: 560px;
+        margin-inline: auto;
+      }
+    }
+
+    .divider,
+    .legacy {
+      width: 100%;
+      max-width: 560px;
+      margin-inline: auto;
+    }
+
+    .right {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+
+      .div-title {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        gap: 5px;
         align-items: center;
-        margin-top: 8rem;
+        justify-content: center;
 
-        .right {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            padding: 10px;
-
-            .div-title {
-                display: flex;
-                flex-direction: column;
-                gap: 5px;
-                justify-content: center;
-                align-items: center;
-
-                .title {
-                    direction: rtl;
-                    font-size: 15px;
-                    text-align: center;
-                }
-
-                .text-information {
-                    text-align: center;
-                    font-size: 13px;
-                    direction: rtl;
-                    color: rgba(0, 0, 0, 0.596);
-                }
-            }
+        .title {
+          direction: rtl;
+          text-align: center;
+          font-size: 15px;
         }
 
-        .left {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 2rem;
-
-            .div-title-and-phone-numbers {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                gap: 2rem;
-
-                .div-title-academy {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 10px;
-
-                    mat-icon {
-                        color: rgb(52, 52, 255);
-                    }
-
-                    .bottom-title-span {
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        align-items: center;
-
-                        .title {
-                            font-size: 16px;
-                            color: black;
-                        }
-
-                        .title-color {
-                            font-size: 16px;
-                            color: rgb(52, 52, 255);
-                        }
-                    }
-                }
-
-                .div-phone-numbers {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    gap: 1rem;
-
-                    .right-side {
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        align-items: center;
-                        gap: 10px;
-
-                        button {
-                            border: none;
-                            height: 40px;
-                            width: 40px;
-                            border-radius: 50%;
-                            box-shadow: 0 0 10px black;
-
-                            mat-icon {
-                                color: rgb(52, 52, 255);
-                            }
-                        }
-
-                        .desc {
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            flex-direction: row-reverse;
-                            gap: 5px;
-                            flex-direction: column;
-
-                            .title {
-                                font-size: 15px;
-                                color: black;
-                                direction: rtl;
-                            }
-
-                            .phone-number {
-                                font-size: 14px;
-                                color: rgba(0, 0, 0, 0.603);
-                            }
-                        }
-                    }
-
-                    .left-side {
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        align-items: center;
-                        gap: 10px;
-
-                        button {
-                            border: none;
-                            height: 40px;
-                            width: 40px;
-                            border-radius: 50%;
-                            box-shadow: 0 0 10px black;
-
-                            mat-icon {
-                                color: rgb(52, 52, 255);
-                            }
-                        }
-
-                        .desc {
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            flex-direction: row-reverse;
-                            gap: 5px;
-                            flex-direction: column;
-
-                            .title {
-                                font-size: 15px;
-                                color: black;
-                                direction: rtl;
-                            }
-
-                            .time {
-                                font-size: 14px;
-                                color: rgba(0, 0, 0, 0.603);
-                            }
-                        }
-                    }
-                }
-            }
-
-            .div-location {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                gap: 10px;
-
-                .span-title-address {
-                    font-size: 15px;
-                    color: black;
-                    direction: rtl;
-                }
-
-                .span-address {
-                    font-size: 14px;
-                    direction: rtl;
-                    color: rgba(0, 0, 0, 0.589);
-                }
-            }
+        .text-information {
+          direction: rtl;
+          text-align: center;
+          font-size: 13px;
+          color: rgba(0, 0, 0, 0.596);
         }
-
-        .divider {
-            background-color: rgba(0, 0, 0, 0.582);
-            height: 1px;
-            width: 90%;
-            margin-top: 2rem;
-        }
-
-        .legacy {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 1rem;
-
-            span {
-                font-size: 12px;
-                color: rgba(0, 0, 0, 0.582);
-            }
-        }
+      }
     }
+
+    .left {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      align-items: center;
+      justify-content: center;
+
+      .div-title-and-phone-numbers {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        align-items: center;
+        justify-content: center;
+
+        .div-title-academy {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          align-items: center;
+          justify-content: center;
+
+          mat-icon {
+            color: rgb(52, 52, 255);
+          }
+
+          .bottom-title-span {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            .title {
+              font-size: 16px;
+              color: #000;
+            }
+
+            .title-color {
+              font-size: 16px;
+              color: rgb(52, 52, 255);
+            }
+          }
+        }
+
+        .div-phone-numbers {
+          width: 100%;
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+          gap: 2.5rem;
+
+          .right-side,
+          .left-side {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+
+            button {
+              width: 40px;
+              height: 40px;
+              border: none;
+              border-radius: 50%;
+              box-shadow: 0 0 10px #000;
+
+              mat-icon {
+                color: rgb(52, 52, 255);
+              }
+            }
+
+            .desc {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              gap: 5px;
+
+              .title {
+                direction: rtl;
+                font-size: 18px;
+                color: #000;
+              }
+
+              .phone-number,
+              .time {
+                direction: ltr;
+                unicode-bidi: plaintext;
+                text-align: left;
+                font-size: 16px;
+                color: rgba(0, 0, 0, 0.603);
+              }
+            }
+          }
+        }
+      }
+
+      .div-location {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+
+        .span-title-address {
+          direction: rtl;
+          font-size: 18px;
+          color: #000;
+        }
+
+        .span-address {
+          direction: rtl;
+          text-align: center;
+          font-size: 16px;
+          color: rgba(0, 0, 0, 0.432);
+          font-weight: bold;
+        }
+      }
+    }
+
+    .divider {
+      height: 1px;
+      background-color: rgba(0, 0, 0, 0.582);
+      margin-top: 2rem;
+    }
+
+    .legacy {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: auto;
+      padding-bottom: 1.25rem;
+
+      span {
+        margin-top: 15px;
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.582);
+      }
+    }
+  }
 }
 
 @media (min-width: 400px) {
-    .section-main {
-        .div-background {
-            .left {
-                .div-title-and-phone-numbers {
-                    .div-phone-numbers {
-                        .right-side {
-                            .desc {
-                                flex-direction: row-reverse;
-                            }
-                        }
+  .section-main .div-background {
+    padding-inline: 20px;
 
-                        .left-side {
-                            .desc {
-                                flex-direction: row-reverse;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    .right,
+    .left {
+      padding-inline: 12px;
     }
+
+    .left .div-title-and-phone-numbers .div-phone-numbers {
+      gap: 2rem;
+
+      .right-side .desc,
+      .left-side .desc {
+        flex-direction: row-reverse;
+      }
+    }
+  }
 }
 
 @media (min-width: 768px) {
-    .section-main {
-        .div-background {
-            .right {
-                .div-title {
-                    width: 90%;
-                }
-            }
-        }
-    }
+  .section-main .div-background .right .div-title {
+    width: 90%;
+  }
 }
 
 @media (min-width: 1100px) {
-    .section-main {
-        .div-background {
-            margin-top: 7rem;
+  .section-main .div-background {
+    .right .div-title {
+      .title {
+        font-size: 20px;
+      }
 
-            .right {
-                .div-title {
-                    .title {
-                        font-size: 20px;
-                    }
-
-                    .text-information {
-                        font-size: 16px;
-                    }
-                }
-            }
-
-            .divider {
-                margin-top: 6rem;
-            }
-        }
+      .text-information {
+        font-size: 16px;
+      }
     }
+
+    .divider {
+      margin-top: 6rem;
+    }
+  }
 }

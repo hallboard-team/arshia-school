@@ -1,0 +1,14 @@
+.panel {
+    width: 100%;
+    margin-top: 8rem;
+}
+
+::ng-deep mat-tab-group {
+    width: 100%;
+}
+
+@media (min-width: 1200px) {
+    .panel {
+        margin-top: 6rem;
+    }
+}

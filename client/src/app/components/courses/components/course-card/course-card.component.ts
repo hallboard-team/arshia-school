@@ -3,20 +3,21 @@ import { Component, inject, Input, OnInit, Signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
-import { ShowCourse } from '../../../models/course.model';
-import { LoggedInUser } from '../../../models/logged-in-user.model';
-import { AccountService } from '../../../services/account.service';
+
 import moment from 'moment-jalaali';
+import { ShowCourse } from '../../../../models/course.model';
+import { LoggedInUser } from '../../../../models/logged-in-user.model';
+import { AccountService } from '../../../../services/account.service';
 moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
 @Component({
-    selector: 'app-course-card',
-    imports: [
-        CommonModule, RouterModule,
-        MatCardModule, MatIconModule
-    ],
-    templateUrl: './course-card.component.html',
-    styleUrl: './course-card.component.scss'
+  selector: 'app-course-card',
+  imports: [
+    CommonModule, RouterModule,
+    MatCardModule, MatIconModule
+  ],
+  templateUrl: './course-card.component.html',
+  styleUrl: './course-card.component.scss'
 })
 export class CourseCardComponent implements OnInit {
   @Input('courseInput') courseIn: ShowCourse | undefined;

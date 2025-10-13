@@ -1,0 +1,119 @@
+<form class="register-form" [formGroup]="teacherFg" (ngSubmit)="addTeacher()" #stuForm="ngForm">
+    <div class="content">
+        <div class="div-title-radio-input">
+            <span class="title">ثبت نام مدرس</span>
+            <mat-radio-group class="radio-group" aria-label="Select an option" formControlName="genderCtrl">
+                <mat-radio-button class="radio-button" value="male">مرد</mat-radio-button>
+                <mat-radio-button class="radio-button" value="female">زن</mat-radio-button>
+            </mat-radio-group>
+        </div>
+
+        <!-- name -->
+        <div class="form-item">
+            <mat-form-field appearance="outline">
+                <mat-label>نام</mat-label>
+                <input class="input" type="text" formControlName="nameCtrl" matInput dir="auto">
+            </mat-form-field>
+            <div class="field-error" *ngIf="showErr(TeacherNameCtrl)">
+                <span *ngIf="TeacherNameCtrl.hasError('required')">فرم رو پرکنید</span>
+                <span *ngIf="TeacherNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل: 2 حرف</span>
+                <span *ngIf="TeacherNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: 30 حرف</span>
+                <span *ngIf="TeacherNameCtrl.hasError('pattern')">فقط حروف فارسی/انگلیسی، فاصله و خط‌تیره مجاز
+                    است.</span>
+            </div>
+        </div>
+
+        <!-- lastName -->
+        <div class="form-item">
+            <mat-form-field appearance="outline">
+                <mat-label>نام خانوادگی</mat-label>
+                <input class="input" type="text" formControlName="lastNameCtrl" matInput dir="auto">
+            </mat-form-field>
+            <div class="field-error" *ngIf="showErr(TeacherLastNameCtrl)">
+                <span *ngIf="TeacherLastNameCtrl.hasError('required')">فرم رو پرکنید</span>
+                <span *ngIf="TeacherLastNameCtrl.hasError('minlength')">خیلی کوتاهه حداقل: 2 حرف</span>
+                <span *ngIf="TeacherLastNameCtrl.hasError('maxlength')">خیلی بلنده حداکثر: 30 حرف</span>
+                <span *ngIf="TeacherLastNameCtrl.hasError('pattern')">فقط حروف فارسی/انگلیسی، فاصله و خط‌تیره مجاز
+                    است.</span>
+            </div>
+        </div>
+
+        <!-- email -->
+        <div class="form-item">
+            <mat-form-field appearance="outline">
+                <mat-label>ایمیل</mat-label>
+                <input class="input" autoFocusDir type="email" formControlName="emailCtrl" matInput maxlength="50"
+                    dir="auto">
+                <mat-hint>ایمیل خودرا وارد کنید</mat-hint>
+                <mat-hint align="end">{{ (TeacherEmailCtrl.value?.length || 0) }}/50</mat-hint>
+            </mat-form-field>
+            <div class="field-error" *ngIf="showErr(TeacherEmailCtrl)">
+                <span *ngIf="TeacherEmailCtrl.hasError('required')">فرم رو پرکنید</span>
+                <span *ngIf="TeacherEmailCtrl.hasError('pattern')">ایمیل رو به درستی وارد کنید</span>
+                <span *ngIf="TeacherEmailCtrl.hasError('maxlength')">حداکثر 50 کاراکتر</span>
+                <span *ngIf="TeacherEmailCtrl.hasError('server')">{{ TeacherEmailCtrl.getError('server') }}</span>
+            </div>
+        </div>
+
+        <!-- phone -->
+        <div class="form-item">
+            <mat-form-field appearance="outline" class="phone-field" floatLabel="always">
+                <mat-label>شماره موبایل</mat-label>
+                <span matPrefix dir="ltr" class="phone-label">+98&nbsp;</span>
+                <input class="input" type="tel" maxlength="10" matInput formControlName="phoneNumCtrl" dir="ltr">
+            </mat-form-field>
+            <div class="field-error" *ngIf="showErr(TeacherPhoneNumCtrl)">
+                <span *ngIf="TeacherPhoneNumCtrl.hasError('required')">فرم رو پرکنید</span>
+                <span *ngIf="TeacherPhoneNumCtrl.hasError('pattern')">شماره موبایل باید 10 رقم و بدون 0 باشد</span>
+            </div>
+        </div>
+
+        <!-- password -->
+        <div class="form-item">
+            <mat-form-field appearance="outline">
+                <mat-label>رمز عبور</mat-label>
+                <input class="input" [type]="hideTeacherPassword ? 'password' : 'text'" formControlName="passwordCtrl"
+                    matInput dir="auto">
+                <button mat-icon-button matSuffix tabindex="-1" type="button"
+                    (click)="hideTeacherPassword = !hideTeacherPassword">
+                    <mat-icon>{{ hideTeacherPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+            </mat-form-field>
+            <div class="field-error" *ngIf="showErr(TeacherPasswordCtrl)">
+                <span *ngIf="TeacherPasswordCtrl.hasError('required')">فرم رو پرکنید</span>
+                <span *ngIf="TeacherPasswordCtrl.hasError('minlength')">حداقل 7 کاراکتر</span>
+                <span *ngIf="TeacherPasswordCtrl.hasError('maxlength')">حداکثر 20 کاراکتر</span>
+                <span *ngIf="TeacherPasswordCtrl.hasError('server')">{{ TeacherPasswordCtrl.getError('server')
+                    }}</span>
+            </div>
+        </div>
+
+        <!-- confirm password -->
+        <div class="form-item">
+            <mat-form-field appearance="outline">
+                <mat-label>تکرار رمز عبور</mat-label>
+                <input class="input" [type]="hideTeacherConfirmPassword ? 'password' : 'text'"
+                    formControlName="confirmPasswordCtrl" matInput dir="auto">
+                <button mat-icon-button matSuffix tabindex="-1" type="button"
+                    (click)="hideTeacherConfirmPassword = !hideTeacherConfirmPassword">
+                    <mat-icon>{{ hideTeacherConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+            </mat-form-field>
+            <div class="field-error" *ngIf="showErr(TeacherConfirmPasswordCtrl)">
+                <span *ngIf="TeacherConfirmPasswordCtrl.hasError('required')">فرم رو پرکنید</span>
+                <span *ngIf="TeacherConfirmPasswordCtrl.hasError('minlength')">حداقل 7 کاراکتر</span>
+                <span *ngIf="TeacherConfirmPasswordCtrl.hasError('maxlength')">حداکثر 20 کاراکتر</span>
+                <span *ngIf="TeacherConfirmPasswordCtrl.hasError('server')">{{
+                    TeacherConfirmPasswordCtrl.getError('server') }}</span>
+            </div>
+        </div>
+
+        <div>
+            <app-datepicker [formControl]="TeacherDateOfBirthCtrl" [maxDate]="max" [minDate]="min"></app-datepicker>
+        </div>
+
+        <div class="div-btn-add">
+            <button type="submit" [disabled]="teacherFg.invalid" mat-raised-button color="primary">ثبت نام</button>
+        </div>
+    </div>
+</form>
