@@ -13,9 +13,6 @@ import { MatIconModule } from "@angular/material/icon";
 import moment from 'moment-jalaali';
 import { DatepickerComponent } from '../../../datepicker/datepicker.component';
 
-const MIN_AGE = 11;
-const MAX_AGE = 90;
-
 @Component({
   selector: 'app-register-student',
   standalone: true,
@@ -33,8 +30,11 @@ export class RegisterStudentComponent {
   private fb = inject(FormBuilder);
   private managerService = inject(ManagerService);
 
-  min = moment().subtract(MAX_AGE, 'jYear').startOf('day');
-  max = moment().subtract(MIN_AGE, 'jYear').endOf('day');
+  readonly minAge = 11;
+  readonly maxAge = 90;
+
+  min = moment().subtract(this.maxAge, 'jYear').startOf('day');
+  max = moment().subtract(this.minAge, 'jYear').endOf('day');
 
   hideStudentPassword = true;
   hideStudentConfirmPassword = true;
