@@ -33,6 +33,7 @@ import { DatepickerComponent } from '../../../../datepicker/datepicker.component
   styleUrl: './course-edit.component.scss'
 })
 export class CourseEditComponent implements OnInit {
+  private snackBar = inject(MatSnackBar);
   private _courseService = inject(CourseService);
   private _managerService = inject(ManagerService);
   private _matSnackBar = inject(MatSnackBar);
@@ -78,6 +79,10 @@ export class CourseEditComponent implements OnInit {
     return new Date(d.getFullYear(), d.getMonth(), d.getDate())
       .toISOString()
       .slice(0, 10);
+  }
+
+  private openSnack(message: string, panel: 'success' | 'error' = 'error'): void {
+    this.snackBar.open(message, 'باشه', { duration: 4000, horizontalPosition: 'center', verticalPosition: 'top', panelClass: [panel === 'success' ? 'snack-success' : 'snack-error'], direction: 'rtl' });
   }
 
   getCourse(): void {
@@ -144,9 +149,7 @@ export class CourseEditComponent implements OnInit {
           next: (course: Course) => {
             if (course) {
               this.course = course;
-              this._matSnackBar.open("update successfull", "Close", {
-                horizontalPosition: 'center', verticalPosition: 'bottom', duration: 10000
-              });
+              this.openSnack('دوره با موفقیت آپدیت شد.', 'success');
             }
           }
         });
