@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ManagerService } from '../../../services/manager.service';
 import { RegisterUser } from '../../../models/register-user.model';
 import { MatIconModule } from "@angular/material/icon";
-import moment from 'moment-jalaali';
+import moment, { Moment } from 'moment-jalaali';
 import { DatepickerComponent } from '../../../datepicker/datepicker.component';
 
 @Component({
@@ -90,15 +90,24 @@ export class RegisterTeacherComponent {
     }
   }
 
-  private toGregorianDateOnly(v: any): string | undefined {
-    if (!v) return undefined;
-    if (typeof v?.format === 'function') {
-      return v.locale('en').format('YYYY-MM-DD');
+  private toGregorianDateOnly(value: Moment | Date | string | null | undefined): string | undefined {
+    if (!value) return undefined;
+
+    if (moment.isMoment(value)) {
+      return value.locale('en').format('YYYY-MM-DD');
     }
-    const d = new Date(v);
-    return new Date(d.getFullYear(), d.getMonth(), d.getDate())
-      .toISOString()
-      .slice(0, 10);
+
+    if (typeof value === 'string') {
+      const m = moment(value);
+      if (m.isValid()) {
+        return m.locale('en').format('YYYY-MM-DD');
+      }
+      const d = new Date(value);
+      return new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString().slice(0, 10);
+    }
+
+    const d = value as Date;
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString().slice(0, 10);
   }
 
   addTeacher(): void {
