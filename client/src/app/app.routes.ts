@@ -26,7 +26,7 @@ import { teacherGuard } from './guards/teacher.guard';
 import { RecoveryComponent } from './components/recovery/recovery.component';
 import { ManagerPanelComponent } from './components/manager-panel/manager-panel.component';
 import { CourseCreateComponent } from './components/courses/pages/create/course-create.component';
-import { CourseCardComponent } from './components/courses/components/course-card/course-card.component';
+import { CourseCardComponent } from './components/courses/course-card/course-card.component';
 import { CourseEditComponent } from './components/courses/pages/edit/course-edit.component';
 import { CoursesListComponent } from './components/courses/pages/list/courses-list.component';
 
