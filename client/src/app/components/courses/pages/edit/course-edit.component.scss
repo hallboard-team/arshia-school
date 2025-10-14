@@ -41,13 +41,11 @@
 
                 .input {
                     padding: 10px;
-                    height: 54px;
+                    // height: 54px;
                     width: 100%;
-                    border: none;
-                    border-radius: 10px;
-                    background: #e0e0e0;
-                    box-shadow: inset 5px 5px 10px #cecece,
-                        inset -5px -5px 10px #f2f2f2;
+                    // background: #e0e0e0;
+                    // box-shadow: inset 5px 5px 10px #cecece,
+                    //     inset -5px -5px 10px #f2f2f2;
                 }
 
                 mat-label {
@@ -362,19 +360,6 @@
     }
 }
 
-::ng-deep mat-form-field {
-    height: 40px !important;
-
-    .mat-mdc-text-field-wrapper {
-        padding: 0px !important;
-    }
-
-    .mat-mdc-form-field-infix {
-        text-align: right;
-        padding: 0px !important;
-    }
-}
-
 @media (min-width: 768px) {
     .div-edit-course {
         .update-course-form {
@@ -410,4 +395,61 @@
             }
         }
     }
+}
+
+::ng-deep mat-form-field {
+    height: auto !important;
+    margin-bottom: 10px;
+}
+
+::ng-deep .mat-mdc-text-field-wrapper {
+    border-radius: 12px;
+    background: #e0e0e0;
+    box-shadow: inset 5px 5px 10px #cecece, inset -5px -5px 10px #f2f2f2;
+    padding: 0;
+    overflow: visible;
+}
+
+::ng-deep .mat-mdc-form-field-appearance-outline .mdc-notched-outline {
+    display: none;
+}
+
+::ng-deep .mat-mdc-form-field-infix {
+    text-align: right;
+    // direction: rtl;
+    padding: 12px 14px !important;
+    min-height: 54px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    position: relative;
+    bottom: 0;
+    margin-top: 6px;
+    padding: 0 12px;
+    height: auto;
+}
+
+::ng-deep mat-form-field.phone-field .mat-mdc-form-field-prefix {
+    direction: ltr;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-inline: 4px;
+    font-weight: 700;
+    opacity: .9;
+}
+
+::ng-deep mat-form-field.phone-field input.mat-mdc-input-element {
+    line-height: 1.5;
+    text-align: left;
+}
+
+::ng-deep mat-form-field.phone-field .mat-mdc-text-field-wrapper {
+    padding: 0 12px;
+}
+
+::ng-deep mat-form-field.phone-field .phone-label {
+    margin-left: 10px;
 }

@@ -1190,7 +1190,7 @@
                 width: 100%;
 
                 .div-photo {
-                    width: min(95%, 1000px);
+                    width: 90%;
                     margin: 1rem auto 0;
                     border-radius: 12px;
                     background: #e0e0e0;
@@ -1397,9 +1397,13 @@
                         background-color: #ffffff00;
                         box-shadow: 0 0 10px rgba(0, 0, 0, 0.534);
 
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
                         img {
-                            height: 95%;
-                            width: 95%;
+                            height: 96%;
+                            width: 98%;
                             border-radius: 10px;
                         }
                     }

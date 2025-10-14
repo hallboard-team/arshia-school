@@ -151,6 +151,10 @@
                 color: #000;
               }
 
+              .forward-slash {
+                display: none;
+              }
+
               .phone-number,
               .time {
                 direction: ltr;
@@ -233,6 +237,11 @@
 @media (min-width: 768px) {
   .section-main .div-background .right .div-title {
     width: 90%;
+  }
+
+  .section-main .div-background .left .div-title-and-phone-numbers .div-phone-numbers .right-side .desc .forward-slash {
+    display: flex;
+
   }
 }
 
