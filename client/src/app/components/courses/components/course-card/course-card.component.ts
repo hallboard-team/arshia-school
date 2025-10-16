@@ -5,9 +5,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 
 import moment from 'moment-jalaali';
-import { ShowCourse } from '../../../../models/course.model';
-import { LoggedInUser } from '../../../../models/logged-in-user.model';
-import { AccountService } from '../../../../services/account.service';
+import { ShowCourse } from '../../../models/course.model';
+import { LoggedInUser } from '../../../models/logged-in-user.model';
+import { AccountService } from '../../../services/account.service';
 moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
 @Component({

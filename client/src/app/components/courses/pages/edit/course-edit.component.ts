@@ -17,7 +17,7 @@ import { Teacher } from '../../../../models/teacher.model';
 import { CourseService } from '../../../../services/course.service';
 import { ManagerService } from '../../../../services/manager.service';
 import { NavbarComponent } from '../../../navbar/navbar.component';
-import moment from 'moment-jalaali';
+import moment, { Moment } from 'moment-jalaali';
 import { DatepickerComponent } from '../../../../datepicker/datepicker.component';
 
 @Component({
@@ -33,6 +33,7 @@ import { DatepickerComponent } from '../../../../datepicker/datepicker.component
   styleUrl: './course-edit.component.scss'
 })
 export class CourseEditComponent implements OnInit {
+  private snackBar = inject(MatSnackBar);
   private _courseService = inject(CourseService);
   private _managerService = inject(ManagerService);
   private _matSnackBar = inject(MatSnackBar);
@@ -69,15 +70,28 @@ export class CourseEditComponent implements OnInit {
   get StartCtrl(): FormControl { return this.courseFg.get('startCtrl') as FormControl; }
   get IsStartedCtrl(): FormControl { return this.courseFg.get('isStartedCtrl') as FormControl; }
 
-  private toGregorianDateOnly(v: any): string | undefined {
-    if (!v) return undefined;
-    if (typeof v?.format === 'function') {
-      return v.locale('en').format('YYYY-MM-DD');
+  private toGregorianDateOnly(value: Moment | Date | string | null | undefined): string | undefined {
+    if (!value) return undefined;
+
+    if (moment.isMoment(value)) {
+      return value.locale('en').format('YYYY-MM-DD');
     }
-    const d = new Date(v);
-    return new Date(d.getFullYear(), d.getMonth(), d.getDate())
-      .toISOString()
-      .slice(0, 10);
+
+    if (typeof value === 'string') {
+      const m = moment(value);
+      if (m.isValid()) {
+        return m.locale('en').format('YYYY-MM-DD');
+      }
+      const d = new Date(value);
+      return new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString().slice(0, 10);
+    }
+
+    const d = value as Date;
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString().slice(0, 10);
+  }
+
+  private openSnack(message: string, panel: 'success' | 'error' = 'error'): void {
+    this.snackBar.open(message, 'باشه', { duration: 4000, horizontalPosition: 'center', verticalPosition: 'top', panelClass: [panel === 'success' ? 'snack-success' : 'snack-error'], direction: 'rtl' });
   }
 
   getCourse(): void {
@@ -144,9 +158,7 @@ export class CourseEditComponent implements OnInit {
           next: (course: Course) => {
             if (course) {
               this.course = course;
-              this._matSnackBar.open("update successfull", "Close", {
-                horizontalPosition: 'center', verticalPosition: 'bottom', duration: 10000
-              });
+              this.openSnack('دوره با موفقیت آپدیت شد.', 'success');
             }
           }
         });

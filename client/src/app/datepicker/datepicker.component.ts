@@ -1,11 +1,11 @@
-import {Component, forwardRef, Input} from '@angular/core';
-import {FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {Moment} from 'moment-jalaali';
-import {CommonModule} from "@angular/common";
-import {JALALI_DATE_PROVIDERS} from './helpers/jalali-providers';
+import { Component, forwardRef, Input } from '@angular/core';
+import { FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { Moment } from 'moment-jalaali';
+import { CommonModule } from "@angular/common";
+import { JALALI_DATE_PROVIDERS } from './helpers/jalali-providers';
 
 @Component({
   selector: 'app-datepicker',
@@ -31,6 +31,7 @@ export class DatepickerComponent {
   /** Optional min/max from parent */
   @Input() minDate?: Moment;
   @Input() maxDate?: Moment;
+  @Input() label: string = 'تاریخ';
 
   value: Moment | null = null;
 
