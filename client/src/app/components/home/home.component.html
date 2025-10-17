@@ -118,42 +118,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="div-time-buttonStart">
-                            <div class="top">
-                                <div class="div-matn">
-                                    <span>ساعت {{ course.hourse }}</span>
-                                    <mat-icon>schedule</mat-icon>
-                                </div>
-                                <div class="div-matn">
-                                    <span>فصل {{ course.chapter }}</span>
-                                    <mat-icon>file_copy</mat-icon>
-                                </div>
-                            </div>
-
-                            <div class="center">
-                                <div class="div-profile">
-                                    <button><mat-icon>person</mat-icon></button>
-                                </div>
-                                <div class="div-teacher-name">
-                                    <span class="span-title">مدرس دوره:</span>
-                                    <span class="span-teacher-course">{{ course.teacher }}</span>
-                                </div>
-                            </div>
-
-                            <div class="bottom">
-                                <button class="btn-click-course" [routerLink]="['/courses']" routerLinkActive
-                                    #rla="routerLinkActive">
-                                    <mat-icon class="icon-after-hover">keyboard_backspace</mat-icon>
-                                    <mat-icon class="icon-befor-hover">north_west</mat-icon>
-                                    مشاهده دوره
-                                </button>
-
-                                <button class="btn-like">
-                                    <mat-icon>favorite</mat-icon>
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
