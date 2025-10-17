@@ -39,12 +39,12 @@ export class CourseCreateComponent {
   constructor(private http: HttpClient) { }
 
   courseFg = this.fb.group({
-    titleCtrl: ['', [Validators.required]],
-    tuitionCtrl: ['', [Validators.required]],
-    hourseCtrl: ['', [Validators.required]],
-    hoursePerClassCtrl: ['', [Validators.required]],
-    startCtrl: [moment(), [Validators.required]]
-  })
+    titleCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    tuitionCtrl: ['', [Validators.required, Validators.pattern(/^[1-9]\d*000000$/)]],
+    hourseCtrl: ['', [Validators.required, Validators.pattern(/^\d+$/), Validators.min(1), Validators.max(500)]],
+    hoursePerClassCtrl: ['', [Validators.required, Validators.pattern(/^\d+$/), Validators.min(1), Validators.max(4)]],
+    startCtrl: ['', [Validators.required]]
+  });
 
   get TitleCtrl(): FormControl {
     return this.courseFg.get('titleCtrl') as FormControl;
@@ -64,6 +64,10 @@ export class CourseCreateComponent {
 
   private openSnack(message: string, panel: 'success' | 'error' = 'error'): void {
     this.snackBar.open(message, 'باشه', { duration: 4000, horizontalPosition: 'center', verticalPosition: 'top', panelClass: [panel === 'success' ? 'snack-success' : 'snack-error'], direction: 'rtl' });
+  }
+
+  showErr(value: FormControl | null | undefined): boolean {
+    return !!value && value.invalid && (value.dirty || value.touched);
   }
 
   private toGregorianDateOnly(value: Moment | Date | string | null | undefined): string | undefined {

@@ -6,60 +6,91 @@
 
 <div class="background">
     <form class="course-form" [formGroup]="courseFg" (ngSubmit)="courseFg.valid && createCourse()">
-        <div class="div-title">
-            <span>اضافه کردن دوره جدید</span>
-        </div>
-
         <div class="content">
-            <mat-form-field appearance="outline">
-                <mat-label>اسم دوره</mat-label>
-                <input class="input" autoFocusDir type="text" formControlName="titleCtrl" label="Title" placeHolder=""
-                    matInput>
-                <mat-hint>اسم دوره جدید را وارد کنید</mat-hint>
-                @if (TitleCtrl.hasError('required')) {
-                <mat-error>فرم رو پرکنید</mat-error>
-                }
-            </mat-form-field>
 
-            <mat-form-field appearance="outline">
-                <mat-label>شهریه</mat-label>
-                <input class="input" type="text" matInput formControlName="tuitionCtrl" appCurrencyFormatter />
-                <span matSuffix class="suffix-text">تومان</span>
-                <mat-hint>شهریه دوره را وارد کنید</mat-hint>
-                <mat-error *ngIf="TuitionCtrl.hasError('required')">
-                    فرم رو پرکنید
-                </mat-error>
-            </mat-form-field>
+            <div class="div-title-radio-input">
+                <span class="title">اضافه کردن دوره جدید</span>
+            </div>
 
-            <mat-form-field appearance="outline">
-                <mat-label>ساعت دوره</mat-label>
-                <input class="input" autoFocusDir type="number" formControlName="hourseCtrl" label="Hourse"
-                    placeHolder="" matInput>
-                <mat-hint>ساعت کل دوره را وارد کنید</mat-hint>
-                @if (HourseCtrl.hasError('required')) {
-                <mat-error>فرم رو پرکنید</mat-error>
-                }
-            </mat-form-field>
+            <!-- title -->
+            <div class="form-item">
+                <mat-form-field appearance="outline">
+                    <mat-label>اسم دوره</mat-label>
+                    <input class="input" autoFocusDir type="text" formControlName="titleCtrl" matInput dir="auto">
+                    <mat-hint>اسم دوره جدید را وارد کنید</mat-hint>
+                </mat-form-field>
+                <div class="field-error" *ngIf="showErr(TitleCtrl)">
+                    <span *ngIf="TitleCtrl.hasError('required')">فرم رو پرکنید</span>
+                    <span *ngIf="TitleCtrl.hasError('minlength')">حداقل ۲ کاراکتر</span>
+                    <span *ngIf="TitleCtrl.hasError('maxlength')">حداکثر ۳۰ کاراکتر</span>
+                </div>
+            </div>
 
-            <mat-form-field appearance="outline">
-                <mat-label>ساعت هر کلاس</mat-label>
-                <input class="input" autoFocusDir type="number" formControlName="hoursePerClassCtrl"
-                    label="Hourse Per Class" placeHolder="" matInput>
-                <mat-hint>ساعت هر کلاس را وارد کنید</mat-hint>
-                @if (HoursePerClassCtrl.hasError('required')) {
-                <mat-error>فرم رو پرکنید</mat-error>
-                }
-            </mat-form-field>
+            <!-- tuition -->
+            <div class="form-item">
+                <mat-form-field appearance="outline">
+                    <mat-label>شهریه</mat-label>
+                    <input class="input" type="text" matInput formControlName="tuitionCtrl" appCurrencyFormatter
+                        inputmode="numeric" dir="ltr">
+                    <span matSuffix class="suffix-text">تومان</span>
+                    <mat-hint>شهریه دوره را وارد کنید (مضاعف ۱,۰۰۰,۰۰۰)</mat-hint>
+                </mat-form-field>
+                <div class="field-error" *ngIf="showErr(TuitionCtrl)">
+                    <span *ngIf="TuitionCtrl.hasError('required')">فرم رو پرکنید</span>
+                    <span *ngIf="TuitionCtrl.hasError('pattern')">مبلغ باید مضربی از ۱,۰۰۰,۰۰۰ باشد (شش صفر
+                        انتهایی)</span>
+                </div>
+            </div>
 
-            <div>
-                <app-datepicker [formControl]="StartCtrl" [maxDate]="max" [minDate]="min"></app-datepicker>
+            <!-- total hours -->
+            <div class="form-item">
+                <mat-form-field appearance="outline">
+                    <mat-label>ساعت دوره</mat-label>
+                    <input class="input" type="number" formControlName="hourseCtrl" matInput min="1" max="500"
+                        inputmode="numeric" dir="ltr">
+                    <mat-hint>ساعت کل دوره را وارد کنید</mat-hint>
+                </mat-form-field>
+                <div class="field-error" *ngIf="showErr(HourseCtrl)">
+                    <span *ngIf="HourseCtrl.hasError('required')">فرم رو پرکنید</span>
+                    <span *ngIf="HourseCtrl.hasError('pattern')">فقط عدد صحیح مجاز است</span>
+                    <span *ngIf="HourseCtrl.hasError('min')">حداقل ۱ ساعت</span>
+                    <span *ngIf="HourseCtrl.hasError('max')">حداکثر ۵۰۰ ساعت</span>
+                </div>
+            </div>
+
+            <!-- hours per class -->
+            <div class="form-item">
+                <mat-form-field appearance="outline">
+                    <mat-label>ساعت هر کلاس</mat-label>
+                    <input class="input" type="number" formControlName="hoursePerClassCtrl" matInput min="1" max="4"
+                        inputmode="numeric" dir="ltr">
+                    <mat-hint>ساعت هر کلاس را وارد کنید</mat-hint>
+                </mat-form-field>
+                <div class="field-error" *ngIf="showErr(HoursePerClassCtrl)">
+                    <span *ngIf="HoursePerClassCtrl.hasError('required')">فرم رو پرکنید</span>
+                    <span *ngIf="HoursePerClassCtrl.hasError('pattern')">فقط عدد صحیح مجاز است</span>
+                    <span *ngIf="HoursePerClassCtrl.hasError('min')">حداقل ۱ ساعت</span>
+                    <span *ngIf="HoursePerClassCtrl.hasError('max')">حداکثر ۴ ساعت</span>
+                </div>
+            </div>
+
+            <!-- start date -->
+            <div class="form-item">
+                <app-datepicker [formControl]="StartCtrl" [maxDate]="max" [minDate]="min"
+                    [label]="'تاریخ شروع'"></app-datepicker>
+                <div class="field-error" *ngIf="showErr(StartCtrl)">
+                    <span *ngIf="StartCtrl.hasError('required')">تاریخ را انتخاب کنید</span>
+                    <span *ngIf="StartCtrl.hasError('outOfRange')">
+                        تاریخ باید بین {{ min.format('jYYYY/jMM/jDD') }} و {{ max.format('jYYYY/jMM/jDD') }} باشد.
+                    </span>
+                </div>
             </div>
 
             <div class="div-btn-add">
                 <button type="submit" [disabled]="courseFg.invalid" mat-raised-button color="warn">ثبت دوره
-                    جدید
-                </button>
+                    جدید</button>
             </div>
+
         </div>
     </form>
 </div>
