@@ -1,5 +1,5 @@
 import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
-import { Observable, map, take } from 'rxjs';
+import { Observable, finalize, map, take } from 'rxjs';
 import { LoginUser } from '../models/login-user.model';
 import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
@@ -19,8 +19,24 @@ export class AccountService {
   snack = inject(MatSnackBar);
 
   private readonly baseApiUrl = environment.apiUrl + 'account/';
+  private readonly LS_KEY = 'loggedInUser';
 
   loggedInUserSig = signal<LoggedInUser | null>(null);
+  authResolvedSig = signal(false);
+
+  constructor() {
+    if (isPlatformBrowser(this.platformId)) {
+      const raw = localStorage.getItem(this.LS_KEY);
+      if (raw) {
+        try {
+          const user = JSON.parse(raw) as LoggedInUser;
+          this.setLoggedInUserRoles(user);
+          this.loggedInUserSig.set(user);
+        } catch { }
+      }
+    }
+    this.authResolvedSig.set(true);
+  }
 
   loginUser(userInput: LoginUser): Observable<LoggedInUser | null> {
     return this.http.post<LoggedInUser>(this.baseApiUrl + 'login', userInput).pipe(
@@ -45,12 +61,19 @@ export class AccountService {
   }
 
   authorizeLoggedInUser(): void {
+    this.authResolvedSig.set(false);
+
     this.http.get<ApiResponse>(this.baseApiUrl)
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        finalize(() => {
+          this.authResolvedSig.set(true);
+        })
+      )
       .subscribe({
         next: res => console.log(res.message),
         error: err => {
-          console.log(err.error);
+          console.log(err?.error);
           this.logout();
         }
       });
@@ -67,15 +90,19 @@ export class AccountService {
 
   setLoggedInUserRoles(loggedInUser: LoggedInUser): void {
     loggedInUser.roles = [];
-    const roles: string | string[] = JSON.parse(atob(loggedInUser.token.split('.')[1])).role;
-    Array.isArray(roles) ? loggedInUser.roles = roles : loggedInUser.roles.push(roles);
+    try {
+      const payload = JSON.parse(atob(loggedInUser.token.split('.')[1]));
+      const roles: string | string[] = payload.role;
+      Array.isArray(roles) ? (loggedInUser.roles = roles) : loggedInUser.roles.push(roles);
+    } catch {
+    }
   }
 
   logout(): void {
     this.loggedInUserSig.set(null);
 
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.clear();
+      localStorage.removeItem(this.LS_KEY);
       this.router.navigateByUrl('/home');
     }
 
