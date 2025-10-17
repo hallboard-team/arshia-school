@@ -5,130 +5,104 @@
     .course-form {
         width: 100%;
         display: flex;
-        flex-direction: column;
-        gap: 1rem;
         justify-content: center;
         align-items: center;
-        position: relative;
-
-        .div-title {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 1rem;
-
-            span {
-                font-size: 16px;
-                color: black;
-                font-weight: 600;
-            }
-        }
+        margin: 2rem 0;
 
         .content {
             width: 90%;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
             align-items: center;
-            gap: 3rem;
-            border-radius: 5px;
+            padding: 1.5rem 1rem;
+
+            border-radius: 10px;
             background: linear-gradient(145deg, #f0f0f0, #cacaca);
-            box-shadow: 5px 5px 10px #c3c3c3,
-                -5px -5px 10px #fdfdfd;
-            padding: 1rem;
-            margin-bottom: 1rem;
+            box-shadow: 5px 5px 10px #5a5a5a, -5px -5px 10px #ffffff;
 
-            mat-form-field {
-                width: 80%;
-
-                .input {
-                    padding: 10px;
-                    // height: 54px;
-                    width: 100%;
-                    // background: #e0e0e0;
-                    // box-shadow: inset 5px 5px 10px #cecece,
-                    //     inset -5px -5px 10px #f2f2f2;
-                }
-
-                mat-label {
-                    font-size: 15px;
-                    font-weight: 800;
-                    color: black;
-                }
-
-                mat-hint {
-                    font-size: 12px;
-                }
-
-                mat-error {
-                    color: red;
-                    font-size: 12px;
-                }
-            }
-
-            .div-button-date {
+            .div-title-radio-input {
+                flex: 0 0 100%;
                 display: flex;
+                flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 width: 100%;
-                background-color: yellow;
+                margin-top: .5rem;
+                gap: 1rem;
 
-                .open-date {
-                    background-color: green;
-                    height: 30px;
-                    width: 30px;
-                    border: none;
+                .title {
+                    font-size: 20px;
+                    color: #000;
+                    font-weight: 800;
                 }
             }
 
-            .div-background-date-picker {
+            .form-item {
+                width: 90%;
+                max-width: 700px;
                 display: flex;
-                justify-content: center;
-                align-items: center;
-                width: 50%;
-                position: absolute;
-                left: 25%;
-                height: 400px;
-                background-color: red;
+                flex-direction: column;
+                align-items: stretch;
+                min-width: 0;
 
-                .close-date {
-                    background-color: blueviolet;
-                    height: 30px;
-                    width: 30px;
-                    border: none;
-                    display: none;
+                mat-form-field {
+                    display: block;
+                    width: 100%;
+
+                    .input {
+                        padding: 10px;
+                        height: 54px;
+                        width: 100%;
+                        border: none;
+                        border-radius: 10px;
+                        background: transparent;
+                        box-shadow: none;
+                    }
+                }
+
+                .field-error {
+                    margin-top: 6px;
+                    padding: 0 4px;
+                    font-size: 12px;
+                    color: #d32f2f;
+                    line-height: 1.6;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2px;
+                    width: 100%;
+                }
+
+                .hint {
+                    margin-top: 6px;
+                    font-size: 12px;
+                    opacity: .75;
+                    padding: 0 4px;
                 }
             }
 
             .div-btn-add {
+                flex: 0 0 100%;
                 width: 100%;
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                margin: .5rem 0 1rem;
 
                 button {
-                    margin-top: 10px;
-                    height: 40px;
+                    border-radius: 10px;
                     border: none;
-                    border-radius: 15px;
-                    padding: 10px 20px;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
+                    height: 40px;
+                    width: 140px;
                     background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                    box-shadow: 5px 5px 10px #989898,
-                        -5px -5px 10px #ffffff;
+                    box-shadow: 5px 5px 10px #989898, -5px -5px 10px #ffffff;
 
-                    &:hover {
-                        box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.15), -6px -6px 15px rgba(255, 255, 255, 0.8);
+                    &:active {
+                        transition: all .1s ease-in-out 0s;
+                        background: #e0e0e0;
+                        box-shadow: inset 5px 5px 10px #989898, inset -5px -5px 10px #ffffff;
                     }
-                }
-
-                button:active {
-                    transition: all .1s ease-in-out 0s;
-                    background: #e0e0e0;
-                    box-shadow: inset 5px 5px 10px #989898,
-                        inset -5px -5px 10px #ffffff;
                 }
             }
         }
@@ -136,40 +110,58 @@
 }
 
 @media (min-width: 768px) {
-    .background {
-        .course-form {
-            .div-title {
-                span {
-                    font-size: 18px;
-                }
-            }
+    .background .course-form .content {
+        width: 90%;
+        flex-direction: row;
+        justify-content: center;
+        align-items: stretch;
+    }
 
-            .content {
-                width: 60%;
-            }
-        }
+    .background .course-form .content .form-item {
+        flex: 1 1 45%;
+        max-width: 45%;
+        width: auto;
     }
 }
 
-@media (min-width: 1100px) {
-    .background {
-        margin-top: 6rem;
+@media (min-width: 1200px) {
+    .background .course-form .content {
+        width: 60%;
+        justify-content: space-between;
+    }
 
-        .course-form {
-            .div-title {
-                span {
-                    font-size: 18px;
-                }
-            }
+    .background .course-form .content .form-item {
+        flex: 1 1 30%;
+        max-width: 30%;
+    }
+}
 
-            .content {
-                width: 50%;
+@media (min-width: 768px) {
+    .background .course-form .content {
+        width: 90%;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: stretch;
+        gap: 2rem;
+    }
 
-                mat-form-field {
-                    width: 60%;
-                }
-            }
-        }
+    .background .course-form .content .form-item {
+        flex: 1 1 45%;
+        max-width: 45%;
+        width: auto;
+    }
+}
+
+@media (min-width: 1200px) {
+    .background .course-form .content {
+        width: 60%;
+        justify-content: flex-start;
+        gap: 2rem;
+    }
+
+    .background .course-form .content .form-item {
+        flex: 1 1 30%;
+        max-width: 30%;
     }
 }
 
@@ -192,7 +184,7 @@
 
 ::ng-deep .mat-mdc-form-field-infix {
     text-align: right;
-    // direction: rtl;
+    direction: rtl;
     padding: 12px 14px !important;
     min-height: 54px;
     width: 100%;
@@ -205,27 +197,4 @@
     margin-top: 6px;
     padding: 0 12px;
     height: auto;
-}
-
-::ng-deep mat-form-field.phone-field .mat-mdc-form-field-prefix {
-    direction: ltr;
-    display: flex;
-    align-items: center;
-    height: 100%;
-    padding-inline: 4px;
-    font-weight: 700;
-    opacity: .9;
-}
-
-::ng-deep mat-form-field.phone-field input.mat-mdc-input-element {
-    line-height: 1.5;
-    text-align: left;
-}
-
-::ng-deep mat-form-field.phone-field .mat-mdc-text-field-wrapper {
-    padding: 0 12px;
-}
-
-::ng-deep mat-form-field.phone-field .phone-label {
-    margin-left: 10px;
 }
