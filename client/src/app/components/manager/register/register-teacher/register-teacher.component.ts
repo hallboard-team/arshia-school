@@ -6,44 +6,43 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { AutoFocusDirective } from '../../../directives/auto-focus.directive';
-import { ManagerService } from '../../../services/manager.service';
-import { RegisterUser } from '../../../models/register-user.model';
+import { ManagerService } from '../../../../services/manager.service';
+import { RegisterUser } from '../../../../models/register-user.model';
 import { MatIconModule } from "@angular/material/icon";
 import moment, { Moment } from 'moment-jalaali';
-import { DatepickerComponent } from '../../../datepicker/datepicker.component';
+import { DatepickerComponent } from '../../../../datepicker/datepicker.component';
 
 @Component({
-  selector: 'app-register-student',
+  selector: 'app-register-teacher',
   standalone: true,
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule,
     MatFormFieldModule, MatInputModule, MatButtonModule,
-    MatSnackBarModule, MatRadioModule, AutoFocusDirective,
-    MatIconModule, DatepickerComponent
+    MatSnackBarModule, MatRadioModule, MatIconModule,
+    DatepickerComponent
   ],
-  templateUrl: './register-student.component.html',
-  styleUrl: './register-student.component.scss'
+  templateUrl: './register-teacher.component.html',
+  styleUrl: './register-teacher.component.scss'
 })
-export class RegisterStudentComponent {
+export class RegisterTeacherComponent {
   private snackBar = inject(MatSnackBar);
   private fb = inject(FormBuilder);
   private managerService = inject(ManagerService);
 
-  readonly minAge = 11;
-  readonly maxAge = 90;
-
-  min = moment().subtract(this.maxAge, 'jYear').startOf('day');
-  max = moment().subtract(this.minAge, 'jYear').endOf('day');
-
-  hideStudentPassword = true;
-  hideStudentConfirmPassword = true;
+  hideTeacherPassword = true;
+  hideTeacherConfirmPassword = true;
 
   private readonly NAME_REGEX = /^[\u0600-\u06FFa-zA-Z\s\u200c-]+$/;
 
-  @ViewChild('stuForm', { read: FormGroupDirective }) stuFormDir!: FormGroupDirective;
+  @ViewChild('teachForm', { read: FormGroupDirective }) teachFormDir!: FormGroupDirective;
 
-  studentFg = this.fb.group({
+  readonly minAge = 11;
+  readonly maxAge = 90;
+
+  min = moment().subtract(this.maxAge, 'jYear').startOf('day'); // 1358
+  max = moment().subtract(this.minAge, 'jYear').endOf('day'); // 1403
+
+  teacherFg = this.fb.group({
     emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
     passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
@@ -54,14 +53,14 @@ export class RegisterStudentComponent {
     genderCtrl: ['', [Validators.required]]
   });
 
-  get StudentGenderCtrl(): FormControl { return this.studentFg.get('genderCtrl') as FormControl; }
-  get StudentEmailCtrl(): FormControl { return this.studentFg.get('emailCtrl') as FormControl; }
-  get StudentPasswordCtrl(): FormControl { return this.studentFg.get('passwordCtrl') as FormControl; }
-  get StudentConfirmPasswordCtrl(): FormControl { return this.studentFg.get('confirmPasswordCtrl') as FormControl; }
-  get StudentNameCtrl(): FormControl { return this.studentFg.get('nameCtrl') as FormControl; }
-  get StudentLastNameCtrl(): FormControl { return this.studentFg.get('lastNameCtrl') as FormControl; }
-  get StudentPhoneNumCtrl(): FormControl { return this.studentFg.get('phoneNumCtrl') as FormControl; }
-  get StudentDateOfBirthCtrl(): FormControl { return this.studentFg.get('dateOfBirthCtrl') as FormControl; }
+  get TeacherGenderCtrl(): FormControl { return this.teacherFg.get('genderCtrl') as FormControl; }
+  get TeacherEmailCtrl(): FormControl { return this.teacherFg.get('emailCtrl') as FormControl; }
+  get TeacherPasswordCtrl(): FormControl { return this.teacherFg.get('passwordCtrl') as FormControl; }
+  get TeacherConfirmPasswordCtrl(): FormControl { return this.teacherFg.get('confirmPasswordCtrl') as FormControl; }
+  get TeacherNameCtrl(): FormControl { return this.teacherFg.get('nameCtrl') as FormControl; }
+  get TeacherLastNameCtrl(): FormControl { return this.teacherFg.get('lastNameCtrl') as FormControl; }
+  get TeacherPhoneNumCtrl(): FormControl { return this.teacherFg.get('phoneNumCtrl') as FormControl; }
+  get TeacherDateOfBirthCtrl(): FormControl { return this.teacherFg.get('dateOfBirthCtrl') as FormControl; }
 
   showErr(c: FormControl | null | undefined): boolean {
     return !!c && c.invalid && (c.dirty || c.touched);
@@ -73,12 +72,12 @@ export class RegisterStudentComponent {
 
   private applyServerErrorsToForm(messages: string[]): void {
     const markKeys = ['emailCtrl', 'passwordCtrl', 'confirmPasswordCtrl'];
-    markKeys.forEach(k => this.studentFg.get(k)?.markAsTouched());
+    markKeys.forEach(k => this.teacherFg.get(k)?.markAsTouched());
 
     const passMsgs = messages.filter(m => /password/i.test(m));
     if (passMsgs.length) {
       const msg = '• ' + passMsgs.join('\n• ');
-      const p = this.studentFg.get('passwordCtrl'); const cp = this.studentFg.get('confirmPasswordCtrl');
+      const p = this.teacherFg.get('passwordCtrl'); const cp = this.teacherFg.get('confirmPasswordCtrl');
       p?.setErrors({ ...(p?.errors || {}), server: msg });
       cp?.setErrors({ ...(cp?.errors || {}), server: msg });
     }
@@ -86,7 +85,7 @@ export class RegisterStudentComponent {
     const emailMsgs = messages.filter(m => /email/i.test(m));
     if (emailMsgs.length) {
       const msg = '• ' + emailMsgs.join('\n• ');
-      const e = this.studentFg.get('emailCtrl');
+      const e = this.teacherFg.get('emailCtrl');
       e?.setErrors({ ...(e?.errors || {}), server: msg });
     }
   }
@@ -111,35 +110,35 @@ export class RegisterStudentComponent {
     return new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString().slice(0, 10);
   }
 
-  addStudent(): void {
-    if (this.StudentPasswordCtrl.value !== this.StudentConfirmPasswordCtrl.value) {
+  addTeacher(): void {
+    if (this.TeacherPasswordCtrl.value !== this.TeacherConfirmPasswordCtrl.value) {
       this.openSnack('رمز عبور و تکرار آن یکسان نیستند.', 'error');
       return;
     }
 
-    const dob = this.StudentDateOfBirthCtrl.value as any;
+    const dob = this.TeacherDateOfBirthCtrl.value as any;
     if (!dob || !dob.isBetween(this.min, this.max, undefined, '[]')) {
       this.openSnack(`تاریخ تولد باید بین ${this.min.format('jYYYY/jMM/jDD')} و ${this.max.format('jYYYY/jMM/jDD')} باشد.`, 'error');
-      this.StudentDateOfBirthCtrl.markAsTouched();
+      this.TeacherDateOfBirthCtrl.markAsTouched();
       return;
     }
 
     const payload: RegisterUser = {
-      email: this.StudentEmailCtrl.value,
-      password: this.StudentPasswordCtrl.value,
-      confirmPassword: this.StudentConfirmPasswordCtrl.value,
-      gender: this.StudentGenderCtrl.value,
+      email: this.TeacherEmailCtrl.value,
+      password: this.TeacherPasswordCtrl.value,
+      confirmPassword: this.TeacherConfirmPasswordCtrl.value,
+      gender: this.TeacherGenderCtrl.value,
       dateOfBirth: this.toGregorianDateOnly(dob),
-      name: this.StudentNameCtrl.value,
-      lastName: this.StudentLastNameCtrl.value,
-      phoneNum: '98' + this.StudentPhoneNumCtrl.value
+      name: this.TeacherNameCtrl.value,
+      lastName: this.TeacherLastNameCtrl.value,
+      phoneNum: '98' + this.TeacherPhoneNumCtrl.value
     };
 
-    this.managerService.createStudent(payload).subscribe({
+    this.managerService.createTeacher(payload).subscribe({
       next: _ => {
-        this.openSnack('دانشجو با موفقیت ثبت شد.', 'success');
-        this.stuFormDir?.resetForm();
-        this.studentFg.reset();
+        this.openSnack('مدرس با موفقیت ثبت شد.', 'success');
+        this.teachFormDir?.resetForm();
+        this.teacherFg.reset();
       },
       error: err => {
         const msgs: string[] = Array.isArray(err?.error) ? err.error : (Array.isArray(err?.error?.errors) ? err.error.errors : []);
