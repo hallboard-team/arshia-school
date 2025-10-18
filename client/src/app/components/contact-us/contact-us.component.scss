@@ -151,10 +151,6 @@
                 color: #000;
               }
 
-              .forward-slash {
-                display: none;
-              }
-
               .phone-number,
               .time {
                 direction: ltr;
@@ -224,24 +220,47 @@
     }
 
     .left .div-title-and-phone-numbers .div-phone-numbers {
-      gap: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      column-gap: 24px;
+      row-gap: 16px;
+
+      .right-side,
+      .left-side {
+        flex: 0 1 calc(50% - 12px);
+        min-width: 180px;
+        align-items: center;
+      }
 
       .right-side .desc,
       .left-side .desc {
         flex-direction: row-reverse;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: baseline;
+        gap: 6px 8px;
+        text-align: center;
+      }
+
+      .right-side .desc .title,
+      .left-side .desc .title {
+        white-space: nowrap;
+      }
+
+      .right-side .desc .phone-number,
+      .left-side .desc .time {
+        direction: ltr;
+        unicode-bidi: plaintext;
+        text-align: center;
       }
     }
   }
 }
 
 @media (min-width: 768px) {
-  .section-main .div-background .right .div-title {
-    width: 90%;
-  }
-
   .section-main .div-background .left .div-title-and-phone-numbers .div-phone-numbers .right-side .desc .forward-slash {
-    display: flex;
-
+    display: inline;
   }
 }
 
