@@ -1,0 +1,90 @@
+name: Project Status Sync – Branch-based Automation
+
+on:
+  pull_request_review:
+    types: [submitted]
+    branches:
+      - 'release/*'
+      - 'main'
+  pull_request:
+    types: [closed]
+    branches:
+      - 'main'
+  workflow_dispatch:
+
+jobs:
+  update_project_status:
+    name: Update GitHub Project Status
+    runs-on: ubuntu-latest
+
+    permissions:
+      issues: write
+      pull-requests: read
+      contents: read
+
+      steps:
+        - name: Determine Target Status
+          id: calc_status
+          run: |
+            echo "🔍 Event: ${{ github.event_name }}"
+            BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
+            TARGET_STATUS=""
+            PR_NODE_ID="" # Initialize PR_NODE_ID
+
+            # ... (Logic to set TARGET_STATUS remains the same)
+
+            # ------------------------------------------------------
+            # 🟢 1. Handle MERGE event (pull_request: closed + merged)
+            # ------------------------------------------------------
+            if [[ "${{ github.event_name }}" == "pull_request" && \
+                  "${{ github.event.pull_request.merged }}" == "true" && \
+                  "$BASE_BRANCH" == "main" ]]; then
+
+              TARGET_STATUS="Done"
+              echo "✅ Condition: PR merged into main."
+
+            # ------------------------------------------------------
+            # 🟣 2. Handle APPROVAL event (pull_request_review: submitted)
+            # ------------------------------------------------------
+            elif [[ "${{ github.event_name }}" == "pull_request_review" ]]; then
+              if [[ "${{ github.event.review.state }}" != "approved" ]]; then
+                echo "::notice::Review was not an approval, skipping status update."
+                exit 0
+              fi
+
+              if [[ "$BASE_BRANCH" == release/* ]]; then
+                TARGET_STATUS="Review"
+                echo "✅ Condition: PR approved into release/*."
+              elif [[ "$BASE_BRANCH" == "main" ]]; then
+                TARGET_STATUS="Done"
+                echo "✅ Condition: PR approved into main."
+              fi
+
+            else
+              echo "::notice::Base branch ($BASE_BRANCH) or event does not trigger a status change."
+              exit 0
+            fi
+
+            # Export TARGET_STATUS and PR_NODE_ID ONLY if status was successfully determined
+            if [[ "$TARGET_STATUS" != "" ]]; then
+              PR_NODE_ID="${{ github.event.pull_request.node_id }}"
+              echo "TARGET_STATUS=$TARGET_STATUS" >> $GITHUB_ENV
+              echo "PR_NODE_ID=$PR_NODE_ID" >> $GITHUB_ENV # <--- EXPORT NODE ID HERE
+              echo "✅ Final status set to: $TARGET_STATUS"
+            fi
+
+        - name: Update Project Status
+          # Now check if the required variables are set before running the action
+          if: env.TARGET_STATUS != '' && env.PR_NODE_ID != ''
+          uses: leonsteinhaeuser/project-beta-automations@v2.1.0
+          with:
+            gh_token: ${{ secrets.GH_TOKEN }}
+            organization: hallboard-team
+            project_id: PVT_kwDODTVfn84A-8fi # 🧠 Replace with your actual Project ID
+            status_value: ${{ env.TARGET_STATUS }}
+            resource_node_id: ${{ env.PR_NODE_ID }} # <--- USE THE EXPORTED VARIABLE
+            move_related_issues: true
+
+        - name: Confirm Update
+          if: env.TARGET_STATUS != ''
+          run: echo "✅ Project status set to '$TARGET_STATUS' for PR → ${{ github.event.pull_request.html_url }}"

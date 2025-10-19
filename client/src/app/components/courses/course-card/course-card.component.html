@@ -9,10 +9,12 @@
         <span class="result">{{ shamsiStartDate }}</span>
     </div>
 
-    <div class="div-professors-name">
-        <span class="teachers-name">اسم اساتید:</span>
+    <div class="div-professors-name" *ngIf="courseIn?.professorNames?.length">
+        <span class="teachers-name">
+            {{ (courseIn?.professorNames?.length ?? 0) === 1 ? 'استاد:' : 'اساتید:' }}
+        </span>
         <div class="result-teachers-name">
-            <span *ngFor="let name of courseIn.professorNames">{{ name }}</span>
+            {{ courseIn?.professorNames?.join(', ') }}
         </div>
     </div>
 

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
-import { NavbarComponent } from '../navbar/navbar.component';
+import { NavbarComponent } from '../../navbar/navbar.component';
 import { RegisterSecretaryComponent } from '../register/register-secretary/register-secretary.component';
 import { RegisterStudentComponent } from '../register/register-student/register-student.component';
 import { RegisterTeacherComponent } from '../register/register-teacher/register-teacher.component';
