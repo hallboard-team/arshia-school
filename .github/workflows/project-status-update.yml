@@ -1,0 +1,62 @@
+name: Project Status Sync – Branch-based Automation
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - 'release/*'
+      - 'main'
+  workflow_dispatch:
+
+jobs:
+  update-project-status:
+    name: Update Project Status
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: read
+      contents: read
+      # 👇 You can also include "project: write" once available
+      # projects: write
+
+    steps:
+      # --------------------------------------------------------
+      # 🔹 Step 1 – Decide target status based on base branch
+      # --------------------------------------------------------
+      - name: Determine target status
+        id: decide
+        run: |
+          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
+          echo "Base branch: $BASE_BRANCH"
+
+          if [[ "$BASE_BRANCH" == "main" ]]; then
+            echo "TARGET_STATUS=Done" >> $GITHUB_ENV
+            echo "✅ Target status set to Done"
+          elif [[ "$BASE_BRANCH" == release/* ]]; then
+            echo "TARGET_STATUS=Review" >> $GITHUB_ENV
+            echo "🧪 Target status set to Review"
+          else
+            echo "TARGET_STATUS=" >> $GITHUB_ENV
+            echo "::notice::No status change for branch $BASE_BRANCH"
+          fi
+
+      # --------------------------------------------------------
+      # 🔹 Step 2 – Update GitHub Project (Project V2)
+      # --------------------------------------------------------
+      - name: Update Project Status in GitHub Project (Main PMS)
+        if: env.TARGET_STATUS != ''
+        uses: leonsteinhaeuser/project-beta-automations@v2.1.0
+        with:
+          # 👇 Must exactly match your project name & field labels
+          project-name: 'Main PMS'
+          column-name: 'Status'
+          column-value: ${{ env.TARGET_STATUS }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # --------------------------------------------------------
+      # 🔹 Step 3 – Confirmation log (optional)
+      # --------------------------------------------------------
+      - name: Confirm update
+        if: env.TARGET_STATUS != ''
+        run: echo "✅ Project status set to $TARGET_STATUS for PR → ${{ github.event.pull_request.html_url }}"
