@@ -6,6 +6,10 @@ on:
     branches:
       - 'release/*'
       - 'main'
+  pull_request:
+    types: [closed]
+    branches:
+      - 'main'
   workflow_dispatch:
 
 jobs:
@@ -19,57 +23,60 @@ jobs:
       contents: read
 
     steps:
-      # --------------------------------------------------------
-      # 1️⃣ Checkout repo
-      # --------------------------------------------------------
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      # --------------------------------------------------------
-      # 2️⃣ Determine status based on PR base branch
-      # --------------------------------------------------------
       - name: Determine Target Status
         id: calc_status
         run: |
-          echo "🔍 Checking PR base branch: ${{ github.event.pull_request.base.ref }}"
-          echo "🔍 Review state: ${{ github.event.review.state }}"
-
-          # Only continue if review is approved
-          if [[ "${{ github.event.review.state }}" != "approved" ]]; then
-            echo "::notice::Review was not an approval, skipping status update."
-            exit 0
-          fi
-
-          BASE="${{ github.event.pull_request.base.ref }}"
+          echo "🔍 Event: ${{ github.event_name }}"
+          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
           TARGET_STATUS=""
 
-          if [[ "$BASE" == release/* ]]; then
-            TARGET_STATUS="Review"
-          elif [[ "$BASE" == "main" ]]; then
+          # ------------------------------------------------------
+          # 🟢 1. Handle MERGE event (pull_request: closed + merged)
+          # ------------------------------------------------------
+          if [[ "${{ github.event_name }}" == "pull_request" && \
+                "${{ github.event.pull_request.merged }}" == "true" && \
+                "$BASE_BRANCH" == "main" ]]; then
+
             TARGET_STATUS="Done"
+            echo "✅ Condition: PR merged into main."
+
+          # ------------------------------------------------------
+          # 🟣 2. Handle APPROVAL event (pull_request_review: submitted)
+          # ------------------------------------------------------
+          elif [[ "${{ github.event_name }}" == "pull_request_review" ]]; then
+            if [[ "${{ github.event.review.state }}" != "approved" ]]; then
+              echo "::notice::Review was not an approval, skipping status update."
+              exit 0
+            fi
+
+            if [[ "$BASE_BRANCH" == release/* ]]; then
+              TARGET_STATUS="Review"
+              echo "✅ Condition: PR approved into release/*."
+            elif [[ "$BASE_BRANCH" == "main" ]]; then
+              TARGET_STATUS="Done"
+              echo "✅ Condition: PR approved into main."
+            fi # <-- Closing 'if' for BASE_BRANCH check
+
           else
-            echo "::notice::Base branch ($BASE) does not trigger a status change."
+            echo "::notice::Base branch ($BASE_BRANCH) or event does not trigger a status change."
             exit 0
-          fi
+          fi # <-- Closing 'if' for event check
 
           echo "TARGET_STATUS=$TARGET_STATUS" >> $GITHUB_ENV
-          echo "✅ Will set status to: $TARGET_STATUS"
+          echo "✅ Final status set to: $TARGET_STATUS"
 
-      # --------------------------------------------------------
-      # 3️⃣ Update project item status
-      # --------------------------------------------------------
       - name: Update Project Status
         if: env.TARGET_STATUS != ''
         uses: leonsteinhaeuser/project-beta-automations@v2.1.0
         with:
           gh_token: ${{ secrets.GH_TOKEN }}
           organization: hallboard-team
-          project_id: PVT_kwDODTVfn84A-8fi  # 🧠 Replace this with your real Project ID
+          project_id: PVT_kwDODTVfn84A-8fi # 🧠 Replace with your actual Project ID
           status_value: ${{ env.TARGET_STATUS }}
+          resource_node_id: ${{ github.event.pull_request.node_id }}
+          # 🚀 NEW: Automatically moves linked Issues (e.g., Closes #123)
+          move_related_issues: true
 
-      # --------------------------------------------------------
-      # 🔹 Step 3 – Confirmation log (optional)
-      # --------------------------------------------------------
-      - name: Confirm update
+      - name: Confirm Update
         if: env.TARGET_STATUS != ''
-        run: echo "✅ Project status set to $TARGET_STATUS for PR → ${{ github.event.pull_request.html_url }}"
+        run: echo "✅ Project status set to '$TARGET_STATUS' for PR → ${{ github.event.pull_request.html_url }}"
