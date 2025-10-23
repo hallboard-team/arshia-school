@@ -1,0 +1,27 @@
+<nav class="sidebar">
+    <ul>
+        <li routerLinkActive="active">
+            <a [routerLink]="['/dashboard/profile']">پروفایل</a>
+        </li>
+
+        @if (loggedInUserSig && loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
+        loggedInUserSig()?.roles?.includes('manager')) {
+        <li routerLinkActive="active">
+            <a [routerLink]="['/dashboard/manager-panel']">پنل مدیر</a>
+        </li>
+        }
+
+        @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
+        <li routerLinkActive="active">
+            <a [routerLink]="['/dashboard/members']">کاربران</a>
+        </li>
+        }
+
+        @if (loggedInUserSig && loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
+        loggedInUserSig()?.roles?.includes('teacher')) {
+        <li routerLinkActive="active">
+            <a [routerLink]="['/dashboard/teacher-panel']">پنل معلم</a>
+        </li>
+        }
+    </ul>
+</nav>
