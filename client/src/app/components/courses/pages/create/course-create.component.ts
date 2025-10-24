@@ -14,6 +14,7 @@ import { AddCourse } from '../../../../models/course.model';
 import { CourseService } from '../../../../services/course.service';
 import moment, { Moment } from 'moment-jalaali';
 import { DatepickerComponent } from '../../../../datepicker/datepicker.component';
+import { DecimalFormatterDirective } from '../../../../directives/decimal-formatter.directive';
 
 @Component({
   selector: 'app-add-course',
@@ -22,7 +23,8 @@ import { DatepickerComponent } from '../../../../datepicker/datepicker.component
     ReactiveFormsModule, MatFormFieldModule, MatInputModule,
     MatButtonModule, MatSnackBarModule,
     AutoFocusDirective, DatepickerComponent,
-    MatIconModule, NavbarComponent, CurrencyFormatterDirective
+    MatIconModule, NavbarComponent, CurrencyFormatterDirective,
+    DecimalFormatterDirective
   ],
   templateUrl: './course-create.component.html',
   styleUrl: './course-create.component.scss'
@@ -40,7 +42,7 @@ export class CourseCreateComponent {
 
   courseFg = this.fb.group({
     titleCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    tuitionCtrl: ['', [Validators.required, Validators.pattern(/^[1-9]\d*000000$/)]],
+    tuitionCtrl: ['', [Validators.required, Validators.min(10_000), Validators.max(100_000_000),]],
     hourseCtrl: ['', [Validators.required, Validators.pattern(/^\d+$/), Validators.min(1), Validators.max(500)]],
     hoursePerClassCtrl: ['', [Validators.required, Validators.min(0.5), Validators.max(10),
     Validators.pattern(/^(?:0\.5|[1-9](?:\.5)?|10)$/),
