@@ -5,8 +5,7 @@ public record AddCourseDto(
      MaxLength(30, ErrorMessage = "عنوان حداکثر ۳۰ کاراکتر است")]
     string Title,
 
-    [Required, Range(1_000_000, int.MaxValue, ErrorMessage = "کمترین مبلغ ۱,۰۰۰,۰۰۰ است"),
-     MultipleOfMillion(ErrorMessage = "مبلغ باید مضربی از ۱,۰۰۰,۰۰۰ باشد و کمتر از ۱,۰۰۰,۰۰۰ نیست.")]
+    [Required, Range(10_000, 100_000_000, ErrorMessage = "مبلغ باید بین ۱۰,۰۰۰ تومن و ۱۰۰,۰۰۰,۰۰۰ تومن باشد."),]
     int Tuition,
 
     [Required, Range(0.5, 20000, ErrorMessage = "ساعت دوره باید بین ۰٫۵ ساعت تا ۲۰,۰۰۰ ساعت باشد")]
@@ -39,8 +38,7 @@ public class UpdateCourseDto
      MaxLength(30, ErrorMessage = "عنوان حداکثر ۳۰ کاراکتر است")]
     public string Title { get; init; } = string.Empty;
 
-    [Required, Range(1_000_000, int.MaxValue, ErrorMessage = "کمترین مبلغ ۱,۰۰۰,۰۰۰ است"),
-     MultipleOfMillion(ErrorMessage = "مبلغ باید مضربی از ۱,۰۰۰,۰۰۰ باشد و کمتر از ۱,۰۰۰,۰۰۰ نیست.")]
+    [Required, Range(10_000, 100_000_000, ErrorMessage = "مبلغ باید بین ۱۰,۰۰۰ تومن و ۱۰۰,۰۰۰,۰۰۰ تومن باشد."),]
     public int Tuition { get; init; }
 
     [Required, Range(0.5, 20000, ErrorMessage = "ساعت دوره باید بین ۰٫۵ ساعت تا ۲۰,۰۰۰ ساعت باشد")]
