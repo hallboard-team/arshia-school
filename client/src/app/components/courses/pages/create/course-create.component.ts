@@ -42,9 +42,8 @@ export class CourseCreateComponent {
     titleCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
     tuitionCtrl: ['', [Validators.required, Validators.pattern(/^[1-9]\d*000000$/)]],
     hourseCtrl: ['', [Validators.required, Validators.pattern(/^\d+$/), Validators.min(1), Validators.max(500)]],
-    hoursePerClassCtrl: ['', [Validators.required, Validators.pattern(/^(?:[1-3](?:\.5)?|4)$/),
-    Validators.min(1),
-    Validators.max(4)
+    hoursePerClassCtrl: ['', [Validators.required, Validators.min(0.5), Validators.max(10),
+    Validators.pattern(/^(?:0\.5|[1-9](?:\.5)?|10)$/),
     ]],
     startCtrl: ['', [Validators.required]]
   });
