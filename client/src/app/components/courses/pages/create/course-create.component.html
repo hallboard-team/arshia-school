@@ -31,14 +31,15 @@
                 <mat-form-field appearance="outline" class="tuition-field">
                     <mat-label>شهریه</mat-label>
                     <input class="input" type="text" matInput formControlName="tuitionCtrl" appCurrencyFormatter
-                        inputmode="numeric" dir="ltr">
+                        inputmode="numeric" dir="ltr" />
                     <span matSuffix class="suffix-text">تومان</span>
-                    <mat-hint>شهریه دوره را وارد کنید (مضاعف ۱,۰۰۰,۰۰۰)</mat-hint>
+                    <mat-hint>شهریه را بین ۱۰,۰۰۰ تا ۱۰۰,۰۰۰,۰۰۰ تومان وارد کنید</mat-hint>
                 </mat-form-field>
+
                 <div class="field-error" *ngIf="showErr(TuitionCtrl)">
-                    <span *ngIf="TuitionCtrl.hasError('required')">فرم رو پرکنید</span>
-                    <span *ngIf="TuitionCtrl.hasError('pattern')">مبلغ باید مضربی از ۱,۰۰۰,۰۰۰ باشد (شش صفر
-                        انتهایی)</span>
+                    <span *ngIf="TuitionCtrl.hasError('required')">فرم رو پر کنید</span>
+                    <span *ngIf="TuitionCtrl.hasError('min')">حداقل مبلغ ۱۰,۰۰۰ تومان است</span>
+                    <span *ngIf="TuitionCtrl.hasError('max')">حداکثر مبلغ ۱۰۰,۰۰۰,۰۰۰ تومان است</span>
                 </div>
             </div>
 
