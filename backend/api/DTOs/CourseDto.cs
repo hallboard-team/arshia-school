@@ -12,7 +12,7 @@ public record AddCourseDto(
     [Required, Range(0.5, 20000, ErrorMessage = "ساعت دوره باید بین ۰٫۵ ساعت تا ۲۰,۰۰۰ ساعت باشد")]
     int Hours,
 
-    [Required, HalfStepRange(1, 4, ErrorMessage = "ساعت هر کلاس باید بین ۱ تا ۴ و مضربی از ۰٫۵ باشد.")]
+    [Required, HalfStepRange(0.5, 10, ErrorMessage = "ساعت هر کلاس باید بین ۰,۵ تا ۱۰ ساعت باشد.")]
     double HoursPerClass,
 
     [Required, StartDateNotBeforeToday(ErrorMessage = "تاریخ شروع نمی‌تواند قبل از امروز باشد.")]
@@ -46,7 +46,7 @@ public class UpdateCourseDto
     [Required, Range(0.5, 20000, ErrorMessage = "ساعت دوره باید بین ۰٫۵ ساعت تا ۲۰,۰۰۰ ساعت باشد")]
     public int Hours { get; init; }
 
-    [Required, HalfStepRange(1, 4, ErrorMessage = "ساعت هر کلاس باید بین ۱ تا ۴ و مضربی از ۰٫۵ باشد.")]
+    [Required, HalfStepRange(0.5, 10, ErrorMessage = "ساعت هر کلاس باید بین ۰,۵ تا ۱۰ ساعت باشد.")]
     public double HoursPerClass { get; init; }
 
     [Required, StartDateNotBeforeToday(ErrorMessage = "تاریخ شروع نمی‌تواند قبل از امروز باشد.")]
