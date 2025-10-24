@@ -47,15 +47,14 @@
             <div class="form-item">
                 <mat-form-field appearance="outline">
                     <mat-label>ساعت دوره</mat-label>
-                    <input class="input" type="number" formControlName="hourseCtrl" matInput min="1" max="500"
-                        inputmode="numeric" dir="ltr">
+                    <input class="input" type="text" formControlName="hourseCtrl" matInput min="0.5" max="20000"
+                        appDecimalFormatter inputmode="decimal" step="0.5" dir="ltr">
                     <mat-hint>ساعت کل دوره را وارد کنید</mat-hint>
                 </mat-form-field>
                 <div class="field-error" *ngIf="showErr(HourseCtrl)">
                     <span *ngIf="HourseCtrl.hasError('required')">فرم رو پرکنید</span>
-                    <span *ngIf="HourseCtrl.hasError('pattern')">فقط عدد صحیح مجاز است</span>
-                    <span *ngIf="HourseCtrl.hasError('min')">حداقل ۱ ساعت</span>
-                    <span *ngIf="HourseCtrl.hasError('max')">حداکثر ۵۰۰ ساعت</span>
+                    <span *ngIf="HourseCtrl.hasError('min')">حداقل ۰,۵ ساعت</span>
+                    <span *ngIf="HourseCtrl.hasError('max')">حداکثر ۲۰,۰۰۰ ساعت</span>
                 </div>
             </div>
 
