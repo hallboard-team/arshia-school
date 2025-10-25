@@ -37,7 +37,7 @@ public class MemberController
         PaginationHeader paginationHeader = new(
             CurrentPage: pagedAttendences.CurrentPage,
             ItemsPerPage: pagedAttendences.PageSize,
-            TotalItems: pagedAttendences.TotalItems,
+            TotalItems: pagedAttendences.TotalItemsCount,
             TotalPages: pagedAttendences.TotalPages
         );
 
