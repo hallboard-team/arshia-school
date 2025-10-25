@@ -25,8 +25,8 @@
     }
 
     @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
-    <div class="div-button-edit-course" [routerLink]="['/' + 'update-course/' + courseIn.title]" routerLinkActive
-        #rla="routerLinkActive">
+    <div class="div-button-edit-course" [routerLink]="['/' + 'dashboard/' + 'update-course/' + courseIn.title]"
+        routerLinkActive #rla="routerLinkActive">
         <button>ادیت دوره</button>
     </div>
     }
