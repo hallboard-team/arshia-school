@@ -28,7 +28,7 @@ public class CourseController(ICourseRepository _courseRepository) : BaseApiCont
         PaginationHeader paginationHeader = new(
             CurrentPage: pagedCourses.CurrentPage,
             ItemsPerPage: pagedCourses.PageSize,
-            TotalItems: pagedCourses.TotalItems,
+            TotalItems: pagedCourses.TotalItemsCount,
             TotalPages: pagedCourses.TotalPages
         );
 

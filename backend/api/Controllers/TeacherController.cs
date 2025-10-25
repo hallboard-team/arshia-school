@@ -79,7 +79,7 @@ public class TeacherController(ITeacherRepository _teacherRepository, ITokenServ
         PaginationHeader paginationHeader = new(
             CurrentPage: pagedAppUsers.CurrentPage,
             ItemsPerPage: pagedAppUsers.PageSize,
-            TotalItems: pagedAppUsers.TotalItems,
+            TotalItems: pagedAppUsers.TotalItemsCount,
             TotalPages: pagedAppUsers.TotalPages
         );
 

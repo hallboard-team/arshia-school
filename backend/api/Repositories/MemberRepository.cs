@@ -36,7 +36,7 @@ public class MemberRepository : IMemberRepository
         if (targetCourseId is null)
             return null;
 
-        IMongoQueryable<Attendence>? query = _collectionAttendence.AsQueryable<Attendence>()
+        IQueryable<Attendence>? query = _collectionAttendence.AsQueryable<Attendence>()
             .Where(doc => doc.StudentId == appUser.Id && doc.CourseId == targetCourseId);
 
         return await PagedList<Attendence>.CreatePagedListAsync(query, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
