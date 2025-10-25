@@ -439,8 +439,10 @@ public class ManagerRepository : IManagerRepository
         var payment = enrolledCourse.Payments.FirstOrDefault(p => p.Id == targetPaymentId);
         if (payment is null) return null;
 
-        var imageUrls = await _photoService.AddPhotoToDiskAsync(file, targetPaymentId);
-        if (imageUrls is null) throw new ArgumentNullException("Saving photo has failed. Error from PhotoService.");
+    bool isSuccess = ObjectId.TryParse(payment.Id, out ObjectId targetPaymentIdObjectId);
+    if (!isSuccess) return null;
+    string[]? imageUrls = await _photoService.AddPhotoToDiskAsync(file, targetPaymentIdObjectId);
+    if (imageUrls is null) throw new ArgumentNullException("Saving photo has failed. Error from PhotoService.");
 
         var photo = Mappers.ConvertPhotoUrlsToPhoto(imageUrls.ToArray(), isMain: true);
 
