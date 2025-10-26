@@ -25,10 +25,10 @@ import { studentGuard } from './guards/student.guard';
 import { teacherGuard } from './guards/teacher.guard';
 import { RecoveryComponent } from './components/recovery/recovery.component';
 import { ManagerPanelComponent } from './components/manager/manager-panel/manager-panel.component';
-import { CourseCreateComponent } from './components/courses/pages/create/course-create.component';
+import { CourseCreateComponent } from './components/courses/course-actions/course-create/course-create.component';
 import { CourseCardComponent } from './components/courses/course-card/course-card.component';
-import { CourseEditComponent } from './components/courses/pages/edit/course-edit.component';
-import { CoursesListComponent } from './components/courses/pages/list/courses-list.component';
+import { CourseEditComponent } from './components/courses/course-actions/course-edit/course-edit.component';
+import { CoursesListComponent } from './components/courses/course-list/course-list.component';
 import { MainDashboardComponent } from './components/dashboard/main-dashboard/main-dashboard.component';
 
 export const routes: Routes = [
