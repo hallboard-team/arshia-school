@@ -38,8 +38,4 @@ export class AboutUsComponent {
   prevStep() {
     this.step.update(i => i - 1);
   }
-
-  whoAreYou(name: string) {
-    console.log('arshiya');
-  }
 } 
