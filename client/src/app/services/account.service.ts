@@ -132,9 +132,9 @@ export class AccountService {
   private getDefaultDashboardPath(user: LoggedInUser): string {
     const roles = (user.roles || []).map(r => r?.toLowerCase());
 
-    if (roles.includes('manager')) return '/manager-panel';
-    if (roles.includes('teacher')) return '/teacher-panel';
-    if (roles.includes('secretary')) return '/secretary-panel';
+    if (roles.includes('manager')) return '/dashboard/manager-panel';
+    if (roles.includes('teacher')) return '/dashboard/teacher-panel';
+    if (roles.includes('secretary')) return '/dashboard/secretary-panel';
     // if (roles.includes('student')) return `/enrolled-course/${user.userName}`;
 
     return '/profile';

@@ -4,14 +4,14 @@
     "net9.0": {
       "AspNetCore.Identity.MongoDbCore": {
         "type": "Direct",
-        "requested": "[6.0.0, )",
-        "resolved": "6.0.0",
-        "contentHash": "Ce4PX1yGGuNATON1Ru//pkD+r6Jn2ZTXYVgaz9DQG3uAejAQSz4h9eG4PdCcRVbIlGxKER5PBo4ix2xqUfLAuQ==",
+        "requested": "[7.0.0, )",
+        "resolved": "7.0.0",
+        "contentHash": "71WasZQtxkxqUSsDRqlyAHOvAroFSicKnoMGhuXxrnXSNhPQzaBAqvzi9HoQA2rmJUSfEAogY5WxDDio6Ne9NQ==",
         "dependencies": {
           "Microsoft.Extensions.Identity.Core": "6.0.8",
           "Microsoft.Extensions.Identity.Stores": "6.0.8",
-          "MongoDB.Driver": "2.28.0",
-          "MongoDbGenericRepository": "1.6.2"
+          "MongoDB.Driver": "3.4.2",
+          "MongoDbGenericRepository": "2.0.0"
         }
       },
       "BCrypt.Net-Next": {
@@ -22,18 +22,18 @@
       },
       "Microsoft.AspNetCore.Authentication.JwtBearer": {
         "type": "Direct",
-        "requested": "[9.0.7, )",
-        "resolved": "9.0.7",
-        "contentHash": "lloN3XvIgXmdocfghzfszOHJb45OYR3fgOg/h536o+zNB2SmP3JrqeOieCBZ7sipgGcgbxP0boA+loVhdsJxWg==",
+        "requested": "[9.0.10, )",
+        "resolved": "9.0.10",
+        "contentHash": "lf82sEH4eETi8DBfV7UIkAYPKJuU9OT0Xpw7OcWC5dHWNZYnxVqhT6jM3Y1Hz3yXhbhTRTmcz4U/+VfcZCBkSA==",
         "dependencies": {
           "Microsoft.IdentityModel.Protocols.OpenIdConnect": "8.0.1"
         }
       },
       "Microsoft.AspNetCore.OpenApi": {
         "type": "Direct",
-        "requested": "[9.0.8, )",
-        "resolved": "9.0.8",
-        "contentHash": "BwF9sQCKmvu93C/pmKxJjPhF5fFB23MEcgTsGL+7W3wKLYawS4lyFSL5/qh00IJzuADLf+1SmvxMaphbyZYqQQ==",
+        "requested": "[9.0.10, )",
+        "resolved": "9.0.10",
+        "contentHash": "yAv5EDEi0Nkk75Vhxh6ppuXd/QIO8hzjGpAt/fGInMZWIX/mVwZ1IM50YFIWeLCVM8KDj0oFPQdcLeQ+9hEJsw==",
         "dependencies": {
           "Microsoft.OpenApi": "1.6.17"
         }
@@ -61,9 +61,9 @@
       },
       "Swashbuckle.AspNetCore.SwaggerUI": {
         "type": "Direct",
-        "requested": "[9.0.4, )",
-        "resolved": "9.0.4",
-        "contentHash": "2ugT2OvZsKHqk/2rMDmuqDuFmtix0NvzlXxAfnfHROVMTovbx7Z0UsOQHZa462DBTgdBFnR2Ss6wm4fypfymdA=="
+        "requested": "[9.0.6, )",
+        "resolved": "9.0.6",
+        "contentHash": "WGsw/Yop9b16miq8TQd4THxuEgkP5cH3+DX93BrX9m0OdPcKNtg2nNm77WQSAsA+Se+M0bTiu8bUyrruRSeS5g=="
       },
       "DnsClient": {
         "type": "Transitive",
@@ -252,10 +252,10 @@
       },
       "MongoDbGenericRepository": {
         "type": "Transitive",
-        "resolved": "1.6.2",
-        "contentHash": "d0uY4rI8Coz2SvALX1NImZIBnxovzLpPbKKDS51RBganZFA1Nj0a7hZd5kQKdXl0wM3rWi6uTO3AQKQox6LdcQ==",
+        "resolved": "2.0.0",
+        "contentHash": "LtS89Ff5MPtmMs0fkFhboddo1mwwrnix+2NxFJjOtJkHhxYeun6bNnOcYRorAXlA2Fmymrxedjl4hadOoQYNvg==",
         "dependencies": {
-          "MongoDB.Driver": "2.28.0"
+          "MongoDB.Driver": "3.4.2"
         }
       },
       "SharpCompress": {

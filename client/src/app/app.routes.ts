@@ -34,28 +34,41 @@ import { MainDashboardComponent } from './components/dashboard/main-dashboard/ma
 export const routes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'home', component: HomeComponent },
-
-    // Public Routes (no login required)
-    { path: 'about', component: AboutUsComponent },
-    { path: 'contact-us', component: ContactUsComponent },
-    { path: 'courses', component: CoursesListComponent },
     { path: 'recovery', component: RecoveryComponent },
 
-    // Authentication Required Routes
     {
-        path: '',
-        runGuardsAndResolvers: 'always',
-        canActivate: [authGuard],
+        path: 'dashboard',
+        component: MainDashboardComponent,
         children: [
+            { path: '', pathMatch: 'full', redirectTo: 'about' },
+
+            { path: 'about', component: AboutUsComponent },
+            { path: 'contact-us', component: ContactUsComponent },
+            { path: 'courses', component: CoursesListComponent },
+
             {
-                path: 'dashboard',
-                component: MainDashboardComponent,
+                path: '',
+                canActivate: [authGuard],
                 children: [
-                    { path: '', pathMatch: 'full', redirectTo: 'manager-panel' },
-
                     { path: 'profile', component: UserProfileComponent },
+                    { path: 'course-card', component: CourseCardComponent },
+                    { path: 'attendences', component: AttendenceCardComponent },
+                    { path: 'member-card', component: MemberCardComponent },
+                    { path: 'students-card/:courseTitle', component: StudentListComponent },
+                    { path: 'attendences-card/:courseTitle', component: AttendenceListComponent },
+                    { path: 'attendences-card/:memberUserName/:courseTitle', component: AttendenceListComponent, canActivate: [managerGuard] },
+                    { path: 'member-enrolled-course/:courseTitle', component: MemberEnrolledCourseComponent },
 
-                    // Manager-only
+                    // student-only
+                    { path: 'enrolled-course/:memberUserName', component: EnrolledCourseComponent, canActivate: [studentGuard] },
+
+                    // teacher-only
+                    { path: 'teacher-panel', component: TeacherComponent, canActivate: [teacherGuard] },
+
+                    // secretary-only
+                    { path: 'secretary-panel', component: SecretaryComponent, canActivate: [secretaryGuard] },
+
+                    // manager-only
                     { path: 'target-user-profile/:memberUserName', component: TargetUserProfileComponent, canActivate: [managerGuard] },
                     { path: 'members', component: MemberListComponent, canActivate: [managerGuard] },
                     { path: 'manager-panel', component: ManagerPanelComponent, canActivate: [managerGuard] },
@@ -63,33 +76,11 @@ export const routes: Routes = [
                     { path: 'update-course/:courseTitle', component: CourseEditComponent, canActivate: [managerGuard] },
                     { path: 'target-member-enrolled-course/:memberUserName/:courseTitle', component: TargetMemberEnrolledCourseComponent, canActivate: [managerGuard] },
                     { path: 'target-payment/:targetPaymentId', component: UploadPhotoComponent, canActivate: [managerGuard] },
-
-                    // Teacher-only
-                    { path: 'teacher-panel', component: TeacherComponent, canActivate: [teacherGuard] },
-
-
-                    // Secretary-only
-                    { path: 'secretary-panel', component: SecretaryComponent, canActivate: [secretaryGuard] },
-
-                    // Student-only
-                    { path: 'enrolled-course/:memberUserName', component: EnrolledCourseComponent, canActivate: [studentGuard] },
-
-                    // Shared (any authenticated user)
-                    { path: 'course-card', component: CourseCardComponent },
-                    { path: 'attendences', component: AttendenceCardComponent },
-                    { path: 'member-card', component: MemberCardComponent },
-                    { path: 'students-card/:courseTitle', component: StudentListComponent },
-                    { path: 'attendences-card/:courseTitle', component: AttendenceListComponent },
-                    { path: 'attendences-card/:memberUserName/:courseTitle', component: AttendenceListComponent, canActivate: [managerGuard] },
-                    // { path: 'edit-member/:memberEmail', component: EditMemberComponent },
-                    { path: 'member-enrolled-course/:courseTitle', component: MemberEnrolledCourseComponent },
-
-                    { path: 'dashboard', component: MainDashboardComponent },
-
-                    { path: 'not-found', component: NotFoundComponent }
-                ]
+                ],
             },
-        ]
+
+            { path: 'not-found', component: NotFoundComponent },
+        ],
     },
 
     // {
