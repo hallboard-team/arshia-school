@@ -16,11 +16,12 @@
             <div class="form-item">
                 <mat-form-field appearance="outline">
                     <mat-label>اسم دوره</mat-label>
-                    <input class="input" autoFocusDir type="text" formControlName="titleCtrl" matInput dir="auto">
+                    <input class="input" autoFocusDir type="text" formControlName="titleCtrl" matInput dir="auto"
+                        placeholder="بین ۲ تا ۳۰ کاراکتر باشد">
                     <mat-hint>اسم دوره جدید را وارد کنید</mat-hint>
                 </mat-form-field>
                 <div class="field-error" *ngIf="showErr(TitleCtrl)">
-                    <span *ngIf="TitleCtrl.hasError('required')">فرم رو پرکنید</span>
+                    <span *ngIf="TitleCtrl.hasError('required')">اسم دوره را وارد کنید</span>
                     <span *ngIf="TitleCtrl.hasError('minlength')">حداقل ۲ کاراکتر</span>
                     <span *ngIf="TitleCtrl.hasError('maxlength')">حداکثر ۳۰ کاراکتر</span>
                 </div>
@@ -31,14 +32,15 @@
                 <mat-form-field appearance="outline" class="tuition-field">
                     <mat-label>شهریه</mat-label>
                     <input class="input" type="text" matInput formControlName="tuitionCtrl" appCurrencyFormatter
-                        inputmode="numeric" dir="ltr">
+                        inputmode="numeric" dir="ltr" placeholder="از۱۰,۰۰۰تا۱۰۰ میلیون">
                     <span matSuffix class="suffix-text">تومان</span>
-                    <mat-hint>شهریه دوره را وارد کنید (مضاعف ۱,۰۰۰,۰۰۰)</mat-hint>
+                    <mat-hint>شهریه را بین ۱۰,۰۰۰ تا ۱۰۰,۰۰۰,۰۰۰ تومان وارد کنید</mat-hint>
                 </mat-form-field>
+
                 <div class="field-error" *ngIf="showErr(TuitionCtrl)">
-                    <span *ngIf="TuitionCtrl.hasError('required')">فرم رو پرکنید</span>
-                    <span *ngIf="TuitionCtrl.hasError('pattern')">مبلغ باید مضربی از ۱,۰۰۰,۰۰۰ باشد (شش صفر
-                        انتهایی)</span>
+                    <span *ngIf="TuitionCtrl.hasError('required')">فرم رو پر کنید</span>
+                    <span *ngIf="TuitionCtrl.hasError('min')">حداقل مبلغ ۱۰,۰۰۰ تومان است</span>
+                    <span *ngIf="TuitionCtrl.hasError('max')">حداکثر مبلغ ۱۰۰,۰۰۰,۰۰۰ تومان است</span>
                 </div>
             </div>
 
@@ -46,15 +48,14 @@
             <div class="form-item">
                 <mat-form-field appearance="outline">
                     <mat-label>ساعت دوره</mat-label>
-                    <input class="input" type="number" formControlName="hourseCtrl" matInput min="1" max="500"
-                        inputmode="numeric" dir="ltr">
+                    <input class="input" type="text" formControlName="hourseCtrl" matInput min="0.5" max="20000"
+                        appDecimalFormatter inputmode="decimal" step="0.5" dir="ltr">
                     <mat-hint>ساعت کل دوره را وارد کنید</mat-hint>
                 </mat-form-field>
                 <div class="field-error" *ngIf="showErr(HourseCtrl)">
                     <span *ngIf="HourseCtrl.hasError('required')">فرم رو پرکنید</span>
-                    <span *ngIf="HourseCtrl.hasError('pattern')">فقط عدد صحیح مجاز است</span>
-                    <span *ngIf="HourseCtrl.hasError('min')">حداقل ۱ ساعت</span>
-                    <span *ngIf="HourseCtrl.hasError('max')">حداکثر ۵۰۰ ساعت</span>
+                    <span *ngIf="HourseCtrl.hasError('min')">حداقل ۰,۵ ساعت</span>
+                    <span *ngIf="HourseCtrl.hasError('max')">حداکثر ۲۰,۰۰۰ ساعت</span>
                 </div>
             </div>
 
@@ -62,15 +63,15 @@
             <div class="form-item">
                 <mat-form-field appearance="outline">
                     <mat-label>ساعت هر کلاس</mat-label>
-                    <input class="input" type="number" formControlName="hoursePerClassCtrl" matInput min="1" max="4"
+                    <input class="input" type="number" formControlName="hoursePerClassCtrl" matInput min="0.5" max="10"
                         step="0.5" inputmode="decimal" dir="ltr">
                     <mat-hint>ساعت هر کلاس را وارد کنید</mat-hint>
                 </mat-form-field>
                 <div class="field-error" *ngIf="showErr(HoursePerClassCtrl)">
                     <span *ngIf="HoursePerClassCtrl.hasError('required')">فرم رو پرکنید</span>
-                    <span *ngIf="HoursePerClassCtrl.hasError('pattern')">فقط اعداد ۱ تا ۴ با گام ۰٫۵ مجاز است</span>
-                    <span *ngIf="HoursePerClassCtrl.hasError('min')">حداقل ۱ ساعت</span>
-                    <span *ngIf="HoursePerClassCtrl.hasError('max')">حداکثر ۴ ساعت</span>
+                    <span *ngIf="HoursePerClassCtrl.hasError('pattern')">فقط اعداد ۰,۵ تا ۱۰ با گام ۰,۵ مجاز است</span>
+                    <span *ngIf="HoursePerClassCtrl.hasError('min')">حداقل ۰,۵ ساعت</span>
+                    <span *ngIf="HoursePerClassCtrl.hasError('max')">حداکثر ۱۰ ساعت</span>
                 </div>
             </div>
 

@@ -60,7 +60,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         PaginationHeader paginationHeader = new(
             CurrentPage: pagedAppUsers.CurrentPage,
             ItemsPerPage: pagedAppUsers.PageSize,
-            TotalItems: pagedAppUsers.TotalItems,
+            TotalItems: pagedAppUsers.TotalItemsCount,
             TotalPages: pagedAppUsers.TotalPages
         );
 
@@ -128,7 +128,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
     public async Task<IActionResult> UpdateEnrolledCourse(
         [FromBody] UpdateEnrolledDto updateEnrolledDto, string targetUserName,
         // [AllowedFileExtensions, FileSize(500 * 500, 2000 * 2000)]
-        // IFormFile? file, 
+        // IFormFile? file,
         CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(targetUserName))
@@ -324,7 +324,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         PaginationHeader paginationHeader = new(
             CurrentPage: pagedAttendences.CurrentPage,
             ItemsPerPage: pagedAttendences.PageSize,
-            TotalItems: pagedAttendences.TotalItems,
+            TotalItems: pagedAttendences.TotalItemsCount,
             TotalPages: pagedAttendences.TotalPages
         );
 

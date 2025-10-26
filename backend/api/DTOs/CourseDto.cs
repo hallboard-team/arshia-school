@@ -5,14 +5,13 @@ public record AddCourseDto(
      MaxLength(30, ErrorMessage = "عنوان حداکثر ۳۰ کاراکتر است")]
     string Title,
 
-    [Required, Range(1_000_000, int.MaxValue, ErrorMessage = "کمترین مبلغ ۱,۰۰۰,۰۰۰ است"),
-     MultipleOfMillion(ErrorMessage = "مبلغ باید مضربی از ۱,۰۰۰,۰۰۰ باشد و کمتر از ۱,۰۰۰,۰۰۰ نیست.")]
+    [Required, Range(10_000, 100_000_000, ErrorMessage = "مبلغ باید بین ۱۰,۰۰۰ تومن و ۱۰۰,۰۰۰,۰۰۰ تومن باشد."),]
     int Tuition,
 
-    [Required, Range(1, 500, ErrorMessage = "ساعت دوره باید بین ۱ تا ۵۰۰ باشد")]
+    [Required, Range(0.5, 20000, ErrorMessage = "ساعت دوره باید بین ۰٫۵ ساعت تا ۲۰,۰۰۰ ساعت باشد")]
     int Hours,
 
-    [Required, HalfStepRange(1, 4, ErrorMessage = "ساعت هر کلاس باید بین ۱ تا ۴ و مضربی از ۰٫۵ باشد.")]
+    [Required, HalfStepRange(0.5, 10, ErrorMessage = "ساعت هر کلاس باید بین ۰,۵ تا ۱۰ ساعت باشد.")]
     double HoursPerClass,
 
     [Required, StartDateNotBeforeToday(ErrorMessage = "تاریخ شروع نمی‌تواند قبل از امروز باشد.")]
@@ -39,14 +38,13 @@ public class UpdateCourseDto
      MaxLength(30, ErrorMessage = "عنوان حداکثر ۳۰ کاراکتر است")]
     public string Title { get; init; } = string.Empty;
 
-    [Required, Range(1_000_000, int.MaxValue, ErrorMessage = "کمترین مبلغ ۱,۰۰۰,۰۰۰ است"),
-     MultipleOfMillion(ErrorMessage = "مبلغ باید مضربی از ۱,۰۰۰,۰۰۰ باشد و کمتر از ۱,۰۰۰,۰۰۰ نیست.")]
+    [Required, Range(10_000, 100_000_000, ErrorMessage = "مبلغ باید بین ۱۰,۰۰۰ تومن و ۱۰۰,۰۰۰,۰۰۰ تومن باشد."),]
     public int Tuition { get; init; }
 
-    [Required, Range(1, 500, ErrorMessage = "ساعت دوره باید بین ۱ تا ۵۰۰ باشد")]
+    [Required, Range(0.5, 20000, ErrorMessage = "ساعت دوره باید بین ۰٫۵ ساعت تا ۲۰,۰۰۰ ساعت باشد")]
     public int Hours { get; init; }
 
-    [Required, HalfStepRange(1, 4, ErrorMessage = "ساعت هر کلاس باید بین ۱ تا ۴ و مضربی از ۰٫۵ باشد.")]
+    [Required, HalfStepRange(0.5, 10, ErrorMessage = "ساعت هر کلاس باید بین ۰,۵ تا ۱۰ ساعت باشد.")]
     public double HoursPerClass { get; init; }
 
     [Required, StartDateNotBeforeToday(ErrorMessage = "تاریخ شروع نمی‌تواند قبل از امروز باشد.")]

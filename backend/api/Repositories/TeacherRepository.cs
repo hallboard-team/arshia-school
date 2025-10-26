@@ -125,7 +125,7 @@ public class TeacherRepository : ITeacherRepository
         if (userId is null)
             return null;
 
-        IMongoQueryable<AppUser> query = _collectionAppUser.AsQueryable()
+        IQueryable<AppUser> query = _collectionAppUser.AsQueryable()
             .Where(user => user.EnrolledCourses.Any(course => course.CourseTitle == targetTitle.ToUpper() && user.Id != userId));
 
         return await PagedList<AppUser>.CreatePagedListAsync(query, paginationParams.PageNumber, paginationParams.PageSize, cancellationToken);

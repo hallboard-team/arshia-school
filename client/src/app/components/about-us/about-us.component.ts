@@ -11,16 +11,16 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
-    selector: 'app-about-us',
-    imports: [
-        NavbarComponent, MatTabsModule, MatDatepickerModule,
-        MatInputModule, MatFormFieldModule, MatIconModule,
-        MatExpansionModule, MatButtonModule, RouterModule
-    ],
-    templateUrl: './about-us.component.html',
-    styleUrl: './about-us.component.scss',
-    providers: [provideNativeDateAdapter()],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-about-us',
+  imports: [
+    NavbarComponent, MatTabsModule, MatDatepickerModule,
+    MatInputModule, MatFormFieldModule, MatIconModule,
+    MatExpansionModule, MatButtonModule, RouterModule
+  ],
+  templateUrl: './about-us.component.html',
+  styleUrl: './about-us.component.scss',
+  providers: [provideNativeDateAdapter()],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AboutUsComponent {
   accordion = viewChild.required(MatAccordion);
@@ -38,4 +38,4 @@ export class AboutUsComponent {
   prevStep() {
     this.step.update(i => i - 1);
   }
-}
+} 

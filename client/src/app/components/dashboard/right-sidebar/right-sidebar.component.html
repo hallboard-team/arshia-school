@@ -1,0 +1,68 @@
+<nav class="sidebar">
+    <div class="div-logo">
+        <img [routerLink]="['/']" src="../assets/images/logo-education.png" alt="Tolou Fanavari">
+    </div>
+
+    <div class="div-description-of-user">
+        <div class="items">
+            <span>نام: </span>
+            <span>{{loggedInUserSig && loggedInUserSig()?.name}}</span>
+        </div>
+
+        <div class="items">
+            <span>نام کاربری:</span>
+            <span>{{loggedInUserSig && loggedInUserSig()?.userName}}</span>
+        </div>
+
+        <div class="items">
+            <span>ایمیل:</span>
+            <span>{{loggedInUserSig && loggedInUserSig()?.email}}</span>
+        </div>
+    </div>
+
+    <ul>
+        <li routerLinkActive="active">
+            <a [routerLink]="['/dashboard/profile']">پروفایل</a>
+        </li>
+
+        @if (loggedInUserSig && loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
+        loggedInUserSig()?.roles?.includes('manager')) {
+        <li routerLinkActive="active">
+            <a [routerLink]="['/dashboard/manager-panel']">پنل مدیر</a>
+        </li>
+        }
+
+        @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
+        <li routerLinkActive="active">
+            <a [routerLink]="['/dashboard/members']">کاربران</a>
+        </li>
+        }
+
+        @if (loggedInUserSig && loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
+        loggedInUserSig()?.roles?.includes('teacher')) {
+        <li routerLinkActive="active">
+            <a [routerLink]="['/dashboard/teacher-panel']">پنل معلم</a>
+        </li>
+        }
+
+        <li routerLinkActive="active">
+            <a [routerLink]="['/dashboard/courses']">دوره ها</a>
+        </li>
+
+        <li routerLinkActive="active">
+            <a [routerLink]="['/dashboard/about']">درباره ما</a>
+        </li>
+
+        <li routerLinkActive="active">
+            <a [routerLink]="['/dashboard/contact-us']">تماس با ما</a>
+        </li>
+    </ul>
+
+    <div class="div-btn-log-out">
+        <span class="desc">شما وارد حساب کاربری شده اید میخواهید خارج بشید؟</span>
+        <button class="exit" (click)="logout()">
+            <span class="circle" aria-hidden="true"><span class="icon arrow"></span></span>
+            <span class="button-text">خروج</span>
+        </button>
+    </div>
+</nav>
