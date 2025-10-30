@@ -53,12 +53,6 @@
           "ZstdSharp.Port": "0.7.3"
         }
       },
-      "PersianDateTime": {
-        "type": "Direct",
-        "requested": "[1.1.5082.36395, )",
-        "resolved": "1.1.5082.36395",
-        "contentHash": "rglVEiB5XXVpTuEH6XqM4U8z21pRKiX1KZcxfRVtLir46Rxt8NHWqw1Qdbphzy5k3dTOI3JQDsbrd7RIDaZg2w=="
-      },
       "Swashbuckle.AspNetCore.SwaggerUI": {
         "type": "Direct",
         "requested": "[9.0.6, )",

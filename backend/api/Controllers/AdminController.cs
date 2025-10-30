@@ -7,14 +7,16 @@ public class AdminController(IAdminRepository _adminRepository) : BaseApiControl
     public async Task<ActionResult<LoggedInDto>> Create(RegisterDto adminInput, CancellationToken cancellationToken)
     {
         if (adminInput.Password != adminInput.ConfirmPassword)
-            return BadRequest("پسوردها درست نیستند");
+            return BadRequest("رمز عبور و تکرار آن یکسان نیست.");
 
         LoggedInDto? loggedInDto = await _adminRepository.CreateAsync(adminInput, cancellationToken);
 
-        return !string.IsNullOrEmpty(loggedInDto.Token)
-            ? Ok(loggedInDto)
-            : loggedInDto.Errors.Count != 0
-            ? BadRequest(loggedInDto.Errors)
-            : BadRequest("Registration has failed. Try again or contact the support.");
+        return loggedInDto switch
+        {
+            null => BadRequest("ثبت‌نام انجام نشد. لطفاً دوباره تلاش کنید یا با پشتیبانی تماس بگیرید."),
+            { Token: not null and not "" } => Ok(loggedInDto),
+            { Errors.Count: > 0 } => BadRequest(loggedInDto.Errors),
+            _ => BadRequest("ثبت‌نام انجام نشد. لطفاً دوباره تلاش کنید یا با پشتیبانی تماس بگیرید.")
+        };
     }
 }

@@ -47,10 +47,10 @@ public static class Mappers
     public static MemberDto ConvertAppUserToMemberDto(AppUser appUser, bool isAbsent)
     {
         return new MemberDto(
-            Email: appUser.Email,
-            UserName: appUser.NormalizedUserName!,
-            Name: appUser.Name,
-            LastName: appUser.LastName,
+            Email: appUser.Email ?? string.Empty,
+            UserName: appUser.NormalizedUserName ?? string.Empty,
+            Name: appUser.Name ?? string.Empty,
+            LastName: appUser.LastName ?? string.Empty,
             PhoneNum: appUser.PhoneNum,
             Gender: appUser.Gender,
             Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth),
@@ -62,10 +62,10 @@ public static class Mappers
     public static TargetMemberDto ConvertAppUserToTargetMemberDto(AppUser appUser)
     {
         return new TargetMemberDto(
-            Email: appUser.Email,
-            UserName: appUser.NormalizedUserName!,
-            Name: appUser.Name,
-            LastName: appUser.LastName,
+            Email: appUser.Email ?? string.Empty,
+            UserName: appUser.NormalizedUserName ?? string.Empty,
+            Name: appUser.Name ?? string.Empty,
+            LastName: appUser.LastName ?? string.Empty,
             PhoneNum: appUser.PhoneNum,
             Gender: appUser.Gender,
             Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth),
@@ -88,10 +88,10 @@ public static class Mappers
     public static ProfileDto ConvertAppUserToProfileDto(AppUser appUser)
     {
         return new ProfileDto(
-            Email: appUser.Email,
-            UserName: appUser.NormalizedUserName!,
-            Name: appUser.Name,
-            LastName: appUser.LastName,
+            Email: appUser.Email ?? string.Empty,
+            UserName: appUser.NormalizedUserName ?? string.Empty,
+            Name: appUser.Name ?? string.Empty,
+            LastName: appUser.LastName ?? string.Empty,
             PhoneNum: appUser.PhoneNum,
             Gender: appUser.Gender,
             Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth)
