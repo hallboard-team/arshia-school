@@ -51,8 +51,8 @@ public class CourseController(ICourseRepository _courseRepository) : BaseApiCont
                 ProfessorUserNames = professorUserNames,
                 ProfessorNames = professorNames,
                 Tuition = course.Tuition,
-                Hours = course.Hours,
-                HoursPerClass = course.HoursPerClass,
+                Hours = course.TotalMinutes / 60d,
+                HoursPerClass = course.ClassMinutes / 60d,
                 Days = course.Days,
                 Start = course.Start,
                 IsStarted = course.IsStarted

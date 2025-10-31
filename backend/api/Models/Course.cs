@@ -6,11 +6,11 @@ public record Course(
     string Title,
     List<ObjectId> ProfessorsIds,
     int Tuition,
-    int Hours,
-    Double HoursPerClass,
+    int TotalMinutes,
+    int ClassMinutes,
     int Days,
     DateTime Start,
-    string IsStarted
+    bool IsStarted
 );
 
 public record EnrolledCourse(
