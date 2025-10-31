@@ -44,9 +44,9 @@ export class CourseCreateComponent {
   courseFg = this.fb.group({
     titleCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
     tuitionCtrl: ['', [Validators.required, Validators.min(10_000), Validators.max(100_000_000),]],
-    hourseCtrl: ['', [Validators.required, Validators.pattern(/^\d+$/), Validators.min(1), Validators.max(500)]],
+    hourseCtrl: ['', [Validators.required, Validators.pattern(/^(0(\.\d+)?|[1-9]\d*(\.\d+)?)$/), Validators.min(0.5), Validators.max(20000)]],
     hoursePerClassCtrl: ['', [Validators.required, Validators.min(0.5), Validators.max(10),
-    Validators.pattern(/^(?:0\.5|[1-9](?:\.5)?|10)$/),
+    Validators.pattern(/^(?:0\.5|[1-9](?:\.5)?|10)$/), 
     ]],
     startCtrl: ['', [Validators.required]]
   });
