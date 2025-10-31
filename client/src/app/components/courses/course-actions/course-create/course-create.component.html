@@ -71,13 +71,13 @@
                     <mat-label>ساعت هر کلاس</mat-label>
                     <input class="input" type="number" formControlName="hoursePerClassCtrl" matInput min="0.5" max="10"
                         step="0.5" inputmode="decimal" dir="ltr">
-                    <mat-hint>ساعت هر کلاس را وارد کنید</mat-hint>
+                    <mat-hint *ngIf="!showErr(HoursePerClassCtrl)">ساعت هر کلاس را وارد کنید</mat-hint>
                 </mat-form-field>
                 <div class="field-error" *ngIf="showErr(HoursePerClassCtrl)">
                     <span *ngIf="HoursePerClassCtrl.hasError('required')">فرم رو پرکنید</span>
                     <span *ngIf="HoursePerClassCtrl.hasError('pattern')">فقط اعداد ۰,۵ تا ۱۰ با گام ۰,۵ مجاز است</span>
-                    <span *ngIf="HoursePerClassCtrl.hasError('min')">حداقل ۰,۵ ساعت</span>
-                    <span *ngIf="HoursePerClassCtrl.hasError('max')">حداکثر ۱۰ ساعت</span>
+                    <span *ngIf="HoursePerClassCtrl.hasError('min')">حداقل زمان کلاس: نیم ساعت</span>
+                    <span *ngIf="HoursePerClassCtrl.hasError('max')">حداکثر زمان کلاس: ۱۰ ساعت</span>
                 </div>
             </div>
 
