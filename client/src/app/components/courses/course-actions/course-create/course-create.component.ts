@@ -7,7 +7,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { HttpClient } from '@angular/common/http';
-import { AutoFocusDirective } from '../../../../directives/auto-focus.directive';
 import { CurrencyFormatterDirective } from '../../../../directives/currency-formatter.directive';
 import { NavbarComponent } from '../../../navbar/navbar.component';
 import { AddCourse } from '../../../../models/course.model';
@@ -22,7 +21,7 @@ import { DecimalFormatterDirective } from '../../../../directives/decimal-format
     CommonModule, FormsModule,
     ReactiveFormsModule, MatFormFieldModule, MatInputModule,
     MatButtonModule, MatSnackBarModule,
-    AutoFocusDirective, DatepickerComponent,
+    DatepickerComponent,
     MatIconModule, NavbarComponent, CurrencyFormatterDirective,
     DecimalFormatterDirective
   ],

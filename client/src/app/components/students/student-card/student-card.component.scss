@@ -1,3 +1,5 @@
+@use "sass:color";
+
 $bg-color: #e0e5ec;
 $shadow-light: #ffffff;
 $shadow-dark: #b8c6db;
@@ -45,7 +47,8 @@ $red: #e74c3c;
         border-radius: 36px;
         cursor: pointer;
         background: #e0e0e0;
-        box-shadow: inset 5px 5px 10px #c3c3c3,
+        box-shadow:
+            inset 5px 5px 10px #c3c3c3,
             inset -5px -5px 10px #fdfdfd;
     }
 
@@ -71,7 +74,12 @@ $red: #e74c3c;
         width: 26px;
         height: 26px;
         transform: translateY(-50%) translateX(-50%);
-        transition: left 0.15s ease-in-out, background-color 0.2s ease-out, width 0.15s ease-in-out, height 0.15s ease-in-out, opacity 0.15s ease-in-out;
+        transition:
+            left 0.15s ease-in-out,
+            background-color 0.2s ease-out,
+            width 0.15s ease-in-out,
+            height 0.15s ease-in-out,
+            opacity 0.15s ease-in-out;
     }
 
     .toggler input:checked+label::after,
@@ -141,7 +149,9 @@ $red: #e74c3c;
         margin: 20px auto;
         padding: 15px;
         border-radius: 15px;
-        box-shadow: 6px 6px 12px $shadow-dark, -6px -6px 12px $shadow-light;
+        box-shadow:
+            6px 6px 12px $shadow-dark,
+            -6px -6px 12px $shadow-light;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -150,7 +160,9 @@ $red: #e74c3c;
         transition: all 0.3s ease-in-out;
 
         &.expanded {
-            box-shadow: inset 6px 6px 12px $shadow-dark, inset -6px -6px 12px $shadow-light;
+            box-shadow:
+                inset 6px 6px 12px $shadow-dark,
+                inset -6px -6px 12px $shadow-light;
 
             .student-details {
                 max-height: 250px;
@@ -170,7 +182,9 @@ $red: #e74c3c;
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            box-shadow: 3px 3px 6px $shadow-dark, -3px -3px 6px $shadow-light;
+            box-shadow:
+                3px 3px 6px $shadow-dark,
+                -3px -3px 6px $shadow-light;
         }
 
         .student-info {
@@ -193,7 +207,8 @@ $red: #e74c3c;
 
         .student-age {
             font-size: 14px;
-            color: darken($text-color, 10%);
+            /* was: darken($text-color, 10%) */
+            color: color.adjust($text-color, $lightness: -10%);
         }
 
         .student-details {
@@ -201,7 +216,9 @@ $red: #e74c3c;
             max-height: 0;
             opacity: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            transition:
+                max-height 0.3s ease-in-out,
+                opacity 0.3s ease-in-out;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -219,7 +236,8 @@ $red: #e74c3c;
         .student-phone {
             direction: rtl;
             font-size: 14px;
-            color: lighten($text-color, 10%);
+            /* was: lighten($text-color, 10%) */
+            color: color.adjust($text-color, $lightness: 10%);
         }
 
         .attendance-section {
@@ -238,11 +256,15 @@ $red: #e74c3c;
                     border-radius: 10px;
                     font-size: 14px;
                     cursor: pointer;
-                    box-shadow: 4px 4px 8px $shadow-dark, -4px -4px 8px $shadow-light;
+                    box-shadow:
+                        4px 4px 8px $shadow-dark,
+                        -4px -4px 8px $shadow-light;
                     transition: all 0.2s ease-in-out;
 
                     &:active {
-                        box-shadow: inset 4px 4px 8px $shadow-dark, inset -4px -4px 8px $shadow-light;
+                        box-shadow:
+                            inset 4px 4px 8px $shadow-dark,
+                            inset -4px -4px 8px $shadow-light;
                     }
                 }
 
@@ -278,7 +300,9 @@ $red: #e74c3c;
                     padding: 5px;
                     border-radius: 10px;
                     margin-bottom: 5px;
-                    box-shadow: inset 2px 2px 5px $shadow-dark, inset -2px -2px 5px $shadow-light;
+                    box-shadow:
+                        inset 2px 2px 5px $shadow-dark,
+                        inset -2px -2px 5px $shadow-light;
                     font-size: 14px;
                 }
             }
@@ -286,12 +310,12 @@ $red: #e74c3c;
     }
 }
 
-
 .card-classmate {
     padding: 1.5rem;
     border-radius: 10px;
     background: linear-gradient(315deg, #f0f0f0, #cacaca);
-    box-shadow: -5px -5px 10px #afafaf,
+    box-shadow:
+        -5px -5px 10px #afafaf,
         5px 5px 10px #ffffff;
     display: flex;
     flex-direction: column;

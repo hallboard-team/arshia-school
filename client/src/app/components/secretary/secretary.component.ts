@@ -9,7 +9,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
-import { AutoFocusDirective } from '../../directives/auto-focus.directive';
 
 @Component({
     selector: 'app-secretary',
@@ -17,7 +16,7 @@ import { AutoFocusDirective } from '../../directives/auto-focus.directive';
         MatTabsModule, CommonModule, FormsModule,
         ReactiveFormsModule, MatFormFieldModule, MatInputModule,
         MatButtonModule, MatSnackBarModule, MatRadioModule,
-        MatDatepickerModule, MatNativeDateModule, AutoFocusDirective
+        MatDatepickerModule, MatNativeDateModule
     ],
     templateUrl: './secretary.component.html',
     styleUrl: './secretary.component.scss'
