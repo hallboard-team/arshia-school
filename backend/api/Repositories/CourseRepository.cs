@@ -3,8 +3,8 @@ namespace api.Repositories;
 public class CourseRepository : ICourseRepository
 {
     #region Vars and Constructor
-    private readonly IMongoCollection<Course>? _collectionCourse;
-    private readonly IMongoCollection<AppUser>? _collectionAppUser;
+    private readonly IMongoCollection<Course> _collectionCourse;
+    private readonly IMongoCollection<AppUser> _collectionAppUser;
     private readonly IMongoClient _client;
 
     public CourseRepository(IMongoClient client, ITokenService tokenService, IMyMongoDbSettings dbSettings)
@@ -23,19 +23,9 @@ public class CourseRepository : ICourseRepository
 
         Course? course = Mappers.ConvertAddCourseDtoToCourse(managerInput, calcDays);
 
-        if (_collectionCourse is not null)
-        {
-            await _collectionCourse.InsertOneAsync(course, null, cancellationToken);
-        }
+        await _collectionCourse.InsertOneAsync(course, cancellationToken: cancellationToken);
 
-        if (ObjectId.Equals != null)
-        {
-            ShowCourseDto showCourseDto = Mappers.ConvertCourseToShowCourseDto(course);
-
-            return showCourseDto;
-        }
-
-        return null;
+        return Mappers.ConvertCourseToShowCourseDto(course);
     }
 
     public async Task<PagedList<Course>> GetAllAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
@@ -45,16 +35,23 @@ public class CourseRepository : ICourseRepository
             paginationParams.PageSize, cancellationToken);
     }
 
-    public async Task<List<string?>> GetProfessorUserNamesByIdsAsync(List<ObjectId> professorIds, CancellationToken cancellationToken)
+    public async Task<List<string>> GetProfessorUserNamesByIdsAsync(List<ObjectId> professorIds, CancellationToken cancellationToken)
     {
-        List<AppUser> professorUserNames = await _collectionAppUser
-            .Find(professor => professorIds.Contains(professor.Id))
+        if (professorIds == null || professorIds.Count == 0)
+            return new List<string>();
+
+        List<string> usernames = await _collectionAppUser
+            .Find(p => professorIds.Contains(p.Id))
+            .Project(p => p.NormalizedUserName ?? string.Empty)
             .ToListAsync(cancellationToken);
 
-        return professorUserNames.Select(p => p.NormalizedUserName).ToList();
+        return usernames
+            .Where(u => !string.IsNullOrWhiteSpace(u))
+            .Select(u => u.Trim())
+            .ToList();
     }
 
-    public async Task<List<string?>> GetProfessorNamesByIdsAsync(List<ObjectId> professorIds, CancellationToken cancellationToken)
+    public async Task<List<string>> GetProfessorNamesByIdsAsync(List<ObjectId> professorIds, CancellationToken cancellationToken)
     {
         List<AppUser> professors = await _collectionAppUser
             .Find(professor => professorIds.Contains(professor.Id))
@@ -139,15 +136,21 @@ public class CourseRepository : ICourseRepository
 
     public async Task<ShowCourseDto?> GetCourseByTitleAsync(string courseTitle, CancellationToken cancellationToken)
     {
-        var course = await _collectionCourse
+        Course? course = await _collectionCourse
             .Find(c => c.Title == courseTitle.ToUpper())
             .FirstOrDefaultAsync(cancellationToken);
 
-        var professorIds = course.ProfessorsIds;
-        var professorUserNames = await _collectionAppUser
-            .Find(doc => professorIds.Contains(doc.Id))
-            .Project(doc => doc.NormalizedUserName)
+        if (course is null) return null;
+
+        List<string> professorUserNames = await _collectionAppUser
+            .Find(doc => course.ProfessorsIds.Contains(doc.Id))
+            .Project(doc => doc.NormalizedUserName ?? string.Empty)
             .ToListAsync(cancellationToken);
+
+        List<string> safeUserNames = professorUserNames
+            .Where(u => !string.IsNullOrWhiteSpace(u))
+            .Select(u => u!)
+            .ToList();
 
         return new ShowCourseDto
         {
@@ -157,7 +160,7 @@ public class CourseRepository : ICourseRepository
             HoursPerClass = course.HoursPerClass,
             Start = course.Start,
             IsStarted = course.IsStarted,
-            ProfessorUserNames = professorUserNames
+            ProfessorUserNames = safeUserNames
         };
     }
 }

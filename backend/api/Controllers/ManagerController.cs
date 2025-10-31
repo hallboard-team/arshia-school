@@ -26,9 +26,14 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         if (managerInput.Password != managerInput.ConfirmPassword)
             return BadRequest("رمز عبور و تکرار آن یکسان نیست.");
 
-        RegisteredUserDto dto = await _managerRepository.CreateStudentAsync(managerInput, cancellationToken);
+        RegisteredUserDto? dto = await _managerRepository.CreateStudentAsync(managerInput, cancellationToken);
 
-        if (dto.Errors.Count > 0) return BadRequest(dto.Errors);
+        if (dto is null)
+            return BadRequest("خطا در ثبت‌نام دانش‌آموز.");
+
+        if (dto.Errors.Count > 0)
+            return BadRequest(dto.Errors);
+
         return Ok(dto);
     }
 
@@ -250,12 +255,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
 
         List<Course>? courses = await _managerRepository.GetTargetMemberCourseAsync(targetUserName, cancellationToken);
 
-        if (courses is null || !courses.Any())
-        {
-            new List<Course>();
-        }
-
-        return Ok(courses);
+        return Ok(courses ?? new List<Course>());
     }
 
     [HttpGet("get-target-member-enrolled-course/{targetUserName}/{courseTitle}")]
@@ -295,12 +295,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
 
         List<string> courseTitles = await _managerRepository.GetTargetCourseTitleAsync(targetUserName, cancellationToken);
 
-        if (courseTitles is null || !courseTitles.Any())
-        {
-            new List<string>();
-        }
-
-        return courseTitles;
+        return Ok(courseTitles ?? new List<string>());
     }
 
     [HttpGet("get-target-member-attendences/{targetMemberUserName}/{targetCourseTitle}")]

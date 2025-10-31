@@ -36,12 +36,12 @@ public class CourseController(ICourseRepository _courseRepository) : BaseApiCont
 
         List<ShowCourseDto> showCourseDtos = [];
 
-        foreach (Course course in pagedCourses)
+        foreach (var course in pagedCourses)
         {
-            List<string?> professorUserNames = await _courseRepository
+            List<string> professorUserNames = await _courseRepository
                 .GetProfessorUserNamesByIdsAsync(course.ProfessorsIds, cancellationToken);
 
-            List<string?> professorNames = await _courseRepository
+            List<string> professorNames = await _courseRepository
                 .GetProfessorNamesByIdsAsync(course.ProfessorsIds, cancellationToken);
 
             showCourseDtos.Add(new ShowCourseDto
