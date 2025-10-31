@@ -6,7 +6,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { AutoFocusDirective } from '../../../../directives/auto-focus.directive';
 import { ManagerService } from '../../../../services/manager.service';
 import { RegisterUser } from '../../../../models/register-user.model';
 import { MatIconModule } from "@angular/material/icon";
@@ -19,7 +18,7 @@ import { DatepickerComponent } from '../../../../datepicker/datepicker.component
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule,
     MatFormFieldModule, MatInputModule, MatButtonModule,
-    MatSnackBarModule, MatRadioModule, AutoFocusDirective,
+    MatSnackBarModule, MatRadioModule,
     MatIconModule, DatepickerComponent
   ],
   templateUrl: './register-student.component.html',

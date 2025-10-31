@@ -5,10 +5,8 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { LoggedInUser } from '../../../models/logged-in-user.model';
 import { Router } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { AutoFocusDirective } from '../../../directives/auto-focus.directive';
 import { AccountService } from '../../../services/account.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NavbarComponent } from '../../navbar/navbar.component';
@@ -19,7 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule,
     MatFormFieldModule, MatInputModule, MatButtonModule,
-    MatSnackBarModule, AutoFocusDirective, MatTabsModule,
+    MatSnackBarModule, MatTabsModule,
     NavbarComponent, MatIconModule
   ],
   templateUrl: './login.component.html',
