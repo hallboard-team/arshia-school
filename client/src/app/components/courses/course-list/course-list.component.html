@@ -6,6 +6,8 @@
     </header>
 
     <div class="div-title-course">
+        <app-back-forward-button class="bf-btns"></app-back-forward-button>
+
         <span>دوره های آموزشگاه</span>
     </div>
     @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {

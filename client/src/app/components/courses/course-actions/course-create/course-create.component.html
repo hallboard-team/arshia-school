@@ -5,6 +5,8 @@
 </header>
 
 <div class="background">
+    <app-back-forward-button class="bf-btns"></app-back-forward-button>
+
     <form class="course-form" [formGroup]="courseFg" (ngSubmit)="courseFg.valid && createCourse()">
         <div class="content">
 

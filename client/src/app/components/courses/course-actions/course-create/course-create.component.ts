@@ -14,6 +14,7 @@ import { CourseService } from '../../../../services/course.service';
 import moment, { Moment } from 'moment-jalaali';
 import { DatepickerComponent } from '../../../../datepicker/datepicker.component';
 import { DecimalFormatterDirective } from '../../../../directives/decimal-formatter.directive';
+import { BackForwardButtonComponent } from "../../../back-forward-button/back-forward-button.component";
 
 @Component({
   selector: 'app-add-course',
@@ -23,7 +24,8 @@ import { DecimalFormatterDirective } from '../../../../directives/decimal-format
     MatButtonModule, MatSnackBarModule,
     DatepickerComponent,
     MatIconModule, NavbarComponent, CurrencyFormatterDirective,
-    DecimalFormatterDirective
+    DecimalFormatterDirective,
+    BackForwardButtonComponent
   ],
   templateUrl: './course-create.component.html',
   styleUrl: './course-create.component.scss'

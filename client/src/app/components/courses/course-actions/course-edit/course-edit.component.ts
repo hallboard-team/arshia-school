@@ -19,6 +19,7 @@ import { ManagerService } from '../../../../services/manager.service';
 import { NavbarComponent } from '../../../navbar/navbar.component';
 import moment, { Moment } from 'moment-jalaali';
 import { DatepickerComponent } from '../../../../datepicker/datepicker.component';
+import { BackForwardButtonComponent } from "../../../back-forward-button/back-forward-button.component";
 
 @Component({
   selector: 'app-course-update',
@@ -27,7 +28,8 @@ import { DatepickerComponent } from '../../../../datepicker/datepicker.component
     ReactiveFormsModule, MatRadioModule, MatIconModule,
     MatCardModule, MatFormFieldModule, MatInputModule,
     MatButtonModule, CurrencyFormatterDirective, MatProgressSpinnerModule,
-    DatepickerComponent
+    DatepickerComponent,
+    BackForwardButtonComponent
   ],
   templateUrl: './course-edit.component.html',
   styleUrl: './course-edit.component.scss'

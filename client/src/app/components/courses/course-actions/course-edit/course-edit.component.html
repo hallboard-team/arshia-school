@@ -5,6 +5,8 @@
 </header>
 
 <div class="div-edit-course">
+    <app-back-forward-button class="bf-btns"></app-back-forward-button>
+
     <form class="update-course-form" [formGroup]="courseFg" (ngSubmit)="courseFg.valid && updateCourse()">
 
         <div class="div-title">
