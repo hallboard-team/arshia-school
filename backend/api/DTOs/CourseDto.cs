@@ -9,7 +9,7 @@ public record AddCourseDto(
     int Tuition,
 
     [Required, Range(0.5, 20000, ErrorMessage = "ساعت دوره باید بین ۰٫۵ ساعت تا ۲۰,۰۰۰ ساعت باشد")]
-    int Hours,
+    double Hours,
 
     [Required, HalfStepRange(0.5, 10, ErrorMessage = "ساعت هر کلاس باید بین ۰,۵ تا ۱۰ ساعت باشد.")]
     double HoursPerClass,
@@ -25,11 +25,11 @@ public class ShowCourseDto
     public List<string> ProfessorUserNames { get; init; } = new();
     public List<string> ProfessorNames { get; init; } = new();
     public int Tuition { get; init; }
-    public int Hours { get; init; }
+    public double Hours { get; init; }
     public double HoursPerClass { get; init; }
     public int Days { get; init; }
     public DateTime Start { get; init; }
-    public string IsStarted { get; init; } = string.Empty;
+    public bool IsStarted { get; init; }
 };
 
 public class UpdateCourseDto
@@ -42,7 +42,7 @@ public class UpdateCourseDto
     public int Tuition { get; init; }
 
     [Required, Range(0.5, 20000, ErrorMessage = "ساعت دوره باید بین ۰٫۵ ساعت تا ۲۰,۰۰۰ ساعت باشد")]
-    public int Hours { get; init; }
+    public double Hours { get; init; }
 
     [Required, HalfStepRange(0.5, 10, ErrorMessage = "ساعت هر کلاس باید بین ۰,۵ تا ۱۰ ساعت باشد.")]
     public double HoursPerClass { get; init; }
@@ -50,5 +50,5 @@ public class UpdateCourseDto
     [Required, StartDateNotBeforeToday(ErrorMessage = "تاریخ شروع نمی‌تواند قبل از امروز باشد.")]
     public DateTime Start { get; init; }
 
-    public string IsStarted { get; init; } = string.Empty;
+    public bool IsStarted { get; init; }
 }

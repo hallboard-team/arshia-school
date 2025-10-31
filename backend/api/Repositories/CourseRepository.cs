@@ -19,7 +19,12 @@ public class CourseRepository : ICourseRepository
 
     public async Task<ShowCourseDto> AddCourseAsync(AddCourseDto managerInput, CancellationToken cancellationToken)
     {
-        int calcDays = (int)Math.Ceiling(managerInput.Hours / managerInput.HoursPerClass);
+        int totalMinutes = (int)Math.Round(managerInput.Hours * 60d);
+        int classMinutes = (int)Math.Round(managerInput.HoursPerClass * 60d);
+
+        if (classMinutes <= 0) throw new ArgumentOutOfRangeException(nameof(classMinutes));
+
+        int calcDays = (int)Math.Ceiling((double)totalMinutes / classMinutes);
 
         Course? course = Mappers.ConvertAddCourseDtoToCourse(managerInput, calcDays);
 
@@ -64,13 +69,17 @@ public class CourseRepository : ICourseRepository
         UpdateCourseDto updateCourseDto, string targetCourseTitle,
         CancellationToken cancellationToken)
     {
-        int? calcDays = (int)Math.Ceiling(updateCourseDto.Hours / updateCourseDto.HoursPerClass);
+        int totalMinutes = (int)Math.Round(updateCourseDto.Hours * 60d);
+        int classMinutes = (int)Math.Round(updateCourseDto.HoursPerClass * 60d);
+        if (classMinutes <= 0) throw new ArgumentOutOfRangeException(nameof(updateCourseDto.HoursPerClass));
+
+        int? calcDays = (int)Math.Ceiling((double)totalMinutes / classMinutes);
 
         UpdateDefinition<Course> updatedCourse = Builders<Course>.Update
             .Set(c => c.Title, updateCourseDto.Title?.ToUpper())
             .Set(c => c.Tuition, updateCourseDto.Tuition)
-            .Set(c => c.Hours, updateCourseDto.Hours)
-            .Set(c => c.HoursPerClass, updateCourseDto.HoursPerClass)
+            .Set(c => c.TotalMinutes, totalMinutes)
+            .Set(c => c.ClassMinutes, classMinutes)
             .Set(c => c.Days, calcDays)
             .Set(c => c.Start, updateCourseDto.Start)
             .Set(c => c.IsStarted, updateCourseDto.IsStarted);
@@ -156,8 +165,8 @@ public class CourseRepository : ICourseRepository
         {
             Title = course.Title,
             Tuition = course.Tuition,
-            Hours = course.Hours,
-            HoursPerClass = course.HoursPerClass,
+            Hours = course.TotalMinutes / 60d,
+            HoursPerClass = course.ClassMinutes / 60d,
             Start = course.Start,
             IsStarted = course.IsStarted,
             ProfessorUserNames = safeUserNames
