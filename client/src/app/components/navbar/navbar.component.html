@@ -50,7 +50,15 @@
         <div class="div-btns">
             @if (loggedInUserSig && loggedInUserSig(); as user) {
             <button class="profile" (click)="toggleProfile($event)">
-                <span>{{loggedInUserSig()?.name?.charAt(0)?.toUpperCase()}}</span>
+                @if (user.roles.includes('manager')) {
+                @if (profile?.gender == 'male') {
+                <img class="default-avatar" src="../assets/images/male-profile.png" alt="">
+                }@else {
+                <img class="default-avatar" src="../assets/images/female-profile.png" alt="">
+                }
+                } @else {
+                <span>{{ user.name.charAt(0).toUpperCase() }}</span>
+                }
             </button>
             } @else {
             <button class="btn-login" routerLink="/account/login">
