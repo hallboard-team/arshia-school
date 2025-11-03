@@ -44,8 +44,8 @@ export class CourseCreateComponent {
   courseFg = this.fb.group({
     titleCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
     tuitionCtrl: ['', [Validators.required, Validators.min(10_000), Validators.max(100_000_000),]],
-    hourseCtrl: ['', [Validators.required, Validators.pattern(/^(0(\.\d+)?|[1-9]\d*(\.\d+)?)$/), Validators.min(0.5), Validators.max(20000)]],
-    hoursePerClassCtrl: ['', [Validators.required, Validators.min(0.5), Validators.max(10),
+    hoursCtrl: ['', [Validators.required, Validators.pattern(/^(0(\.\d+)?|[1-9]\d*(\.\d+)?)$/), Validators.min(0.5), Validators.max(20000)]],
+    hoursPerClassCtrl: ['', [Validators.required, Validators.min(0.5), Validators.max(10),
     Validators.pattern(/^(?:0\.5|[1-9](?:\.5)?|10)$/), 
     ]],
     startCtrl: ['', [Validators.required]]
@@ -57,11 +57,11 @@ export class CourseCreateComponent {
   get TuitionCtrl(): FormControl {
     return this.courseFg.get('tuitionCtrl') as FormControl;
   }
-  get HourseCtrl(): FormControl {
-    return this.courseFg.get('hourseCtrl') as FormControl;
+  get HoursCtrl(): FormControl {
+    return this.courseFg.get('hoursCtrl') as FormControl;
   }
-  get HoursePerClassCtrl(): FormControl {
-    return this.courseFg.get('hoursePerClassCtrl') as FormControl;
+  get HoursPerClassCtrl(): FormControl {
+    return this.courseFg.get('hoursPerClassCtrl') as FormControl;
   }
   get StartCtrl(): FormControl {
     return this.courseFg.get('startCtrl') as FormControl;
@@ -110,8 +110,8 @@ export class CourseCreateComponent {
     let addCourse: AddCourse = {
       title: this.TitleCtrl.value,
       tuition: this.TuitionCtrl.value,
-      hours: this.HourseCtrl.value,
-      hoursPerClass: this.HoursePerClassCtrl.value,
+      hours: this.HoursCtrl.value,
+      hoursPerClass: this.HoursPerClassCtrl.value,
       start: this.toGregorianDateOnly(start)
     }
 
