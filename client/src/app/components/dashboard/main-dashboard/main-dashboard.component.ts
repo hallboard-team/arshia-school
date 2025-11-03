@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { RightSidebarComponent } from '../right-sidebar/right-sidebar.component';
 import { RouterOutlet } from "@angular/router";
 
-
 @Component({
   selector: 'app-main-dashboard',
   imports: [RightSidebarComponent, RouterOutlet],
@@ -10,5 +9,9 @@ import { RouterOutlet } from "@angular/router";
   styleUrl: './main-dashboard.component.scss'
 })
 export class MainDashboardComponent {
+  sidebarCollapsed = false;
 
+  onSidebarState(v: boolean): void {
+    this.sidebarCollapsed = v;
+  }
 }
