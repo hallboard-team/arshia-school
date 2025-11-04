@@ -42,7 +42,7 @@
                 </mat-form-field>
                 <div class="field-error" *ngIf="showErr(TuitionCtrl)">
                     <span *ngIf="TuitionCtrl.hasError('required')">لطفاً مبلغ شهریه را مشخص کنید</span>
-                    <span *ngIf="TuitionCtrl.hasError('min')">حداقل شهریه ۱۰.۰۰۰ تومان است.</span>
+                    <span *ngIf="TuitionCtrl.hasError('min')">حداقل شهریه ۱۰.۰۰۰ تومان است</span>
                     <span *ngIf="TuitionCtrl.hasError('max')">حداکثر شهریه ۱۰۰.۰۰۰.۰۰۰ تومان (صد میلیون تومان)
                         است</span>
                 </div>
@@ -70,8 +70,8 @@
                 <mat-form-field appearance="outline">
                     <mat-label>ساعت هر کلاس</mat-label>
                     <input class="input" type="number" formControlName="hoursPerClassCtrl" matInput min="0.5" max="10"
-                        step="0.5" inputmode="decimal" dir="ltr">
-                    <mat-hint *ngIf="!showErr(HoursPerClassCtrl)">ساعت هر کلاس را وارد کنید</mat-hint>
+                        step="0.5" inputmode="decimal" dir="ltr" placeholder="شروع از 0.5 ساعت">
+                    <mat-hint *ngIf="!showErr(HoursPerClassCtrl)">بین ۰۰:۳۰ تا ۱۰</mat-hint>
                 </mat-form-field>
                 <div class="field-error" *ngIf="showErr(HoursPerClassCtrl)">
                     <span *ngIf="HoursPerClassCtrl.hasError('required')">لطفا ساعت هر کلاس را مشخص کنید</span>

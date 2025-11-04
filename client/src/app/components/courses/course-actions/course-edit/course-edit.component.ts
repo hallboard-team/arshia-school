@@ -19,6 +19,7 @@ import { ManagerService } from '../../../../services/manager.service';
 import { NavbarComponent } from '../../../navbar/navbar.component';
 import moment, { Moment } from 'moment-jalaali';
 import { DatepickerComponent } from '../../../../datepicker/datepicker.component';
+import { DecimalFormatterDirective } from '../../../../directives/decimal-formatter.directive';
 import { BackForwardButtonComponent } from "../../../back-forward-button/back-forward-button.component";
 
 @Component({
@@ -29,6 +30,7 @@ import { BackForwardButtonComponent } from "../../../back-forward-button/back-fo
     MatCardModule, MatFormFieldModule, MatInputModule,
     MatButtonModule, CurrencyFormatterDirective, MatProgressSpinnerModule,
     DatepickerComponent,
+    DecimalFormatterDirective,
     BackForwardButtonComponent
   ],
   templateUrl: './course-edit.component.html',
