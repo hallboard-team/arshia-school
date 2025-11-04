@@ -81,17 +81,8 @@
 
                 <div class="div-routes">
                     <button [routerLink]="['/dashboard/profile']"><span>پروفایل</span></button>
-                    @if (loggedInUserSig && loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
-                    loggedInUserSig()?.roles?.includes('manager')) {
-                    <button [routerLink]="['/dashboard/manager-panel']"><span>پنل-مدیر</span></button>
-                    }
-                    @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
-                    <button [routerLink]="['/dashboard/members']"><span>کاربران</span></button>
-                    }
-                    @if (loggedInUserSig && loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
-                    loggedInUserSig()?.roles?.includes('teacher')) {
-                    <button [routerLink]="['/dashboard/teacher-panel']"><span>پنل-معلم</span></button>
-                    }
+                    <button [routerLink]="['/dashboard/about']">درباره ما</button>
+                    <button [routerLink]="['/dashboard/contact-us']">تماس با ما</button>
                 </div>
 
                 <div class="div-btn-log-out">

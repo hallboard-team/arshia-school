@@ -4,23 +4,7 @@
         <span class="chev" [class.to-left]="collapsed()" [class.to-right]="!collapsed()"></span>
     </button>
 
-    <div class="div-logo" title="خانه">
-        <img [routerLink]="['/']" src="../assets/images/logo-education.png" alt="Tolou Fanavari" />
-    </div>
-
     <ul>
-        <li routerLinkActive="active">
-            <a [routerLink]="['/dashboard/profile']" title="پروفایل">
-                <span class="icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24">
-                        <path
-                            d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z" />
-                    </svg>
-                </span>
-                <span class="label">پروفایل</span>
-            </a>
-        </li>
-
         @if (loggedInUserSig && loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
         loggedInUserSig()?.roles?.includes('manager')) {
         <li routerLinkActive="active">
@@ -71,29 +55,6 @@
                     </svg>
                 </span>
                 <span class="label">دوره ها</span>
-            </a>
-        </li>
-
-        <li routerLinkActive="active">
-            <a [routerLink]="['/dashboard/about']" title="درباره ما">
-                <span class="icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm1 15h-2v-6h2Zm0-8h-2V7h2Z" />
-                    </svg>
-                </span>
-                <span class="label">درباره ما</span>
-            </a>
-        </li>
-
-        <li routerLinkActive="active">
-            <a [routerLink]="['/dashboard/contact-us']" title="تماس با ما">
-                <span class="icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24">
-                        <path
-                            d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.7 11.7 0 0 0 3.7.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 7a1 1 0 0 1 1-1h2.5a1 1 0 0 1 1 1 11.7 11.7 0 0 0 .6 3.7 1 1 0 0 1-.25 1Z" />
-                    </svg>
-                </span>
-                <span class="label">تماس با ما</span>
             </a>
         </li>
     </ul>
