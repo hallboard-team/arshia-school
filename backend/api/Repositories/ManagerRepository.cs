@@ -2,6 +2,98 @@ namespace api.Repositories;
 
 public class ManagerRepository : IManagerRepository
 {
+  public async Task<bool> UpdateAccountAsync(ManagerUpdateProfile dto, string? hashedUserId, CancellationToken ct)
+  {
+    if (string.IsNullOrEmpty(hashedUserId)) return false;
+
+    ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, ct);
+    if (userId == null) return false;
+
+    AppUser? user = await _userManager.FindByIdAsync(userId.Value.ToString());
+    if (user == null) return false;
+
+    bool anyProfileFieldChanged = false;
+    List<UpdateDefinition<AppUser>> updateDefinitions = new List<UpdateDefinition<AppUser>>();
+    UpdateDefinitionBuilder<AppUser> updateDefinitionBuilder = Builders<AppUser>.Update;
+
+    if (dto.Name is not null)
+    {
+      string trimmed = dto.Name.Trim();
+      if (!string.Equals(user.Name, trimmed, StringComparison.Ordinal))
+      {
+        updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.Name, trimmed));
+        anyProfileFieldChanged = true;
+      }
+    }
+
+    if (dto.LastName is not null)
+    {
+      string trimmed = dto.LastName.Trim();
+      if (!string.Equals(user.LastName, trimmed, StringComparison.Ordinal))
+      {
+        updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.LastName, trimmed));
+        anyProfileFieldChanged = true;
+      }
+    }
+
+    if (dto.DateOfBirth is not null && user.DateOfBirth != dto.DateOfBirth.Value)
+    {
+      updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.DateOfBirth, dto.DateOfBirth.Value));
+      anyProfileFieldChanged = true;
+    }
+
+    if (!string.IsNullOrWhiteSpace(dto.PhoneNum))
+    {
+      string phone = dto.PhoneNum.Trim();
+
+      if (!string.Equals(user.PhoneNum, phone, StringComparison.Ordinal))
+      {
+        updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.PhoneNum, phone));
+        anyProfileFieldChanged = true;
+      }
+    }
+
+    string? current = string.IsNullOrWhiteSpace(dto.CurrentPassword) ? null : dto.CurrentPassword;
+    string? newer = string.IsNullOrWhiteSpace(dto.NewPassword) ? null : dto.NewPassword;
+    string? confirm = string.IsNullOrWhiteSpace(dto.ConfirmPassword) ? null : dto.ConfirmPassword;
+
+    bool wantsPasswordChange = current is not null || newer is not null || confirm is not null;
+
+    if (wantsPasswordChange)
+    {
+      if (current is null || newer is null || confirm is null)
+        throw new ApplicationException("برای تغییر رمز عبور، هر سه فیلد لازم است.");
+
+      if (!string.Equals(newer, confirm, StringComparison.Ordinal))
+        throw new ApplicationException("تکرار رمز عبور با رمز جدید مطابقت ندارد.");
+
+      IdentityResult? pwd = await _userManager.ChangePasswordAsync(user, current!, newer!);
+      if (!pwd.Succeeded)
+        throw new ApplicationException(string.Join(" | ", pwd.Errors.Select(e => e.Description)));
+    }
+
+    if (anyProfileFieldChanged)
+    {
+      if (updateDefinitions.Count > 0)
+      {
+        UpdateDefinition<AppUser>? combined = Builders<AppUser>.Update.Combine(updateDefinitions);
+        UpdateResult? result = await _collectionAppUser.UpdateOneAsync(
+            filter: appUser => appUser.Id == user.Id,
+            update: combined,
+            cancellationToken: ct
+        );
+
+        if (result.MatchedCount == 0)
+          return wantsPasswordChange;
+      }
+      return true;
+    }
+
+    if (wantsPasswordChange) return true;
+
+    return false;
+  }
+
   public async Task<RegisteredUserDto?> CreateSecretaryAsync(
     RegisterDto registerDto, CancellationToken cancellationToken
   )
