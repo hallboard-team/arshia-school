@@ -3,6 +3,26 @@ namespace api.Controllers;
 [Authorize(Policy = "RequiredManagerRole")]
 public class ManagerController(IManagerRepository _managerRepository, ITokenService _tokenService) : BaseApiController
 {
+    [HttpPut("update-account")]
+    public async Task<ActionResult> UpdateAccount(ManagerUpdateProfile managerUpdateProfile, CancellationToken cancellationToken)
+    {
+        if (managerUpdateProfile is null)
+            return BadRequest("ورودی نامعتبر است.");
+
+        try
+        {
+            bool? updateResult = await _managerRepository.UpdateAccountAsync(managerUpdateProfile, User.GetHashedUserId(), cancellationToken);
+
+            return updateResult is false
+                ? BadRequest("بروزرسانی انجام نشد. لطفاً دوباره تلاش کنید.")
+                : Ok(new { message = "اطلاعات با موفقیت بروزرسانی شد." });
+        }
+        catch (ApplicationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
     [HttpPost("create-secretary")]
     public async Task<ActionResult<RegisteredUserDto>> CreateSecretary(RegisterDto managerInput, CancellationToken cancellationToken)
     {
