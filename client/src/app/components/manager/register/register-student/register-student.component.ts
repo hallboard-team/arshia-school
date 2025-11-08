@@ -142,8 +142,15 @@ export class RegisterStudentComponent {
       },
       error: err => {
         const msgs: string[] = Array.isArray(err?.error) ? err.error : (Array.isArray(err?.error?.errors) ? err.error.errors : []);
-        if (msgs.length) this.applyServerErrorsToForm(msgs);
-        this.openSnack('خطا در ثبت نام.', 'error');
+
+        if (msgs.length) {
+          this.applyServerErrorsToForm(msgs);
+
+          this.openSnack(msgs.join('\n'), 'error');
+        }
+        else {
+          this.openSnack('خطا در ثبت نام', 'error');
+        }
       }
     });
   }
