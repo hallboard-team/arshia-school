@@ -104,6 +104,6 @@ jobs:
 
       - name: Build and Prerender Angular App
         working-directory: client
-        run: npx ng build
+        run: npx ng build --ssr
         env:
           NODE_OPTIONS: --max_old_space_size=8192
