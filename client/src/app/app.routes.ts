@@ -36,17 +36,15 @@ export const routes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'recovery', component: RecoveryComponent },
 
-    { path: 'about', component: AboutUsComponent },
-    { path: 'contact-us', component: ContactUsComponent },
-    { path: 'courses', component: CoursesListComponent },
-
     {
         path: 'dashboard',
         component: MainDashboardComponent,
         children: [
-            // { path: 'about', component: AboutUsComponent },
-            // { path: 'contact-us', component: ContactUsComponent },
-            // { path: 'courses', component: CoursesListComponent },
+            { path: '', pathMatch: 'full', redirectTo: 'about' },
+
+            { path: 'about', component: AboutUsComponent },
+            { path: 'contact-us', component: ContactUsComponent },
+            { path: 'courses', component: CoursesListComponent },
 
             {
                 path: '',
