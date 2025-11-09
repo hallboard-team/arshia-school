@@ -102,7 +102,7 @@
                 <div class="track" [style.transform]="'translateX(-' + currentIndexCourse * 100 + '%)'">
                     <div class="slide" *ngFor="let course of sliderCourses">
                         <div class="div-bg-title-img">
-                            <img [src]="course.image" [alt]="course.nameTitleCourse" [routerLink]="['/courses']"
+                            <img [src]="course.image" [alt]="course.nameTitleCourse" [routerLink]="['/dashboard/courses']"
                                 routerLinkActive #rla="routerLinkActive" />
                             <div class="icon-course" [routerLink]="['/dashboard/courses']" routerLinkActive
                                 #rla="routerLinkActive">
