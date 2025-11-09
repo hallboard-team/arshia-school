@@ -8,13 +8,13 @@
         @if (loggedInUserSig && loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
         loggedInUserSig()?.roles?.includes('manager')) {
         <li routerLinkActive="active">
-            <a [routerLink]="['/dashboard/manager-panel']" title="پنل مدیر">
+            <a [routerLink]="['/dashboard/manager-panel']" title="ثبت نام">
                 <span class="icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24">
                         <path d="M12 2 3 6v6c0 5 4 9 9 10 5-1 9-5 9-10V6Z" />
                     </svg>
                 </span>
-                <span class="label">پنل مدیر</span>
+                <span class="label">ثبت نام</span>
             </a>
         </li>
         }
