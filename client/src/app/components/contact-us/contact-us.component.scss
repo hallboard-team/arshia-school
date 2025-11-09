@@ -235,10 +235,10 @@
 
       .right-side .desc,
       .left-side .desc {
-        flex-direction: row-reverse;
-        flex-wrap: wrap;
+        display: flex;
+        flex-direction: column;
         justify-content: center;
-        align-items: baseline;
+        align-items: center;
         gap: 6px 8px;
         text-align: center;
       }
@@ -259,9 +259,19 @@
 }
 
 @media (min-width: 768px) {
-  .section-main .div-background .left .div-title-and-phone-numbers .div-phone-numbers .right-side .desc .forward-slash {
-    display: inline;
+  .section-main .div-background .left .div-title-and-phone-numbers .div-phone-numbers {
+
+    .right-side .desc,
+    .left-side .desc {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
   }
+
+
 }
 
 @media (min-width: 1100px) {
