@@ -34,21 +34,25 @@
 
     <div class="div-tabs">
         <mat-tab-group (selectedTabChange)="onTabChange($event)">
-            <mat-tab label="ادیت پروفایل">
+
+            <mat-tab label="تغییر پروفایل">
+                <div class="div-edit-profile">
+                    <form class="update-member-form" [formGroup]="memberEditFg"
+                        (ngSubmit)="memberEditFg.valid && updateMember()">
+
+                    </form>
+                </div>
+            </mat-tab>
+
+            <mat-tab label="تغییر رمز عبور">
                 <div class="div-edit-profile">
                     <form class="update-member-form" [formGroup]="memberEditFg"
                         (ngSubmit)="memberEditFg.valid && updateMember()">
                         <div class="div-title">
-                            <span class="title">تغییر در پروفایل خود</span>
+                            <span class="title">رمز عبور خود را تغییر بدید</span>
                         </div>
 
                         <div class="content">
-                            <mat-form-field appearance="outline">
-                                <mat-label>ایمیل</mat-label>
-                                <input class="input" autoFocusDir type="email" formControlName="emailCtrl" label="Email"
-                                    placeHolder="ایمیل جدید را وارد کنید" matInput>
-                            </mat-form-field>
-
                             <mat-form-field appearance="outline">
                                 <mat-label>رمز قدیمی</mat-label>
                                 <input class="input" type="password" formControlName="currentPasswordCtrl"
