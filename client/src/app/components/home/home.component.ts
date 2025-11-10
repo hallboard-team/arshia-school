@@ -89,7 +89,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       course: 'دوره پروژه محور FullStack',
       image: 'assets/images/profile-icon1.png',
       description:
-        'از بین دوره هایی که گذروندم مثل ICDL, WordPress, Photoshop دوره FullStack رو دوست درم چون هدفم اینه برنامه نویس بشم...'
+        'از بین دوره هایی که گذروندم مثل WordPress ,ICDL و Photoshop دوره FullStack رو دوست دارم چون هدفم اینه برنامه نویس بشم...'
     },
     {
       name: 'آتنا عطائی',

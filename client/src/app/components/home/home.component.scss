@@ -738,6 +738,10 @@ main {
             display: block;
         }
 
+        img:hover {
+            cursor: pointer;
+        }
+
         .span-course {
             position: absolute;
             right: 0;

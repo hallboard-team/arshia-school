@@ -3,11 +3,11 @@ namespace api.Repositories;
 public class TeacherRepository : ITeacherRepository
 {
     #region Vars and Constructor
-    private readonly IMongoCollection<AppUser>? _collectionAppUser;
-    private readonly IMongoCollection<Course>? _collectionCourse;
+    private readonly IMongoCollection<AppUser> _collectionAppUser;
+    private readonly IMongoCollection<Course> _collectionCourse;
     private readonly UserManager<AppUser> _userManager;
     private readonly ITokenService _tokenService;
-    private readonly IMongoCollection<Attendence>? _collectionAttendence;
+    private readonly IMongoCollection<Attendence> _collectionAttendence;
 
     public TeacherRepository(IMongoClient client, ITokenService tokenService, IMyMongoDbSettings dbSettings, UserManager<AppUser> userManager)
     {
@@ -31,27 +31,20 @@ public class TeacherRepository : ITeacherRepository
         return ValidationsExtensions.ValidateObjectId(studentId);
     }
 
-    public async Task<List<Course?>> GetCourseAsync(string hashedUserId, CancellationToken cancellationToken)
+    public async Task<List<Course>> GetCourseAsync(string hashedUserId, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
         if (userId is null)
-            return null;
+            return new List<Course>();
 
         List<Course>? courses = await _collectionCourse.Find<Course>(doc =>
             doc.ProfessorsIds.Contains(userId.Value)).ToListAsync(cancellationToken);
 
-        if (courses is null)
-        {
-            return null;
-        }
-
-        return courses is null
-            ? null
-            : courses;
+        return courses ?? new List<Course>();
     }
 
-    public async Task<ShowStudentStatusDto> AddAsync(AddStudentStatusDto teacherInput, string courseTitle, CancellationToken cancellationToken)
+    public async Task<ShowStudentStatusDto?> AddAsync(AddStudentStatusDto teacherInput, string courseTitle, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(teacherInput.UserName))
             return null;
@@ -123,7 +116,11 @@ public class TeacherRepository : ITeacherRepository
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
         if (userId is null)
-            return null;
+        {
+            var empty = _collectionAppUser.AsQueryable().Where(_ => false);
+            return await PagedList<AppUser>.CreatePagedListAsync(
+                empty, paginationParams.PageNumber, paginationParams.PageSize, cancellationToken);
+        }
 
         IQueryable<AppUser> query = _collectionAppUser.AsQueryable()
             .Where(user => user.EnrolledCourses.Any(course => course.CourseTitle == targetTitle.ToUpper() && user.Id != userId));
@@ -141,7 +138,7 @@ public class TeacherRepository : ITeacherRepository
 
         return studentIds.ToDictionary(
             studentId => studentId,
-            studentId => attendances.Any(a => a.StudentId == studentId) // اگر در لیست باشد، یعنی غایب است
+            studentId => attendances.Any(a => a.StudentId == studentId)
         );
     }
 }

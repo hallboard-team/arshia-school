@@ -27,15 +27,15 @@ export class AboutUsComponent {
 
   step = signal(0);
 
-  setStep(index: number) {
+  setStep(index: number): void {
     this.step.set(index);
   }
 
-  nextStep() {
+  nextStep(): void {
     this.step.update(i => i + 1);
   }
 
-  prevStep() {
+  prevStep(): void {
     this.step.update(i => i - 1);
   }
 } 

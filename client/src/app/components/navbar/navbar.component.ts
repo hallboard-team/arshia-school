@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, Signal, ViewChild, inject } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
@@ -19,7 +19,7 @@ import { BackForwardButtonComponent } from '../back-forward-button/back-forward-
 @Component({
   selector: 'app-navbar',
   imports: [
-    CommonModule, RouterModule, NgOptimizedImage,
+    CommonModule, RouterModule,
     MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule,
     MatDividerModule, MatListModule, MatTabsModule,
     MatSlideToggleModule, FormsModule, BackForwardButtonComponent

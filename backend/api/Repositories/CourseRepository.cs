@@ -3,8 +3,8 @@ namespace api.Repositories;
 public class CourseRepository : ICourseRepository
 {
     #region Vars and Constructor
-    private readonly IMongoCollection<Course>? _collectionCourse;
-    private readonly IMongoCollection<AppUser>? _collectionAppUser;
+    private readonly IMongoCollection<Course> _collectionCourse;
+    private readonly IMongoCollection<AppUser> _collectionAppUser;
     private readonly IMongoClient _client;
 
     public CourseRepository(IMongoClient client, ITokenService tokenService, IMyMongoDbSettings dbSettings)
@@ -19,23 +19,18 @@ public class CourseRepository : ICourseRepository
 
     public async Task<ShowCourseDto> AddCourseAsync(AddCourseDto managerInput, CancellationToken cancellationToken)
     {
-        int calcDays = (int)Math.Ceiling(managerInput.Hours / managerInput.HoursPerClass);
+        int totalMinutes = (int)Math.Round(managerInput.Hours * 60d);
+        int classMinutes = (int)Math.Round(managerInput.HoursPerClass * 60d);
+
+        if (classMinutes <= 0) throw new ArgumentOutOfRangeException(nameof(classMinutes));
+
+        int calcDays = (int)Math.Ceiling((double)totalMinutes / classMinutes);
 
         Course? course = Mappers.ConvertAddCourseDtoToCourse(managerInput, calcDays);
 
-        if (_collectionCourse is not null)
-        {
-            await _collectionCourse.InsertOneAsync(course, null, cancellationToken);
-        }
+        await _collectionCourse.InsertOneAsync(course, cancellationToken: cancellationToken);
 
-        if (ObjectId.Equals != null)
-        {
-            ShowCourseDto showCourseDto = Mappers.ConvertCourseToShowCourseDto(course);
-
-            return showCourseDto;
-        }
-
-        return null;
+        return Mappers.ConvertCourseToShowCourseDto(course);
     }
 
     public async Task<PagedList<Course>> GetAllAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
@@ -45,16 +40,23 @@ public class CourseRepository : ICourseRepository
             paginationParams.PageSize, cancellationToken);
     }
 
-    public async Task<List<string?>> GetProfessorUserNamesByIdsAsync(List<ObjectId> professorIds, CancellationToken cancellationToken)
+    public async Task<List<string>> GetProfessorUserNamesByIdsAsync(List<ObjectId> professorIds, CancellationToken cancellationToken)
     {
-        List<AppUser> professorUserNames = await _collectionAppUser
-            .Find(professor => professorIds.Contains(professor.Id))
+        if (professorIds == null || professorIds.Count == 0)
+            return new List<string>();
+
+        List<string> usernames = await _collectionAppUser
+            .Find(p => professorIds.Contains(p.Id))
+            .Project(p => p.NormalizedUserName ?? string.Empty)
             .ToListAsync(cancellationToken);
 
-        return professorUserNames.Select(p => p.NormalizedUserName).ToList();
+        return usernames
+            .Where(u => !string.IsNullOrWhiteSpace(u))
+            .Select(u => u.Trim())
+            .ToList();
     }
 
-    public async Task<List<string?>> GetProfessorNamesByIdsAsync(List<ObjectId> professorIds, CancellationToken cancellationToken)
+    public async Task<List<string>> GetProfessorNamesByIdsAsync(List<ObjectId> professorIds, CancellationToken cancellationToken)
     {
         List<AppUser> professors = await _collectionAppUser
             .Find(professor => professorIds.Contains(professor.Id))
@@ -67,13 +69,17 @@ public class CourseRepository : ICourseRepository
         UpdateCourseDto updateCourseDto, string targetCourseTitle,
         CancellationToken cancellationToken)
     {
-        int? calcDays = (int)Math.Ceiling(updateCourseDto.Hours / updateCourseDto.HoursPerClass);
+        int totalMinutes = (int)Math.Round(updateCourseDto.Hours * 60d);
+        int classMinutes = (int)Math.Round(updateCourseDto.HoursPerClass * 60d);
+        if (classMinutes <= 0) throw new ArgumentOutOfRangeException(nameof(updateCourseDto.HoursPerClass));
+
+        int? calcDays = (int)Math.Ceiling((double)totalMinutes / classMinutes);
 
         UpdateDefinition<Course> updatedCourse = Builders<Course>.Update
             .Set(c => c.Title, updateCourseDto.Title?.ToUpper())
             .Set(c => c.Tuition, updateCourseDto.Tuition)
-            .Set(c => c.Hours, updateCourseDto.Hours)
-            .Set(c => c.HoursPerClass, updateCourseDto.HoursPerClass)
+            .Set(c => c.TotalMinutes, totalMinutes)
+            .Set(c => c.ClassMinutes, classMinutes)
             .Set(c => c.Days, calcDays)
             .Set(c => c.Start, updateCourseDto.Start)
             .Set(c => c.IsStarted, updateCourseDto.IsStarted);
@@ -139,25 +145,31 @@ public class CourseRepository : ICourseRepository
 
     public async Task<ShowCourseDto?> GetCourseByTitleAsync(string courseTitle, CancellationToken cancellationToken)
     {
-        var course = await _collectionCourse
+        Course? course = await _collectionCourse
             .Find(c => c.Title == courseTitle.ToUpper())
             .FirstOrDefaultAsync(cancellationToken);
 
-        var professorIds = course.ProfessorsIds;
-        var professorUserNames = await _collectionAppUser
-            .Find(doc => professorIds.Contains(doc.Id))
-            .Project(doc => doc.NormalizedUserName)
+        if (course is null) return null;
+
+        List<string> professorUserNames = await _collectionAppUser
+            .Find(doc => course.ProfessorsIds.Contains(doc.Id))
+            .Project(doc => doc.NormalizedUserName ?? string.Empty)
             .ToListAsync(cancellationToken);
+
+        List<string> safeUserNames = professorUserNames
+            .Where(u => !string.IsNullOrWhiteSpace(u))
+            .Select(u => u!)
+            .ToList();
 
         return new ShowCourseDto
         {
             Title = course.Title,
             Tuition = course.Tuition,
-            Hours = course.Hours,
-            HoursPerClass = course.HoursPerClass,
+            Hours = course.TotalMinutes / 60d,
+            HoursPerClass = course.ClassMinutes / 60d,
             Start = course.Start,
             IsStarted = course.IsStarted,
-            ProfessorUserNames = professorUserNames
+            ProfessorUserNames = safeUserNames
         };
     }
 }

@@ -3,26 +3,40 @@ namespace api.Controllers;
 [Authorize(Policy = "RequiredTeacherRole")]
 public class TeacherController(ITeacherRepository _teacherRepository, ITokenService _tokenService) : BaseApiController
 {
+    // [HttpGet("get-course")]
+    // public async Task<ActionResult<List<Course>>> GetCourse(CancellationToken cancellationToken)
+    // {
+    //     string? token = null;
+
+    //     bool isTokenValid = HttpContext.Request.Headers.TryGetValue("Authorization", out var authHeader);
+
+    //     if (isTokenValid)
+    //         token = authHeader.ToString().Split(' ').Last();
+
+    //     if (string.IsNullOrEmpty(token))
+    //         return Unauthorized("Token is expired or invalid. Login again.");
+
+    //     string? hashedUserId = User.GetHashedUserId();
+    //     if (string.IsNullOrEmpty(hashedUserId))
+    //         return BadRequest("No user was found with this user Id.");
+
+    //     List<Course>? course = await _teacherRepository.GetCourseAsync(hashedUserId, cancellationToken);
+
+    //     return course is null ? Unauthorized("User is logged out or unauthorized. Login again.") : course;
+    // }
+
     [HttpGet("get-course")]
     public async Task<ActionResult<List<Course>>> GetCourse(CancellationToken cancellationToken)
     {
-        string? token = null;
-
-        bool isTokenValid = HttpContext.Request.Headers.TryGetValue("Authorization", out var authHeader);
-
-        if (isTokenValid)
-            token = authHeader.ToString().Split(' ').Last();
-
-        if (string.IsNullOrEmpty(token))
+        if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authHeader))
             return Unauthorized("Token is expired or invalid. Login again.");
 
         string? hashedUserId = User.GetHashedUserId();
         if (string.IsNullOrEmpty(hashedUserId))
             return BadRequest("No user was found with this user Id.");
 
-        List<Course>? course = await _teacherRepository.GetCourseAsync(hashedUserId, cancellationToken);
-
-        return course is null ? Unauthorized("User is logged out or unauthorized. Login again.") : course;
+        var courses = await _teacherRepository.GetCourseAsync(hashedUserId, cancellationToken);
+        return courses.Count == 0 ? NoContent() : Ok(courses);
     }
 
     [HttpPost("add-attendence/{targetCourseTitle}")]
@@ -32,7 +46,7 @@ public class TeacherController(ITeacherRepository _teacherRepository, ITokenServ
 
             return BadRequest("یوزرنیم خالی است.");
 
-        ShowStudentStatusDto showStudentStatusDto = await _teacherRepository.AddAsync(teacherInput, targetCourseTitle, cancellationToken);
+        ShowStudentStatusDto? showStudentStatusDto = await _teacherRepository.AddAsync(teacherInput, targetCourseTitle, cancellationToken);
 
         if (showStudentStatusDto is null)
             return BadRequest("ثبت حضور و غیاب انجام نشد. دانش‌آموز یافت نشد یا قبلاً ثبت شده است.");
@@ -57,54 +71,95 @@ public class TeacherController(ITeacherRepository _teacherRepository, ITokenServ
             : NotFound($"Attendence record for {targetUserName} not found");
     }
 
+    // [AllowAnonymous]
+    // [HttpGet("get-student/{targetTitle}")]
+    // public async Task<ActionResult<IEnumerable<MemberDto>>> GetAll([FromQuery] PaginationParams paginationParams, string targetTitle, CancellationToken cancellationToken)
+    // {
+    //     string? userIdHashed = User.GetHashedUserId();
+
+    //     if (userIdHashed is null)
+    //         return null;
+
+    //     ObjectId? userId = await _tokenService.GetActualUserIdAsync(userIdHashed, cancellationToken);
+
+    //     if (userId is null)
+    //         return Unauthorized("You are unauthorized. Login again.");
+
+    //     PagedList<AppUser> pagedAppUsers = await _teacherRepository.GetAllAsync(paginationParams, targetTitle, userIdHashed, cancellationToken);
+
+    //     if (pagedAppUsers.Count == 0)
+    //         return NoContent();
+
+    //     PaginationHeader paginationHeader = new(
+    //         CurrentPage: pagedAppUsers.CurrentPage,
+    //         ItemsPerPage: pagedAppUsers.PageSize,
+    //         TotalItems: pagedAppUsers.TotalItemsCount,
+    //         TotalPages: pagedAppUsers.TotalPages
+    //     );
+
+    //     Response.AddPaginationHeader(paginationHeader);
+
+    //     List<ObjectId> studentIds = pagedAppUsers.Select(user => user.Id).ToList();
+
+    //     ObjectId? courseId = pagedAppUsers.FirstOrDefault()?.EnrolledCourses
+    //         .FirstOrDefault(course => course.CourseTitle == targetTitle.ToUpper())?.CourseId;
+
+    //     if (courseId == null)
+    //         return BadRequest("Course not found.");
+
+    //     Dictionary<ObjectId, bool> absences = await _teacherRepository.CheckIsAbsentAsync(studentIds, courseId.Value, cancellationToken);
+
+    //     List<MemberDto> memberDtos = [];
+
+    //     bool isAbsent;
+    //     foreach (AppUser appUser in pagedAppUsers)
+    //     {
+    //         isAbsent = absences.ContainsKey(appUser.Id) && absences[appUser.Id];
+
+    //         memberDtos.Add(Mappers.ConvertAppUserToMemberDto(appUser, isAbsent));
+    //     }
+
+    //     return memberDtos;
+    // }
     [AllowAnonymous]
     [HttpGet("get-student/{targetTitle}")]
     public async Task<ActionResult<IEnumerable<MemberDto>>> GetAll([FromQuery] PaginationParams paginationParams, string targetTitle, CancellationToken cancellationToken)
     {
         string? userIdHashed = User.GetHashedUserId();
-
-        if (userIdHashed is null)
-            return null;
+        if (string.IsNullOrEmpty(userIdHashed))
+            return Unauthorized("You are unauthorized. Login again.");
 
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(userIdHashed, cancellationToken);
-
         if (userId is null)
             return Unauthorized("You are unauthorized. Login again.");
 
-        PagedList<AppUser> pagedAppUsers = await _teacherRepository.GetAllAsync(paginationParams, targetTitle, userIdHashed, cancellationToken);
+        var pagedAppUsers = await _teacherRepository.GetAllAsync(paginationParams, targetTitle, userIdHashed, cancellationToken);
+        if (pagedAppUsers.Count == 0) return NoContent();
 
-        if (pagedAppUsers.Count == 0)
-            return NoContent();
-
-        PaginationHeader paginationHeader = new(
+        Response.AddPaginationHeader(new PaginationHeader(
             CurrentPage: pagedAppUsers.CurrentPage,
             ItemsPerPage: pagedAppUsers.PageSize,
             TotalItems: pagedAppUsers.TotalItemsCount,
             TotalPages: pagedAppUsers.TotalPages
-        );
+        ));
 
-        Response.AddPaginationHeader(paginationHeader);
-
-        List<ObjectId> studentIds = pagedAppUsers.Select(user => user.Id).ToList();
+        var studentIds = pagedAppUsers.Select(u => u.Id).ToList();
 
         ObjectId? courseId = pagedAppUsers.FirstOrDefault()?.EnrolledCourses
-            .FirstOrDefault(course => course.CourseTitle == targetTitle.ToUpper())?.CourseId;
+            .FirstOrDefault(c => c.CourseTitle == targetTitle.ToUpper())?.CourseId;
 
-        if (courseId == null)
+        if (courseId is null)
             return BadRequest("Course not found.");
 
-        Dictionary<ObjectId, bool> absences = await _teacherRepository.CheckIsAbsentAsync(studentIds, courseId.Value, cancellationToken);
+        var absences = await _teacherRepository.CheckIsAbsentAsync(studentIds, courseId.Value, cancellationToken);
 
-        List<MemberDto> memberDtos = [];
-
-        bool isAbsent;
-        foreach (AppUser appUser in pagedAppUsers)
+        var memberDtos = new List<MemberDto>();
+        foreach (var appUser in pagedAppUsers)
         {
-            isAbsent = absences.ContainsKey(appUser.Id) && absences[appUser.Id];
-
+            bool isAbsent = absences.TryGetValue(appUser.Id, out var val) && val;
             memberDtos.Add(Mappers.ConvertAppUserToMemberDto(appUser, isAbsent));
         }
 
-        return memberDtos;
+        return Ok(memberDtos);
     }
 }

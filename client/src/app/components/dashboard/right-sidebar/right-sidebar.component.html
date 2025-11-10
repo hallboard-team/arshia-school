@@ -1,68 +1,61 @@
-<nav class="sidebar">
-    <div class="div-logo">
-        <img [routerLink]="['/']" src="../assets/images/logo-education.png" alt="Tolou Fanavari">
-    </div>
-
-    <div class="div-description-of-user">
-        <div class="items">
-            <span>نام: </span>
-            <span>{{loggedInUserSig && loggedInUserSig()?.name}}</span>
-        </div>
-
-        <div class="items">
-            <span>نام کاربری:</span>
-            <span>{{loggedInUserSig && loggedInUserSig()?.userName}}</span>
-        </div>
-
-        <div class="items">
-            <span>ایمیل:</span>
-            <span>{{loggedInUserSig && loggedInUserSig()?.email}}</span>
-        </div>
-    </div>
+<nav class="sidebar" [attr.aria-expanded]="!collapsed()">
+    <button class="toggle-btn" type="button" [attr.aria-label]="collapsed() ? 'باز کردن منو' : 'بستن منو'"
+        (click)="toggleSidebar()">
+        <span class="chev" [class.to-left]="collapsed()" [class.to-right]="!collapsed()"></span>
+    </button>
 
     <ul>
-        <li routerLinkActive="active">
-            <a [routerLink]="['/dashboard/profile']">پروفایل</a>
-        </li>
-
         @if (loggedInUserSig && loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
         loggedInUserSig()?.roles?.includes('manager')) {
         <li routerLinkActive="active">
-            <a [routerLink]="['/dashboard/manager-panel']">پنل مدیر</a>
+            <a [routerLink]="['/dashboard/manager-panel']" title="ثبت نام">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2 3 6v6c0 5 4 9 9 10 5-1 9-5 9-10V6Z" />
+                    </svg>
+                </span>
+                <span class="label">ثبت نام</span>
+            </a>
         </li>
         }
 
         @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
         <li routerLinkActive="active">
-            <a [routerLink]="['/dashboard/members']">کاربران</a>
+            <a [routerLink]="['/dashboard/members']" title="کاربران">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M16 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm-8 1a3 3 0 1 0-3-3 3 3 0 0 0 3 3Zm8 2c-3 0-6 1.5-6 4v2h12v-2c0-2.5-3-4-6-4Zm-8 1c-2.67 0-5 1.33-5 3v2h6v-2c0-1.1.4-2.1 1.1-3Z" />
+                    </svg>
+                </span>
+                <span class="label">کاربران</span>
+            </a>
         </li>
         }
 
         @if (loggedInUserSig && loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
         loggedInUserSig()?.roles?.includes('teacher')) {
         <li routerLinkActive="active">
-            <a [routerLink]="['/dashboard/teacher-panel']">پنل معلم</a>
+            <a [routerLink]="['/dashboard/teacher-panel']" title="پنل معلم">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M3 4h14a2 2 0 0 1 2 2v9H3V4Zm0 13h8v3H9v-1H5v1H3Z" />
+                    </svg>
+                </span>
+                <span class="label">پنل معلم</span>
+            </a>
         </li>
         }
 
         <li routerLinkActive="active">
-            <a [routerLink]="['/dashboard/courses']">دوره ها</a>
-        </li>
-
-        <li routerLinkActive="active">
-            <a [routerLink]="['/dashboard/about']">درباره ما</a>
-        </li>
-
-        <li routerLinkActive="active">
-            <a [routerLink]="['/dashboard/contact-us']">تماس با ما</a>
+            <a [routerLink]="['/dashboard/courses']" title="دوره‌ها">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M5 4h11a3 3 0 0 1 3 3v12H7a2 2 0 0 1-2-2Z" />
+                    </svg>
+                </span>
+                <span class="label">دوره ها</span>
+            </a>
         </li>
     </ul>
-
-    <div class="div-btn-log-out">
-        <span class="desc">شما وارد حساب کاربری شده اید میخواهید خارج بشید؟</span>
-        <button class="exit" (click)="logout()">
-            <span class="circle" aria-hidden="true"><span class="icon arrow"></span></span>
-            <span class="button-text">خروج</span>
-        </button>
-    </div>
 </nav>

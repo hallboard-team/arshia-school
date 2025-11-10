@@ -18,7 +18,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
-import { AutoFocusDirective } from '../../directives/auto-focus.directive';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { Course, ShowCourse } from '../../models/course.model';
 import { UpdateEnrolledCourse } from '../../models/update-enrolled-course.model';
@@ -33,7 +32,7 @@ import { CurrencyFormatterDirective } from '../../directives/currency-formatter.
   selector: 'app-target-user-profile',
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule,
-    MatCardModule, MatFormFieldModule, AutoFocusDirective,
+    MatCardModule, MatFormFieldModule,
     MatInputModule, MatButtonModule, NavbarComponent,
     RouterModule, MatTabsModule, MatNativeDateModule,
     MatRadioModule, MatSnackBarModule, MatDatepickerModule,

@@ -3,7 +3,6 @@ import { Component, inject, Signal } from '@angular/core';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { NavbarComponent } from '../../navbar/navbar.component';
-import { SelectCourseCardComponent } from "../select-course-card/select-course-card.component";
 import { Observable, Subscription } from 'rxjs';
 import { Course, ShowCourse } from '../../../models/course.model';
 import { CourseParams } from '../../../models/helpers/course-params';
@@ -25,16 +24,16 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 
 @Component({
-    selector: 'app-enrolled-course',
-    imports: [
-        CommonModule, MatPaginatorModule, ReactiveFormsModule,
-        NavbarComponent, RouterModule, MatFormFieldModule,
-        SelectCourseCardComponent, MatSnackBarModule,
-        MatInputModule, MatButtonModule, MatTabsModule,
-        MatRadioModule, MatSelectModule
-    ],
-    templateUrl: './enrolled-course.component.html',
-    styleUrl: './enrolled-course.component.scss'
+  selector: 'app-enrolled-course',
+  imports: [
+    CommonModule, MatPaginatorModule, ReactiveFormsModule,
+    NavbarComponent, RouterModule, MatFormFieldModule,
+    MatSnackBarModule,
+    MatInputModule, MatButtonModule, MatTabsModule,
+    MatRadioModule, MatSelectModule
+  ],
+  templateUrl: './enrolled-course.component.html',
+  styleUrl: './enrolled-course.component.scss'
 })
 export class EnrolledCourseComponent {
   private _accountService = inject(AccountService);

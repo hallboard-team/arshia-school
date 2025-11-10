@@ -1,6 +1,42 @@
 :host {
-    display: block;
-    height: 100%;
+    --w-expanded: 280px;
+    --w-collapsed: 72px;
+
+    position: fixed;
+    inset-inline-end: 12px;
+    inset-block-start: 12px;
+    height: calc(80dvh - 24px);
+    inline-size: var(--w-expanded);
+    z-index: 50;
+    margin-top: 6rem;
+    transition: inline-size .3s ease, transform .35s ease;
+}
+
+:host.collapsed {
+    inline-size: var(--w-collapsed);
+}
+
+@media (max-width: 768px) {
+    :host {
+        inline-size: var(--w-expanded);
+    }
+
+    :host.collapsed {
+        transform: translateX(calc(100% + 12px));
+    }
+}
+
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgb(0 0 0 / .35);
+    backdrop-filter: blur(1.5px);
+    z-index: 40;
+}
+
+.sidebar,
+.sidebar * {
+    box-sizing: border-box;
 }
 
 .sidebar {
@@ -11,180 +47,145 @@
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: 12px;
+    height: 100%;
+    position: relative;
+    overflow: visible;
+}
 
-    .div-logo {
-        height: 50px;
-        width: 50px;
+.toggle-btn {
+    position: absolute;
+    z-index: 60;
+    inset-inline-start: -18px;
+    inset-block-start: 16px;
+    inline-size: 32px;
+    block-size: 32px;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
 
-        img {
-            height: 100%;
-            width: 100%;
-        }
-    }
+.toggle-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .12);
+}
 
-    .div-description-of-user {
+.chev {
+    inline-size: 10px;
+    block-size: 10px;
+    border-inline-end: 2px solid #6b7280;
+    border-block-end: 2px solid #6b7280;
+    transform: rotate(45deg);
+    transition: transform .25s ease;
+}
+
+.chev.to-left {
+    transform: rotate(225deg);
+}
+
+.chev.to-right {
+    transform: rotate(45deg);
+}
+
+.div-logo {
+    inline-size: 52px;
+    block-size: 52px;
+    margin-inline: auto;
+}
+
+.div-logo img {
+    inline-size: 100%;
+    block-size: 100%;
+}
+
+.div-description-of-user {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    align-items: center;
+
+    .items {
         display: flex;
-        width: 100%;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 1rem;
-
-        .items {
-            width: 100%;
-
-            display: flex;
-            flex-direction: row-reverse;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 3px;
-
-            span {
-                direction: rtl;
-                font-size: 15px;
-                color: black;
-            }
-        }
-
-    }
-
-    .div-btn-log-out {
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-        gap: 10px;
-        align-items: center;
-
-        .desc {
-            width: 90%;
-            font-size: 13px;
-            color: rgba(0, 0, 0, 0.486);
-            direction: rtl;
-        }
-
-        button {
-            position: relative;
-            display: inline-block;
-            cursor: pointer;
-            outline: none;
-            border: 0;
-            vertical-align: middle;
-            text-decoration: none;
-            background: transparent;
-            padding: 0;
-            font-size: inherit;
-            font-family: inherit;
-        }
-
-        button.exit {
-            width: 7rem;
-            height: auto;
-        }
-
-        button.exit .circle {
-            transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-            position: relative;
-            display: block;
-            margin: 0;
-            width: 2.5rem;
-            height: 2.5rem;
-            background: hsl(345deg 100% 47%);
-            border-radius: 1.625rem;
-        }
-
-        button.exit .circle .icon {
-            transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            margin: auto;
-            background: #fff;
-        }
-
-        button.exit .circle .icon.arrow {
-            transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-            left: 0.625rem;
-            width: 1.125rem;
-            height: 0.125rem;
-            background: none;
-        }
-
-        button.exit .circle .icon.arrow::before {
-            position: absolute;
-            content: "";
-            top: -0.29rem;
-            right: 0.0625rem;
-            width: 0.625rem;
-            height: 0.625rem;
-            border-top: 0.125rem solid #fff;
-            border-right: 0.125rem solid #fff;
-            transform: rotate(45deg);
-        }
-
-        button.exit .button-text {
-            transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
-            position: absolute;
-            top: -5px;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            padding: 0.75rem 0;
-            margin: 0 0 0 1.85rem;
-            color: hsl(345deg 100% 47%);
-            font-weight: 700;
-            line-height: 1.6;
-            text-align: center;
-            text-transform: uppercase;
-        }
-
-        button:hover .circle {
-            width: 100%;
-        }
-
-        button:hover .circle .icon.arrow {
-            background: #fff;
-            transform: translate(1rem, 0);
-        }
-
-        button:hover .button-text {
-            color: #fff;
-        }
+        flex-direction: row-reverse;
+        gap: 6px;
+        font-size: 14px;
     }
 }
 
 ul {
+    width: 100%;
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    width: 100%;
-
-    li {
-        border: 1px solid rgba(0, 0, 0, 0.205);
-        border-radius: 10px;
-    }
+    display: grid;
+    gap: 10px;
 }
 
 a {
-    display: block;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 10px;
+    inline-size: 100%;
     padding: 10px 12px;
+    border: 1px solid rgba(0, 0, 0, .18);
     border-radius: 10px;
     text-decoration: none;
     color: inherit;
-    text-align: right;
+    background: #fff;
+    transition: background .2s ease, color .2s ease, border-color .2s ease;
 }
 
 li.active a,
 a:hover {
-    // background: #eee;
-    background: rgba(92, 92, 92, 0.438);
-    font-weight: 600;
+    background: #5c5c5c70;
     color: #fff;
+    border-color: transparent;
+}
+
+.icon {
+    inline-size: 26px;
+    block-size: 26px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 26px;
+}
+
+.icon svg {
+    inline-size: 100%;
+    block-size: 100%;
+    fill: currentColor;
+}
+
+.label {
+    white-space: nowrap;
+    overflow: hidden;
+    transition: opacity .2s ease, max-inline-size .2s ease;
+    max-inline-size: 100%;
+}
+
+:host.collapsed {
+    a {
+        justify-content: center;
+        padding: 0;
+        min-block-size: 48px;
+    }
+
+    .icon {
+        inline-size: 24px;
+        block-size: 24px;
+        margin-right: 8px;
+    }
+
+    .label {
+        opacity: 0;
+        max-inline-size: 0;
+        pointer-events: none;
+    }
 }

@@ -13,12 +13,14 @@ import { AccountService } from '../../../services/account.service';
 import { CourseService } from '../../../services/course.service';
 import { NavbarComponent } from '../../navbar/navbar.component';
 import { CourseCardComponent } from '../course-card/course-card.component';
+import { BackForwardButtonComponent } from "../../back-forward-button/back-forward-button.component";
 
 @Component({
   selector: 'app-course-list',
   imports: [
     CommonModule, MatPaginatorModule, CourseCardComponent,
-    NavbarComponent, RouterModule
+    NavbarComponent, RouterModule,
+    BackForwardButtonComponent
   ],
   templateUrl: './course-list.component.html',
   styleUrl: './course-list.component.scss'

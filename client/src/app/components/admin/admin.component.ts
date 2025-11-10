@@ -8,7 +8,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { AutoFocusDirective } from '../../directives/auto-focus.directive';
 import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
@@ -17,7 +16,7 @@ import { MatTabsModule } from '@angular/material/tabs';
         CommonModule, FormsModule, ReactiveFormsModule,
         MatFormFieldModule, MatInputModule, MatButtonModule,
         MatSnackBarModule, MatRadioModule,
-        MatDatepickerModule, MatNativeDateModule, AutoFocusDirective,
+        MatDatepickerModule, MatNativeDateModule,
         MatTabsModule
     ],
     templateUrl: './admin.component.html',

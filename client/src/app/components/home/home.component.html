@@ -82,7 +82,7 @@
 
         <div class="div-bg-course">
             <div class="div-course">
-                <div class="left-item" [routerLink]="['/courses']" routerLinkActive #rla="routerLinkActive">
+                <div class="left-item" [routerLink]="['/dashboard/courses']" routerLinkActive #rla="routerLinkActive">
                     <mat-icon>north_west</mat-icon>
                 </div>
                 <div class="center-item">
@@ -104,7 +104,7 @@
                         <div class="div-bg-title-img">
                             <img [src]="course.image" [alt]="course.nameTitleCourse" [routerLink]="['/courses']"
                                 routerLinkActive #rla="routerLinkActive" />
-                            <div class="icon-course" [routerLink]="['/courses']" routerLinkActive
+                            <div class="icon-course" [routerLink]="['/dashboard/courses']" routerLinkActive
                                 #rla="routerLinkActive">
                                 <mat-icon>north_west</mat-icon>
                             </div>

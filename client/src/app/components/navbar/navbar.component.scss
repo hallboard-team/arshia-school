@@ -348,6 +348,13 @@ nav {
                     font-weight: bold;
                     color: black;
                 }
+
+                img.default-avatar {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: 50%;
+                }
             }
 
             .profile:hover {
@@ -399,8 +406,8 @@ nav {
                 padding: 1rem;
                 width: 90%;
                 position: fixed;
-                left: 5%;
-                top: 8rem;
+                left: 1%;
+                top: 6rem;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -666,7 +673,7 @@ nav {
 
                 .div-open-profile {
                     width: 30%;
-                    left: 5%;
+                    left: 1%;
                 }
             }
         }

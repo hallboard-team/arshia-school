@@ -195,7 +195,7 @@ public class ManagerRepository : IManagerRepository
     bool alreadyEnrolledAdded = appUser.EnrolledCourses.Any(doc => doc.CourseId == course.Id);
     if (alreadyEnrolledAdded) return null;
 
-    int tuitionReminderCalc = course.Tuition / 1 - addEnrolledCourseDto.PaidAmount; // همون قبلی؛ فقط محاسبه ساده
+    int tuitionReminderCalc = course.Tuition / 1 - addEnrolledCourseDto.PaidAmount;
     int paymentPerMonthCalc = course.Tuition / addEnrolledCourseDto.NumberOfPayments;
 
     EnrolledCourse enrolledCourse = ConvertAddEnrolledCourseDtoToEnrolledCourse(
@@ -418,7 +418,7 @@ public class ManagerRepository : IManagerRepository
     return result.ModifiedCount > 0;
   }
 
-  public async Task<List<Course?>?> GetTargetMemberCourseAsync(
+  public async Task<List<Course>> GetTargetMemberCourseAsync(
     string targetUserName, CancellationToken cancellationToken
   )
   {
@@ -426,12 +426,12 @@ public class ManagerRepository : IManagerRepository
       Where(u => u.NormalizedUserName == targetUserName.ToUpper()).SelectMany(u => u.EnrolledCourses).
       Select(ec => ec.CourseId.ToString()).ToListAsync(cancellationToken);
 
-    if (enrolledCourseIds is null || enrolledCourseIds.Count == 0) return null;
+    if (enrolledCourseIds is null || enrolledCourseIds.Count == 0) return new List<Course>();
 
-    List<Course>? courses = await _collectionCourse.Find(doc => enrolledCourseIds.Contains(doc.Id.ToString())).
+    List<Course> courses = await _collectionCourse.Find(doc => enrolledCourseIds.Contains(doc.Id.ToString())).
       ToListAsync(cancellationToken);
 
-    return courses;
+    return courses ?? new List<Course>();
   }
 
   public async Task<EnrolledCourse?> GetTargetMemberEnrolledCourseAsync(
@@ -459,16 +459,16 @@ public class ManagerRepository : IManagerRepository
     return enrolledCourse.Payments.FirstOrDefault(p => p.Id == targetPaymentId);
   }
 
-  public async Task<List<string>?> GetTargetCourseTitleAsync(string targetUserName, CancellationToken cancellationToken)
+  public async Task<List<string>> GetTargetCourseTitleAsync(string targetUserName, CancellationToken cancellationToken)
   {
     List<string>? courseTitles = await _collectionAppUser.AsQueryable().
       Where(u => u.NormalizedUserName == targetUserName.ToUpper()).SelectMany(u => u.EnrolledCourses).
       Select(ec => ec.CourseTitle.ToUpper()).ToListAsync(cancellationToken);
 
-    return courseTitles.Count == 0 ? null : courseTitles;
+    return courseTitles ?? new List<string>();
   }
 
-  public async Task<PagedList<Attendence>?> GetAllAttendenceAsync(
+  public async Task<PagedList<Attendence>> GetAllAttendenceAsync(
     AttendenceParams attendenceParams,
     string targetMemberUserName,
     string targetCourseTitle,
@@ -477,12 +477,22 @@ public class ManagerRepository : IManagerRepository
   {
     AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == targetMemberUserName.ToUpper()).
       FirstOrDefaultAsync(cancellationToken);
-    if (appUser is null) return null;
+    if (appUser is null)
+    {
+      var emptyQuery = _collectionAttendence.AsQueryable().Where(_ => false);
+      return await PagedList<Attendence>.CreatePagedListAsync(
+          emptyQuery, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
+    }
 
     ObjectId targetCourseId = await _collectionCourse.AsQueryable().
       Where(doc => doc.Title == targetCourseTitle.ToUpper()).Select(doc => doc.Id).
       FirstOrDefaultAsync(cancellationToken);
-    if (targetCourseId == default) return null;
+    if (targetCourseId == default)
+    {
+      var emptyQuery = _collectionAttendence.AsQueryable().Where(_ => false);
+      return await PagedList<Attendence>.CreatePagedListAsync(
+          emptyQuery, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
+    }
 
     IQueryable<Attendence>? query = _collectionAttendence.AsQueryable().
       Where(doc => doc.StudentId == appUser.Id && doc.CourseId == targetCourseId);
@@ -502,10 +512,10 @@ public class ManagerRepository : IManagerRepository
     if (!string.IsNullOrWhiteSpace(memberParams.Search))
     {
       string s = memberParams.Search.ToUpper();
-      query = query.Where(u => u.Name.ToUpper().Contains(s) ||
-                               u.NormalizedUserName.Contains(s) ||
-                               u.LastName.ToUpper().Contains(s)
-      );
+      query = query.Where(u =>
+          (u.Name ?? string.Empty).ToUpper().Contains(s) ||
+          (u.NormalizedUserName ?? string.Empty).Contains(s) ||
+          (u.LastName ?? string.Empty).ToUpper().Contains(s));
     }
 
     query = query.Where(u => u.NormalizedUserName != "ADMIN" && u.NormalizedUserName != "MANAGER");
