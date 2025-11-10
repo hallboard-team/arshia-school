@@ -46,25 +46,47 @@
                             <mat-form-field appearance="outline">
                                 <mat-label>ایمیل</mat-label>
                                 <input class="input" autoFocusDir type="email" formControlName="emailCtrl" label="Email"
-                                    placeHolder="ایمیل جدید را وارد کنید" matInput>
+                                    placeholder="ایمیل جدید" matInput>
+                                <mat-hint>ایمیل خود را وارد کنید</mat-hint>
+                                <mat-error *ngIf="EmailCtrl.hasError('required')">وارد کردن ایمیل الزامی است</mat-error>
+                                <mat-error *ngIf="EmailCtrl.hasError('pattern')">ایمیل را به درستی وارد کنید</mat-error>
+                                <mat-error *ngIf="EmailCtrl.errors && EmailCtrl.hasError('maxlength')">حداکثر 50 کاراکتر</mat-error>
+                                <mat-error
+                                    *ngIf="EmailCtrl.hasError('server')">{{EmailCtrl.getError('server')}}
+                                </mat-error>
                             </mat-form-field>
 
                             <mat-form-field appearance="outline">
-                                <mat-label>رمز قدیمی</mat-label>
+                                <mat-label>رمز فعلی</mat-label>
                                 <input class="input" type="password" formControlName="currentPasswordCtrl"
-                                    label="Current Password" placeHolder="رمز قدیمی خودرا واردکنید" matInput>
+                                    label="Current Password" placeholder="****" matInput>
+                                <mat-hint>رمز فعلی خود را وارد کنید</mat-hint>
+                                <mat-error *ngIf="CurrentPasswordCtrl.hasError('required')">رمز فعلی را وارد
+                                    نکردید</mat-error>
+                                    <mat-error *ngIf="CurrentPasswordCtrl.errors && CurrentPasswordCtrl.hasError('minlength')">حداقل ۷ کاراکتر</mat-error>
+                                    <mat-error *ngIf="CurrentPasswordCtrl.errors && CurrentPasswordCtrl.hasError('maxlength')">حداکثر ۲۰ کاراکتر</mat-error>
                             </mat-form-field>
 
                             <mat-form-field appearance="outline">
                                 <mat-label>رمز جدید</mat-label>
                                 <input class="input" type="password" formControlName="passwordCtrl" label="Password"
-                                    placeHolder="رمز جدید خودرا وارد کنید" matInput>
+                                    placeholder="****" matInput>
+                                <mat-hint>رمز جدید را وارد کنید</mat-hint>
+                                <mat-error *ngIf="PasswordCtrl.hasError('required')">برای تغییر رمز، لطفاً رمز جدید را
+                                    بنویسید</mat-error>
+                                    <mat-error *ngIf="PasswordCtrl.errors && PasswordCtrl.hasError('minlength')">حداقل ۷ کاراکتر</mat-error>
+                                    <mat-error *ngIf="PasswordCtrl.errors && PasswordCtrl.hasError('maxlength')">حداکثر ۲۰ کاراکتر</mat-error>
                             </mat-form-field>
 
                             <mat-form-field appearance="outline">
                                 <mat-label>تکرار رمز جدید</mat-label>
                                 <input class="input" type="password" formControlName="confirmPasswordCtrl"
-                                    label="Confirm Password" placeHolder="تکرار رمز جدید" matInput>
+                                    label="Confirm Password" placeholder="****" matInput>
+                                <mat-hint>رمز جدید را مجدد وارد کنید</mat-hint>
+                                <mat-error *ngIf="ConfirmPasswordCtrl.hasError('required')">برای تأیید، رمز جدید را
+                                    دوباره وارد کنید</mat-error>
+                                    <mat-error *ngIf="ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('minlength')">حداقل ۷ کاراکتر</mat-error>
+                                    <mat-error *ngIf="ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('maxlength')">حداکثر ۲۰ کاراکتر</mat-error>
                             </mat-form-field>
                         </div>
 
