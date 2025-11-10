@@ -16,7 +16,7 @@ public class ManagerRepository : IManagerRepository
     List<UpdateDefinition<AppUser>> updateDefinitions = new List<UpdateDefinition<AppUser>>();
     UpdateDefinitionBuilder<AppUser> updateDefinitionBuilder = Builders<AppUser>.Update;
 
-    if (dto.Name is not null)
+    if (!string.IsNullOrWhiteSpace(dto.Name))
     {
       string trimmed = dto.Name.Trim();
       if (!string.Equals(user.Name, trimmed, StringComparison.Ordinal))
@@ -26,7 +26,7 @@ public class ManagerRepository : IManagerRepository
       }
     }
 
-    if (dto.LastName is not null)
+    if (!string.IsNullOrWhiteSpace(dto.LastName))
     {
       string trimmed = dto.LastName.Trim();
       if (!string.Equals(user.LastName, trimmed, StringComparison.Ordinal))
