@@ -56,6 +56,7 @@ export class CourseEditComponent implements OnInit {
   ngOnInit(): void {
     this.getCourse();
     console.log(this.course);
+    this.openDivTeachers();
   }
 
   courseFg: FormGroup = this._fb.group({
@@ -83,7 +84,7 @@ export class CourseEditComponent implements OnInit {
   showErr(value: FormControl | null | undefined): boolean {
     return !!value && value.invalid && (value.dirty || value.touched);
   }
-  
+
   private toGregorianDateOnly(value: Moment | Date | string | null | undefined): string | undefined {
     if (!value) return undefined;
 
