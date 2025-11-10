@@ -67,7 +67,7 @@ export class CourseEditComponent implements OnInit {
     Validators.pattern(/^(?:0\.5|[1-9](?:\.5)?|10)$/),
     ]],
     startCtrl: [null, [Validators.required]],
-    isStartedCtrl: ['']
+    isStartedCtrl: [false]
   });
 
   get TitleCtrl(): FormControl { return this.courseFg.get('titleCtrl') as FormControl; }
@@ -160,7 +160,7 @@ export class CourseEditComponent implements OnInit {
         hours: this.HoursCtrl.value,
         hoursPerClass: this.HoursPerClassCtrl.value,
         start: this.toGregorianDateOnly(start),
-        isStarted: this.IsStartedCtrl.value,
+        isStarted: !!this.IsStartedCtrl.value,
       };
 
       this._courseService.update(updatedCourse, courseTitle)

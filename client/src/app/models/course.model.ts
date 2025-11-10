@@ -6,7 +6,7 @@ export interface Course {
     hoursPerClass: DoubleRange,
     days: number,
     start: string | undefined,
-    isStarted: string
+    isStarted: boolean
 }
 
 export interface ShowCourse {
@@ -17,7 +17,7 @@ export interface ShowCourse {
     hoursPerClass: DoubleRange,
     days: number,
     start: string | undefined,
-    isStarted: string
+    isStarted: boolean
 }
 
 export interface CourseUpdate {
