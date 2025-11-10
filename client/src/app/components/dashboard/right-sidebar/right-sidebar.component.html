@@ -1,5 +1,4 @@
 @if (userSig(); as user) {
-@if (user) {
 <nav class="sidebar" [attr.aria-expanded]="!collapsed()">
     <button class="toggle-btn" type="button" [attr.aria-label]="collapsed() ? 'باز کردن منو' : 'بستن منو'"
         (click)="toggleSidebar()">
@@ -59,5 +58,4 @@
         </li>
     </ul>
 </nav>
-}
 }
