@@ -1,3 +1,4 @@
+@if (userSig(); as user) {
 <nav class="sidebar" [attr.aria-expanded]="!collapsed()">
     <button class="toggle-btn" type="button" [attr.aria-label]="collapsed() ? 'باز کردن منو' : 'بستن منو'"
         (click)="toggleSidebar()">
@@ -5,8 +6,7 @@
     </button>
 
     <ul>
-        @if (loggedInUserSig && loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
-        loggedInUserSig()?.roles?.includes('manager')) {
+        @if (user.userName.toLowerCase() !== 'admin' && user.roles.includes('manager')) {
         <li routerLinkActive="active">
             <a [routerLink]="['/dashboard/manager-panel']" title="ثبت نام">
                 <span class="icon" aria-hidden="true">
@@ -19,7 +19,7 @@
         </li>
         }
 
-        @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
+        @if (user.roles.includes('manager')) {
         <li routerLinkActive="active">
             <a [routerLink]="['/dashboard/members']" title="کاربران">
                 <span class="icon" aria-hidden="true">
@@ -33,8 +33,7 @@
         </li>
         }
 
-        @if (loggedInUserSig && loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
-        loggedInUserSig()?.roles?.includes('teacher')) {
+        @if (user.userName.toLowerCase() !== 'admin' && user.roles.includes('teacher')) {
         <li routerLinkActive="active">
             <a [routerLink]="['/dashboard/teacher-panel']" title="پنل معلم">
                 <span class="icon" aria-hidden="true">
@@ -59,3 +58,4 @@
         </li>
     </ul>
 </nav>
+}
