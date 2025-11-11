@@ -82,7 +82,7 @@
 
         <div class="div-bg-course">
             <div class="div-course">
-                <div class="left-item" [routerLink]="['/courses']" routerLinkActive #rla="routerLinkActive">
+                <div class="left-item" [routerLink]="['/dashboard/courses']" routerLinkActive #rla="routerLinkActive">
                     <mat-icon>north_west</mat-icon>
                 </div>
                 <div class="center-item">
@@ -102,21 +102,14 @@
                 <div class="track" [style.transform]="'translateX(-' + currentIndexCourse * 100 + '%)'">
                     <div class="slide" *ngFor="let course of sliderCourses">
                         <div class="div-bg-title-img">
-                            <img [src]="course.image" [alt]="course.nameTitleCourse" />
-                            <span class="span-course">دوره پروژه محور {{ course.nameTitleCourse }}</span>
-                        </div>
+                            <img [src]="course.image" [alt]="course.nameTitleCourse" [routerLink]="['/courses']"
+                                routerLinkActive #rla="routerLinkActive" />
+                            <div class="icon-course" [routerLink]="['/dashboard/courses']" routerLinkActive
+                                #rla="routerLinkActive">
+                                <mat-icon>north_west</mat-icon>
+                            </div>
 
-                        <div class="div-title-course">
-                            <div class="right">
-                                <span class="span-title">دوره پروژه محور</span>
-                                <span class="span-title-from-ts">{{ course.nameTitleCourse }}</span>
-                            </div>
-                            <div class="left">
-                                <div class="bg-icon" [routerLink]="['/courses']" routerLinkActive
-                                    #rla="routerLinkActive">
-                                    <mat-icon>north_west</mat-icon>
-                                </div>
-                            </div>
+                            <span class="span-course">دوره پروژه محور {{ course.nameTitleCourse }}</span>
                         </div>
                     </div>
                 </div>

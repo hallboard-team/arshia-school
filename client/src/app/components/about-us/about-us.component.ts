@@ -11,31 +11,31 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
-    selector: 'app-about-us',
-    imports: [
-        NavbarComponent, MatTabsModule, MatDatepickerModule,
-        MatInputModule, MatFormFieldModule, MatIconModule,
-        MatExpansionModule, MatButtonModule, RouterModule
-    ],
-    templateUrl: './about-us.component.html',
-    styleUrl: './about-us.component.scss',
-    providers: [provideNativeDateAdapter()],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'app-about-us',
+  imports: [
+    NavbarComponent, MatTabsModule, MatDatepickerModule,
+    MatInputModule, MatFormFieldModule, MatIconModule,
+    MatExpansionModule, MatButtonModule, RouterModule
+  ],
+  templateUrl: './about-us.component.html',
+  styleUrl: './about-us.component.scss',
+  providers: [provideNativeDateAdapter()],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AboutUsComponent {
   accordion = viewChild.required(MatAccordion);
 
   step = signal(0);
 
-  setStep(index: number) {
+  setStep(index: number): void {
     this.step.set(index);
   }
 
-  nextStep() {
+  nextStep(): void {
     this.step.update(i => i + 1);
   }
 
-  prevStep() {
+  prevStep(): void {
     this.step.update(i => i - 1);
   }
-}
+} 

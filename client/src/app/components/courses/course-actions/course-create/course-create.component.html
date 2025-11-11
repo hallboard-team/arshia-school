@@ -1,0 +1,103 @@
+<header>
+    <nav>
+        <app-navbar />
+    </nav>
+</header>
+
+<div class="background">
+    <app-back-forward-button class="bf-btns"></app-back-forward-button>
+
+    <form class="course-form" [formGroup]="courseFg" (ngSubmit)="courseFg.valid && createCourse()">
+        <div class="content">
+
+            <div class="div-title-radio-input">
+                <span class="title">اضافه کردن دوره جدید</span>
+            </div>
+
+            <!-- title -->
+            <div class="form-item">
+                <mat-form-field appearance="outline">
+                    <mat-label>اسم دوره</mat-label>
+                    <input class="input" autoFocusDir type="text" formControlName="titleCtrl" matInput dir="auto"
+                        placeholder="بین ۲ تا ۳۰ کاراکتر باشد">
+                    <mat-hint>اسم دوره جدید را وارد کنید</mat-hint>
+                </mat-form-field>
+                <div class="field-error" *ngIf="showErr(TitleCtrl)">
+                    <span *ngIf="TitleCtrl.hasError('required')">لطفاً نام دوره را وارد کنید</span>
+                    <span *ngIf="TitleCtrl.hasError('minlength')">حداقل ۲ کاراکتر</span>
+                    <span *ngIf="TitleCtrl.hasError('maxlength')">حداکثر ۳۰ کاراکتر</span>
+                </div>
+            </div>
+
+            <!-- tuition -->
+            <div class="form-item">
+                <mat-form-field appearance="outline" class="tuition-field">
+                    <mat-label>شهریه</mat-label>
+                    <input class="input" type="text" matInput formControlName="tuitionCtrl" appCurrencyFormatter
+                        inputmode="numeric" dir="ltr" placeholder="از ۱۰.۰۰۰ تومان">
+                    <span matSuffix matSuffix *ngIf="TuitionCtrl.value">تومان</span>
+                    <mat-hint *ngIf="!showErr(TuitionCtrl)">
+                        بین ۱۰,۰۰۰ تا ۱۰۰,۰۰۰,۰۰۰
+                    </mat-hint>
+                </mat-form-field>
+                <div class="field-error" *ngIf="showErr(TuitionCtrl)">
+                    <span *ngIf="TuitionCtrl.hasError('required')">لطفاً مبلغ شهریه را مشخص کنید</span>
+                    <span *ngIf="TuitionCtrl.hasError('min')">حداقل شهریه ۱۰.۰۰۰ تومان است</span>
+                    <span *ngIf="TuitionCtrl.hasError('max')">حداکثر شهریه ۱۰۰.۰۰۰.۰۰۰ تومان (صد میلیون تومان)
+                        است</span>
+                </div>
+            </div>
+
+            <!-- total hours -->
+            <div class="form-item">
+                <mat-form-field appearance="outline">
+                    <mat-label>ساعت دوره</mat-label>
+                    <input class="input" type="text" formControlName="hoursCtrl" matInput min="0.5" max="20000"
+                        appDecimalFormatter inputmode="decimal" step="0.5" dir="ltr" placeholder="مجموع ساعت دوره">
+                    <mat-hint *ngIf="!showErr(HoursCtrl)">
+                        بین ۰۰:۳۰ تا ۲۰.۰۰۰
+                    </mat-hint>
+                </mat-form-field>
+                <div class="field-error" *ngIf="showErr(HoursCtrl)">
+                    <span *ngIf="HoursCtrl.hasError('required')">لطفاً ساعت کل دوره را وارد کنید</span>
+                    <span *ngIf="HoursCtrl.hasError('min')">حداقل ۰,۵ ساعت</span>
+                    <span *ngIf="HoursCtrl.hasError('max')">حداکثر ۲۰,۰۰۰ ساعت</span>
+                </div>
+            </div>
+
+            <!-- hours per class -->
+            <div class="form-item">
+                <mat-form-field appearance="outline">
+                    <mat-label>ساعت هر کلاس</mat-label>
+                    <input class="input" type="number" formControlName="hoursPerClassCtrl" matInput min="0.5" max="10"
+                        step="0.5" inputmode="decimal" dir="ltr" placeholder="شروع از 0.5 ساعت">
+                    <mat-hint *ngIf="!showErr(HoursPerClassCtrl)">بین ۰۰:۳۰ تا ۱۰</mat-hint>
+                </mat-form-field>
+                <div class="field-error" *ngIf="showErr(HoursPerClassCtrl)">
+                    <span *ngIf="HoursPerClassCtrl.hasError('required')">لطفا ساعت هر کلاس را مشخص کنید</span>
+                    <span *ngIf="HoursPerClassCtrl.hasError('pattern')">فقط اعداد ۰,۵ تا ۱۰ با گام ۰,۵ مجاز است</span>
+                    <span *ngIf="HoursPerClassCtrl.hasError('min')">حداقل زمان کلاس: نیم ساعت</span>
+                    <span *ngIf="HoursPerClassCtrl.hasError('max')">حداکثر زمان کلاس: ۱۰ ساعت</span>
+                </div>
+            </div>
+
+            <!-- start date -->
+            <div class="form-item">
+                <app-datepicker [formControl]="StartCtrl" [maxDate]="max" [minDate]="min"
+                    [label]="'تاریخ شروع'"></app-datepicker>
+                <div class="field-error" *ngIf="showErr(StartCtrl)">
+                    <span *ngIf="StartCtrl.hasError('required')">بدون وارد کردن تاریخ شروع، ثبت دوره ممکن نیست</span>
+                    <span *ngIf="StartCtrl.hasError('outOfRange')">
+                        تاریخ باید بین {{ min.format('jYYYY/jMM/jDD') }} و {{ max.format('jYYYY/jMM/jDD') }} باشد.
+                    </span>
+                </div>
+            </div>
+
+            <div class="div-btn-add">
+                <button type="submit" [disabled]="courseFg.invalid" mat-raised-button color="warn">ثبت دوره
+                    جدید</button>
+            </div>
+
+        </div>
+    </form>
+</div>

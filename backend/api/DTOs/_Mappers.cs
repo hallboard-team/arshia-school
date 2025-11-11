@@ -47,10 +47,10 @@ public static class Mappers
     public static MemberDto ConvertAppUserToMemberDto(AppUser appUser, bool isAbsent)
     {
         return new MemberDto(
-            Email: appUser.Email,
-            UserName: appUser.NormalizedUserName!,
-            Name: appUser.Name,
-            LastName: appUser.LastName,
+            Email: appUser.Email ?? string.Empty,
+            UserName: appUser.NormalizedUserName ?? string.Empty,
+            Name: appUser.Name ?? string.Empty,
+            LastName: appUser.LastName ?? string.Empty,
             PhoneNum: appUser.PhoneNum,
             Gender: appUser.Gender,
             Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth),
@@ -62,10 +62,10 @@ public static class Mappers
     public static TargetMemberDto ConvertAppUserToTargetMemberDto(AppUser appUser)
     {
         return new TargetMemberDto(
-            Email: appUser.Email,
-            UserName: appUser.NormalizedUserName!,
-            Name: appUser.Name,
-            LastName: appUser.LastName,
+            Email: appUser.Email ?? string.Empty,
+            UserName: appUser.NormalizedUserName ?? string.Empty,
+            Name: appUser.Name ?? string.Empty,
+            LastName: appUser.LastName ?? string.Empty,
             PhoneNum: appUser.PhoneNum,
             Gender: appUser.Gender,
             Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth),
@@ -88,10 +88,10 @@ public static class Mappers
     public static ProfileDto ConvertAppUserToProfileDto(AppUser appUser)
     {
         return new ProfileDto(
-            Email: appUser.Email,
-            UserName: appUser.NormalizedUserName!,
-            Name: appUser.Name,
-            LastName: appUser.LastName,
+            Email: appUser.Email ?? string.Empty,
+            UserName: appUser.NormalizedUserName ?? string.Empty,
+            Name: appUser.Name ?? string.Empty,
+            LastName: appUser.LastName ?? string.Empty,
             PhoneNum: appUser.PhoneNum,
             Gender: appUser.Gender,
             Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth)
@@ -131,11 +131,11 @@ public static class Mappers
             ProfessorsIds: [],
             // ProfessorsNames: [],
             Tuition: managerInput.Tuition,
-            Hours: managerInput.Hours,
-            HoursPerClass: managerInput.HoursPerClass,
+            TotalMinutes: (int)Math.Round(managerInput.Hours * 60d),
+            ClassMinutes: (int)Math.Round(managerInput.HoursPerClass * 60d),
             Days: daysCalc,
             Start: managerInput.Start,
-            IsStarted: "false"
+            IsStarted: false
         );
     }
 
@@ -145,13 +145,15 @@ public static class Mappers
         {
             Id = course.Id.ToString(),
             Title = course.Title,
-            // ProfessorNames = course.ProfessorsNames,
             Tuition = course.Tuition,
-            Hours = course.Hours,
-            HoursPerClass = course.HoursPerClass,
+            // ProfessorNames = course.ProfessorsNames,
+            Hours = course.TotalMinutes / 60d,
+            HoursPerClass = course.ClassMinutes / 60d,
             Days = course.Days,
             Start = course.Start,
-            IsStarted = course.IsStarted
+            IsStarted = course.IsStarted,
+            ProfessorUserNames = new List<string>(),
+            ProfessorNames = new List<string>()
         };
     }
 

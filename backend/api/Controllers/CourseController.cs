@@ -28,7 +28,7 @@ public class CourseController(ICourseRepository _courseRepository) : BaseApiCont
         PaginationHeader paginationHeader = new(
             CurrentPage: pagedCourses.CurrentPage,
             ItemsPerPage: pagedCourses.PageSize,
-            TotalItems: pagedCourses.TotalItems,
+            TotalItems: pagedCourses.TotalItemsCount,
             TotalPages: pagedCourses.TotalPages
         );
 
@@ -36,12 +36,12 @@ public class CourseController(ICourseRepository _courseRepository) : BaseApiCont
 
         List<ShowCourseDto> showCourseDtos = [];
 
-        foreach (Course course in pagedCourses)
+        foreach (var course in pagedCourses)
         {
-            List<string?> professorUserNames = await _courseRepository
+            List<string> professorUserNames = await _courseRepository
                 .GetProfessorUserNamesByIdsAsync(course.ProfessorsIds, cancellationToken);
 
-            List<string?> professorNames = await _courseRepository
+            List<string> professorNames = await _courseRepository
                 .GetProfessorNamesByIdsAsync(course.ProfessorsIds, cancellationToken);
 
             showCourseDtos.Add(new ShowCourseDto
@@ -51,8 +51,8 @@ public class CourseController(ICourseRepository _courseRepository) : BaseApiCont
                 ProfessorUserNames = professorUserNames,
                 ProfessorNames = professorNames,
                 Tuition = course.Tuition,
-                Hours = course.Hours,
-                HoursPerClass = course.HoursPerClass,
+                Hours = course.TotalMinutes / 60d,
+                HoursPerClass = course.ClassMinutes / 60d,
                 Days = course.Days,
                 Start = course.Start,
                 IsStarted = course.IsStarted

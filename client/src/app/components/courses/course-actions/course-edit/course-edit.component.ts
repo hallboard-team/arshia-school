@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { FormGroup, AbstractControl, FormControl, FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -19,6 +19,8 @@ import { ManagerService } from '../../../../services/manager.service';
 import { NavbarComponent } from '../../../navbar/navbar.component';
 import moment, { Moment } from 'moment-jalaali';
 import { DatepickerComponent } from '../../../../datepicker/datepicker.component';
+import { DecimalFormatterDirective } from '../../../../directives/decimal-formatter.directive';
+import { BackForwardButtonComponent } from "../../../back-forward-button/back-forward-button.component";
 
 @Component({
   selector: 'app-course-update',
@@ -27,7 +29,9 @@ import { DatepickerComponent } from '../../../../datepicker/datepicker.component
     ReactiveFormsModule, MatRadioModule, MatIconModule,
     MatCardModule, MatFormFieldModule, MatInputModule,
     MatButtonModule, CurrencyFormatterDirective, MatProgressSpinnerModule,
-    DatepickerComponent
+    DatepickerComponent,
+    DecimalFormatterDirective,
+    BackForwardButtonComponent
   ],
   templateUrl: './course-edit.component.html',
   styleUrl: './course-edit.component.scss'
@@ -55,12 +59,14 @@ export class CourseEditComponent implements OnInit {
   }
 
   courseFg: FormGroup = this._fb.group({
-    titleCtrl: ['',],
-    tuitionCtrl: ['',],
-    hoursCtrl: ['',],
-    hoursPerClassCtrl: ['',],
-    startCtrl: [null],
-    isStartedCtrl: ['',]
+    titleCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    tuitionCtrl: ['', [Validators.required, Validators.min(10_000), Validators.max(100_000_000),]],
+    hoursCtrl: ['', [Validators.required, Validators.pattern(/^(0(\.\d+)?|[1-9]\d*(\.\d+)?)$/), Validators.min(0.5), Validators.max(20000)]],
+    hoursPerClassCtrl: ['', [Validators.required, Validators.min(0.5), Validators.max(10),
+    Validators.pattern(/^(?:0\.5|[1-9](?:\.5)?|10)$/),
+    ]],
+    startCtrl: [null, [Validators.required]],
+    isStartedCtrl: ['']
   });
 
   get TitleCtrl(): FormControl { return this.courseFg.get('titleCtrl') as FormControl; }
@@ -70,6 +76,14 @@ export class CourseEditComponent implements OnInit {
   get StartCtrl(): FormControl { return this.courseFg.get('startCtrl') as FormControl; }
   get IsStartedCtrl(): FormControl { return this.courseFg.get('isStartedCtrl') as FormControl; }
 
+  private openSnack(message: string, panel: 'success' | 'error' = 'error'): void {
+    this.snackBar.open(message, 'باشه', { duration: 4000, horizontalPosition: 'center', verticalPosition: 'top', panelClass: [panel === 'success' ? 'snack-success' : 'snack-error'], direction: 'rtl' });
+  }
+
+  showErr(value: FormControl | null | undefined): boolean {
+    return !!value && value.invalid && (value.dirty || value.touched);
+  }
+  
   private toGregorianDateOnly(value: Moment | Date | string | null | undefined): string | undefined {
     if (!value) return undefined;
 
@@ -88,10 +102,6 @@ export class CourseEditComponent implements OnInit {
 
     const d = value as Date;
     return new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString().slice(0, 10);
-  }
-
-  private openSnack(message: string, panel: 'success' | 'error' = 'error'): void {
-    this.snackBar.open(message, 'باشه', { duration: 4000, horizontalPosition: 'center', verticalPosition: 'top', panelClass: [panel === 'success' ? 'snack-success' : 'snack-error'], direction: 'rtl' });
   }
 
   getCourse(): void {

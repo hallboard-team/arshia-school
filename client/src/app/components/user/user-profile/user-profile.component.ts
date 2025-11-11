@@ -16,7 +16,6 @@ import { Course, ShowCourse } from '../../../models/course.model';
 import { NavbarComponent } from '../../navbar/navbar.component';
 import { MemberUpdate } from '../../../models/member-update.model';
 import { ApiResponse } from '../../../models/helpers/apiResponse.model';
-import { AutoFocusDirective } from '../../../directives/auto-focus.directive';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { AccountService } from '../../../services/account.service';
 import { ManagerService } from '../../../services/manager.service';
@@ -31,17 +30,17 @@ import { Pagination } from '../../../models/helpers/pagination';
 import moment from 'moment-jalaali';
 
 @Component({
-    selector: 'app-user-profile',
-    imports: [
-        CommonModule, FormsModule, ReactiveFormsModule,
-        MatCardModule, MatFormFieldModule, AutoFocusDirective,
-        MatInputModule, MatButtonModule, NavbarComponent,
-        RouterModule, MatTabsModule, MatNativeDateModule,
-        MatRadioModule, MatSnackBarModule, MatDatepickerModule,
-        MatSelectModule
-    ],
-    templateUrl: './user-profile.component.html',
-    styleUrl: './user-profile.component.scss'
+  selector: 'app-user-profile',
+  imports: [
+    CommonModule, FormsModule, ReactiveFormsModule,
+    MatCardModule, MatFormFieldModule,
+    MatInputModule, MatButtonModule, NavbarComponent,
+    RouterModule, MatTabsModule, MatNativeDateModule,
+    MatRadioModule, MatSnackBarModule, MatDatepickerModule,
+    MatSelectModule
+  ],
+  templateUrl: './user-profile.component.html',
+  styleUrl: './user-profile.component.scss'
 })
 export class UserProfileComponent implements OnInit {
   private _accountService = inject(AccountService);

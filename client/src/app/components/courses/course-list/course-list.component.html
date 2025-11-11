@@ -6,11 +6,13 @@
     </header>
 
     <div class="div-title-course">
+        <app-back-forward-button class="bf-btns"></app-back-forward-button>
+
         <span>دوره های آموزشگاه</span>
     </div>
     @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
     <div class="div-btn-add-course">
-        <button class="add-btn" [routerLink]="['/add-course']">
+        <button class="add-btn" [routerLink]="['/dashboard/add-course']">
             <span class="icon-wrap" aria-hidden="true">
                 <svg class="icon" viewBox="0 0 24 24" role="img" focusable="false">
                     <circle cx="12" cy="12" r="9" fill="none" stroke="#ff2f72" stroke-width="2" />

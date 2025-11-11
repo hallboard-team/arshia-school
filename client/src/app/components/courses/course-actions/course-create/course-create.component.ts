@@ -7,13 +7,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { HttpClient } from '@angular/common/http';
-import { AutoFocusDirective } from '../../../../directives/auto-focus.directive';
 import { CurrencyFormatterDirective } from '../../../../directives/currency-formatter.directive';
 import { NavbarComponent } from '../../../navbar/navbar.component';
 import { AddCourse } from '../../../../models/course.model';
 import { CourseService } from '../../../../services/course.service';
 import moment, { Moment } from 'moment-jalaali';
 import { DatepickerComponent } from '../../../../datepicker/datepicker.component';
+import { DecimalFormatterDirective } from '../../../../directives/decimal-formatter.directive';
+import { BackForwardButtonComponent } from "../../../back-forward-button/back-forward-button.component";
 
 @Component({
   selector: 'app-add-course',
@@ -21,8 +22,10 @@ import { DatepickerComponent } from '../../../../datepicker/datepicker.component
     CommonModule, FormsModule,
     ReactiveFormsModule, MatFormFieldModule, MatInputModule,
     MatButtonModule, MatSnackBarModule,
-    AutoFocusDirective, DatepickerComponent,
-    MatIconModule, NavbarComponent, CurrencyFormatterDirective
+    DatepickerComponent,
+    MatIconModule, NavbarComponent, CurrencyFormatterDirective,
+    DecimalFormatterDirective,
+    BackForwardButtonComponent
   ],
   templateUrl: './course-create.component.html',
   styleUrl: './course-create.component.scss'
@@ -40,11 +43,10 @@ export class CourseCreateComponent {
 
   courseFg = this.fb.group({
     titleCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    tuitionCtrl: ['', [Validators.required, Validators.pattern(/^[1-9]\d*000000$/)]],
-    hourseCtrl: ['', [Validators.required, Validators.pattern(/^\d+$/), Validators.min(1), Validators.max(500)]],
-    hoursePerClassCtrl: ['', [Validators.required, Validators.pattern(/^(?:[1-3](?:\.5)?|4)$/),
-    Validators.min(1),
-    Validators.max(4)
+    tuitionCtrl: ['', [Validators.required, Validators.min(10_000), Validators.max(100_000_000),]],
+    hoursCtrl: ['', [Validators.required, Validators.pattern(/^(0(\.\d+)?|[1-9]\d*(\.\d+)?)$/), Validators.min(0.5), Validators.max(20000)]],
+    hoursPerClassCtrl: ['', [Validators.required, Validators.min(0.5), Validators.max(10),
+    Validators.pattern(/^(?:0\.5|[1-9](?:\.5)?|10)$/), 
     ]],
     startCtrl: ['', [Validators.required]]
   });
@@ -55,11 +57,11 @@ export class CourseCreateComponent {
   get TuitionCtrl(): FormControl {
     return this.courseFg.get('tuitionCtrl') as FormControl;
   }
-  get HourseCtrl(): FormControl {
-    return this.courseFg.get('hourseCtrl') as FormControl;
+  get HoursCtrl(): FormControl {
+    return this.courseFg.get('hoursCtrl') as FormControl;
   }
-  get HoursePerClassCtrl(): FormControl {
-    return this.courseFg.get('hoursePerClassCtrl') as FormControl;
+  get HoursPerClassCtrl(): FormControl {
+    return this.courseFg.get('hoursPerClassCtrl') as FormControl;
   }
   get StartCtrl(): FormControl {
     return this.courseFg.get('startCtrl') as FormControl;
@@ -108,8 +110,8 @@ export class CourseCreateComponent {
     let addCourse: AddCourse = {
       title: this.TitleCtrl.value,
       tuition: this.TuitionCtrl.value,
-      hours: this.HourseCtrl.value,
-      hoursPerClass: this.HoursePerClassCtrl.value,
+      hours: this.HoursCtrl.value,
+      hoursPerClass: this.HoursPerClassCtrl.value,
       start: this.toGregorianDateOnly(start)
     }
 

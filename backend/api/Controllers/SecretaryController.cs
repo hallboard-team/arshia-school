@@ -1,7 +1,7 @@
 namespace api.Controllers;
 
 [Authorize(Policy = "RequiredSecretaryRole")]
-public class SecretaryController(ISecretaryRepository _secretaryRepository) : BaseApiController
+public class SecretaryController() : BaseApiController
 {
     // [HttpPost("add-student")]
     // public async Task<ActionResult<LoggedInDto>> CreateStudent(RegisterDto managerInput, CancellationToken cancellationToken)

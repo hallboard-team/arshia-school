@@ -37,7 +37,7 @@ public class MemberController
         PaginationHeader paginationHeader = new(
             CurrentPage: pagedAttendences.CurrentPage,
             ItemsPerPage: pagedAttendences.PageSize,
-            TotalItems: pagedAttendences.TotalItems,
+            TotalItems: pagedAttendences.TotalItemsCount,
             TotalPages: pagedAttendences.TotalPages
         );
 
@@ -76,34 +76,24 @@ public class MemberController
     [HttpGet("get-course")]
     public async Task<ActionResult<List<Course>>> GetCourse(CancellationToken cancellationToken)
     {
-        string? HashedUserId = User.GetHashedUserId();
-
-        if (string.IsNullOrEmpty(HashedUserId))
+        string? hashedUserId = User.GetHashedUserId();
+        if (string.IsNullOrEmpty(hashedUserId))
             return BadRequest("No user was found with this userId.");
 
-        List<Course>? courses = await _memberRepository.GetCourseAsync(HashedUserId, cancellationToken);
-
-        if (courses is null || !courses.Any())
-        {
-            return Ok(new List<Course>());
-        }
-
-        return Ok(courses);
+        var courses = await _memberRepository.GetCourseAsync(hashedUserId, cancellationToken);
+        return courses.Count == 0 ? Ok(new List<Course>()) : Ok(courses);
     }
 
     [HttpGet("get-enrolled-course/{courseTitle}")]
     public async Task<ActionResult<EnrolledCourse>> GetEnrolledCourse(string courseTitle, CancellationToken cancellationToken)
     {
-        string? HashedUserId = User.GetHashedUserId();
+        string? hashedUserId = User.GetHashedUserId();
 
-        if (string.IsNullOrEmpty(HashedUserId))
+        if (string.IsNullOrEmpty(hashedUserId))
             return BadRequest("No user was found with this userId.");
 
-        EnrolledCourse? enrolledCourse = await _memberRepository.GetEnrolledCourseAsync(HashedUserId, courseTitle, cancellationToken);
-
-        if (enrolledCourse == null)
-            return NotFound("دوره مورد نظر یافت نشد");
-
-        return enrolledCourse;
+        EnrolledCourse? enrolledCourse = await _memberRepository.GetEnrolledCourseAsync(hashedUserId, courseTitle, cancellationToken);
+        
+        return enrolledCourse is null ? NotFound("دوره مورد نظر یافت نشد") : Ok(enrolledCourse);
     }
 }

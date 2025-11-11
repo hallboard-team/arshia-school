@@ -4,24 +4,26 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { Observable, Subscription } from 'rxjs';
 
 import { RouterModule } from '@angular/router';
-import { Course, ShowCourse } from '../../../../models/course.model';
-import { CourseParams } from '../../../../models/helpers/course-params';
-import { PaginatedResult } from '../../../../models/helpers/paginatedResult';
-import { Pagination } from '../../../../models/helpers/pagination';
-import { LoggedInUser } from '../../../../models/logged-in-user.model';
-import { AccountService } from '../../../../services/account.service';
-import { CourseService } from '../../../../services/course.service';
-import { NavbarComponent } from '../../../navbar/navbar.component';
-import { CourseCardComponent } from '../../course-card/course-card.component';
+import { Course, ShowCourse } from '../../../models/course.model';
+import { CourseParams } from '../../../models/helpers/course-params';
+import { PaginatedResult } from '../../../models/helpers/paginatedResult';
+import { Pagination } from '../../../models/helpers/pagination';
+import { LoggedInUser } from '../../../models/logged-in-user.model';
+import { AccountService } from '../../../services/account.service';
+import { CourseService } from '../../../services/course.service';
+import { NavbarComponent } from '../../navbar/navbar.component';
+import { CourseCardComponent } from '../course-card/course-card.component';
+import { BackForwardButtonComponent } from "../../back-forward-button/back-forward-button.component";
 
 @Component({
   selector: 'app-course-list',
   imports: [
     CommonModule, MatPaginatorModule, CourseCardComponent,
-    NavbarComponent, RouterModule
+    NavbarComponent, RouterModule,
+    BackForwardButtonComponent
   ],
-  templateUrl: './courses-list.component.html',
-  styleUrl: './courses-list.component.scss'
+  templateUrl: './course-list.component.html',
+  styleUrl: './course-list.component.scss'
 })
 export class CoursesListComponent implements OnInit, OnDestroy {
   private _accountService = inject(AccountService);

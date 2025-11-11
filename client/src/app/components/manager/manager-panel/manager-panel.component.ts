@@ -10,12 +10,8 @@ import { RegisterTeacherComponent } from '../register/register-teacher/register-
   selector: 'app-manager-panel',
   standalone: true,
   imports: [
-    CommonModule,
-    MatTabsModule,
-    NavbarComponent,
-    RegisterStudentComponent,
-    RegisterTeacherComponent,
-    RegisterSecretaryComponent
+    CommonModule, MatTabsModule, NavbarComponent,
+    RegisterStudentComponent, RegisterTeacherComponent, RegisterSecretaryComponent
   ],
   templateUrl: './manager-panel.component.html',
   styleUrl: './manager-panel.component.scss'

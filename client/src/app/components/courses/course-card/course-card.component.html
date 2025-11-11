@@ -4,19 +4,22 @@
     <span class="text">🕒 مدت دوره: {{ courseIn.hours }} ساعت</span>
     <span class="text">📅 روزهای دوره: {{ courseIn.days }}</span>
     <span class="text">⏳ ساعت به ازای هر کلاس: {{ courseIn.hoursPerClass }}</span>
+
     <div class="div-start-day">
         <span class="title">📅 تاریخ شروع دوره</span>
         <span class="result">{{ shamsiStartDate }}</span>
     </div>
 
-    <div class="div-professors-name" *ngIf="courseIn?.professorNames?.length">
+    @if (courseIn.professorNames.length) {
+    <div class="div-professors-name">
         <span class="teachers-name">
-            {{ (courseIn?.professorNames?.length ?? 0) === 1 ? 'استاد:' : 'اساتید:' }}
+            {{ courseIn.professorNames.length === 1 ? 'استاد:' : 'اساتید:' }}
         </span>
         <div class="result-teachers-name">
-            {{ courseIn?.professorNames?.join(', ') }}
+            {{ courseIn.professorNames.join(', ') }}
         </div>
     </div>
+    }
 
     @if (courseIn.isStarted == 'true') {
     <span class="text-isStarted-true">در حال اجرا ✅</span>
@@ -25,8 +28,8 @@
     }
 
     @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
-    <div class="div-button-edit-course" [routerLink]="['/' + 'update-course/' + courseIn.title]" routerLinkActive
-        #rla="routerLinkActive">
+    <div class="div-button-edit-course" [routerLink]="['/' + 'dashboard/' + 'update-course/' + courseIn.title]"
+        routerLinkActive #rla="routerLinkActive">
         <button>ادیت دوره</button>
     </div>
     }
