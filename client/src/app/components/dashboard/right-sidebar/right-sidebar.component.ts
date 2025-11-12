@@ -1,5 +1,5 @@
 import {
-  Component, EventEmitter, HostBinding, inject, OnInit, Output, Signal, signal
+  Component, computed, EventEmitter, HostBinding, inject, OnInit, Output, Signal, signal
 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AccountService } from '../../../services/account.service';
@@ -20,7 +20,8 @@ export class RightSidebarComponent implements OnInit {
   private accountService = inject(AccountService);
   public memberService = inject(MemberService);
 
-  loggedInUserSig: Signal<LoggedInUser | null> | undefined;
+  loggedInUserSig: Signal<LoggedInUser | null> = signal<LoggedInUser | null>(null);
+  userSig = computed<LoggedInUser | null>(() => this.loggedInUserSig?.() ?? null);
   profile: UserProfile | null = null;
   error: string | null = null;
 
@@ -37,7 +38,9 @@ export class RightSidebarComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.loggedInUserSig = this.accountService.loggedInUserSig;
+    if (this.accountService.loggedInUserSig) {
+      this.loggedInUserSig = this.accountService.loggedInUserSig;
+    }
 
     this.applyDefaultByRoute(this.router.url, true);
 

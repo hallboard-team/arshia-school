@@ -46,11 +46,13 @@ nav {
             transform-style: preserve-3d;
 
             .div-transsform-style {
+
                 display: flex;
                 gap: 10px;
                 transform-style: preserve-3d;
 
                 .btn {
+                    background: transparent;
                     padding: 5px;
                     background-color: transparent;
                     border-radius: 6px;
@@ -101,14 +103,20 @@ nav {
                     transform: skew(45deg) translate(-50%, -50%);
                 }
 
-                .btn:hover {
-                    color: #fff;
-                }
+                // .btn:hover {
+                //     color: #fff;
+                // }
 
                 .btn:active {
                     filter: brightness(.7);
                     transform: scale(.98);
                 }
+            }
+
+            .div-transsform-style .btn.active {
+                background-color: rgb(52, 52, 255);
+                color: #fff;
+                box-shadow: inset 5px 5px 10px #2e2edb, inset -5px -5px 10px #6f6fff;
             }
 
         }
@@ -457,6 +465,8 @@ nav {
                 }
 
                 .div-routes {
+                    background: transparent;
+                    color: #0ea5e9;
                     width: 100%;
                     display: flex;
                     flex-direction: column;

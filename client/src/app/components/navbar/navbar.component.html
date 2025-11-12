@@ -6,9 +6,12 @@
 
         <div class="div-links">
             <div class="div-transsform-style">
-                <button class="btn" [routerLink]="['/dashboard/courses']">دوره ها</button>
-                <button class="btn" [routerLink]="['/dashboard/about']">درباره ما</button>
-                <button class="btn" [routerLink]="['/dashboard/contact-us']">تماس باما</button>
+                <button class="btn" [routerLink]="['/dashboard/courses']" routerLinkActive="active"
+                    [routerLinkActiveOptions]="{ exact: true }">دوره ها</button>
+                <button class="btn" [routerLink]="['/dashboard/about']" routerLinkActive="active"
+                    [routerLinkActiveOptions]="{ exact: true }">درباره ما</button>
+                <button class="btn" [routerLink]="['/dashboard/contact-us']" routerLinkActive="active"
+                    [routerLinkActiveOptions]="{ exact: true }">تماس باما</button>
             </div>
         </div>
     </section>
