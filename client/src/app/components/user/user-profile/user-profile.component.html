@@ -34,30 +34,27 @@
 
     <div class="div-tabs">
         <mat-tab-group (selectedTabChange)="onTabChange($event)">
-            <mat-tab label="ویرایش پروفایل">
+
+            <mat-tab label="تغییر پروفایل">
+                <div class="div-edit-profile">
+                    <form class="update-member-form" [formGroup]="memberEditFg"
+                        (ngSubmit)="memberEditFg.valid && updateMember()">
+
+                    </form>
+                </div>
+            </mat-tab>
+
+            <mat-tab label="تغییر رمز عبور">
                 <div class="div-edit-profile">
                     <form class="update-member-form" [formGroup]="memberEditFg"
                         (ngSubmit)="memberEditFg.valid && updateMember()">
                         <div class="div-title">
-                            <span class="title">تغییر در پروفایل خود</span>
+                            <span class="title">رمز عبور خود را تغییر بدید</span>
                         </div>
 
                         <div class="content">
                             <mat-form-field appearance="outline">
-                                <mat-label>ایمیل</mat-label>
-                                <input class="input" autoFocusDir type="email" formControlName="emailCtrl" label="Email"
-                                    placeholder="ایمیل جدید" matInput>
-                                <mat-hint>ایمیل خود را وارد کنید</mat-hint>
-                                <mat-error *ngIf="EmailCtrl.hasError('required')">وارد کردن ایمیل الزامی است</mat-error>
-                                <mat-error *ngIf="EmailCtrl.hasError('pattern')">ایمیل را به درستی وارد کنید</mat-error>
-                                <mat-error *ngIf="EmailCtrl.errors && EmailCtrl.hasError('maxlength')">حداکثر 50 کاراکتر</mat-error>
-                                <mat-error
-                                    *ngIf="EmailCtrl.hasError('server')">{{EmailCtrl.getError('server')}}
-                                </mat-error>
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline">
-                                <mat-label>رمز فعلی</mat-label>
+                                <mat-label>رمز قدیمی</mat-label>
                                 <input class="input" type="password" formControlName="currentPasswordCtrl"
                                     label="Current Password" placeholder="****" matInput>
                                 <mat-hint>رمز فعلی خود را وارد کنید</mat-hint>
