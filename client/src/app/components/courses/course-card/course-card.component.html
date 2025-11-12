@@ -1,7 +1,7 @@
 @if (courseIn) {
 <div class="card-items">
     <span class="course-title">{{ courseIn.title }}
-        @if (courseIn.isStarted == 'true') {
+        @if (courseIn.isStarted == true) {
         <span class="text-isStarted-true">✅</span>
         }@else {
         <span class="text-isStarted-false">⏳</span>
