@@ -32,6 +32,20 @@ public class ShowCourseDto
     public bool IsStarted { get; init; }
 };
 
+public class CourseResponse
+{
+    public string Id { get; init; } = string.Empty;
+    public string Title { get; init; } = string.Empty;
+    public List<string> ProfessorUserNames { get; init; } = new();
+    public List<string> ProfessorNames { get; init; } = new();
+    public int Tuition { get; init; }
+    public int TotalMinutes { get; init; }
+    public int ClassMinutes { get; init; }
+    public int Days { get; init; }
+    public DateTime Start { get; init; }
+    public bool IsStarted { get; init; }
+}
+
 public class UpdateCourseDto
 {
     [Required, MinLength(2, ErrorMessage = "عنوان حداقل ۲ کاراکتر است"),

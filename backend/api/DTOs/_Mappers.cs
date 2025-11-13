@@ -157,6 +157,23 @@ public static class Mappers
         };
     }
 
+    public static CourseResponse ConvertCourseToCourseRes(Course course, List<string> userNames, List<string> names)
+    {
+        return new CourseResponse
+        {
+            Id = course.Id.ToString(),
+            Title = course.Title,
+            ProfessorUserNames = userNames,
+            ProfessorNames = names,
+            Tuition = course.Tuition,
+            TotalMinutes = course.TotalMinutes,
+            ClassMinutes = course.ClassMinutes,
+            Days = course.Days,
+            Start = course.Start,
+            IsStarted = course.IsStarted
+        };
+    }
+
     public static EnrolledCourse ConvertAddEnrolledCourseDtoToEnrolledCourse
         (AddEnrolledCourseDto managerInput, Course course,
             int paymentPerMonthCalc, int tuitionReminderCalc
