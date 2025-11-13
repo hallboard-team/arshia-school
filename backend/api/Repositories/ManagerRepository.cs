@@ -510,7 +510,7 @@ public class ManagerRepository : IManagerRepository
     return result.ModifiedCount > 0;
   }
 
-  public async Task<List<Course>> GetTargetMemberCourseAsync(
+  public async Task<List<CourseResponse>> GetTargetMemberCourseAsync(
     string targetUserName, CancellationToken cancellationToken
   )
   {
@@ -518,12 +518,24 @@ public class ManagerRepository : IManagerRepository
       Where(u => u.NormalizedUserName == targetUserName.ToUpper()).SelectMany(u => u.EnrolledCourses).
       Select(ec => ec.CourseId.ToString()).ToListAsync(cancellationToken);
 
-    if (enrolledCourseIds is null || enrolledCourseIds.Count == 0) return new List<Course>();
+    if (enrolledCourseIds is null || enrolledCourseIds.Count == 0) return new List<CourseResponse>();
 
     List<Course> courses = await _collectionCourse.Find(doc => enrolledCourseIds.Contains(doc.Id.ToString())).
       ToListAsync(cancellationToken);
 
-    return courses ?? new List<Course>();
+    List<string> userNames = [];
+    List<string> names = [];
+    List<CourseResponse> coursesRes = [];
+
+    foreach (var course in courses)
+    {
+      userNames = await _courseRepository.GetProfessorUserNamesByIdsAsync(course.ProfessorsIds, cancellationToken);
+      names = await _courseRepository.GetProfessorNamesByIdsAsync(course.ProfessorsIds, cancellationToken);
+
+      coursesRes.Add(Mappers.ConvertCourseToCourseRes(course, userNames, names));
+    }
+
+    return coursesRes ?? new List<CourseResponse>();
   }
 
   public async Task<EnrolledCourse?> GetTargetMemberEnrolledCourseAsync(
@@ -655,13 +667,15 @@ public class ManagerRepository : IManagerRepository
   private readonly ITokenService _tokenService;
   private readonly IMongoClient _client;
   private readonly IPhotoService _photoService;
+  private readonly ICourseRepository _courseRepository;
 
   public ManagerRepository(
     IMongoClient client,
     ITokenService tokenService,
     IMyMongoDbSettings dbSettings,
     UserManager<AppUser> userManager,
-    IPhotoService photoService
+    IPhotoService photoService,
+    ICourseRepository courseRepository
   )
   {
     _client = client; // used for Session
@@ -674,6 +688,7 @@ public class ManagerRepository : IManagerRepository
     _userManager = userManager;
     _tokenService = tokenService;
     _photoService = photoService;
+    _courseRepository = courseRepository;
   }
 
   #endregion
