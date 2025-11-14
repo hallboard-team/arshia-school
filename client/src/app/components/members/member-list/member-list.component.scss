@@ -77,6 +77,12 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 2rem;
+
+    .no-result {
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.6);
+        text-align: center;
+    }
 }
 
 .members-container {

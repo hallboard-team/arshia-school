@@ -34,7 +34,7 @@ export class MemberListComponent {
   private _route = inject(ActivatedRoute);
   private _fB = inject(FormBuilder);
 
-  members: Member[] | undefined;
+  members: Member[] = [];
   students$: Observable<Member[] | null> | undefined;
   pagination: Pagination | undefined;
 

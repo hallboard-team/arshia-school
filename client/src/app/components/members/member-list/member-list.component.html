@@ -42,8 +42,14 @@
   </div>
 
   <div class="div-cards-member">
+    @if (members && members.length > 0) {
     @for (member of members; track $index) {
     <app-member-card [memberInput]="member"></app-member-card>
+    }
+    } @else {
+    <div class="no-result">
+      کاربری با این مشخصات پیدا نشد.
+    </div>
     }
   </div>
 
