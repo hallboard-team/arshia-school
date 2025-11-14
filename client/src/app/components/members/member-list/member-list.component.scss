@@ -28,6 +28,15 @@
         .input-search {
             direction: rtl;
         }
+
+        .search-icon-btn {
+            cursor: default;
+
+            mat-icon {
+                font-size: 20px;
+                color: rgba(0, 0, 0, 0.55);
+            }
+        }
     }
 
     .age {
@@ -53,7 +62,10 @@
                 -5px -5px 10px #ffffff;
             border: none;
             height: 35px;
-            width: 150px;
+        }
+
+        .remove-filters {
+            color: red;
         }
     }
 }
