@@ -254,7 +254,7 @@ export class TargetUserProfileComponent implements OnInit {
         lastName: this.TargetLastNameCtrl.value,
         dateOfBirth: this.toGregorianDateOnly(dob),
         phoneNum: '98' + this.TargetPhoneNumCtrl.value
-      }
+      };
 
       this._managerService.updateMember(managerUpdateMember, memberUserName)
         .pipe(take(1)).subscribe({
@@ -416,7 +416,6 @@ export class TargetUserProfileComponent implements OnInit {
     return 'شروع نشده';
   }
 
-  // Baraye inke bargarde be hamon details ke dasht 
   onCancelEdit(): void {
     if (this.targetUserProfile) {
       this.initTargetControllersValues(this.targetUserProfile);
@@ -427,21 +426,14 @@ export class TargetUserProfileComponent implements OnInit {
     }
   }
 
-  // Baraye inke kolan input ha khali beshan
-  // onCancelEdit(): void {
-  //   this.targetMemberEditFg.reset();
-  // }
-
   onCancelAddEnrolledCourse(): void {
     this.addEnrolledCourseFg.reset();
-
     this.addEnrolledCourseFg.markAsPristine();
     this.addEnrolledCourseFg.markAsUntouched();
   }
 
   onCancelUpdateEnrolledCourse(): void {
     this.updateEnrolledCourseFg.reset();
-
     this.updateEnrolledCourseFg.markAsPristine();
     this.updateEnrolledCourseFg.markAsUntouched();
   }
@@ -467,6 +459,16 @@ export class TargetUserProfileComponent implements OnInit {
   }
 
   private openSnack(message: string, panel: 'success' | 'error' = 'error'): void {
-    this._matSnackBar.open(message, 'باشه', { duration: 4000, horizontalPosition: 'center', verticalPosition: 'top', panelClass: [panel === 'success' ? 'snack-success' : 'snack-error'], direction: 'rtl' });
+    this._matSnackBar.open(
+      message,
+      'باشه',
+      {
+        duration: 4000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: [panel === 'success' ? 'snack-success' : 'snack-error'],
+        direction: 'rtl'
+      }
+    );
   }
 }

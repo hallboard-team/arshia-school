@@ -13,7 +13,7 @@
         <div class="profile-card">
 
             <div class="profile-image">
-                @if (targetUserProfile?.gender === "Male") {
+                @if (isMale) {
                 <img src="../assets/images/menProfilePhoto.png" alt="Profile">
                 } @else {
                 <img src="../assets/images/womenProfilePhoto.png" alt="Profile">
@@ -28,10 +28,10 @@
                 <span class="description">شماره تلفن: {{targetUserProfile?.phoneNum}}</span>
                 <span class="description">سن: {{targetUserProfile?.age}}</span>
 
-                @if (targetUserProfile?.gender === "Male") {
-                <span class="gender-men-span">جنسیت: آقا</span>
+                @if (isMale) {
+                <span class="gender-men-span">جنسیت: مرد</span>
                 } @else {
-                <span class="gender-women-span">جنسیت: خانم</span>
+                <span class="gender-women-span">جنسیت: زن</span>
                 }
             </div>
         </div>
