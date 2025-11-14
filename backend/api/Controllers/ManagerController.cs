@@ -266,16 +266,16 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
     }
 
     [HttpGet("get-target-member-course/{targetUserName}")]
-    public async Task<ActionResult<List<Course>>> GetTargetMemberCourse(string targetUserName, CancellationToken cancellationToken)
+    public async Task<ActionResult<List<CourseResponse>>> GetTargetMemberCourse(string targetUserName, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(targetUserName))
         {
             return BadRequest("userName is required.");
         }
 
-        List<Course>? courses = await _managerRepository.GetTargetMemberCourseAsync(targetUserName, cancellationToken);
+        List<CourseResponse>? coursesRes = await _managerRepository.GetTargetMemberCourseAsync(targetUserName, cancellationToken);
 
-        return Ok(courses ?? new List<Course>());
+        return Ok(coursesRes ?? new List<CourseResponse>());
     }
 
     [HttpGet("get-target-member-enrolled-course/{targetUserName}/{courseTitle}")]

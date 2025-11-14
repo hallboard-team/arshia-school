@@ -17,7 +17,7 @@ public interface IManagerRepository
     Task<bool> UpdateMemberAsync(string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken);
     Task<Photo?> AddPhotoAsync(IFormFile file, string targetPaymentId, CancellationToken cancellationToken);
     Task<bool> DeletePhotoAsync(string targetPaymentId, CancellationToken cancellationToken);
-    Task<List<Course>> GetTargetMemberCourseAsync(string targetUserName, CancellationToken cancellationToken);
+    Task<List<CourseResponse>> GetTargetMemberCourseAsync(string targetUserName, CancellationToken cancellationToken);
     Task<EnrolledCourse?> GetTargetMemberEnrolledCourseAsync(string targetUserName, string courseTitle, CancellationToken cancellationToken);
     Task<Payment?> GetTargetPaymentByIdAsync(string targetPaymentId, CancellationToken cancellationToken);
     Task<List<string>> GetTargetCourseTitleAsync(string targetUserName, CancellationToken cancellationToken);
