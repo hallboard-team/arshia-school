@@ -1,6 +1,6 @@
 .container {
     width: 100%;
-    margin-top: 6rem;
+    margin-top: 9rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -13,13 +13,27 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column;
+        gap: 1rem;
+
+        .title {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+
+            span {
+                font-size: 23px;
+                font-weight: bold;
+            }
+        }
 
         .profile-card {
             width: 80%;
             background: #e0e5ec;
             border-radius: 20px;
             box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.1), -8px -8px 15px rgba(255, 255, 255, 0.7);
-            padding: 2rem;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -195,7 +209,22 @@
             width: 100%;
             display: flex;
             justify-content: center;
+            flex-direction: column;
             align-items: center;
+            margin-top: 10px;
+            gap: 1rem;
+
+            .title {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+
+                span {
+                    font-size: 22px;
+                    font-weight: bold;
+                }
+            }
 
             .update-member-form {
                 width: 100%;
@@ -208,34 +237,18 @@
                 justify-content: center;
                 align-items: center;
                 gap: 3rem;
+                margin-top: 1rem;
 
-                .div-radio-input {
+                .date-field {
+                    width: 80%;
                     display: flex;
-                    flex-direction: column;
                     justify-content: center;
                     align-items: center;
+                    margin-top: -25px;
+                }
+
+                .date-field app-datepicker {
                     width: 100%;
-                    margin-top: 1rem;
-                    gap: 1rem;
-
-                    .radio-group {
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        gap: 1rem;
-
-                        .radio-button {
-                            height: 60px;
-                            width: 100px;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            border-radius: 10px;
-                            background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                            box-shadow: 5px 5px 10px #5a5a5a,
-                                -5px -5px 10px #ffffff;
-                        }
-                    }
                 }
 
                 mat-form-field {
@@ -281,7 +294,7 @@
 
                         span {
                             font-size: 15px;
-                            color: red;
+                            color: blue;
                         }
                     }
 
@@ -789,4 +802,8 @@
         text-align: right;
         padding: 0px !important;
     }
+}
+
+::ng-deep app-datepicker input.mat-mdc-input-element {
+    margin-top: 12px;
 }
