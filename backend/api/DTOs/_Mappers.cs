@@ -204,6 +204,15 @@ public static class Mappers
         );
     }
 
+    public static MemberPhoto ConvertPhotoUrlsToMemberPhoto(string[] photoUrls)
+    {
+        return new MemberPhoto(
+            Url_165: photoUrls[0],
+            Url_256: photoUrls[1],
+            Url_enlarged: photoUrls[2]
+        );
+    }
+
     public static class Utils
     {
         private static readonly Random _random = new();
