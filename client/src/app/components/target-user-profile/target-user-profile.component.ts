@@ -187,12 +187,17 @@ export class TargetUserProfileComponent implements OnInit {
       this._managerService.getTargetUserCourses(memberUserName).subscribe({
         next: (data) => {
           this.courses = data;
-          // if (data !== null) {
-          //   this.shamsiCourses = data.map(course => ({
-          //     ...course,
-          //     shamsiStart: moment(course.start).format('jYYYY/jMM/jDD')
-          //   }));
-          // }
+          if (data !== null) {
+            this.shamsiCourses = data.map(course => ({
+              ...course,
+              hours: course.hours ?? (course.totalMinutes ?? 0) / 60,
+              hoursPerClass: course.hoursPerClass ?? (course.classMinutes ?? 0) / 60,
+              shamsiStart: moment(course.start).format('jYYYY/jMM/jDD')
+            }));
+          } else {
+            this.shamsiCourses = [];
+          }
+
           this.loading = false;
         },
         error: (err) => {
@@ -395,6 +400,44 @@ export class TargetUserProfileComponent implements OnInit {
     this.shamsiDisplayDate = event.shamsi;
     this.TargetDateOfBirthCtrl.setValue(new Date(event.gregorian));
     this.closeDatePicker();
+  }
+
+  getCourseStatus(course: { isStarted: boolean }): string {
+    if (course.isStarted) {
+      return 'در حال برگزاری';
+    }
+
+    return 'شروع نشده';
+  }
+
+  // Baraye inke bargarde be hamon details ke dasht 
+  onCancelEdit(): void {
+    if (this.targetUserProfile) {
+      this.initTargetControllersValues(this.targetUserProfile);
+      this.targetMemberEditFg.markAsPristine();
+      this.targetMemberEditFg.markAsUntouched();
+    } else {
+      this.targetMemberEditFg.reset();
+    }
+  }
+
+  // Baraye inke kolan input ha khali beshan
+  // onCancelEdit(): void {
+  //   this.targetMemberEditFg.reset();
+  // }
+
+  onCancelAddEnrolledCourse(): void {
+    this.addEnrolledCourseFg.reset();
+
+    this.addEnrolledCourseFg.markAsPristine();
+    this.addEnrolledCourseFg.markAsUntouched();
+  }
+
+  onCancelUpdateEnrolledCourse(): void {
+    this.updateEnrolledCourseFg.reset();
+
+    this.updateEnrolledCourseFg.markAsPristine();
+    this.updateEnrolledCourseFg.markAsUntouched();
   }
 
   private toGregorianDateOnly(value: Moment | Date | string | null | undefined): string | undefined {

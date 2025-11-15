@@ -278,6 +278,7 @@
                     align-items: center;
                     width: 100%;
                     margin-bottom: 1rem;
+                    gap: 1rem;
 
                     button {
                         height: 35px;
@@ -305,6 +306,10 @@
                         box-shadow: inset 5px 5px 10px #cacaca,
                             inset -5px -5px 10px #f6f6f6;
                     }
+
+                    .btn-cancel span {
+                        color: red;
+                    }
                 }
             }
         }
@@ -315,6 +320,17 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+
+            .title {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                span {
+                    font-size: 22px;
+                    font-weight: bold;
+                }
+            }
 
             .div-title-course {
                 margin-top: 10px;
@@ -360,7 +376,8 @@
 
                         .name-of-course-men {
                             font-size: 16px;
-                            color: #00c4ad;
+                            // color: #00c4ad;
+                            color: blue;
                             font-weight: bold;
                         }
 
@@ -388,10 +405,20 @@
                                     color: red;
                                 }
 
+                                .blue-text {
+                                    font-size: 15px;
+                                    color: blue;
+                                }
+
                                 .green-text {
                                     font-size: 15px;
                                     color: green;
                                     font-weight: bold;
+                                }
+
+                                .teachers-name {
+                                    font-weight: 600;
+                                    margin-left: 4px;
                                 }
                             }
                         }
@@ -490,16 +517,36 @@
                         }
                     }
 
-                    .button-enrolled {
-                        border: none;
-                        border-radius: 5px;
-                        background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                        box-shadow: 5px 5px 10px #797979,
-                            -5px -5px 10px #ffffff;
-                        height: 40px;
-                        width: 150px;
-                        padding: 6px 12px;
+                    .buttons-row {
+                        display: flex;
+                        gap: 12px;
+                        justify-content: center;
+                        align-items: center;
                         margin-bottom: 1rem;
+
+                        .button-enrolled {
+                            border: none;
+                            border-radius: 5px;
+                            background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                            box-shadow: 5px 5px 10px #797979,
+                                -5px -5px 10px #ffffff;
+                            height: 40px;
+                            width: 150px;
+                            padding: 6px 12px;
+                            cursor: pointer;
+                        }
+
+                        .button-enrolled-cancel {
+                            border: none;
+                            border-radius: 5px;
+                            background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                            box-shadow: 5px 5px 10px #797979,
+                                -5px -5px 10px #ffffff;
+                            height: 40px;
+                            padding: 6px 12px;
+                            color: red;
+                            cursor: pointer;
+                        }
                     }
 
                     .radio-inputs {
@@ -806,4 +853,21 @@
 
 ::ng-deep app-datepicker input.mat-mdc-input-element {
     margin-top: 12px;
+}
+
+.div-enrolled-course {
+    ::ng-deep mat-form-field {
+        height: auto !important; 
+    }
+
+    ::ng-deep .mat-mdc-form-field-flex {
+        display: flex;
+        align-items: center;
+    }
+
+    ::ng-deep .mat-mdc-select-trigger {
+        height: 54px;
+        display: flex;
+        align-items: center;
+    }
 }

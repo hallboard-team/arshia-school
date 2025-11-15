@@ -97,6 +97,10 @@
                         </mat-form-field>
 
                         <div class="div-btn-add">
+                            <button type="button" class="btn-cancel" (click)="onCancelEdit()">
+                                <span>لغو تغییرات</span>
+                            </button>
+
                             <button type="submit" [disabled]="targetMemberEditFg.invalid">
                                 <span>ذخیره تغییرات</span>
                             </button>
@@ -109,6 +113,10 @@
                 @if (courses && targetUserProfile) {
                 <ng-container>
                     <div class="div-courses">
+                        <div class="title">
+                            <span>دوره های کاربر</span>
+                        </div>
+
                         @if (!loading) {
                         <div class="course-container">
                             @if (error) {
@@ -117,28 +125,75 @@
                             </div>
                             }
 
-                            @if (courses.length > 0) {
+                            @if (shamsiCourses.length > 0) {
                             <div class="course-list">
                                 @for (course of shamsiCourses; track $index) {
                                 <div class="course-card">
-                                    @if (targetUserProfile.gender == 'male') {
+                                    @if (isMale) {
                                     <span class="name-of-course-men">{{ course.title }}</span>
-                                    }@else {
+                                    } @else {
                                     <span class="name-of-course-women">{{ course.title }}</span>
                                     }
                                     <div class="tozihat-course">
-                                        <span class="text">شهریه: {{ course.tuition | currency:'IRR' }}</span>
-                                        <span class="text">مدت زمان کلاس: <span class="red-text">{{
-                                                course.hours}}</span>
+                                        <span class="text">
+                                            شهریه:
+                                            {{ course.tuition | currency:'IRR' }}
+                                        </span>
+
+                                        <span class="text">
+                                            مدت زمان دوره:
+                                            @if (isMale) {
+                                            <span class="name-of-course-men">{{ course.hours }}</span>
+                                            } @else {
+                                            <span class="name-of-course-women">{{ course.hours }}</span>
+                                            }
                                             ساعت
                                         </span>
-                                        <span class="text">تاریخ شروع: {{ course.shamsiStart }}</span>
-                                        @if (course.isStarted == 'true') {
-                                        <span class="text">آغاز شده: <span class="green-text">بله</span></span>
-                                        }@else {
-                                        <span class="text">آغاز شده: <span class="red-text">خیر</span></span>
+
+                                        <span class="text">
+                                            مدت زمان هر جلسه:
+                                            @if (isMale) {
+                                            <span class="name-of-course-men">{{ course.hoursPerClass }}</span>
+                                            } @else {
+                                            <span class="name-of-course-women">{{ course.hoursPerClass }}</span>
+                                            }
+                                            ساعت
+                                        </span>
+
+                                        <span class="text">
+                                            تاریخ شروع: {{ course.shamsiStart }}
+                                        </span>
+
+                                        @if (course.professorNames && course.professorNames.length > 0) {
+                                        <span class="text">
+                                            <span>
+                                                {{ course.professorNames.length === 1 ? 'استاد:' : 'اساتید:' }}
+                                            </span>
+                                            <span class="teachers-name">
+                                                {{ course.professorNames.join('، ') }}
+                                            </span>
+                                        </span>
+                                        } @else {
+                                        <span class="text">
+                                            <span class="teachers-name">
+                                                استاد:
+                                            </span>
+                                            <span class="green-text">
+                                                نامشخص
+                                            </span>
+                                        </span>
                                         }
+
+                                        <span class="text">
+                                            وضعیت دوره:
+                                            <span [ngClass]="{
+                                                'green-text': getCourseStatus(course) === 'در حال برگزاری',
+                                                'red-text': getCourseStatus(course) !== 'در حال برگزاری'}">
+                                                {{ getCourseStatus(course) }}
+                                            </span>
+                                        </span>
                                     </div>
+
 
                                     <div class="div-button-show-classmate">
                                         <button [routerLink]="['/students-card/' + course.title]">مشاهده
@@ -156,11 +211,9 @@
                                 }
                             </div>
                             }
-                            @if (courses.length === 0) {
+                            @if (shamsiCourses.length === 0) {
                             <div class="no-courses">
-                                <span>
-                                    هیچ دوره‌ای ثبت‌نام نکرده‌اید.
-                                </span>
+                                <span>هیچ دوره‌ای ثبت‌نام نکرده‌اید.</span>
                             </div>
                             }
                         </div>
@@ -184,7 +237,7 @@
                         (ngSubmit)="addEnrolledCourseFg.valid && addEnrolledCourse()">
                         <div class="content">
                             <mat-form-field appearance="outline">
-                                <mat-label>اسم دوره</mat-label>
+                                <mat-label>نام دوره</mat-label>
                                 <mat-select formControlName="titleCourseCtrl">
                                     <mat-option *ngFor="let course of showCourses" [value]="course.title">
                                         {{ course.title }}
@@ -203,15 +256,23 @@
                             </mat-form-field>
 
                             <mat-form-field appearance="outline">
-                                <mat-label>مبلغ پرداختی</mat-label>
+                                <mat-label>پیش پرداخت</mat-label>
                                 <input type="number" formControlName="paidAmountCtrl" label="paid amount" matInput>
                                 @if (PaidAmountCtrl.hasError('required')) {
                                 <mat-error>!این فیلد خالی است</mat-error>
                                 }
                             </mat-form-field>
 
-                            <button class="button-enrolled" type="submit" [disabled]="addEnrolledCourseFg.invalid">ثبت
-                                اطلاعات</button>
+                            <div class="buttons-row">
+                                <button type="button" class="button-enrolled-cancel"
+                                    (click)="onCancelAddEnrolledCourse()">
+                                    لغو تغییرات
+                                </button>
+
+                                <button class="button-enrolled" type="submit" [disabled]="addEnrolledCourseFg.invalid">
+                                    ثبت اطلاعات
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -224,20 +285,21 @@
                         (ngSubmit)="updateEnrolledCourseFg.valid && updateEnrolledCourse()">
                         <div class="content">
                             <mat-form-field appearance="outline">
-                                <mat-label>اسم دوره</mat-label>
+                                <mat-label>نام دوره</mat-label>
                                 <mat-select formControlName="titleCourseUpdateCtrl">
                                     <mat-option *ngFor="let title of courseTitles" [value]="title">
                                         {{ title }}
                                     </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="TitleCourseCtrl.hasError('required')">!این فیلد خالی است</mat-error>
+                                <mat-error *ngIf="TitleCourseUpdateCtrl.hasError('required')">!این فیلد خالی
+                                    است</mat-error>
                             </mat-form-field>
 
                             <mat-form-field appearance="outline">
                                 <mat-label>مبلغ پرداختی</mat-label>
                                 <input type="text" formControlName="paidAmountUpdateCtrl" matInput appCurrencyFormatter>
                                 <span matSuffix class="suffix-text">تومان</span>
-                                @if (PaidAmountCtrl.hasError('required')) {
+                                @if (PaidAmountUpdateCtrl.hasError('required')) {
                                 <mat-error>!این فیلد خالی است</mat-error>
                                 }
                             </mat-form-field>
@@ -266,9 +328,18 @@
                                 </mat-radio-group>
                             </div>
 
-                            <button class="button-enrolled" type="submit" [disabled]="updateEnrolledCourseFg.invalid">
-                                ثبت اطلاعات
-                            </button>
+                            <div class="buttons-row">
+                                <button type="button" class="button-enrolled-cancel"
+                                    (click)="onCancelUpdateEnrolledCourse()">
+                                    لغو تغییرات
+                                </button>
+
+                                <button class="button-enrolled" type="submit"
+                                    [disabled]="updateEnrolledCourseFg.invalid">
+                                    ثبت اطلاعات
+                                </button>
+
+                            </div>
                         </div>
                     </form>
                 </div>
