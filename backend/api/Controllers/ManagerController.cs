@@ -1,3 +1,6 @@
+using api.DTOs.Account;
+using api.DTOs.Helpers;
+
 namespace api.Controllers;
 
 [Authorize(Policy = "RequiredManagerRole")]
@@ -227,12 +230,38 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         if (memberUserName == null)
             return BadRequest("Invalid user data.");
 
+        string? hashedUserId = User.GetHashedUserId();
+
+        if (hashedUserId is null)
+            return Unauthorized("You are not logged in. Pl");
+
         bool isUpdated = await _managerRepository.UpdateMemberAsync(memberUserName, updatedMember, cancellationToken);
 
         if (!isUpdated)
             return NotFound("User not found or no changes were made.");
 
         return Ok();
+    }
+
+    [HttpPost("add-member-photo/{targetUserName}")]
+    public async Task<ActionResult<MemberPhoto>> UploadMemberPhoto(
+        [AllowedFileExtensions, FileSize(250_000, 4_000_000)]
+        IFormFile file, string targetUserName, CancellationToken cancellationToken
+    )
+    {
+        if (file is null || file.Length == 0)
+            return BadRequest("No file is selected with this request.");
+
+        OperationResult<MemberPhoto> opResult = await _managerRepository.UploadMemberPhotoAsync(file, targetUserName, cancellationToken);
+
+        return opResult.IsSuccess
+            ? opResult.Result
+            : opResult.Error?.Code switch
+            {
+                ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
+                ErrorCode.IsOperationFailed => BadRequest(opResult.Error.Message),
+                _ => BadRequest("Something unexpected went wrong. Try again or contact support")
+            };
     }
 
     [HttpPost("add-photo/{targetPaymentId}")]
