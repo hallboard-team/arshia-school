@@ -1,7 +1,7 @@
 @if (loggedInUserSig && loggedInUserSig()) {
 @if (loggedInUserSig()?.roles?.includes('manager')) {
 @if (memberIn) {
-<div class="member-card" [routerLink]="['/' + 'target-user-profile/' + memberIn.userName]" routerLinkActive
+<div class="member-card" [routerLink]="['/' + 'dashboard/target-user-profile/' + memberIn.userName]" routerLinkActive
     #rla="routerLinkActive">
     @if (memberIn.gender == 'femaile') {
     <img class="profile" src="../assets/images/femial-profilePhoto1.png" alt="">
