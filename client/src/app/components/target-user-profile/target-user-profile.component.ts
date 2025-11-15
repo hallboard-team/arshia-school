@@ -416,6 +416,7 @@ export class TargetUserProfileComponent implements OnInit {
     return 'شروع نشده';
   }
 
+  // Baraye inke bargarde be hamon details ke dasht 
   onCancelEdit(): void {
     if (this.targetUserProfile) {
       this.initTargetControllersValues(this.targetUserProfile);
@@ -426,8 +427,14 @@ export class TargetUserProfileComponent implements OnInit {
     }
   }
 
+  // Baraye inke kolan input ha khali beshan
+  // onCancelEdit(): void {
+  //   this.targetMemberEditFg.reset();
+  // }
+
   onCancelAddEnrolledCourse(): void {
     this.addEnrolledCourseFg.reset();
+
     this.addEnrolledCourseFg.markAsPristine();
     this.addEnrolledCourseFg.markAsUntouched();
   }
