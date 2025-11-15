@@ -225,7 +225,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
     }
 
     [HttpPut("update-member/{memberUserName}")]
-    public async Task<ActionResult> UpdateMember(string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken)
+    public async Task<ActionResult<Response>> UpdateMember(string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken)
     {
         if (memberUserName == null)
             return BadRequest("Invalid user data.");
@@ -238,9 +238,13 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         bool isUpdated = await _managerRepository.UpdateMemberAsync(memberUserName, updatedMember, cancellationToken);
 
         if (!isUpdated)
-            return NotFound("User not found or no changes were made.");
+            return BadRequest("User not found or no changes were made.");
 
-        return Ok();
+        return Ok(
+            new Response(
+                "User has been updated successfully."
+            )
+        );
     }
 
     [HttpPost("add-member-photo/{targetUserName}")]
