@@ -50,30 +50,30 @@
                         <mat-form-field appearance="outline">
                             <mat-label>نام</mat-label>
                             <input class="input" type="text" formControlName="targetNameCtrl" label="Name"
-                                placeHolder="Enter your desired name." matInput>
+                                placeholder="نام مورد نظر خود را وارد کنید" matInput>
                             @if (TargetNameCtrl.hasError('required')) {
                             <mat-error>فرم رو پرکنید</mat-error>
                             }
                             @else if (TargetNameCtrl.hasError('minlength')) {
-                            <mat-error>خیلی کوتاهه حداقل :۲ حرف</mat-error>
+                            <mat-error>حداقل ۲ حرف مجاز است</mat-error>
                             }
                             @else if(TargetNameCtrl.hasError('maxlength')) {
-                            <mat-error>خیلی بلنده حداقل: ۳۰ حرف</mat-error>
+                            <mat-error>حداکثر ۳۰ حرف مجاز است</mat-error>
                             }
                         </mat-form-field>
 
                         <mat-form-field appearance="outline">
                             <mat-label>نام خانوادگی</mat-label>
                             <input class="input" type="text" formControlName="targetLastNameCtrl" label="Last Name"
-                                placeHolder="Enter your desired name." matInput>
+                                placeholder="نام خوانوادگی مورد نظر خود را وارد کنید" matInput>
                             @if (TargetLastNameCtrl.hasError('required')) {
                             <mat-error>فرم رو پرکنید</mat-error>
                             }
                             @else if (TargetLastNameCtrl.hasError('minlength')) {
-                            <mat-error>خیلی کوتاهه حداقل :۲ حرف‍</mat-error>
+                            <mat-error>حداقل ۲ حرف مجاز است</mat-error>
                             }
                             @else if(TargetLastNameCtrl.hasError('maxlength')) {
-                            <mat-error>خیلی بلنده حداقل: ۳۰ حرف</mat-error>
+                            <mat-error>حداکثر ۳۰ حرف مجاز است</mat-error>
                             }
                         </mat-form-field>
 
