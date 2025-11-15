@@ -43,7 +43,7 @@ export class MemberListComponent {
   pageSizeOptions = [5, 10, 25];
   pageEvent: PageEvent | undefined;
 
-  readonly minAge: number = 18;
+  readonly minAge: number = 11;
   readonly maxAge: number = 99;
 
   filterFg = this._fB.group({
