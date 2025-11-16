@@ -16,24 +16,25 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
-    selector: 'app-member-list',
-    imports: [
-        CommonModule, MemberCardComponent, MatPaginatorModule,
-        NavbarComponent, MatFormFieldModule, MatInputModule,
-        MatSelectModule, MatButtonModule, MatSliderModule,
-        FormsModule, ReactiveFormsModule,
-    ],
-    templateUrl: './member-list.component.html',
-    styleUrl: './member-list.component.scss'
+  selector: 'app-member-list',
+  imports: [
+    CommonModule, MemberCardComponent, MatPaginatorModule,
+    NavbarComponent, MatFormFieldModule, MatInputModule,
+    MatSelectModule, MatButtonModule, MatSliderModule,
+    FormsModule, ReactiveFormsModule, MatIcon
+  ],
+  templateUrl: './member-list.component.html',
+  styleUrl: './member-list.component.scss'
 })
 export class MemberListComponent {
   private _memberService = inject(MemberService);
   private _route = inject(ActivatedRoute);
   private _fB = inject(FormBuilder);
 
-  members: Member[] | undefined;
+  members: Member[] = [];
   students$: Observable<Member[] | null> | undefined;
   pagination: Pagination | undefined;
 
@@ -43,7 +44,7 @@ export class MemberListComponent {
   pageSizeOptions = [5, 10, 25];
   pageEvent: PageEvent | undefined;
 
-  readonly minAge: number = 18;
+  readonly minAge: number = 11;
   readonly maxAge: number = 99;
 
   filterFg = this._fB.group({

@@ -1,8 +1,31 @@
+using api.DTOs.Account;
+using api.DTOs.Helpers;
+
 namespace api.Controllers;
 
 [Authorize(Policy = "RequiredManagerRole")]
 public class ManagerController(IManagerRepository _managerRepository, ITokenService _tokenService) : BaseApiController
 {
+    [HttpPut("update-account")]
+    public async Task<ActionResult> UpdateAccount(ManagerUpdateProfile managerUpdateProfile, CancellationToken cancellationToken)
+    {
+        if (managerUpdateProfile is null)
+            return BadRequest("ورودی نامعتبر است.");
+
+        try
+        {
+            bool? updateResult = await _managerRepository.UpdateAccountAsync(managerUpdateProfile, User.GetHashedUserId(), cancellationToken);
+
+            return updateResult is false
+                ? BadRequest("بروزرسانی انجام نشد. لطفاً دوباره تلاش کنید.")
+                : Ok(new { message = "اطلاعات با موفقیت بروزرسانی شد." });
+        }
+        catch (ApplicationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
     [HttpPost("create-secretary")]
     public async Task<ActionResult<RegisteredUserDto>> CreateSecretary(RegisterDto managerInput, CancellationToken cancellationToken)
     {
@@ -142,6 +165,9 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         if (string.IsNullOrWhiteSpace(updateEnrolledDto.TitleCourse))
             return BadRequest("Course title is required.");
 
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         var updateResult = await _managerRepository.UpdateEnrolledCourseAsync(updateEnrolledDto, targetUserName, cancellationToken);
 
         return updateResult?.ModifiedCount > 0
@@ -199,17 +225,47 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
     }
 
     [HttpPut("update-member/{memberUserName}")]
-    public async Task<ActionResult> UpdateMember(string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken)
+    public async Task<ActionResult<Response>> UpdateMember(string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken)
     {
         if (memberUserName == null)
             return BadRequest("Invalid user data.");
 
+        string? hashedUserId = User.GetHashedUserId();
+
+        if (hashedUserId is null)
+            return Unauthorized("You are not logged in. Please login first.");
+
         bool isUpdated = await _managerRepository.UpdateMemberAsync(memberUserName, updatedMember, cancellationToken);
 
         if (!isUpdated)
-            return NotFound("User not found or no changes were made.");
+            return BadRequest("User not found or no changes were made.");
 
-        return Ok();
+        return Ok(
+            new Response(
+                "User has been updated successfully."
+            )
+        );
+    }
+
+    [HttpPost("add-member-photo/{targetUserName}")]
+    public async Task<ActionResult<MemberPhoto>> UploadMemberPhoto(
+        [AllowedFileExtensions, FileSize(250_000, 4_000_000)]
+        IFormFile file, string targetUserName, CancellationToken cancellationToken
+    )
+    {
+        if (file is null || file.Length == 0)
+            return BadRequest("No file is selected with this request.");
+
+        OperationResult<MemberPhoto> opResult = await _managerRepository.UploadMemberPhotoAsync(file, targetUserName, cancellationToken);
+
+        return opResult.IsSuccess
+            ? opResult.Result
+            : opResult.Error?.Code switch
+            {
+                ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
+                ErrorCode.IsOperationFailed => BadRequest(opResult.Error.Message),
+                _ => BadRequest("Something unexpected went wrong. Try again or contact support")
+            };
     }
 
     [HttpPost("add-photo/{targetPaymentId}")]
@@ -246,16 +302,16 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
     }
 
     [HttpGet("get-target-member-course/{targetUserName}")]
-    public async Task<ActionResult<List<Course>>> GetTargetMemberCourse(string targetUserName, CancellationToken cancellationToken)
+    public async Task<ActionResult<List<CourseResponse>>> GetTargetMemberCourse(string targetUserName, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(targetUserName))
         {
             return BadRequest("userName is required.");
         }
 
-        List<Course>? courses = await _managerRepository.GetTargetMemberCourseAsync(targetUserName, cancellationToken);
+        List<CourseResponse>? coursesRes = await _managerRepository.GetTargetMemberCourseAsync(targetUserName, cancellationToken);
 
-        return Ok(courses ?? new List<Course>());
+        return Ok(coursesRes ?? new List<CourseResponse>());
     }
 
     [HttpGet("get-target-member-enrolled-course/{targetUserName}/{courseTitle}")]

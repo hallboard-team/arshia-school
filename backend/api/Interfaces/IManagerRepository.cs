@@ -1,7 +1,10 @@
+using api.DTOs.Helpers;
+
 namespace api.Interfaces;
 
 public interface IManagerRepository
 {
+    Task<bool> UpdateAccountAsync(ManagerUpdateProfile managerUpdateProfile, string? hashedUserId, CancellationToken cancellationToken);
     Task<RegisteredUserDto?> CreateSecretaryAsync(RegisterDto managerInput, CancellationToken cancellationToken);
     Task<RegisteredUserDto?> CreateStudentAsync(RegisterDto managerInput, CancellationToken cancellationToken);
     Task<RegisteredUserDto?> CreateTeacherAsync(RegisterDto managerInput, CancellationToken cancellationToken);
@@ -14,9 +17,10 @@ public interface IManagerRepository
     Task<MemberDto?> GetMemberByEmailAsync(string targetMemberEmail, CancellationToken cancellationToken);
     Task<TargetMemberDto?> GetMemberByUserNameAsync(string targetUserName, CancellationToken cancellationToken);
     Task<bool> UpdateMemberAsync(string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken);
+    public Task<OperationResult<MemberPhoto>> UploadMemberPhotoAsync(IFormFile file, string userName, CancellationToken cancellationToken);
     Task<Photo?> AddPhotoAsync(IFormFile file, string targetPaymentId, CancellationToken cancellationToken);
     Task<bool> DeletePhotoAsync(string targetPaymentId, CancellationToken cancellationToken);
-    Task<List<Course>> GetTargetMemberCourseAsync(string targetUserName, CancellationToken cancellationToken);
+    Task<List<CourseResponse>> GetTargetMemberCourseAsync(string targetUserName, CancellationToken cancellationToken);
     Task<EnrolledCourse?> GetTargetMemberEnrolledCourseAsync(string targetUserName, string courseTitle, CancellationToken cancellationToken);
     Task<Payment?> GetTargetPaymentByIdAsync(string targetPaymentId, CancellationToken cancellationToken);
     Task<List<string>> GetTargetCourseTitleAsync(string targetUserName, CancellationToken cancellationToken);

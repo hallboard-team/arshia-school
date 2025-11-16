@@ -1,7 +1,102 @@
+using api.DTOs.Account;
+using api.DTOs.Helpers;
+
 namespace api.Repositories;
 
 public class ManagerRepository : IManagerRepository
 {
+  public async Task<bool> UpdateAccountAsync(ManagerUpdateProfile dto, string? hashedUserId, CancellationToken ct)
+  {
+    if (string.IsNullOrEmpty(hashedUserId)) return false;
+
+    ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, ct);
+    if (userId == null) return false;
+
+    AppUser? user = await _userManager.FindByIdAsync(userId.Value.ToString());
+    if (user == null) return false;
+
+    bool anyProfileFieldChanged = false;
+    List<UpdateDefinition<AppUser>> updateDefinitions = new List<UpdateDefinition<AppUser>>();
+    UpdateDefinitionBuilder<AppUser> updateDefinitionBuilder = Builders<AppUser>.Update;
+
+    if (!string.IsNullOrWhiteSpace(dto.Name))
+    {
+      string trimmed = dto.Name.Trim();
+      if (!string.Equals(user.Name, trimmed, StringComparison.Ordinal))
+      {
+        updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.Name, trimmed));
+        anyProfileFieldChanged = true;
+      }
+    }
+
+    if (!string.IsNullOrWhiteSpace(dto.LastName))
+    {
+      string trimmed = dto.LastName.Trim();
+      if (!string.Equals(user.LastName, trimmed, StringComparison.Ordinal))
+      {
+        updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.LastName, trimmed));
+        anyProfileFieldChanged = true;
+      }
+    }
+
+    if (dto.DateOfBirth is not null && user.DateOfBirth != dto.DateOfBirth.Value)
+    {
+      updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.DateOfBirth, dto.DateOfBirth.Value));
+      anyProfileFieldChanged = true;
+    }
+
+    if (!string.IsNullOrWhiteSpace(dto.PhoneNum))
+    {
+      string phone = dto.PhoneNum.Trim();
+
+      if (!string.Equals(user.PhoneNum, phone, StringComparison.Ordinal))
+      {
+        updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.PhoneNum, phone));
+        anyProfileFieldChanged = true;
+      }
+    }
+
+    string? current = string.IsNullOrWhiteSpace(dto.CurrentPassword) ? null : dto.CurrentPassword;
+    string? newer = string.IsNullOrWhiteSpace(dto.NewPassword) ? null : dto.NewPassword;
+    string? confirm = string.IsNullOrWhiteSpace(dto.ConfirmPassword) ? null : dto.ConfirmPassword;
+
+    bool wantsPasswordChange = current is not null || newer is not null || confirm is not null;
+
+    if (wantsPasswordChange)
+    {
+      if (current is null || newer is null || confirm is null)
+        throw new ApplicationException("برای تغییر رمز عبور، هر سه فیلد لازم است.");
+
+      if (!string.Equals(newer, confirm, StringComparison.Ordinal))
+        throw new ApplicationException("تکرار رمز عبور با رمز جدید مطابقت ندارد.");
+
+      IdentityResult? pwd = await _userManager.ChangePasswordAsync(user, current!, newer!);
+      if (!pwd.Succeeded)
+        throw new ApplicationException(string.Join(" | ", pwd.Errors.Select(e => e.Description)));
+    }
+
+    if (anyProfileFieldChanged)
+    {
+      if (updateDefinitions.Count > 0)
+      {
+        UpdateDefinition<AppUser>? combined = Builders<AppUser>.Update.Combine(updateDefinitions);
+        UpdateResult? result = await _collectionAppUser.UpdateOneAsync(
+            filter: appUser => appUser.Id == user.Id,
+            update: combined,
+            cancellationToken: ct
+        );
+
+        if (result.MatchedCount == 0)
+          return wantsPasswordChange;
+      }
+      return true;
+    }
+
+    if (wantsPasswordChange) return true;
+
+    return false;
+  }
+
   public async Task<RegisteredUserDto?> CreateSecretaryAsync(
     RegisterDto registerDto, CancellationToken cancellationToken
   )
@@ -310,31 +405,66 @@ public class ManagerRepository : IManagerRepository
 
     if (targetAppUser is null) return false;
 
-    bool emailChanged = !string.Equals(targetAppUser.Email, updatedMember.Email, StringComparison.OrdinalIgnoreCase);
-
-    if (emailChanged)
-    {
-      targetAppUser.Email = updatedMember.Email;
-      targetAppUser.NormalizedEmail = updatedMember.Email.ToUpper();
-
-      IdentityResult identityUpdate = await _userManager.UpdateAsync(targetAppUser);
-      if (!identityUpdate.Succeeded) return false;
-    }
-
     FilterDefinition<AppUser>? filter = Builders<AppUser>.Filter.Eq(u => u.Id, targetAppUser.Id);
 
-    string genderValue = updatedMember.Gender?.ToLower() ?? string.Empty;
-
-    UpdateDefinition<AppUser>? update = Builders<AppUser>.Update.Set(u => u.Name, updatedMember.Name).
-      Set(u => u.LastName, updatedMember.LastName).Set(u => u.PhoneNum, updatedMember.PhoneNum).
-      Set("Gender", genderValue).Set(u => u.DateOfBirth, updatedMember.DateOfBirth);
+    UpdateDefinition<AppUser>? update = Builders<AppUser>.Update
+    .Set(u => u.Name, updatedMember.Name)
+    .Set(u => u.LastName, updatedMember.LastName)
+    .Set(u => u.PhoneNum, updatedMember.PhoneNum)
+    .Set(u => u.DateOfBirth, updatedMember.DateOfBirth);
 
     UpdateResult? updateResult = await _collectionAppUser.UpdateOneAsync(
       filter, update, cancellationToken: cancellationToken
     );
+
     return updateResult.ModifiedCount > 0;
   }
 
+  public async Task<OperationResult<MemberPhoto>> UploadMemberPhotoAsync(IFormFile file, string userName, CancellationToken cancellationToken)
+  {
+    AppUser? targetAppUser = await _collectionAppUser.Find(u => u.NormalizedUserName == userName.ToUpper()).
+      FirstOrDefaultAsync(cancellationToken);
+
+    if (targetAppUser is null)
+    {
+      return new OperationResult<MemberPhoto>(
+        false,
+        Error: new CustomError(
+          ErrorCode.IsUserNotFound,
+          "Target user not found"
+        )
+      );
+    }
+
+    // userId, appUser, file
+    // save file in Storage using PhotoService / userId makes the folder name
+    string[]? imageUrls = await _photoService.AddMemberPhotoToDiskAsync(file, targetAppUser.Photo, targetAppUser.Id);
+    if (imageUrls is not null)
+    {
+      MemberPhoto photo;
+
+      photo = Mappers.ConvertPhotoUrlsToMemberPhoto(imageUrls);
+
+      UpdateDefinition<AppUser> updatedUser = Builders<AppUser>.Update
+        .Set(doc => doc.Photo, photo);
+
+      UpdateResult result = await _collectionAppUser.UpdateOneAsync(doc => doc.Id == targetAppUser.Id, updatedUser, null, cancellationToken);
+
+      return new OperationResult<MemberPhoto>(
+        true,
+        photo,
+        null
+      );
+    }
+
+    return new OperationResult<MemberPhoto>(
+      false,
+      Error: new CustomError(
+        ErrorCode.IsOperationFailed,
+        "Operation failed. Try agian or contact support."
+      )
+    );
+  }
 
   public async Task<Photo?> AddPhotoAsync(IFormFile file, string targetPaymentId, CancellationToken cancellationToken)
   {
@@ -418,7 +548,7 @@ public class ManagerRepository : IManagerRepository
     return result.ModifiedCount > 0;
   }
 
-  public async Task<List<Course>> GetTargetMemberCourseAsync(
+  public async Task<List<CourseResponse>> GetTargetMemberCourseAsync(
     string targetUserName, CancellationToken cancellationToken
   )
   {
@@ -426,12 +556,24 @@ public class ManagerRepository : IManagerRepository
       Where(u => u.NormalizedUserName == targetUserName.ToUpper()).SelectMany(u => u.EnrolledCourses).
       Select(ec => ec.CourseId.ToString()).ToListAsync(cancellationToken);
 
-    if (enrolledCourseIds is null || enrolledCourseIds.Count == 0) return new List<Course>();
+    if (enrolledCourseIds is null || enrolledCourseIds.Count == 0) return new List<CourseResponse>();
 
     List<Course> courses = await _collectionCourse.Find(doc => enrolledCourseIds.Contains(doc.Id.ToString())).
       ToListAsync(cancellationToken);
 
-    return courses ?? new List<Course>();
+    List<string> userNames = [];
+    List<string> names = [];
+    List<CourseResponse> coursesRes = [];
+
+    foreach (var course in courses)
+    {
+      userNames = await _courseRepository.GetProfessorUserNamesByIdsAsync(course.ProfessorsIds, cancellationToken);
+      names = await _courseRepository.GetProfessorNamesByIdsAsync(course.ProfessorsIds, cancellationToken);
+
+      coursesRes.Add(Mappers.ConvertCourseToCourseRes(course, userNames, names));
+    }
+
+    return coursesRes ?? new List<CourseResponse>();
   }
 
   public async Task<EnrolledCourse?> GetTargetMemberEnrolledCourseAsync(
@@ -563,13 +705,15 @@ public class ManagerRepository : IManagerRepository
   private readonly ITokenService _tokenService;
   private readonly IMongoClient _client;
   private readonly IPhotoService _photoService;
+  private readonly ICourseRepository _courseRepository;
 
   public ManagerRepository(
     IMongoClient client,
     ITokenService tokenService,
     IMyMongoDbSettings dbSettings,
     UserManager<AppUser> userManager,
-    IPhotoService photoService
+    IPhotoService photoService,
+    ICourseRepository courseRepository
   )
   {
     _client = client; // used for Session
@@ -582,6 +726,7 @@ public class ManagerRepository : IManagerRepository
     _userManager = userManager;
     _tokenService = tokenService;
     _photoService = photoService;
+    _courseRepository = courseRepository;
   }
 
   #endregion

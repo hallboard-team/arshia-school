@@ -36,18 +36,23 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                width: 100px;
-                height: 100px;
+                width: 120px;
+                height: 120px;
                 border-radius: 50%;
+                overflow: hidden;
+                // اگر حلقه‌ی دور عکس می‌خوای:
+                // border: 3px solid #fff;
 
                 img {
-                    height: 100%;
                     width: 100%;
-                    border-radius: 50%;
+                    height: 100%;
+                    object-fit: cover;
+                    display: block;
                 }
             }
 
             .profile-info {
+                color: rgba(0, 0, 0, 0.603);
                 width: 100%;
                 display: flex;
                 flex-direction: column;
@@ -56,19 +61,12 @@
                 gap: 10px;
 
                 .description {
-                    color: rgba(0, 0, 0, 0.603);
                     direction: rtl;
                     font-size: 17px;
                 }
 
-                .gender-men-span {
-                    color: #00c4ad;
-                    direction: rtl;
-                    font-size: 15px;
-                }
-
+                .gender-men-span,
                 .gender-women-span {
-                    color: hsl(345deg 100% 47%);
                     direction: rtl;
                     font-size: 15px;
                 }

@@ -20,7 +20,14 @@ public class ShowEnrolledCourseDto
 
 public class UpdateEnrolledDto
 {
+    [Required(ErrorMessage = "Course title is required.")]
     public string TitleCourse { get; init; } = string.Empty;
+
+    // [Range(500000, int.MaxValue, ErrorMessage = "Paid amount must be greater than zero.")]
+    [Range(10000, int.MaxValue, ErrorMessage = "The minimum payment amount must not be less than 10,000 Tomans.")]
     public int PaidAmount { get; init; }
+
+    [Required]
+    [EnumDataType(typeof(PaymentMethod), ErrorMessage = "Invalid payment method.")]
     public PaymentMethod Method { get; init; }
 }
