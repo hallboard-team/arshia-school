@@ -238,15 +238,18 @@ export class TargetUserProfileComponent implements OnInit {
   updateTargetMember() {
     const memberUserName: string | null = this._route.snapshot.paramMap.get('memberUserName');
 
-    const dob = this.TargetDateOfBirthCtrl.value as any;
+    const dob = this.TargetDateOfBirthCtrl.value as Moment;
     if (!dob || !dob.isBetween(this.min, this.max, undefined, '[]')) {
-      this.openSnack(`تاریخ تولد باید بین ${this.min.format('jYYYY/jMM/jDD')} و ${this.max.format('jYYYY/jMM/jDD')} باشد.`, 'error');
+      this.openSnack(
+        `تاریخ تولد باید بین ${this.min.format('jYYYY/jMM/jDD')} و ${this.max.format('jYYYY/jMM/jDD')} باشد.`,
+        'error'
+      );
       this.TargetDateOfBirthCtrl.markAsTouched();
       return;
     }
 
     if (memberUserName) {
-      let managerUpdateMember: ManagerUpdateMemberDto = {
+      const managerUpdateMember: ManagerUpdateMemberDto = {
         name: this.TargetNameCtrl.value,
         lastName: this.TargetLastNameCtrl.value,
         dateOfBirth: this.toGregorianDateOnly(dob),
@@ -398,7 +401,10 @@ export class TargetUserProfileComponent implements OnInit {
 
   onDateSelect(event: { shamsi: string; gregorian: string; timestamp: number }): void {
     this.shamsiDisplayDate = event.shamsi;
-    this.TargetDateOfBirthCtrl.setValue(new Date(event.gregorian));
+
+    const dobMoment = moment(event.gregorian, 'YYYY-MM-DD');
+    this.TargetDateOfBirthCtrl.setValue(dobMoment);
+
     this.closeDatePicker();
   }
 
