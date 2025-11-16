@@ -28,6 +28,15 @@
         .input-search {
             direction: rtl;
         }
+
+        .search-icon-btn {
+            cursor: default;
+
+            mat-icon {
+                font-size: 20px;
+                color: rgba(0, 0, 0, 0.55);
+            }
+        }
     }
 
     .age {
@@ -53,7 +62,10 @@
                 -5px -5px 10px #ffffff;
             border: none;
             height: 35px;
-            width: 150px;
+        }
+
+        .remove-filters {
+            color: red;
         }
     }
 }
@@ -65,6 +77,12 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 2rem;
+
+    .no-result {
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.6);
+        text-align: center;
+    }
 }
 
 .members-container {

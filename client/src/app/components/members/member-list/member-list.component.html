@@ -6,15 +6,18 @@
 
 <form [formGroup]="filterFg" class="form-filters">
   <div class="filter">
-    <span class="title">جست و جو کاربران</span>
-    <span class="filter-by">نام/نام خانوادگی/نام کاربری</span>
+    <span class="title">جست و جو</span>
+    <span class="filter-by">نام/نام خانوادگی کاربر</span>
     <mat-form-field>
-      <input class="input-search" formControlName="searchCtrl" matInput placeholder="جست و جو کاربر" type="text">
+      <input class="input-search" formControlName="searchCtrl" matInput placeholder="نام/نام خانوادگی" type="text">
+      <button mat-icon-button matSuffix tabindex="-1" class="search-icon-btn">
+        <mat-icon>search</mat-icon>
+      </button>
     </mat-form-field>
   </div>
 
   <div class="age">
-    <span>فیلتر با سن کاربر</span>
+    <span>سن کاربر</span>
     <div class="slider">
       <mat-slider discrete max="{{maxAge}}" min="{{minAge}}">
         <input formControlName="minAgeCtrl" matSliderStartThumb>
@@ -25,30 +28,35 @@
 
   <div class="btns">
     <button (click)="updateMemberParams(); getAll();" color="primary" mat-stroked-button>
-      ثبت تغیرات
+      جست و جو
     </button>
-    <button (click)="reset()" mat-stroked-button color="warn">
-      حذف تغییرات
+    <button class="remove-filters" (click)="reset()" mat-stroked-button>
+      پاک کردن فیلتر ها
     </button>
   </div>
 </form>
 
 <section class="members-container">
   <div class="div-title">
-    <span class="title">کاربران آموزشگاه</span>
+    <span class="title">کاربران</span>
   </div>
 
   <div class="div-cards-member">
+    @if (members && members.length > 0) {
     @for (member of members; track $index) {
     <app-member-card [memberInput]="member"></app-member-card>
+    }
+    } @else {
+    <div class="no-result">
+      کاربری با این مشخصات پیدا نشد.
+    </div>
     }
   </div>
 
   @if (pagination && memberParams) {
   <mat-paginator #paginator (page)="handlePageEvent($event)" [length]="pagination.totalItems"
-    [pageSize]="memberParams.pageSize" [disabled]="false" [showFirstLastButtons]="true"
-    [pageSizeOptions]="true ? pageSizeOptions : []" [hidePageSize]="false" [pageIndex]="memberParams.pageNumber - 1"
-    aria-label="Select page" class="paginator">
+    [pageSize]="memberParams.pageSize" [pageIndex]="memberParams.pageNumber - 1" [pageSizeOptions]="pageSizeOptions"
+    [disabled]="false" [showFirstLastButtons]="true" [hidePageSize]="false" aria-label="Select page" class="paginator">
   </mat-paginator>
   }
 </section>

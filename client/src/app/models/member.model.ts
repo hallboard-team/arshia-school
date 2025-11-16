@@ -7,6 +7,7 @@ export interface Member {
     gender: string;
     age: number;
     isAbsent: boolean;
+    photo?: string | null;
 }
 
 export interface ShowMember {
