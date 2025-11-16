@@ -233,7 +233,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         string? hashedUserId = User.GetHashedUserId();
 
         if (hashedUserId is null)
-            return Unauthorized("You are not logged in. Pl");
+            return Unauthorized("You are not logged in. Please login first.");
 
         bool isUpdated = await _managerRepository.UpdateMemberAsync(memberUserName, updatedMember, cancellationToken);
 
