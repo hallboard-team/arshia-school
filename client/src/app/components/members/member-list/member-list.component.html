@@ -55,9 +55,8 @@
 
   @if (pagination && memberParams) {
   <mat-paginator #paginator (page)="handlePageEvent($event)" [length]="pagination.totalItems"
-    [pageSize]="memberParams.pageSize" [disabled]="false" [showFirstLastButtons]="true"
-    [pageSizeOptions]="true ? pageSizeOptions : []" [hidePageSize]="false" [pageIndex]="memberParams.pageNumber - 1"
-    aria-label="Select page" class="paginator">
+    [pageSize]="memberParams.pageSize" [pageIndex]="memberParams.pageNumber - 1" [pageSizeOptions]="pageSizeOptions"
+    [disabled]="false" [showFirstLastButtons]="true" [hidePageSize]="false" aria-label="Select page" class="paginator">
   </mat-paginator>
   }
 </section>
