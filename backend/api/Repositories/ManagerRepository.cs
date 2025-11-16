@@ -1,3 +1,6 @@
+using api.DTOs.Account;
+using api.DTOs.Helpers;
+
 namespace api.Repositories;
 
 public class ManagerRepository : IManagerRepository
@@ -402,31 +405,66 @@ public class ManagerRepository : IManagerRepository
 
     if (targetAppUser is null) return false;
 
-    bool emailChanged = !string.Equals(targetAppUser.Email, updatedMember.Email, StringComparison.OrdinalIgnoreCase);
-
-    if (emailChanged)
-    {
-      targetAppUser.Email = updatedMember.Email;
-      targetAppUser.NormalizedEmail = updatedMember.Email.ToUpper();
-
-      IdentityResult identityUpdate = await _userManager.UpdateAsync(targetAppUser);
-      if (!identityUpdate.Succeeded) return false;
-    }
-
     FilterDefinition<AppUser>? filter = Builders<AppUser>.Filter.Eq(u => u.Id, targetAppUser.Id);
 
-    string genderValue = updatedMember.Gender?.ToLower() ?? string.Empty;
-
-    UpdateDefinition<AppUser>? update = Builders<AppUser>.Update.Set(u => u.Name, updatedMember.Name).
-      Set(u => u.LastName, updatedMember.LastName).Set(u => u.PhoneNum, updatedMember.PhoneNum).
-      Set("Gender", genderValue).Set(u => u.DateOfBirth, updatedMember.DateOfBirth);
+    UpdateDefinition<AppUser>? update = Builders<AppUser>.Update
+    .Set(u => u.Name, updatedMember.Name)
+    .Set(u => u.LastName, updatedMember.LastName)
+    .Set(u => u.PhoneNum, updatedMember.PhoneNum)
+    .Set(u => u.DateOfBirth, updatedMember.DateOfBirth);
 
     UpdateResult? updateResult = await _collectionAppUser.UpdateOneAsync(
       filter, update, cancellationToken: cancellationToken
     );
+
     return updateResult.ModifiedCount > 0;
   }
 
+  public async Task<OperationResult<MemberPhoto>> UploadMemberPhotoAsync(IFormFile file, string userName, CancellationToken cancellationToken)
+  {
+    AppUser? targetAppUser = await _collectionAppUser.Find(u => u.NormalizedUserName == userName.ToUpper()).
+      FirstOrDefaultAsync(cancellationToken);
+
+    if (targetAppUser is null)
+    {
+      return new OperationResult<MemberPhoto>(
+        false,
+        Error: new CustomError(
+          ErrorCode.IsUserNotFound,
+          "Target user not found"
+        )
+      );
+    }
+
+    // userId, appUser, file
+    // save file in Storage using PhotoService / userId makes the folder name
+    string[]? imageUrls = await _photoService.AddMemberPhotoToDiskAsync(file, targetAppUser.Photo, targetAppUser.Id);
+    if (imageUrls is not null)
+    {
+      MemberPhoto photo;
+
+      photo = Mappers.ConvertPhotoUrlsToMemberPhoto(imageUrls);
+
+      UpdateDefinition<AppUser> updatedUser = Builders<AppUser>.Update
+        .Set(doc => doc.Photo, photo);
+
+      UpdateResult result = await _collectionAppUser.UpdateOneAsync(doc => doc.Id == targetAppUser.Id, updatedUser, null, cancellationToken);
+
+      return new OperationResult<MemberPhoto>(
+        true,
+        photo,
+        null
+      );
+    }
+
+    return new OperationResult<MemberPhoto>(
+      false,
+      Error: new CustomError(
+        ErrorCode.IsOperationFailed,
+        "Operation failed. Try agian or contact support."
+      )
+    );
+  }
 
   public async Task<Photo?> AddPhotoAsync(IFormFile file, string targetPaymentId, CancellationToken cancellationToken)
   {

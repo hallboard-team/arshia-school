@@ -1,3 +1,5 @@
+using api.DTOs.Helpers;
+
 namespace api.Interfaces;
 
 public interface IManagerRepository
@@ -15,6 +17,7 @@ public interface IManagerRepository
     Task<MemberDto?> GetMemberByEmailAsync(string targetMemberEmail, CancellationToken cancellationToken);
     Task<TargetMemberDto?> GetMemberByUserNameAsync(string targetUserName, CancellationToken cancellationToken);
     Task<bool> UpdateMemberAsync(string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken);
+    public Task<OperationResult<MemberPhoto>> UploadMemberPhotoAsync(IFormFile file, string userName, CancellationToken cancellationToken);
     Task<Photo?> AddPhotoAsync(IFormFile file, string targetPaymentId, CancellationToken cancellationToken);
     Task<bool> DeletePhotoAsync(string targetPaymentId, CancellationToken cancellationToken);
     Task<List<CourseResponse>> GetTargetMemberCourseAsync(string targetUserName, CancellationToken cancellationToken);
