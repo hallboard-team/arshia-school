@@ -1,10 +1,10 @@
 public record ManagerUpdateMemberDto(
-    [MinLength(2, ErrorMessage = "نام حداقل باید ۲ حرف باشد.")]
-    [MaxLength(30, ErrorMessage = "نام نمی‌تواند بیش از ۳۰ حرف باشد.")]
+    [MinLength(2, ErrorMessage = "نام باید حداقل ۲ حرف باشد.")]
+    [MaxLength(30, ErrorMessage = "نام باید حداکثر ۳۰ حرف باشد.")]
     string Name,
 
-    [MinLength(2, ErrorMessage = "نام خانوادگی حداقل باید ۲ حرف باشد.")]
-    [MaxLength(30, ErrorMessage = "نام خانوادگی نمی‌تواند بیش از ۳۰ حرف باشد.")]
+    [MinLength(2, ErrorMessage = "نام خانوادگی باید حداقل ۲ حرف باشد.")]
+    [MaxLength(30, ErrorMessage = "نام خانوادگی باید حداکثر ۳۰ حرف باشد.")]
     string LastName,
 
     [Optional]
