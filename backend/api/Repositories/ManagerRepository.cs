@@ -461,7 +461,7 @@ public class ManagerRepository : IManagerRepository
       false,
       Error: new CustomError(
         ErrorCode.IsOperationFailed,
-        "Operation failed try agian or cnatact the support"
+        "Operation failed. Try agian or contact support."
       )
     );
   }
