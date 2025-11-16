@@ -130,8 +130,9 @@
                                 <input class="input" type="password" formControlName="currentPasswordCtrl"
                                     placeholder="****" matInput>
                                 <mat-hint>رمز فعلی خود را وارد کنید</mat-hint>
-                                <mat-error *ngIf="CurrentPasswordCtrl.hasError('required')">رمز فعلی را وارد
-                                    نکردید</mat-error>
+                                <mat-error *ngIf="CurrentPasswordCtrl.hasError('required')">
+                                    رمز فعلی را وارد نکرده اید
+                                </mat-error>
                                 <mat-error
                                     *ngIf="CurrentPasswordCtrl.errors && CurrentPasswordCtrl.hasError('minlength')">حداقل
                                     ۷ کاراکتر</mat-error>
@@ -145,8 +146,9 @@
                                 <input class="input" type="password" formControlName="passwordCtrl" placeholder="****"
                                     matInput>
                                 <mat-hint>رمز جدید را وارد کنید</mat-hint>
-                                <mat-error *ngIf="PasswordCtrl.hasError('required')">برای تغییر رمز، لطفاً رمز جدید را
-                                    بنویسید</mat-error>
+                                <mat-error *ngIf="PasswordCtrl.hasError('required')">
+                                    برای تغییر رمز، لطفاً رمز جدید را وارد کنید
+                                </mat-error>
                                 <mat-error *ngIf="PasswordCtrl.errors && PasswordCtrl.hasError('minlength')">حداقل ۷
                                     کاراکتر</mat-error>
                                 <mat-error *ngIf="PasswordCtrl.errors && PasswordCtrl.hasError('maxlength')">حداکثر ۲۰
@@ -158,8 +160,9 @@
                                 <input class="input" type="password" formControlName="confirmPasswordCtrl"
                                     label="Confirm Password" placeholder="****" matInput>
                                 <mat-hint>رمز جدید را مجدد وارد کنید</mat-hint>
-                                <mat-error *ngIf="ConfirmPasswordCtrl.hasError('required')">برای تأیید، رمز جدید را
-                                    دوباره وارد کنید</mat-error>
+                                <mat-error *ngIf="ConfirmPasswordCtrl.hasError('required')">
+                                    برای تایید رمز، لطفاً رمز جدید را مجدد وارد کنید
+                                </mat-error>
                                 <mat-error
                                     *ngIf="ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('minlength')">حداقل
                                     ۷ کاراکتر</mat-error>
