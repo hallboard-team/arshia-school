@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
@@ -44,6 +44,8 @@ export class CourseEditComponent implements OnInit {
   private _fb = inject(FormBuilder);
   private _route = inject(ActivatedRoute);
   private _platformId = inject(PLATFORM_ID);
+  private _router = inject(Router);
+  private oldCourseTitle: string | null = null;
 
   course: Course | undefined;
   teachers: Teacher[] = [];
@@ -110,6 +112,8 @@ export class CourseEditComponent implements OnInit {
       const courseTitle: string | null = this._route.snapshot.paramMap.get('courseTitle');
 
       if (courseTitle) {
+        this.oldCourseTitle = courseTitle;
+
         this._courseService.getByTitle(courseTitle)?.pipe(take(1)).subscribe(course => {
           if (course) {
             this.course = course;
@@ -139,7 +143,8 @@ export class CourseEditComponent implements OnInit {
   }
 
   updateCourse(): void {
-    const courseTitle: string | null = this._route.snapshot.paramMap.get('courseTitle');
+    const courseTitle: string | null =
+      this.oldCourseTitle ?? this._route.snapshot.paramMap.get('courseTitle');
 
     if (this.course && courseTitle) {
       const start = this.StartCtrl.value as any;
@@ -166,15 +171,31 @@ export class CourseEditComponent implements OnInit {
       this._courseService.update(updatedCourse, courseTitle)
         .pipe(take(1))
         .subscribe({
-          next: (course: Course) => {
+          next: (course: Course | null) => {
             if (course) {
               this.course = course;
-              this.openSnack('دوره با موفقیت آپدیت شد.', 'success');
             }
+
+            this.openSnack('دوره با موفقیت آپدیت شد.', 'success');
+
+            const newTitle: string = this.TitleCtrl.value;
+
+            if (newTitle && newTitle !== this.oldCourseTitle) {
+              this.oldCourseTitle = newTitle;
+
+              this._router.navigate(
+                ['/dashboard/update-course', newTitle],
+                { replaceUrl: true }
+              );
+            }
+          },
+          error: (err) => {
+            this.openSnack('خطا در آپدیت دوره رخ داد.', 'error');
           }
         });
     }
   }
+
 
   getTeachers(): void {
     this._managerService.getTeachers().subscribe({
