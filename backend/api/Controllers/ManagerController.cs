@@ -162,6 +162,9 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         if (string.IsNullOrWhiteSpace(updateEnrolledDto.TitleCourse))
             return BadRequest("Course title is required.");
 
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
         var updateResult = await _managerRepository.UpdateEnrolledCourseAsync(updateEnrolledDto, targetUserName, cancellationToken);
 
         return updateResult?.ModifiedCount > 0
