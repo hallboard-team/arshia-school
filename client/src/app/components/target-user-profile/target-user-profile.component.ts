@@ -27,6 +27,8 @@ import { PaginatedResult } from '../../models/helpers/paginatedResult';
 import { PageEvent } from '@angular/material/paginator';
 import { Pagination } from '../../models/helpers/pagination';
 import { CurrencyFormatterDirective } from '../../directives/currency-formatter.directive';
+import { DatepickerComponent } from '../../datepicker/datepicker.component';
+import moment, { Moment } from 'moment-jalaali';
 
 @Component({
   selector: 'app-target-user-profile',
@@ -36,7 +38,7 @@ import { CurrencyFormatterDirective } from '../../directives/currency-formatter.
     MatInputModule, MatButtonModule, NavbarComponent,
     RouterModule, MatTabsModule, MatNativeDateModule,
     MatRadioModule, MatSnackBarModule, MatDatepickerModule,
-    MatSelectModule, CurrencyFormatterDirective
+    MatSelectModule, CurrencyFormatterDirective, DatepickerComponent
   ],
   templateUrl: './target-user-profile.component.html',
   styleUrl: './target-user-profile.component.scss'
@@ -77,6 +79,12 @@ export class TargetUserProfileComponent implements OnInit {
 
   shamsiDisplayDate: string = '';
 
+  readonly minAge = 11;
+  readonly maxAge = 90;
+
+  min = moment().subtract(this.maxAge, 'jYear').startOf('day');
+  max = moment().subtract(this.minAge, 'jYear').endOf('day');
+
   ngOnInit(): void {
     const currentYear = new Date().getFullYear();
     this.minDate = new Date(currentYear - 99, 0, 1);
@@ -91,27 +99,10 @@ export class TargetUserProfileComponent implements OnInit {
   }
 
   targetMemberEditFg: FormGroup = this._fb.group({
-    targetEmailCtrl: ['', [
-      Validators.required,
-      Validators.maxLength(50),
-      Validators.pattern(/^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)
-    ]],
-    targetNameCtrl: ['', [
-      Validators.required,
-      Validators.minLength(2),
-      Validators.maxLength(30)
-    ]],
-    targetLastNameCtrl: ['', [
-      Validators.required,
-      Validators.minLength(2),
-      Validators.maxLength(30)
-    ]],
-    targetPhoneNumCtrl: ['', [
-      Validators.required,
-      Validators.pattern(/^[0-9]{10}$/)
-    ]],
-    targetGenderCtrl: ['', Validators.required],
-    targetDateOfBirthCtrl: ['', Validators.required]
+    targetNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    targetLastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    targetDateOfBirthCtrl: [null, [Validators.required]],
+    targetPhoneNumCtrl: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]]
   });
 
   addEnrolledCourseFg: FormGroup = this.fb.group({
@@ -126,23 +117,17 @@ export class TargetUserProfileComponent implements OnInit {
     methodCtrl: ['', [Validators.required]]
   })
 
-  get TargetEmailCtrl(): AbstractControl {
-    return this.targetMemberEditFg.get('targetEmailCtrl') as FormControl;
-  }
   get TargetNameCtrl(): AbstractControl {
     return this.targetMemberEditFg.get('targetNameCtrl') as FormControl;
   }
   get TargetLastNameCtrl(): AbstractControl {
     return this.targetMemberEditFg.get('targetLastNameCtrl') as FormControl;
   }
-  get TargetPhoneNumCtrl(): AbstractControl {
-    return this.targetMemberEditFg.get('targetPhoneNumCtrl') as FormControl;
-  }
-  get TargetGenderCtrl(): AbstractControl {
-    return this.targetMemberEditFg.get('targetGenderCtrl') as FormControl;
-  }
   get TargetDateOfBirthCtrl(): AbstractControl {
     return this.targetMemberEditFg.get('targetDateOfBirthCtrl') as FormControl;
+  }
+  get TargetPhoneNumCtrl(): AbstractControl {
+    return this.targetMemberEditFg.get('targetPhoneNumCtrl') as FormControl;
   }
 
   //add enrolled-course
@@ -165,6 +150,14 @@ export class TargetUserProfileComponent implements OnInit {
   }
   get MethodCtrl(): FormControl {
     return this.updateEnrolledCourseFg.get('methodCtrl') as FormControl;
+  }
+
+  //Gender Getter
+  get isMale(): boolean {
+    return this.targetUserProfile?.gender?.toLowerCase() === 'male';
+  }
+  get isFemale(): boolean {
+    return this.targetUserProfile?.gender?.toLowerCase() === 'female';
   }
 
   getTargetUserProfile(): void {
@@ -194,12 +187,17 @@ export class TargetUserProfileComponent implements OnInit {
       this._managerService.getTargetUserCourses(memberUserName).subscribe({
         next: (data) => {
           this.courses = data;
-          // if (data !== null) {
-          //   this.shamsiCourses = data.map(course => ({
-          //     ...course,
-          //     shamsiStart: moment(course.start).format('jYYYY/jMM/jDD')
-          //   }));
-          // }
+          if (data !== null) {
+            this.shamsiCourses = data.map(course => ({
+              ...course,
+              hours: course.hours ?? (course.totalMinutes ?? 0) / 60,
+              hoursPerClass: course.hoursPerClass ?? (course.classMinutes ?? 0) / 60,
+              shamsiStart: moment(course.start).format('jYYYY/jMM/jDD')
+            }));
+          } else {
+            this.shamsiCourses = [];
+          }
+
           this.loading = false;
         },
         error: (err) => {
@@ -228,29 +226,34 @@ export class TargetUserProfileComponent implements OnInit {
   }
 
   initTargetControllersValues(targetUserProfile: TargetUserProfile) {
-    this.TargetEmailCtrl.setValue(targetUserProfile.email);
     this.TargetNameCtrl.setValue(targetUserProfile.name);
     this.TargetLastNameCtrl.setValue(targetUserProfile.lastName);
-    this.TargetPhoneNumCtrl.setValue(targetUserProfile.phoneNum?.slice(2));
-    this.TargetGenderCtrl.setValue(targetUserProfile.gender);
-
-    this.TargetDateOfBirthCtrl.setValue(targetUserProfile.dateOfBirth);
-    // this.shamsiDisplayDate = moment(targetUserProfile.dateOfBirth).format('jYYYY/jMM/jDD');
+    this.TargetPhoneNumCtrl.setValue(targetUserProfile.phoneNum?.slice(2) ?? '');
+    if (targetUserProfile.dateOfBirth) {
+      const dobMoment = moment(targetUserProfile.dateOfBirth, 'YYYY-MM-DD');
+      this.TargetDateOfBirthCtrl.setValue(dobMoment);
+    }
   }
 
   updateTargetMember() {
     const memberUserName: string | null = this._route.snapshot.paramMap.get('memberUserName');
 
-    if (memberUserName) {
-      const dob: string | undefined = this.getDateOnly(this.TargetDateOfBirthCtrl.value);
+    const dob = this.TargetDateOfBirthCtrl.value as Moment;
+    if (!dob || !dob.isBetween(this.min, this.max, undefined, '[]')) {
+      this.openSnack(
+        `تاریخ تولد باید بین ${this.min.format('jYYYY/jMM/jDD')} و ${this.max.format('jYYYY/jMM/jDD')} باشد.`,
+        'error'
+      );
+      this.TargetDateOfBirthCtrl.markAsTouched();
+      return;
+    }
 
-      let managerUpdateMember: ManagerUpdateMemberDto = {
-        email: this.TargetEmailCtrl.value,
+    if (memberUserName) {
+      const managerUpdateMember: ManagerUpdateMemberDto = {
         name: this.TargetNameCtrl.value,
         lastName: this.TargetLastNameCtrl.value,
-        phoneNum: '98' + this.TargetPhoneNumCtrl.value,
-        gender: this.TargetGenderCtrl.value,
-        dateOfBirth: dob,
+        dateOfBirth: this.toGregorianDateOnly(dob),
+        phoneNum: '98' + this.TargetPhoneNumCtrl.value
       }
 
       this._managerService.updateMember(managerUpdateMember, memberUserName)
@@ -398,14 +401,72 @@ export class TargetUserProfileComponent implements OnInit {
 
   onDateSelect(event: { shamsi: string; gregorian: string; timestamp: number }): void {
     this.shamsiDisplayDate = event.shamsi;
-    this.TargetDateOfBirthCtrl.setValue(new Date(event.gregorian));
+
+    const dobMoment = moment(event.gregorian, 'YYYY-MM-DD');
+    this.TargetDateOfBirthCtrl.setValue(dobMoment);
+
     this.closeDatePicker();
   }
 
-  private getDateOnly(dob: string | null): string | undefined {
-    if (!dob) return undefined;
+  getCourseStatus(course: { isStarted: boolean }): string {
+    if (course.isStarted) {
+      return 'در حال برگزاری';
+    }
 
-    let theDob: Date = new Date(dob);
-    return new Date(theDob.setMinutes(theDob.getMinutes() - theDob.getTimezoneOffset())).toISOString().slice(0, 10);
+    return 'شروع نشده';
+  }
+
+  // Baraye inke bargarde be hamon details ke dasht 
+  onCancelEdit(): void {
+    if (this.targetUserProfile) {
+      this.initTargetControllersValues(this.targetUserProfile);
+      this.targetMemberEditFg.markAsPristine();
+      this.targetMemberEditFg.markAsUntouched();
+    } else {
+      this.targetMemberEditFg.reset();
+    }
+  }
+
+  // Baraye inke kolan input ha khali beshan
+  // onCancelEdit(): void {
+  //   this.targetMemberEditFg.reset();
+  // }
+
+  onCancelAddEnrolledCourse(): void {
+    this.addEnrolledCourseFg.reset();
+
+    this.addEnrolledCourseFg.markAsPristine();
+    this.addEnrolledCourseFg.markAsUntouched();
+  }
+
+  onCancelUpdateEnrolledCourse(): void {
+    this.updateEnrolledCourseFg.reset();
+
+    this.updateEnrolledCourseFg.markAsPristine();
+    this.updateEnrolledCourseFg.markAsUntouched();
+  }
+
+  private toGregorianDateOnly(value: Moment | Date | string | null | undefined): string | undefined {
+    if (!value) return undefined;
+
+    if (moment.isMoment(value)) {
+      return value.locale('en').format('YYYY-MM-DD');
+    }
+
+    if (typeof value === 'string') {
+      const m = moment(value);
+      if (m.isValid()) {
+        return m.locale('en').format('YYYY-MM-DD');
+      }
+      const d = new Date(value);
+      return new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString().slice(0, 10);
+    }
+
+    const d = value as Date;
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString().slice(0, 10);
+  }
+
+  private openSnack(message: string, panel: 'success' | 'error' = 'error'): void {
+    this._matSnackBar.open(message, 'باشه', { duration: 4000, horizontalPosition: 'center', verticalPosition: 'top', panelClass: [panel === 'success' ? 'snack-success' : 'snack-error'], direction: 'rtl' });
   }
 }

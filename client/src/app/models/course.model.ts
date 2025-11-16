@@ -1,12 +1,15 @@
 export interface Course {
     title: string,
     professorUserNames: string[],
+    professorNames: string[],
     tuition: number,
-    hours: number,
-    hoursPerClass: DoubleRange,
+    hours?: number,
+    hoursPerClass?: number,
+    totalMinutes?: number;
+    classMinutes?: number;
     days: number,
     start: string | undefined,
-    isStarted: string
+    isStarted: boolean
 }
 
 export interface ShowCourse {
@@ -14,17 +17,17 @@ export interface ShowCourse {
     professorNames: string[],
     tuition: number,
     hours: number,
-    hoursPerClass: DoubleRange,
+    hoursPerClass: number,
     days: number,
     start: string | undefined,
-    isStarted: string
+    isStarted: boolean
 }
 
 export interface CourseUpdate {
     title: string,
     tuition: number,
     hours: number,
-    hoursPerClass: DoubleRange,
+    hoursPerClass: number,
     start: string | undefined,
     isStarted: boolean
 }
