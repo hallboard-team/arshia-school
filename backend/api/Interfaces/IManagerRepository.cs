@@ -4,7 +4,7 @@ namespace api.Interfaces;
 
 public interface IManagerRepository
 {
-    Task<bool> UpdateAccountAsync(ManagerUpdateProfile managerUpdateProfile, string? hashedUserId, CancellationToken cancellationToken);
+    Task<OperationResult> UpdateAccountAsync(ManagerUpdateProfile managerUpdateProfile, ObjectId userId, CancellationToken cancellationToken);
     Task<RegisteredUserDto?> CreateSecretaryAsync(RegisterDto managerInput, CancellationToken cancellationToken);
     Task<RegisteredUserDto?> CreateStudentAsync(RegisterDto managerInput, CancellationToken cancellationToken);
     Task<RegisteredUserDto?> CreateTeacherAsync(RegisterDto managerInput, CancellationToken cancellationToken);
