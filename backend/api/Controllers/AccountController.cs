@@ -49,7 +49,7 @@ public class AccountController(IAccountRepository _accountRepository, ITokenServ
         string? hashedUserId = User.GetHashedUserId();
 
         if (hashedUserId is null)
-            return Unauthorized("شما لاگین نیستید. دوباره لاگین کنید.");
+            return Unauthorized("شما ورود نکرده اید. لطفا ابتدا ورود کنید.");
 
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 

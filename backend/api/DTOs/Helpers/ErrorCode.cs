@@ -5,7 +5,7 @@ public enum ErrorCode
     IsWrongCreds,
     IsUserNotFound,
     IsOperationFailed,
-    IsInavalidType,
+    IsInvalidType,
     IsPasswordInvalid,
     IsIdentityFailed,
     ArePasswordsNotMatch

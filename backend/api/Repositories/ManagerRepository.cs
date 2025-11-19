@@ -66,7 +66,7 @@ public class ManagerRepository : IManagerRepository
         return new OperationResult(
           false,
           Error: new CustomError(
-            ErrorCode.IsInavalidType,
+            ErrorCode.IsInvalidType,
             "Enter valid gender"
           )
         );

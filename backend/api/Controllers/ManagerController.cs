@@ -15,9 +15,12 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         string? hashedUserId = User.GetHashedUserId();
 
         if (hashedUserId is null)
-            return Unauthorized("شما لاگین نیستید. دوباره لاگین کنید.");
+            return Unauthorized("شما ورود نکرده اید. لطفا ابتدا ورود کنید.");
 
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
+
+        if (userId is null)
+            return Unauthorized("شما ورود نکرده اید. لطفا ابتدا ورود کنید.");
 
         OperationResult? opResult = await _managerRepository.UpdateAccountAsync(managerUpdateProfile, userId.Value, cancellationToken);
 
@@ -26,7 +29,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
             : opResult.Error?.Code switch
             {
                 ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
-                ErrorCode.IsInavalidType => BadRequest(opResult.Error.Message),
+                ErrorCode.IsInvalidType => BadRequest(opResult.Error.Message),
                 ErrorCode.IsOperationFailed => BadRequest(opResult.Error.Message),
                 _ => BadRequest("Operation failed. Try again or contact support.")
             };
