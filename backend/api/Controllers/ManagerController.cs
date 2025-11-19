@@ -7,23 +7,32 @@ namespace api.Controllers;
 public class ManagerController(IManagerRepository _managerRepository, ITokenService _tokenService) : BaseApiController
 {
     [HttpPut("update-account")]
-    public async Task<ActionResult> UpdateAccount(ManagerUpdateProfile managerUpdateProfile, CancellationToken cancellationToken)
+    public async Task<ActionResult<Response>> UpdateAccount(ManagerUpdateProfile managerUpdateProfile, CancellationToken cancellationToken)
     {
         if (managerUpdateProfile is null)
             return BadRequest("ورودی نامعتبر است.");
 
-        try
-        {
-            bool? updateResult = await _managerRepository.UpdateAccountAsync(managerUpdateProfile, User.GetHashedUserId(), cancellationToken);
+        string? hashedUserId = User.GetHashedUserId();
 
-            return updateResult is false
-                ? BadRequest("بروزرسانی انجام نشد. لطفاً دوباره تلاش کنید.")
-                : Ok(new { message = "اطلاعات با موفقیت بروزرسانی شد." });
-        }
-        catch (ApplicationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        if (hashedUserId is null)
+            return Unauthorized("شما ورود نکرده اید. لطفا ابتدا ورود کنید.");
+
+        ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
+
+        if (userId is null)
+            return Unauthorized("شما ورود نکرده اید. لطفا ابتدا ورود کنید.");
+
+        OperationResult? opResult = await _managerRepository.UpdateAccountAsync(managerUpdateProfile, userId.Value, cancellationToken);
+
+        return opResult.IsSuccess
+            ? Ok(new Response("User successfully updated."))
+            : opResult.Error?.Code switch
+            {
+                ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
+                ErrorCode.IsInvalidType => BadRequest(opResult.Error.Message),
+                ErrorCode.IsOperationFailed => BadRequest(opResult.Error.Message),
+                _ => BadRequest("Operation failed. Try again or contact support.")
+            };
     }
 
     [HttpPost("create-secretary")]

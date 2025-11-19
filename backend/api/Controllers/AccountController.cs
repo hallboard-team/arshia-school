@@ -1,7 +1,10 @@
+using api.DTOs.Account;
+using api.DTOs.Helpers;
+
 namespace api.Controllers;
 
 [Authorize]
-public class AccountController(IAccountRepository _accountRepository) : BaseApiController
+public class AccountController(IAccountRepository _accountRepository, ITokenService _tokenService) : BaseApiController
 {
     [AllowAnonymous]
     [HttpPost("login")]
@@ -39,4 +42,32 @@ public class AccountController(IAccountRepository _accountRepository) : BaseApiC
 
         return loggedInDto is null ? Unauthorized("User is logged out or unauthorized. Login again.") : loggedInDto;
     }
+
+    [HttpPut("update-password")]
+    public async Task<ActionResult<Response>> UpdatePassword(PasswordDto request, CancellationToken cancellationToken)
+    {
+        string? hashedUserId = User.GetHashedUserId();
+
+        if (hashedUserId is null)
+            return Unauthorized("شما ورود نکرده اید. لطفا ابتدا ورود کنید.");
+
+        ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
+
+        if (userId is null)
+            return Unauthorized("Please login again");
+
+        OperationResult opResult = await _accountRepository.UpdatePasswordAsync(request, userId.Value, cancellationToken);
+
+        return opResult.IsSuccess
+            ? Ok(new Response("Password successfully updated"))
+            : opResult.Error?.Code switch
+            {
+                ErrorCode.IsPasswordInvalid => BadRequest(opResult.Error.Message),
+                ErrorCode.ArePasswordsNotMatch => BadRequest(opResult.Error.Message),
+                ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
+                ErrorCode.IsIdentityFailed => BadRequest(opResult.Error.Message),
+                _ => BadRequest("Operation failed. Try again or contact support.")
+            };
+    }
+
 }

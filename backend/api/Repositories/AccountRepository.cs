@@ -1,3 +1,6 @@
+using api.DTOs.Account;
+using api.DTOs.Helpers;
+
 namespace api.Repositories;
 
 public class AccountRepository : IAccountRepository
@@ -60,5 +63,59 @@ public class AccountRepository : IAccountRepository
         return appUser is null
             ? null
             : Mappers.ConvertAppUserToLoggedInDto(appUser, token);
+    }
+
+    public async Task<OperationResult> UpdatePasswordAsync(PasswordDto request, ObjectId userId, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(request.CurrentPassword) || string.IsNullOrWhiteSpace(request.NewPassword) || string.IsNullOrWhiteSpace(request.ConfirmPassword))
+        {
+            return new OperationResult(
+              false,
+              new CustomError(
+                ErrorCode.IsPasswordInvalid,
+                "All three fields are required to change the password."
+              )
+            );
+        }
+
+        if (request.NewPassword != request.ConfirmPassword)
+        {
+            return new OperationResult(
+              false,
+              new CustomError(
+                ErrorCode.ArePasswordsNotMatch,
+                "New password and confirm password do not match."
+              )
+            );
+        }
+
+        AppUser? appUser = await _userManager.FindByIdAsync(userId.ToString());
+        if (appUser is null)
+        {
+            return new OperationResult(
+              false,
+              new CustomError(
+                ErrorCode.IsUserNotFound,
+                "User not found."
+              )
+            );
+        }
+
+        IdentityResult? result = await _userManager.ChangePasswordAsync(appUser, request.CurrentPassword, request.NewPassword);
+        if (!result.Succeeded)
+        {
+            return new OperationResult(
+              false,
+              new CustomError(
+                ErrorCode.IsIdentityFailed,
+                string.Join(" | ", result.Errors.Select(e => e.Description))
+              )
+            );
+        }
+
+        return new OperationResult(
+          true,
+          null
+        );
     }
 }
