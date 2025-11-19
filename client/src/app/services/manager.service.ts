@@ -112,8 +112,8 @@ export class ManagerService {
     return this._http.get<Payment>(this._apiUrl + 'get-target-payment-by-id/' + targetPaymentId);
   }
 
-  updateMember(managerUpdateInput: ManagerUpdateMemberDto, targetMemberEmail: string): Observable<any> {
-    return this._http.put(this._apiUrl + 'update-member/' + targetMemberEmail, managerUpdateInput)
+  updateMember(managerUpdateInput: ManagerUpdateMemberDto, targetMemberEmail: string): Observable<TargetUserProfile> {
+    return this._http.put<TargetUserProfile>(this._apiUrl + 'update-member/' + targetMemberEmail, managerUpdateInput)
   }
 
   addEnrolledCourse(targetUserName: string, addEnrolledCourse: AddEnrolledCourse) {
