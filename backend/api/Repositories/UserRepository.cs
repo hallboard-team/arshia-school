@@ -23,7 +23,7 @@ public class UserRepository : IUserRepository
 
     public async Task<OperationResult<MemberPhoto>> AddProflePhotoAsync(IFormFile file, ObjectId? userId, CancellationToken cancellationToken)
     {
-        AppUser appUser = await _collectionAppUser.Find(doc => doc.Id == userId).SingleOrDefaultAsync(cancellationToken);
+        AppUser? appUser = await _collectionAppUser.Find(doc => doc.Id == userId).SingleOrDefaultAsync(cancellationToken);
 
         if (appUser is null)
         {
