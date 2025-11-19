@@ -29,7 +29,7 @@ public class UserController(ITokenService _tokenService, IUserRepository _userRe
             {
                 ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
                 ErrorCode.IsOperationFailed => BadRequest(opResult.Error.Message),
-                _ => BadRequest("Opration failed. Try again or contact supprot")
+                _ => BadRequest("Operation failed. Try again or contact support.")
             };
     }
 }
