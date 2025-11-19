@@ -234,7 +234,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
     }
 
     [HttpPut("update-member/{memberUserName}")]
-    public async Task<ActionResult<Response>> UpdateMember(string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken)
+    public async Task<ActionResult<TargetMemberDto>> UpdateMember(string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken)
     {
         if (memberUserName == null)
             return BadRequest("Invalid user data.");
@@ -244,15 +244,13 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         if (hashedUserId is null)
             return Unauthorized("You are not logged in. Please login first.");
 
-        bool isUpdated = await _managerRepository.UpdateMemberAsync(memberUserName, updatedMember, cancellationToken);
+        TargetMemberDto? targetMemberDto = await _managerRepository.UpdateMemberAsync(memberUserName, updatedMember, cancellationToken);
 
-        if (!isUpdated)
+        if (targetMemberDto is null)
             return BadRequest("User not found or no changes were made.");
 
         return Ok(
-            new Response(
-                "User has been updated successfully."
-            )
+           targetMemberDto
         );
     }
 

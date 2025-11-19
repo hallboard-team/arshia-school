@@ -393,14 +393,14 @@ public class ManagerRepository : IManagerRepository
     return ConvertAppUserToTargetMemberDto(appUser);
   }
 
-  public async Task<bool> UpdateMemberAsync(
+  public async Task<TargetMemberDto?> UpdateMemberAsync(
     string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken
   )
   {
     AppUser? targetAppUser = await _collectionAppUser.Find(u => u.NormalizedUserName == memberUserName.ToUpper()).
       FirstOrDefaultAsync(cancellationToken);
 
-    if (targetAppUser is null) return false;
+    if (targetAppUser is null) return null;
 
     FilterDefinition<AppUser>? filter = Builders<AppUser>.Filter.Eq(u => u.Id, targetAppUser.Id);
 
@@ -414,7 +414,9 @@ public class ManagerRepository : IManagerRepository
       filter, update, cancellationToken: cancellationToken
     );
 
-    return updateResult.ModifiedCount > 0;
+    AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == memberUserName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+
+    return Mappers.ConvertAppUserToTargetMemberDto(appUser);
   }
 
   public async Task<OperationResult<MemberPhoto>> UploadMemberPhotoAsync(IFormFile file, string userName, CancellationToken cancellationToken)
