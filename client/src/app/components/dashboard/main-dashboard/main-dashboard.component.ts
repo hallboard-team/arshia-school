@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RightSidebarComponent } from '../right-sidebar/right-sidebar.component';
 import { RouterOutlet } from "@angular/router";
+import { AccountService } from '../../../services/account.service';
 
 @Component({
   selector: 'app-main-dashboard',
@@ -9,6 +10,7 @@ import { RouterOutlet } from "@angular/router";
   styleUrl: './main-dashboard.component.scss'
 })
 export class MainDashboardComponent {
+  accountService = inject(AccountService);
   sidebarCollapsed = false;
 
   onSidebarState(v: boolean): void {

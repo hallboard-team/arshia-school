@@ -1,9 +1,11 @@
-<div class="main" [class.sidebar-collapsed]="sidebarCollapsed">
+<div class="main" [class.sidebar-collapsed]="sidebarCollapsed" [class.no-sidebar]="accountService.loggedInUserSig() === null">
     <div class="content">
         <router-outlet />
     </div>
 
+    @if (accountService.loggedInUserSig()) {
     <div class="sidebar">
         <app-right-sidebar (collapsedChange)="onSidebarState($event)" />
     </div>
+    }
 </div>

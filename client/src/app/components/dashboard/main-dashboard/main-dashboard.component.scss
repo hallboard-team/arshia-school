@@ -33,6 +33,11 @@
             width: 0;
             height: 0;
         }
+
+        &.no-sidebar {
+            --sidebar-width: 0;
+            --sidebar-gap: 0;
+        }
     }
 }
 
