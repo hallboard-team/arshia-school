@@ -15,6 +15,7 @@ public static class RepositoryServiceExtensions
         services.AddScoped<ICourseRepository, CourseRepository>();
         services.AddScoped<IPhotoService, PhotoService>();
         services.AddScoped<IPhotoModifySaveService, PhotoModifySaveService>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         #endregion Dependency Injections
 
