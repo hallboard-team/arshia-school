@@ -1,3 +1,4 @@
+using api.Middlewares;
 using api.Serializers;
 using backend.Serializers;
 using MongoDB.Bson.Serialization;
@@ -17,6 +18,8 @@ builder.Services.AddRepositoryServices();
 builder.Services.AddOpenApi();
 
 WebApplication app = builder.Build();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
