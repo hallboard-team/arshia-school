@@ -5,5 +5,7 @@ export interface UserProfile {
     name: string;
     lastName: string;
     age: number;
+    dateOfBirth: string;
     gender: string;
+    photoUrl: string;
 }
