@@ -49,12 +49,22 @@ export class MemberListComponent {
 
   filterFg = this._fB.group({
     searchCtrl: ['', []],
+    courseCtrl: ['', []],
+    classCtrl: ['', []],
     minAgeCtrl: [this.minAge, []],
     maxAgeCtrl: [this.maxAge, []]
   });
 
   get SearchCtrl(): FormControl {
     return this.filterFg.get('searchCtrl') as FormControl;
+  }
+
+  get CourseCtrl(): FormControl {
+    return this.filterFg.get('courseCtrl') as FormControl;
+  }
+
+  get ClassCtrl(): FormControl {
+    return this.filterFg.get('classCtrl') as FormControl;
   }
 
   get MinAgeCtrl(): AbstractControl {
@@ -105,11 +115,15 @@ export class MemberListComponent {
       this.memberParams.search = this.SearchCtrl.value;
       this.memberParams.minAge = this.MinAgeCtrl.value;
       this.memberParams.maxAge = this.MaxAgeCtrl.value;
+      this.memberParams.courseTitle = this.CourseCtrl.value;
+      this.memberParams.classTitle = this.ClassCtrl.value;
     }
   }
 
   reset(): void {
     this.SearchCtrl.reset();
+    this.CourseCtrl.reset();
+    this.ClassCtrl.reset();
     this.MinAgeCtrl.setValue(this.minAge);
     this.MaxAgeCtrl.setValue(this.maxAge);
   }
