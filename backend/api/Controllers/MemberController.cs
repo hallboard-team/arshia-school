@@ -76,7 +76,7 @@ public class MemberController
             : opResult.Error?.Code switch
             {
                 ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
-                _ => BadRequest("Operarion failed. Try again or contact support.")
+                _ => BadRequest("Operation failed. Try again or contact support.")
             };
     }
 
