@@ -237,11 +237,19 @@
                 gap: 3rem;
                 margin-top: 1rem;
 
+                .span-phone {
+                    margin-left: 8px;
+                }
+
                 .date-field {
+                    // background-color: #00c4ad;
                     width: 80%;
                     display: flex;
+                    flex-direction: column;
+                    flex-wrap: wrap;
                     justify-content: center;
-                    align-items: center;
+                    gap: 1rem;
+                    // align-items: center;
                     margin-top: -25px;
                 }
 
@@ -295,6 +303,17 @@
                             font-size: 15px;
                             color: blue;
                         }
+                    }
+
+                    button:disabled {
+                        opacity: 0.5;
+                        cursor: not-allowed;
+                        background: #e0e0e0;
+
+                        span {
+                            color: gray;
+                        }
+
                     }
 
                     button:hover {
@@ -512,6 +531,10 @@
                             background: #e0e0e0;
                             box-shadow: inset 5px 5px 10px #cecece,
                                 inset -5px -5px 10px #f2f2f2;
+                        }
+
+                        .span-paid {
+                            margin-right: 8px;
                         }
                     }
 
@@ -855,7 +878,7 @@
 
 .div-enrolled-course {
     ::ng-deep mat-form-field {
-        height: auto !important; 
+        height: auto !important;
     }
 
     ::ng-deep .mat-mdc-form-field-flex {

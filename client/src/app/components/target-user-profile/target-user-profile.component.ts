@@ -107,13 +107,13 @@ export class TargetUserProfileComponent implements OnInit {
 
   addEnrolledCourseFg: FormGroup = this.fb.group({
     titleCourseCtrl: ['', Validators.required],
-    numberOfPaymentsCtrl: ['', [Validators.required]],
-    paidAmountCtrl: ['', [Validators.required]]
-  })
+    numberOfPaymentsCtrl: [null, [Validators.required, Validators.min(1), Validators.max(99)]],
+    paidAmountCtrl: ['', [Validators.required, Validators.min(10_000), Validators.max(100_000_000)]]
+  });
 
   updateEnrolledCourseFg: FormGroup = this.fb.group({
     titleCourseUpdateCtrl: ['', Validators.required],
-    paidAmountUpdateCtrl: ['', [Validators.required]],
+    paidAmountUpdateCtrl: ['', [Validators.required, Validators.min(10_000), Validators.max(100_000_000)]],
     methodCtrl: ['', [Validators.required]]
   })
 

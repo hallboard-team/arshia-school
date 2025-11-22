@@ -47,12 +47,14 @@
 
                     <form class="update-member-form" [formGroup]="targetMemberEditFg"
                         (ngSubmit)="targetMemberEditFg.valid && updateTargetMember()">
+
+                        <!-- نام -->
                         <mat-form-field appearance="outline">
                             <mat-label>نام</mat-label>
                             <input class="input" type="text" formControlName="targetNameCtrl" label="Name"
-                                placeholder="نام مورد نظر خود را وارد کنید" matInput>
+                                placeholder="نام کاربر" matInput>
                             @if (TargetNameCtrl.hasError('required')) {
-                            <mat-error>فرم رو پرکنید</mat-error>
+                            <mat-error>لطفا نام کاربر را وارد کنید</mat-error>
                             }
                             @else if (TargetNameCtrl.hasError('minlength')) {
                             <mat-error>حداقل ۲ حرف مجاز است</mat-error>
@@ -62,12 +64,13 @@
                             }
                         </mat-form-field>
 
+                        <!-- نام خانوادگی -->
                         <mat-form-field appearance="outline">
                             <mat-label>نام خانوادگی</mat-label>
                             <input class="input" type="text" formControlName="targetLastNameCtrl" label="Last Name"
-                                placeholder="نام خوانوادگی مورد نظر خود را وارد کنید" matInput>
+                                placeholder="نام خوانوادگی کاربر" matInput>
                             @if (TargetLastNameCtrl.hasError('required')) {
-                            <mat-error>فرم رو پرکنید</mat-error>
+                            <mat-error>لطفا نام خانوادگی کاربر را وارد کنید</mat-error>
                             }
                             @else if (TargetLastNameCtrl.hasError('minlength')) {
                             <mat-error>حداقل ۲ حرف مجاز است</mat-error>
@@ -77,22 +80,28 @@
                             }
                         </mat-form-field>
 
+                        <!-- تاریخ تولد -->
                         <div class="date-field">
                             <app-datepicker formControlName="targetDateOfBirthCtrl" [maxDate]="max" [minDate]="min"
                                 [label]="'تاریخ تولد'">
                             </app-datepicker>
+
+                            @if (TargetDateOfBirthCtrl.hasError('required')) {
+                            <mat-error>لطفا تاریخ تولد کاربر را وارد کنید</mat-error>
+                            }
                         </div>
 
+                        <!-- شماره تلفن -->
                         <mat-form-field appearance="outline">
                             <mat-label>شماره تلفن</mat-label>
-                            <span matPrefix dir="ltr">+98&nbsp;</span>
+                            <span class="span-phone" matPrefix dir="ltr">+98&nbsp;</span>
                             <input class="input" type="tel" maxlength="10" formControlName="targetPhoneNumCtrl"
-                                matInput>
+                                placeholder="شماره تلفن بدون صفر" matInput>
                             @if (TargetPhoneNumCtrl.hasError('required')) {
-                            <mat-error>فرم رو پرکنید</mat-error>
+                            <mat-error>لطفا شماره تلفن کاربر را وارد کنید</mat-error>
                             }
                             @else if (TargetPhoneNumCtrl.hasError('pattern')) {
-                            <mat-error>فرمت شماره موبایل معتبر نیست</mat-error>
+                            <mat-error>فرمت شماره تلفن معتبر نیست</mat-error>
                             }
                         </mat-form-field>
 
@@ -236,6 +245,7 @@
                     <form class="enrolled-form" [formGroup]="addEnrolledCourseFg"
                         (ngSubmit)="addEnrolledCourseFg.valid && addEnrolledCourse()">
                         <div class="content">
+                            <!-- نام دوره -->
                             <mat-form-field appearance="outline">
                                 <mat-label>نام دوره</mat-label>
                                 <mat-select formControlName="titleCourseCtrl">
@@ -243,23 +253,45 @@
                                         {{ course.title }}
                                     </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="TitleCourseCtrl.hasError('required')">!این فیلد خالی است</mat-error>
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline">
-                                <mat-label>تعداد اقساط</mat-label>
-                                <input autoFocusDir type="number" formControlName="numberOfPaymentsCtrl"
-                                    label="number of payments" matInput>
-                                @if (NumberOfPaymentsCtrl.hasError('required')) {
-                                <mat-error>!این فیلد خالی است</mat-error>
+                                <mat-hint>یک دوره را انتخاب کنید</mat-hint>
+                                @if (TitleCourseCtrl.hasError('required')) {
+                                <mat-error>هیچ دوره‌ای انتخاب نکرده‌اید</mat-error>
                                 }
                             </mat-form-field>
 
+                            <!-- تعداد اقساط -->
+                            <mat-form-field appearance="outline">
+                                <mat-label>تعداد اقساط</mat-label>
+                                <input type="number" formControlName="numberOfPaymentsCtrl" min="1" matInput
+                                    placeholder="مثلا ۱۲" />
+                                <mat-hint>عدد مثبت وارد کنید</mat-hint>
+                                @if (NumberOfPaymentsCtrl.hasError('required')) {
+                                <mat-error>لطفا تعداد اقساط را مشخص کنید.</mat-error>
+                                }
+                                @if (NumberOfPaymentsCtrl.errors && NumberOfPaymentsCtrl.hasError('min')) {
+                                <mat-error>تعداد اقساط نمی‌تواند کمتر از ۱ باشد.</mat-error>
+                                }
+                                @if (NumberOfPaymentsCtrl.errors && NumberOfPaymentsCtrl.hasError('max')) {
+                                <mat-error>تعداد اقساط نمی‌تواند بیشتر از ۹۹ باشد.</mat-error>
+                                }
+                            </mat-form-field>
+
+                            <!-- پیش پرداخت -->
                             <mat-form-field appearance="outline">
                                 <mat-label>پیش پرداخت</mat-label>
-                                <input type="number" formControlName="paidAmountCtrl" label="paid amount" matInput>
+                                <input type="text" formControlName="paidAmountCtrl" matInput appCurrencyFormatter
+                                    inputmode="numeric" dir="ltr" placeholder="از ۱۰.۰۰۰ تومان" />
+                                <span class="span-paid" matSuffix matSuffix *ngIf="PaidAmountCtrl.value">تومان</span>
+                                <mat-hint>حداقل پیش پرداخت ۱۰.۰۰۰ تومان است</mat-hint>
                                 @if (PaidAmountCtrl.hasError('required')) {
-                                <mat-error>!این فیلد خالی است</mat-error>
+                                <mat-error>لطفا مبلغ پیش پرداخت را وارد نمایید.</mat-error>
+                                }
+                                @if (PaidAmountCtrl.errors && PaidAmountCtrl.hasError('min')) {
+                                <mat-error>حداقل مبلغ مجاز برای پیش پرداخت ۱۰٬۰۰۰ تومان</mat-error>
+                                }
+                                @if (PaidAmountCtrl.errors && PaidAmountCtrl.hasError('max')) {
+                                <mat-error>حداکثر مبلغ مجاز پیش پرداخت ۱۰۰.۰۰۰.۰۰۰ تومان (صد میلیون تومان)
+                                    است</mat-error>
                                 }
                             </mat-form-field>
 
@@ -284,6 +316,7 @@
                     <form class="enrolled-form" [formGroup]="updateEnrolledCourseFg"
                         (ngSubmit)="updateEnrolledCourseFg.valid && updateEnrolledCourse()">
                         <div class="content">
+                            <!-- نام دوره -->
                             <mat-form-field appearance="outline">
                                 <mat-label>نام دوره</mat-label>
                                 <mat-select formControlName="titleCourseUpdateCtrl">
@@ -291,16 +324,29 @@
                                         {{ title }}
                                     </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="TitleCourseUpdateCtrl.hasError('required')">!این فیلد خالی
-                                    است</mat-error>
+                                <mat-hint>یک دوره را انتخاب کنید</mat-hint>
+                                @if (TitleCourseUpdateCtrl.hasError('required')) {
+                                <mat-error>هیچ دوره‌ای انتخاب نکرده‌اید</mat-error>
+                                }
                             </mat-form-field>
 
+                            <!-- مبلغ پرداختی -->
                             <mat-form-field appearance="outline">
                                 <mat-label>مبلغ پرداختی</mat-label>
-                                <input type="text" formControlName="paidAmountUpdateCtrl" matInput appCurrencyFormatter>
-                                <span matSuffix class="suffix-text">تومان</span>
+                                <input type="text" formControlName="paidAmountUpdateCtrl" matInput appCurrencyFormatter
+                                    inputmode="numeric" dir="ltr" placeholder="از ۱۰.۰۰۰ تومان" />
+                                <span class="span-paid" matSuffix matSuffix
+                                    *ngIf="PaidAmountUpdateCtrl.value">تومان</span>
+                                <mat-hint>حداقل شهریه ۱۰.۰۰۰ تومان است</mat-hint>
                                 @if (PaidAmountUpdateCtrl.hasError('required')) {
-                                <mat-error>!این فیلد خالی است</mat-error>
+                                <mat-error>لطفا مبلغ پرداختی شهریه را وارد کنید</mat-error>
+                                }
+                                @if (PaidAmountUpdateCtrl.errors && PaidAmountUpdateCtrl.hasError('min')) {
+                                <mat-error>حداقل مبلغ مجاز برای پرداخت شهریه ۱۰٬۰۰۰ تومان</mat-error>
+                                }
+                                @if (PaidAmountUpdateCtrl.errors && PaidAmountUpdateCtrl.hasError('max')) {
+                                <mat-error>حداکثر مبلغ مجاز پرداخت شهریه ۱۰۰.۰۰۰.۰۰۰ تومان (صد میلیون تومان)
+                                    است</mat-error>
                                 }
                             </mat-form-field>
 
