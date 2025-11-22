@@ -41,7 +41,7 @@ export class MemberListComponent {
   memberParams: MemberParams | undefined;
   subscribed: Subscription | undefined;
 
-  pageSizeOptions = [5, 10, 25];
+  pageSizeOptions = [9, 18, 25];
   pageEvent: PageEvent | undefined;
 
   readonly minAge: number = 11;
@@ -77,6 +77,16 @@ export class MemberListComponent {
 
   ngOnInit(): void {
     this.memberParams = new MemberParams();
+
+    const width = window.innerWidth;
+
+    if (width < 600) {
+      this.memberParams.pageSize = 9;
+    } else if (width < 1024) {
+      this.memberParams.pageSize = 18;
+    } else {
+      this.memberParams.pageSize = 25;
+    }
 
     this.getAll();
   }
