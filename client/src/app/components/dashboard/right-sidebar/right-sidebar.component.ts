@@ -53,7 +53,7 @@ export class RightSidebarComponent implements OnInit {
     const shouldCollapse = this.DEFAULT_COLLAPSED_ROUTES.some(p => url.startsWith(p));
 
     const isMobile = typeof window !== 'undefined'
-      ? window.matchMedia('(max-width: 768px)').matches
+      ? window.matchMedia('(max-width: 767px)').matches
       : false;
 
     if (isMobile) {

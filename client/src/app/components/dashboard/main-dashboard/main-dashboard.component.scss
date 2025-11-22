@@ -16,7 +16,7 @@
     }
 }
 
-@media (min-width: 760px) {
+@media (min-width: 768px) {
     .main {
         --sidebar-width: var(--sidebar-expanded);
 
@@ -40,5 +40,3 @@
         }
     }
 }
-
-@media (min-width:1200px) {}
