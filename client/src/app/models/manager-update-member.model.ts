@@ -1,6 +1,7 @@
 export interface ManagerUpdateMemberDto {
-    name: string,
-    lastName: string,
-    dateOfBirth: string | undefined
-    phoneNum: string,
+    name: string;
+    lastName: string;
+    dateOfBirth: string | undefined;
+    phoneNum: string;
+    gender: string;
 }
