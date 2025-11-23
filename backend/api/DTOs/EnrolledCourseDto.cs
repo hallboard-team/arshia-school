@@ -1,8 +1,13 @@
 namespace api.DTOs;
 
 public record AddEnrolledCourseDto(
+    [Required(ErrorMessage = "Course title is required.")]
     string TitleCourse,
+
+    [Range(1, 99)]
     int NumberOfPayments, //4
+
+    [Range(10000, int.MaxValue, ErrorMessage = "The minimum payment amount must not be less than 10,000 Tomans.")]
     int PaidAmount //2_000_000
 );
 
