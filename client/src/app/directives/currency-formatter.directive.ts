@@ -26,11 +26,16 @@ export class CurrencyFormatterDirective implements ControlValueAccessor {
 
   constructor(private el: ElementRef<HTMLInputElement>) { }
 
-  @HostListener('input', ['$event.target.value'])
-  onInput(value: string): void {
+  @HostListener('input', ['$event'])
+  onInput(event: Event): void {
+    const input = event.target as HTMLInputElement | null;
+    if (!input) return;
+
+    const value = input.value ?? '';
     const rawValue = value.replace(/,/g, '').replace(/[^\d]/g, '');
     const formattedValue = this.formatWithCommas(rawValue);
-    this.el.nativeElement.value = formattedValue;
+
+    input.value = formattedValue;
     this.onChange(rawValue);
   }
 
