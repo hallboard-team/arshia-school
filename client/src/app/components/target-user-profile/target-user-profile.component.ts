@@ -101,7 +101,7 @@ export class TargetUserProfileComponent implements OnInit {
   targetMemberEditFg: FormGroup = this._fb.group({
     targetNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
     targetLastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    targetDateOfBirthCtrl: [null, [Validators.required]],
+    targetDateOfBirthCtrl: ['', [Validators.required]],
     targetPhoneNumCtrl: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]]
   });
 
