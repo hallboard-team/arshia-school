@@ -39,9 +39,9 @@
                 <span class="description">سن: {{targetUserProfile?.age}}</span>
 
                 @if (isMale) {
-                <span class="gender-men-span">جنسیت: مرد</span>
+                <span class="gender-men-span">جنسیت: آقا</span>
                 } @else {
-                <span class="gender-women-span">جنسیت: زن</span>
+                <span class="gender-women-span">جنسیت: خانم</span>
                 }
             </div>
         </div>
@@ -275,8 +275,8 @@
 
                             <mat-form-field appearance="outline">
                                 <mat-label>پیش پرداخت</mat-label>
-                                <input type="text" matInput formControlName="paidAmountCtrl" placeholder="مثلاً 1,000,000"
-                                    appCurrencyFormatter />
+                                <input type="text" matInput formControlName="paidAmountCtrl"
+                                    placeholder="مثلاً 1,000,000" appCurrencyFormatter />
                                 <mat-hint>مبلغی که در ابتدا از شهریه پرداخت می‌شود</mat-hint>
                                 @if (PaidAmountCtrl.hasError('required')) {
                                 <mat-error>!این فیلد خالی است</mat-error>
