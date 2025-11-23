@@ -8,6 +8,7 @@ import { LoggedInUser } from '../models/logged-in-user.model';
 import { ApiResponse } from '../models/helpers/apiResponse.model';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UpdatePassword } from '../models/password-update.model';
 
 @Injectable({
   providedIn: 'root'
@@ -113,6 +114,10 @@ export class AccountService {
       panelClass: ['snack-info'],
       direction: 'rtl'
     });
+  }
+
+  updatePassword(updatePassword: UpdatePassword): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(this.baseApiUrl + 'update-password', updatePassword);
   }
 
   private navigateAfterLogin(user: LoggedInUser): void {

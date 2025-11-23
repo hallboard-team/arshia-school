@@ -4,5 +4,9 @@ public enum ErrorCode
 {
     IsWrongCreds,
     IsUserNotFound,
-    IsOperationFailed
+    IsOperationFailed,
+    IsInvalidType,
+    IsPasswordInvalid,
+    IsIdentityFailed,
+    ArePasswordsNotMatch
 }

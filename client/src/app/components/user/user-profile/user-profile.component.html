@@ -8,101 +8,182 @@
     <div class="div-profile">
         <div class="profile-card">
             <div class="profile-image">
-                @if (profile?.gender == 'male') {
-                <img src="../assets/images/menProfilePhoto.png" alt="Profile">
-                }@else {
-                <img src="../assets/images/womenProfilePhoto.png" alt="Profile">
-                }
+                <div class="avatar-wrapper" (click)="fileInput.click()">
+                    <img [src]="getProfilePhoto()" alt="Profile" />
+
+                    <div class="avatar-hover-overlay">
+                        <div class="hover-circle">
+                            <span class="hover-plus">+</span>
+                        </div>
+                    </div>
+
+                    <div class="avatar-plus-badge" (click)="$event.stopPropagation(); fileInput.click()">
+                        <span>+</span>
+                    </div>
+                </div>
+
+                <input #fileInput type="file" accept="image/*" hidden>
             </div>
 
             <div class="profile-info">
-                <span class="description">ایمیل: {{profile?.email}}</span>
                 <span class="description">نام: {{profile?.name}}</span>
                 <span class="description">نام خانوادگی: {{profile?.lastName}}</span>
-                <span class="description">تاریخ تولد: {{profile?.age}}</span>
-                <span class="description">شماره تلفن: {{profile?.phoneNum}}</span>
                 <span class="description">نام کاربری: {{profile?.userName}}</span>
+                <span class="description">ایمیل: {{profile?.email}}</span>
+                <span class="description">شماره تلفن: {{profile?.phoneNum}}</span>
+                <span class="description">سن: {{profile?.age}}</span>
 
                 @if (profile?.gender == 'male') {
                 <span class="gender-men-span">جنسیت: مرد</span>
-                }@else {
+                } @else {
                 <span class="gender-women-span">جنسیت: زن</span>
                 }
             </div>
         </div>
     </div>
 
+
     <div class="div-tabs">
         <mat-tab-group (selectedTabChange)="onTabChange($event)">
 
-            <mat-tab label="تغییر پروفایل">
+            <mat-tab label="ویرایش پروفایل">
                 <div class="div-edit-profile">
-                    <form class="update-member-form" [formGroup]="memberEditFg"
-                        (ngSubmit)="memberEditFg.valid && updateMember()">
+                    <form class="update-member-form" [formGroup]="profileFg" (ngSubmit)="saveProfileChanges()">
+
+                        <div class="div-title">
+                            <span class="title">اصلاح اطلاعات کاربر</span>
+                        </div>
+
+                        <div class="content">
+                            <mat-form-field appearance="outline">
+                                <mat-label>ایمیل</mat-label>
+                                <input class="input" matInput type="email" formControlName="emailCtrl" dir="ltr" />
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>نام</mat-label>
+                                <input class="input" matInput type="text" formControlName="nameCtrl" />
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>نام خانوادگی</mat-label>
+                                <input class="input" matInput type="text" formControlName="lastNameCtrl" />
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>شماره تلفن</mat-label>
+                                <input class="input" matInput type="text" formControlName="phoneNumCtrl" dir="ltr" />
+                            </mat-form-field>
+
+                            <div class="datepicker-wrapper" [class.disabled]="!profileEditMode">
+                                <app-datepicker [formControl]="DateOfBirthCtrl" [maxDate]="maxDob" [minDate]="minDob">
+                                </app-datepicker>
+                            </div>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>نام کاربری</mat-label>
+                                <input class="input" matInput type="text" formControlName="userNameCtrl" />
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>جنسیت</mat-label>
+                                <mat-select formControlName="genderCtrl">
+                                    <mat-option value="female">زن</mat-option>
+                                    <mat-option value="male">مرد</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="div-button-submit">
+                            <button *ngIf="!profileEditMode" class="button-edit-profile" type="button" mat-raised-button
+                                (click)="enableProfileEdit()">
+                                ایجاد تغییرات
+                            </button>
+
+                            <button *ngIf="profileEditMode" class="button-edit-profile" type="submit" mat-raised-button
+                                color="primary" [disabled]="profileFg.invalid">
+                                ذخیره تغییرات
+                            </button>
+
+                            <button *ngIf="profileEditMode" class="button-cancel" type="button" mat-stroked-button
+                                (click)="cancelProfileEdit()">
+                                انصراف
+                            </button>
+                        </div>
 
                     </form>
                 </div>
             </mat-tab>
 
-            <mat-tab label="تغییر رمز عبور">
-                <div class="div-edit-profile">
-                    <form class="update-member-form" [formGroup]="memberEditFg"
+            <mat-tab label="ویرایش رمز ورود">
+                <div class="div-edit-profile password-tab">
+                    <form class="update-member-form password-form" [formGroup]="memberEditFg"
                         (ngSubmit)="memberEditFg.valid && updateMember()">
+
                         <div class="div-title">
-                            <span class="title">رمز عبور خود را تغییر بدید</span>
+                            <span class="title">اصلاح رمز ورود</span>
                         </div>
 
                         <div class="content">
                             <mat-form-field appearance="outline">
                                 <mat-label>رمز قدیمی</mat-label>
                                 <input class="input" type="password" formControlName="currentPasswordCtrl"
-                                    label="Current Password" placeholder="****" matInput>
+                                    placeholder="****" matInput>
                                 <mat-hint>رمز فعلی خود را وارد کنید</mat-hint>
                                 <mat-error *ngIf="CurrentPasswordCtrl.hasError('required')">
-                                    رمز فعلی را وارد نکرده اید
+                                    رمز فعلی را وارد نکرده‌اید
                                 </mat-error>
-                                <mat-error
-                                    *ngIf="CurrentPasswordCtrl.errors && CurrentPasswordCtrl.hasError('minlength')">حداقل
-                                    ۷ کاراکتر</mat-error>
-                                <mat-error
-                                    *ngIf="CurrentPasswordCtrl.errors && CurrentPasswordCtrl.hasError('maxlength')">حداکثر
-                                    ۲۰ کاراکتر</mat-error>
+                                <mat-error *ngIf="CurrentPasswordCtrl.hasError('minlength')">
+                                    حداقل ۷ کاراکتر
+                                </mat-error>
+                                <mat-error *ngIf="CurrentPasswordCtrl.hasError('maxlength')">
+                                    حداکثر ۲۰ کاراکتر
+                                </mat-error>
                             </mat-form-field>
 
                             <mat-form-field appearance="outline">
                                 <mat-label>رمز جدید</mat-label>
-                                <input class="input" type="password" formControlName="passwordCtrl" label="Password"
-                                    placeholder="****" matInput>
+                                <input class="input" type="password" formControlName="passwordCtrl" placeholder="****"
+                                    matInput>
                                 <mat-hint>رمز جدید را وارد کنید</mat-hint>
                                 <mat-error *ngIf="PasswordCtrl.hasError('required')">
                                     برای تغییر رمز، لطفاً رمز جدید را وارد کنید
                                 </mat-error>
-                                <mat-error *ngIf="PasswordCtrl.errors && PasswordCtrl.hasError('minlength')">حداقل ۷
-                                    کاراکتر</mat-error>
-                                <mat-error *ngIf="PasswordCtrl.errors && PasswordCtrl.hasError('maxlength')">حداکثر ۲۰
-                                    کاراکتر</mat-error>
+                                <mat-error *ngIf="PasswordCtrl.hasError('minlength')">
+                                    حداقل ۷ کاراکتر
+                                </mat-error>
+                                <mat-error *ngIf="PasswordCtrl.hasError('maxlength')">
+                                    حداکثر ۲۰ کاراکتر
+                                </mat-error>
                             </mat-form-field>
 
                             <mat-form-field appearance="outline">
                                 <mat-label>تکرار رمز جدید</mat-label>
                                 <input class="input" type="password" formControlName="confirmPasswordCtrl"
-                                    label="Confirm Password" placeholder="****" matInput>
-                                <mat-hint>رمز جدید را مجدد وارد کنید</mat-hint>
+                                    placeholder="****" matInput>
+                                <mat-hint>رمز جدید را مجدداً وارد کنید</mat-hint>
                                 <mat-error *ngIf="ConfirmPasswordCtrl.hasError('required')">
-                                    برای تایید رمز، لطفاً رمز جدید را مجدد وارد کنید
+                                    برای تأیید رمز، لطفاً رمز جدید را مجدد وارد کنید
                                 </mat-error>
-                                <mat-error
-                                    *ngIf="ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('minlength')">حداقل
-                                    ۷ کاراکتر</mat-error>
-                                <mat-error
-                                    *ngIf="ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('maxlength')">حداکثر
-                                    ۲۰ کاراکتر</mat-error>
+                                <mat-error *ngIf="ConfirmPasswordCtrl.hasError('minlength')">
+                                    حداقل ۷ کاراکتر
+                                </mat-error>
+                                <mat-error *ngIf="ConfirmPasswordCtrl.hasError('maxlength')">
+                                    حداکثر ۲۰ کاراکتر
+                                </mat-error>
                             </mat-form-field>
                         </div>
 
-                        <div class="div-button-submit">
+                        <div class="div-button-submit password-buttons">
                             <button class="button-edit-profile" type="submit" [disabled]="memberEditFg.invalid"
-                                mat-raised-button color="primary">ثبت اطلاعات</button>
+                                mat-raised-button color="primary">
+                                ذخیره تغییرات
+                            </button>
+
+                            <button class="button-cancel" type="button" mat-stroked-button
+                                (click)="cancelPasswordEdit()">
+                                انصراف
+                            </button>
                         </div>
                     </form>
                 </div>

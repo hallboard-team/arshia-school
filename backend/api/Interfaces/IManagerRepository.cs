@@ -4,7 +4,7 @@ namespace api.Interfaces;
 
 public interface IManagerRepository
 {
-    Task<bool> UpdateAccountAsync(ManagerUpdateProfile managerUpdateProfile, string? hashedUserId, CancellationToken cancellationToken);
+    Task<OperationResult> UpdateAccountAsync(ManagerUpdateProfile managerUpdateProfile, ObjectId userId, CancellationToken cancellationToken);
     Task<RegisteredUserDto?> CreateSecretaryAsync(RegisterDto managerInput, CancellationToken cancellationToken);
     Task<RegisteredUserDto?> CreateStudentAsync(RegisterDto managerInput, CancellationToken cancellationToken);
     Task<RegisteredUserDto?> CreateTeacherAsync(RegisterDto managerInput, CancellationToken cancellationToken);
@@ -16,7 +16,7 @@ public interface IManagerRepository
     Task<List<AppUser>> GetAllTeachersAsync(CancellationToken cancellationToken);
     Task<MemberDto?> GetMemberByEmailAsync(string targetMemberEmail, CancellationToken cancellationToken);
     Task<TargetMemberDto?> GetMemberByUserNameAsync(string targetUserName, CancellationToken cancellationToken);
-    Task<bool> UpdateMemberAsync(string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken);
+    Task<TargetMemberDto?> UpdateMemberAsync(string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken);
     public Task<OperationResult<MemberPhoto>> UploadMemberPhotoAsync(IFormFile file, string userName, CancellationToken cancellationToken);
     Task<Photo?> AddPhotoAsync(IFormFile file, string targetPaymentId, CancellationToken cancellationToken);
     Task<bool> DeletePhotoAsync(string targetPaymentId, CancellationToken cancellationToken);

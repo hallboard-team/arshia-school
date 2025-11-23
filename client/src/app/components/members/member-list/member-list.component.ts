@@ -41,7 +41,7 @@ export class MemberListComponent {
   memberParams: MemberParams | undefined;
   subscribed: Subscription | undefined;
 
-  pageSizeOptions = [5, 10, 25];
+  pageSizeOptions = [9, 18, 25];
   pageEvent: PageEvent | undefined;
 
   readonly minAge: number = 11;
@@ -49,12 +49,22 @@ export class MemberListComponent {
 
   filterFg = this._fB.group({
     searchCtrl: ['', []],
+    courseCtrl: ['', []],
+    classCtrl: ['', []],
     minAgeCtrl: [this.minAge, []],
     maxAgeCtrl: [this.maxAge, []]
   });
 
   get SearchCtrl(): FormControl {
     return this.filterFg.get('searchCtrl') as FormControl;
+  }
+
+  get CourseCtrl(): FormControl {
+    return this.filterFg.get('courseCtrl') as FormControl;
+  }
+
+  get ClassCtrl(): FormControl {
+    return this.filterFg.get('classCtrl') as FormControl;
   }
 
   get MinAgeCtrl(): AbstractControl {
@@ -67,6 +77,16 @@ export class MemberListComponent {
 
   ngOnInit(): void {
     this.memberParams = new MemberParams();
+
+    const width = window.innerWidth;
+
+    if (width < 600) {
+      this.memberParams.pageSize = 9;
+    } else if (width < 1024) {
+      this.memberParams.pageSize = 18;
+    } else {
+      this.memberParams.pageSize = 25;
+    }
 
     this.getAll();
   }
@@ -105,11 +125,15 @@ export class MemberListComponent {
       this.memberParams.search = this.SearchCtrl.value;
       this.memberParams.minAge = this.MinAgeCtrl.value;
       this.memberParams.maxAge = this.MaxAgeCtrl.value;
+      this.memberParams.courseTitle = this.CourseCtrl.value;
+      this.memberParams.classTitle = this.ClassCtrl.value;
     }
   }
 
   reset(): void {
     this.SearchCtrl.reset();
+    this.CourseCtrl.reset();
+    this.ClassCtrl.reset();
     this.MinAgeCtrl.setValue(this.minAge);
     this.MaxAgeCtrl.setValue(this.maxAge);
   }

@@ -16,7 +16,7 @@
     }
 }
 
-@media (min-width: 760px) {
+@media (min-width: 768px) {
     .main {
         --sidebar-width: var(--sidebar-expanded);
 
@@ -33,7 +33,10 @@
             width: 0;
             height: 0;
         }
+
+        &.no-sidebar {
+            --sidebar-width: 0;
+            --sidebar-gap: 0;
+        }
     }
 }
-
-@media (min-width:1200px) {}

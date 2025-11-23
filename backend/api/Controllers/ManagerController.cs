@@ -7,23 +7,32 @@ namespace api.Controllers;
 public class ManagerController(IManagerRepository _managerRepository, ITokenService _tokenService) : BaseApiController
 {
     [HttpPut("update-account")]
-    public async Task<ActionResult> UpdateAccount(ManagerUpdateProfile managerUpdateProfile, CancellationToken cancellationToken)
+    public async Task<ActionResult<Response>> UpdateAccount(ManagerUpdateProfile managerUpdateProfile, CancellationToken cancellationToken)
     {
         if (managerUpdateProfile is null)
             return BadRequest("ورودی نامعتبر است.");
 
-        try
-        {
-            bool? updateResult = await _managerRepository.UpdateAccountAsync(managerUpdateProfile, User.GetHashedUserId(), cancellationToken);
+        string? hashedUserId = User.GetHashedUserId();
 
-            return updateResult is false
-                ? BadRequest("بروزرسانی انجام نشد. لطفاً دوباره تلاش کنید.")
-                : Ok(new { message = "اطلاعات با موفقیت بروزرسانی شد." });
-        }
-        catch (ApplicationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        if (hashedUserId is null)
+            return Unauthorized("شما ورود نکرده اید. لطفا ابتدا ورود کنید.");
+
+        ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
+
+        if (userId is null)
+            return Unauthorized("شما ورود نکرده اید. لطفا ابتدا ورود کنید.");
+
+        OperationResult? opResult = await _managerRepository.UpdateAccountAsync(managerUpdateProfile, userId.Value, cancellationToken);
+
+        return opResult.IsSuccess
+            ? Ok(new Response("User successfully updated."))
+            : opResult.Error?.Code switch
+            {
+                ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
+                ErrorCode.IsInvalidType => BadRequest(opResult.Error.Message),
+                ErrorCode.IsOperationFailed => BadRequest(opResult.Error.Message),
+                _ => BadRequest("Operation failed. Try again or contact support.")
+            };
     }
 
     [HttpPost("create-secretary")]
@@ -225,7 +234,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
     }
 
     [HttpPut("update-member/{memberUserName}")]
-    public async Task<ActionResult<Response>> UpdateMember(string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken)
+    public async Task<ActionResult<TargetMemberDto>> UpdateMember(string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken)
     {
         if (memberUserName == null)
             return BadRequest("Invalid user data.");
@@ -235,15 +244,13 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         if (hashedUserId is null)
             return Unauthorized("You are not logged in. Please login first.");
 
-        bool isUpdated = await _managerRepository.UpdateMemberAsync(memberUserName, updatedMember, cancellationToken);
+        TargetMemberDto? targetMemberDto = await _managerRepository.UpdateMemberAsync(memberUserName, updatedMember, cancellationToken);
 
-        if (!isUpdated)
+        if (targetMemberDto is null)
             return BadRequest("User not found or no changes were made.");
 
         return Ok(
-            new Response(
-                "User has been updated successfully."
-            )
+           targetMemberDto
         );
     }
 

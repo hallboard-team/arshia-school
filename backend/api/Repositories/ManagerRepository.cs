@@ -5,17 +5,20 @@ namespace api.Repositories;
 
 public class ManagerRepository : IManagerRepository
 {
-  public async Task<bool> UpdateAccountAsync(ManagerUpdateProfile dto, string? hashedUserId, CancellationToken ct)
+  public async Task<OperationResult> UpdateAccountAsync(ManagerUpdateProfile dto, ObjectId userId, CancellationToken ct)
   {
-    if (string.IsNullOrEmpty(hashedUserId)) return false;
+    AppUser? user = await _userManager.FindByIdAsync(userId.ToString());
+    if (user is null)
+    {
+      return new OperationResult(
+        false,
+        Error: new CustomError(
+          ErrorCode.IsUserNotFound,
+          Message: "User not found."
+        )
+      );
+    }
 
-    ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, ct);
-    if (userId == null) return false;
-
-    AppUser? user = await _userManager.FindByIdAsync(userId.Value.ToString());
-    if (user == null) return false;
-
-    bool anyProfileFieldChanged = false;
     List<UpdateDefinition<AppUser>> updateDefinitions = new List<UpdateDefinition<AppUser>>();
     UpdateDefinitionBuilder<AppUser> updateDefinitionBuilder = Builders<AppUser>.Update;
 
@@ -25,7 +28,6 @@ public class ManagerRepository : IManagerRepository
       if (!string.Equals(user.Name, trimmed, StringComparison.Ordinal))
       {
         updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.Name, trimmed));
-        anyProfileFieldChanged = true;
       }
     }
 
@@ -35,14 +37,12 @@ public class ManagerRepository : IManagerRepository
       if (!string.Equals(user.LastName, trimmed, StringComparison.Ordinal))
       {
         updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.LastName, trimmed));
-        anyProfileFieldChanged = true;
       }
     }
 
     if (dto.DateOfBirth is not null && user.DateOfBirth != dto.DateOfBirth.Value)
     {
       updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.DateOfBirth, dto.DateOfBirth.Value));
-      anyProfileFieldChanged = true;
     }
 
     if (!string.IsNullOrWhiteSpace(dto.PhoneNum))
@@ -52,49 +52,46 @@ public class ManagerRepository : IManagerRepository
       if (!string.Equals(user.PhoneNum, phone, StringComparison.Ordinal))
       {
         updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.PhoneNum, phone));
-        anyProfileFieldChanged = true;
       }
     }
 
-    string? current = string.IsNullOrWhiteSpace(dto.CurrentPassword) ? null : dto.CurrentPassword;
-    string? newer = string.IsNullOrWhiteSpace(dto.NewPassword) ? null : dto.NewPassword;
-    string? confirm = string.IsNullOrWhiteSpace(dto.ConfirmPassword) ? null : dto.ConfirmPassword;
-
-    bool wantsPasswordChange = current is not null || newer is not null || confirm is not null;
-
-    if (wantsPasswordChange)
+    if (!string.IsNullOrWhiteSpace(dto.Gender))
     {
-      if (current is null || newer is null || confirm is null)
-        throw new ApplicationException("برای تغییر رمز عبور، هر سه فیلد لازم است.");
-
-      if (!string.Equals(newer, confirm, StringComparison.Ordinal))
-        throw new ApplicationException("تکرار رمز عبور با رمز جدید مطابقت ندارد.");
-
-      IdentityResult? pwd = await _userManager.ChangePasswordAsync(user, current!, newer!);
-      if (!pwd.Succeeded)
-        throw new ApplicationException(string.Join(" | ", pwd.Errors.Select(e => e.Description)));
-    }
-
-    if (anyProfileFieldChanged)
-    {
-      if (updateDefinitions.Count > 0)
+      if (Enum.TryParse<GenderType>(dto.Gender.Trim(), true, out var parsedGender))
       {
-        UpdateDefinition<AppUser>? combined = Builders<AppUser>.Update.Combine(updateDefinitions);
-        UpdateResult? result = await _collectionAppUser.UpdateOneAsync(
-            filter: appUser => appUser.Id == user.Id,
-            update: combined,
-            cancellationToken: ct
-        );
-
-        if (result.MatchedCount == 0)
-          return wantsPasswordChange;
+        updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.Gender, parsedGender));
       }
-      return true;
+      else
+      {
+        return new OperationResult(
+          false,
+          Error: new CustomError(
+            ErrorCode.IsInvalidType,
+            "Enter valid gender"
+          )
+        );
+      }
     }
 
-    if (wantsPasswordChange) return true;
+    if (updateDefinitions.Count > 0)
+    {
+      UpdateDefinition<AppUser> updateDef = Builders<AppUser>.Update.Combine(updateDefinitions);
 
-    return false;
+      UpdateResult updateResult = await _collectionAppUser.UpdateOneAsync(doc => doc.Id == userId, updateDef, null, ct);
+
+      return new OperationResult(
+        true,
+        null
+      );
+    }
+
+    return new OperationResult(
+      false,
+      new CustomError(
+        ErrorCode.IsOperationFailed,
+        "No update was made."
+      )
+    );
   }
 
   public async Task<RegisteredUserDto?> CreateSecretaryAsync(
@@ -396,14 +393,14 @@ public class ManagerRepository : IManagerRepository
     return ConvertAppUserToTargetMemberDto(appUser);
   }
 
-  public async Task<bool> UpdateMemberAsync(
+  public async Task<TargetMemberDto?> UpdateMemberAsync(
     string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken
   )
   {
     AppUser? targetAppUser = await _collectionAppUser.Find(u => u.NormalizedUserName == memberUserName.ToUpper()).
       FirstOrDefaultAsync(cancellationToken);
 
-    if (targetAppUser is null) return false;
+    if (targetAppUser is null) return null;
 
     FilterDefinition<AppUser>? filter = Builders<AppUser>.Filter.Eq(u => u.Id, targetAppUser.Id);
 
@@ -417,7 +414,9 @@ public class ManagerRepository : IManagerRepository
       filter, update, cancellationToken: cancellationToken
     );
 
-    return updateResult.ModifiedCount > 0;
+    AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == memberUserName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+
+    return Mappers.ConvertAppUserToTargetMemberDto(appUser);
   }
 
   public async Task<OperationResult<MemberPhoto>> UploadMemberPhotoAsync(IFormFile file, string userName, CancellationToken cancellationToken)
@@ -657,7 +656,10 @@ public class ManagerRepository : IManagerRepository
       query = query.Where(u =>
           (u.Name ?? string.Empty).ToUpper().Contains(s) ||
           (u.NormalizedUserName ?? string.Empty).Contains(s) ||
-          (u.LastName ?? string.Empty).ToUpper().Contains(s));
+          (u.LastName ?? string.Empty).ToUpper().Contains(s) ||
+           u.EnrolledCourses.Any(c =>
+                (c.CourseTitle ?? string.Empty).ToUpper().Contains(s)
+            ));
     }
 
     query = query.Where(u => u.NormalizedUserName != "ADMIN" && u.NormalizedUserName != "MANAGER");
