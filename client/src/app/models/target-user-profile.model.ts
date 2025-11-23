@@ -9,5 +9,6 @@ export interface TargetUserProfile {
     gender: string;
     age: number;
     dateOfBirth: Date;
+    photoUrl: string;
     enrolledCourses: EnrolledCourse[];
 };

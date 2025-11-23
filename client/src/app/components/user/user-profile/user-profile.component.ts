@@ -88,18 +88,18 @@ export class UserProfileComponent implements OnInit {
   });
 
   // Getters: profile tab
-  get EmailCtrl(): AbstractControl { return this.profileFg.get('emailCtrl') as FormControl; }
-  get NameCtrl(): AbstractControl { return this.profileFg.get('nameCtrl') as FormControl; }
-  get LastNameCtrl(): AbstractControl { return this.profileFg.get('lastNameCtrl') as FormControl; }
-  get PhoneNumCtrl(): AbstractControl { return this.profileFg.get('phoneNumCtrl') as FormControl; }
-  get UserNameCtrl(): AbstractControl { return this.profileFg.get('userNameCtrl') as FormControl; }
-  get GenderCtrl(): AbstractControl { return this.profileFg.get('genderCtrl') as FormControl; }
+  get EmailCtrl(): FormControl { return this.profileFg.get('emailCtrl') as FormControl; }
+  get NameCtrl(): FormControl { return this.profileFg.get('nameCtrl') as FormControl; }
+  get LastNameCtrl(): FormControl { return this.profileFg.get('lastNameCtrl') as FormControl; }
+  get PhoneNumCtrl(): FormControl { return this.profileFg.get('phoneNumCtrl') as FormControl; }
+  get UserNameCtrl(): FormControl { return this.profileFg.get('userNameCtrl') as FormControl; }
+  get GenderCtrl(): FormControl { return this.profileFg.get('genderCtrl') as FormControl; }
   get DateOfBirthCtrl(): FormControl { return this.profileFg.get('dateOfBirthCtrl') as FormControl; }
 
   // Getters: password tab
-  get CurrentPasswordCtrl(): AbstractControl { return this.memberEditFg.get('currentPasswordCtrl') as FormControl; }
-  get PasswordCtrl(): AbstractControl { return this.memberEditFg.get('passwordCtrl') as FormControl; }
-  get ConfirmPasswordCtrl(): AbstractControl { return this.memberEditFg.get('confirmPasswordCtrl') as FormControl; }
+  get CurrentPasswordCtrl(): FormControl { return this.memberEditFg.get('currentPasswordCtrl') as FormControl; }
+  get PasswordCtrl(): FormControl { return this.memberEditFg.get('passwordCtrl') as FormControl; }
+  get ConfirmPasswordCtrl(): FormControl { return this.memberEditFg.get('confirmPasswordCtrl') as FormControl; }
 
   ngOnInit(): void {
     this.loggedInUserSig = this._accountService.loggedInUserSig;
