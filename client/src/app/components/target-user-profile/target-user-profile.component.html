@@ -89,12 +89,6 @@
                                 }
                             </mat-form-field>
 
-                            <div class="date-field">
-                                <app-datepicker [formControl]="TargetDateOfBirthCtrl" [maxDate]="max" [minDate]="min"
-                                    [label]="'تاریخ تولد'">
-                                </app-datepicker>
-                            </div>
-
                             <mat-form-field appearance="outline">
                                 <mat-label>شماره تلفن</mat-label>
                                 <span matPrefix dir="ltr">+98&nbsp;</span>
@@ -107,6 +101,24 @@
                                 <mat-error>فرمت شماره موبایل معتبر نیست</mat-error>
                                 }
                             </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>جنسیت</mat-label>
+                                <mat-select formControlName="targetGenderCtrl">
+                                    <mat-option value="male">آقا</mat-option>
+                                    <mat-option value="female">خانم</mat-option>
+                                </mat-select>
+
+                                @if (TargetGenderCtrl.hasError('required')) {
+                                <mat-error>انتخاب جنسیت الزامی است</mat-error>
+                                }
+                            </mat-form-field>
+
+                            <div class="date-field">
+                                <app-datepicker [formControl]="TargetDateOfBirthCtrl" [maxDate]="max" [minDate]="min"
+                                    [label]="'تاریخ تولد'">
+                                </app-datepicker>
+                            </div>
                         </div>
 
                         <div class="div-button-submit">

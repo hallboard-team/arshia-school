@@ -106,7 +106,8 @@ export class TargetUserProfileComponent implements OnInit {
     targetNameCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
     targetLastNameCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
     targetDateOfBirthCtrl: [{ value: null, disabled: true }, [Validators.required]],
-    targetPhoneNumCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.pattern(/^[0-9]{10}$/)]]
+    targetPhoneNumCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+    targetGenderCtrl: [{ value: '', disabled: true }, [Validators.required]]
   });
 
   addEnrolledCourseFg: FormGroup = this.fb.group({
@@ -133,6 +134,9 @@ export class TargetUserProfileComponent implements OnInit {
   }
   get TargetPhoneNumCtrl(): FormControl {
     return this.targetMemberEditFg.get('targetPhoneNumCtrl') as FormControl;
+  }
+  get TargetGenderCtrl(): FormControl {
+    return this.targetMemberEditFg.get('targetGenderCtrl') as FormControl;
   }
 
   //add enrolled-course
@@ -254,6 +258,8 @@ export class TargetUserProfileComponent implements OnInit {
       const dobMoment = moment(targetUserProfile.dateOfBirth, 'YYYY-MM-DD');
       this.TargetDateOfBirthCtrl.setValue(dobMoment);
     }
+
+    this.TargetGenderCtrl.setValue(targetUserProfile.gender?.toLowerCase() ?? '');
   }
 
   updateTargetMember() {
@@ -274,7 +280,8 @@ export class TargetUserProfileComponent implements OnInit {
         name: this.TargetNameCtrl.value,
         lastName: this.TargetLastNameCtrl.value,
         dateOfBirth: this.toGregorianDateOnly(dob),
-        phoneNum: '98' + this.TargetPhoneNumCtrl.value
+        phoneNum: '98' + this.TargetPhoneNumCtrl.value,
+        gender: this.TargetGenderCtrl.value
       };
 
       this._managerService.updateMember(managerUpdateMember, memberUserName)
