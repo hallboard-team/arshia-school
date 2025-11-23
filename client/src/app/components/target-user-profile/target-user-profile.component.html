@@ -281,7 +281,7 @@
                                 <mat-label>پیش پرداخت</mat-label>
                                 <input type="text" formControlName="paidAmountCtrl" matInput appCurrencyFormatter
                                     inputmode="numeric" dir="ltr" placeholder="از ۱۰.۰۰۰ تومان" />
-                                <span class="span-paid" matSuffix matSuffix *ngIf="PaidAmountCtrl.value">تومان</span>
+                                <span class="span-paid" matSuffix *ngIf="PaidAmountCtrl.value">تومان</span>
                                 <mat-hint>حداقل پیش پرداخت ۱۰.۰۰۰ تومان است</mat-hint>
                                 @if (PaidAmountCtrl.hasError('required')) {
                                 <mat-error>لطفا مبلغ پیش پرداخت را وارد نمایید.</mat-error>
