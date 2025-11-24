@@ -13,11 +13,21 @@
         <div class="profile-card">
 
             <div class="profile-image">
-                @if (targetUserProfile?.gender === "Male") {
-                <img src="../assets/images/menProfilePhoto.png" alt="Profile">
-                } @else {
-                <img src="../assets/images/womenProfilePhoto.png" alt="Profile">
-                }
+                <div class="avatar-wrapper" (click)="fileInput.click()">
+                    <img [src]="getProfilePhoto()" alt="Profile" />
+
+                    <div class="avatar-hover-overlay">
+                        <div class="hover-circle">
+                            <span class="hover-plus">+</span>
+                        </div>
+                    </div>
+
+                    <div class="avatar-plus-badge" (click)="$event.stopPropagation(); fileInput.click()">
+                        <span>+</span>
+                    </div>
+                </div>
+
+                <input #fileInput type="file" accept="image/*" hidden />
             </div>
 
             <div class="profile-info">
@@ -28,7 +38,7 @@
                 <span class="description">شماره تلفن: {{targetUserProfile?.phoneNum}}</span>
                 <span class="description">سن: {{targetUserProfile?.age}}</span>
 
-                @if (targetUserProfile?.gender === "Male") {
+                @if (isMale) {
                 <span class="gender-men-span">جنسیت: آقا</span>
                 } @else {
                 <span class="gender-women-span">جنسیت: خانم</span>
@@ -41,77 +51,90 @@
         <mat-tab-group>
             <mat-tab label="ویرایش پروفایل">
                 <div class="div-edit-profile">
-                    <div class="title">
-                        <span>ویرایش اطلاعات</span>
-                    </div>
-
                     <form class="update-member-form" [formGroup]="targetMemberEditFg"
                         (ngSubmit)="targetMemberEditFg.valid && updateTargetMember()">
 
-                        <!-- نام -->
-                        <mat-form-field appearance="outline">
-                            <mat-label>نام</mat-label>
-                            <input class="input" type="text" formControlName="targetNameCtrl" label="Name"
-                                placeholder="نام کاربر" matInput>
-                            @if (TargetNameCtrl.hasError('required')) {
-                            <mat-error>لطفا نام کاربر را وارد کنید</mat-error>
-                            }
-                            @else if (TargetNameCtrl.hasError('minlength')) {
-                            <mat-error>حداقل ۲ حرف مجاز است</mat-error>
-                            }
-                            @else if(TargetNameCtrl.hasError('maxlength')) {
-                            <mat-error>حداکثر ۳۰ حرف مجاز است</mat-error>
-                            }
-                        </mat-form-field>
-
-                        <!-- نام خانوادگی -->
-                        <mat-form-field appearance="outline">
-                            <mat-label>نام خانوادگی</mat-label>
-                            <input class="input" type="text" formControlName="targetLastNameCtrl" label="Last Name"
-                                placeholder="نام خوانوادگی کاربر" matInput>
-                            @if (TargetLastNameCtrl.hasError('required')) {
-                            <mat-error>لطفا نام خانوادگی کاربر را وارد کنید</mat-error>
-                            }
-                            @else if (TargetLastNameCtrl.hasError('minlength')) {
-                            <mat-error>حداقل ۲ حرف مجاز است</mat-error>
-                            }
-                            @else if(TargetLastNameCtrl.hasError('maxlength')) {
-                            <mat-error>حداکثر ۳۰ حرف مجاز است</mat-error>
-                            }
-                        </mat-form-field>
-
-                        <!-- تاریخ تولد -->
-                        <div class="date-field">
-                            <app-datepicker formControlName="targetDateOfBirthCtrl" [maxDate]="max" [minDate]="min"
-                                [label]="'تاریخ تولد'">
-                            </app-datepicker>
-
-                            @if (TargetDateOfBirthCtrl.hasError('required')) {
-                            <mat-error>لطفا تاریخ تولد کاربر را وارد کنید</mat-error>
-                            }
+                        <div class="div-title">
+                            <span class="title">اصلاح اطلاعات کاربر</span>
                         </div>
 
-                        <!-- شماره تلفن -->
-                        <mat-form-field appearance="outline">
-                            <mat-label>شماره تلفن</mat-label>
-                            <span class="span-phone" matPrefix dir="ltr">+98&nbsp;</span>
-                            <input class="input" type="tel" maxlength="10" formControlName="targetPhoneNumCtrl"
-                                placeholder="شماره تلفن بدون صفر" matInput>
-                            @if (TargetPhoneNumCtrl.hasError('required')) {
-                            <mat-error>لطفا شماره تلفن کاربر را وارد کنید</mat-error>
-                            }
-                            @else if (TargetPhoneNumCtrl.hasError('pattern')) {
-                            <mat-error>فرمت شماره تلفن معتبر نیست</mat-error>
-                            }
-                        </mat-form-field>
+                        <div class="content">
+                            <mat-form-field appearance="outline">
+                                <mat-label>نام</mat-label>
+                                <input class="input" type="text" matInput formControlName="targetNameCtrl"
+                                    placeholder="نام مورد نظر خود را وارد کنید" />
+                                @if (TargetNameCtrl.hasError('required')) {
+                                <mat-error>فرم رو پرکنید</mat-error>
+                                }
+                                @else if (TargetNameCtrl.hasError('minlength')) {
+                                <mat-error>حداقل ۲ حرف مجاز است</mat-error>
+                                }
+                                @else if (TargetNameCtrl.hasError('maxlength')) {
+                                <mat-error>حداکثر ۳۰ حرف مجاز است</mat-error>
+                                }
+                            </mat-form-field>
 
-                        <div class="div-btn-add">
-                            <button type="button" class="btn-cancel" (click)="onCancelEdit()">
-                                <span>لغو تغییرات</span>
+                            <mat-form-field appearance="outline">
+                                <mat-label>نام خانوادگی</mat-label>
+                                <input class="input" type="text" matInput formControlName="targetLastNameCtrl"
+                                    placeholder="نام خانوادگی مورد نظر خود را وارد کنید" />
+                                @if (TargetLastNameCtrl.hasError('required')) {
+                                <mat-error>فرم رو پرکنید</mat-error>
+                                }
+                                @else if (TargetLastNameCtrl.hasError('minlength')) {
+                                <mat-error>حداقل ۲ حرف مجاز است</mat-error>
+                                }
+                                @else if (TargetLastNameCtrl.hasError('maxlength')) {
+                                <mat-error>حداکثر ۳۰ حرف مجاز است</mat-error>
+                                }
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>شماره تلفن</mat-label>
+                                <span matPrefix dir="ltr">+98&nbsp;</span>
+                                <input class="input" type="tel" maxlength="10" matInput
+                                    formControlName="targetPhoneNumCtrl" dir="ltr" />
+                                @if (TargetPhoneNumCtrl.hasError('required')) {
+                                <mat-error>فرم رو پرکنید</mat-error>
+                                }
+                                @else if (TargetPhoneNumCtrl.hasError('pattern')) {
+                                <mat-error>فرمت شماره موبایل معتبر نیست</mat-error>
+                                }
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>جنسیت</mat-label>
+                                <mat-select formControlName="targetGenderCtrl">
+                                    <mat-option value="male">آقا</mat-option>
+                                    <mat-option value="female">خانم</mat-option>
+                                </mat-select>
+
+                                @if (TargetGenderCtrl.hasError('required')) {
+                                <mat-error>انتخاب جنسیت الزامی است</mat-error>
+                                }
+                            </mat-form-field>
+
+                            <div class="date-field">
+                                <app-datepicker [formControl]="TargetDateOfBirthCtrl" [maxDate]="max" [minDate]="min"
+                                    [label]="'تاریخ تولد'">
+                                </app-datepicker>
+                            </div>
+                        </div>
+
+                        <div class="div-button-submit">
+                            <button *ngIf="!targetProfileEditMode" class="button-edit-profile" type="button"
+                                mat-raised-button (click)="enableTargetProfileEdit()">
+                                ایجاد تغییرات
                             </button>
 
-                            <button type="submit" [disabled]="targetMemberEditFg.invalid">
-                                <span>ذخیره تغییرات</span>
+                            <button *ngIf="targetProfileEditMode" class="button-edit-profile" type="submit"
+                                mat-raised-button color="primary" [disabled]="targetMemberEditFg.invalid">
+                                ذخیره تغییرات
+                            </button>
+
+                            <button *ngIf="targetProfileEditMode" class="button-cancel" type="button" mat-stroked-button
+                                (click)="cancelTargetProfileEdit()">
+                                انصراف
                             </button>
                         </div>
                     </form>
@@ -205,14 +228,12 @@
 
 
                                     <div class="div-button-show-classmate">
-                                        <button [routerLink]="['/students-card/' + course.title]">مشاهده
-                                            دانشجویان</button>
                                         <button
-                                            [routerLink]="['/attendences-card/' + targetUserProfile.userName + '/' + course.title]">
+                                            [routerLink]="['/dashboard/attendences-card/' + targetUserProfile.userName + '/' + course.title]">
                                             دیدن حضور و غیاب
                                         </button>
                                         <button
-                                            [routerLink]="['/' + 'target-member-enrolled-course/' + targetUserProfile.userName + '/' + course.title]">
+                                            [routerLink]="['/dashboard' + '/target-member-enrolled-course/' + targetUserProfile.userName + '/' + course.title]">
                                             مشاهده پرداخت ها
                                         </button>
                                     </div>
@@ -230,6 +251,11 @@
                         @else {
                         <div class="loading">در حال بارگذاری...</div>
                         }
+
+                        <mat-paginator [length]="pagination?.totalItems || 0"
+                            [pageSize]="pagination?.itemsPerPage || 10" [pageSizeOptions]="pageSizeOptions"
+                            (page)="handlePageEvent($event)">
+                        </mat-paginator>
                     </div>
                 </ng-container>
                 }
@@ -240,12 +266,13 @@
                 }
             </mat-tab>
 
-            <mat-tab label="اضافه کردن دوره">
+            <mat-tab label="افزودن دوره">
                 <div class="div-enrolled-course">
                     <form class="enrolled-form" [formGroup]="addEnrolledCourseFg"
                         (ngSubmit)="addEnrolledCourseFg.valid && addEnrolledCourse()">
+
                         <div class="content">
-                            <!-- نام دوره -->
+
                             <mat-form-field appearance="outline">
                                 <mat-label>نام دوره</mat-label>
                                 <mat-select formControlName="titleCourseCtrl">
@@ -253,9 +280,18 @@
                                         {{ course.title }}
                                     </mat-option>
                                 </mat-select>
-                                <mat-hint>یک دوره را انتخاب کنید</mat-hint>
-                                @if (TitleCourseCtrl.hasError('required')) {
-                                <mat-error>هیچ دوره‌ای انتخاب نکرده‌اید</mat-error>
+                                <mat-error *ngIf="TitleCourseCtrl.hasError('required')">
+                                    !این فیلد خالی است
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>پیش پرداخت</mat-label>
+                                <input type="text" matInput formControlName="paidAmountCtrl"
+                                    placeholder="مثلاً 1,000,000" appCurrencyFormatter />
+                                <mat-hint>مبلغی که در ابتدا از شهریه پرداخت می‌شود</mat-hint>
+                                @if (PaidAmountCtrl.hasError('required')) {
+                                <mat-error>!این فیلد خالی است</mat-error>
                                 }
                             </mat-form-field>
 
@@ -298,13 +334,14 @@
                             <div class="buttons-row">
                                 <button type="button" class="button-enrolled-cancel"
                                     (click)="onCancelAddEnrolledCourse()">
-                                    لغو تغییرات
+                                    انصراف
                                 </button>
 
                                 <button class="button-enrolled" type="submit" [disabled]="addEnrolledCourseFg.invalid">
-                                    ثبت اطلاعات
+                                    ذخیره اطلاعات
                                 </button>
                             </div>
+
                         </div>
                     </form>
                 </div>
@@ -377,12 +414,12 @@
                             <div class="buttons-row">
                                 <button type="button" class="button-enrolled-cancel"
                                     (click)="onCancelUpdateEnrolledCourse()">
-                                    لغو تغییرات
+                                    انصراف
                                 </button>
 
                                 <button class="button-enrolled" type="submit"
                                     [disabled]="updateEnrolledCourseFg.invalid">
-                                    ثبت اطلاعات
+                                    ذخیره اطلاعات
                                 </button>
 
                             </div>

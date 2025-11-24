@@ -1,3 +1,6 @@
+using api.DTOs.Account;
+using api.DTOs.Helpers;
+
 namespace api.Repositories;
 
 public class MemberRepository : IMemberRepository
@@ -50,34 +53,96 @@ public class MemberRepository : IMemberRepository
         return await PagedList<Attendence>.CreatePagedListAsync(query, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
     }
 
-    public async Task<bool> UpdateMemberAsync(MemberUpdateDto memberUpdateDto, string? hashedUserId, CancellationToken cancellationToken)
+    public async Task<OperationResult<TargetMemberDto>> UpdateMemberAsync(MemberUpdateDto memberUpdateDto, ObjectId userId, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(hashedUserId)) return false;
-
-        ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
-        if (userId == null) return false;
-
-        AppUser? targetAppUser = await _userManager.FindByIdAsync(userId.Value.ToString());
-        if (targetAppUser == null) return false;
-
-        targetAppUser.Email = memberUpdateDto.Email;
-
-        if (!string.IsNullOrEmpty(memberUpdateDto.CurrentPassword) &&
-            !string.IsNullOrEmpty(memberUpdateDto.Password) &&
-            !string.IsNullOrEmpty(memberUpdateDto.ConfirmPassword))
+        AppUser? targetAppUser = await _userManager.FindByIdAsync(userId.ToString());
+        if (targetAppUser == null)
         {
-            IdentityResult passwordChangeResult = await _userManager.ChangePasswordAsync(targetAppUser, memberUpdateDto.CurrentPassword, memberUpdateDto.Password);
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsUserNotFound,
+                    "User not found"
+                )
+            );
+        }
 
-            if (!passwordChangeResult.Succeeded)
+        List<UpdateDefinition<AppUser>> updateDefinitions = new List<UpdateDefinition<AppUser>>();
+        UpdateDefinitionBuilder<AppUser> updateDefinitionBuilder = Builders<AppUser>.Update;
+
+        if (!string.IsNullOrWhiteSpace(memberUpdateDto.Name))
+        {
+            string trimmed = memberUpdateDto.Name.Trim();
+            if (!string.Equals(targetAppUser.Name, trimmed, StringComparison.Ordinal))
             {
-                throw new ApplicationException(string.Join(" | ", passwordChangeResult.Errors.Select(e => e.Description)));
+                updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.Name, trimmed));
             }
         }
 
-        targetAppUser.NormalizedEmail = memberUpdateDto.Email.ToUpper();
+        if (!string.IsNullOrWhiteSpace(memberUpdateDto.LastName))
+        {
+            string trimmed = memberUpdateDto.LastName.Trim();
+            if (!string.Equals(targetAppUser.LastName, trimmed, StringComparison.Ordinal))
+            {
+                updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.LastName, trimmed));
+            }
+        }
 
-        IdentityResult updateResult = await _userManager.UpdateAsync(targetAppUser);
-        return updateResult.Succeeded;
+        if (memberUpdateDto.DateOfBirth is not null && targetAppUser.DateOfBirth != memberUpdateDto.DateOfBirth.Value)
+        {
+            updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.DateOfBirth, memberUpdateDto.DateOfBirth.Value));
+        }
+
+        if (!string.IsNullOrWhiteSpace(memberUpdateDto.PhoneNum))
+        {
+            string phone = memberUpdateDto.PhoneNum.Trim();
+
+            if (!string.Equals(targetAppUser.PhoneNum, phone, StringComparison.Ordinal))
+            {
+                updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.PhoneNum, phone));
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(memberUpdateDto.Gender))
+        {
+            if (Enum.TryParse<GenderType>(memberUpdateDto.Gender.Trim(), true, out var parsedGender))
+            {
+                updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.Gender, parsedGender));
+            }
+            else
+            {
+                return new(
+                    false,
+                    Error: new(
+                        ErrorCode.IsInvalidType,
+                        "Enter valid gender."
+                    )
+                );
+            }
+        }
+
+        if (updateDefinitions.Count > 0)
+        {
+            UpdateDefinition<AppUser> updateDef = Builders<AppUser>.Update.Combine(updateDefinitions);
+
+            UpdateResult updateResult = await _collectionAppUser.UpdateOneAsync(doc => doc.Id == userId, updateDef, null, cancellationToken);
+
+            AppUser? appUser = await _userManager.FindByIdAsync(userId.ToString());
+
+            return new(
+                true,
+                Mappers.ConvertAppUserToTargetMemberDto(appUser!),
+                null
+            );
+        }
+
+        return new(
+            false,
+            Error: new(
+                ErrorCode.IsOperationFailed,
+                "No update was made."
+            )
+        );
     }
 
     public async Task<ProfileDto?> GetProfileAsync(string HashedUserId, CancellationToken cancellationToken)

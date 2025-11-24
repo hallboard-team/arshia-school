@@ -34,6 +34,7 @@ export class DatepickerComponent {
   @Input() label: string = 'تاریخ';
 
   value: Moment | null = null;
+  disabled = false;
 
   writeValue(value: Moment | null): void {
     this.value = value;
@@ -50,7 +51,7 @@ export class DatepickerComponent {
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    // you can disable the input here if needed
+    this.disabled = isDisabled;
   }
 
   onDateChange(date: Moment | null): void {

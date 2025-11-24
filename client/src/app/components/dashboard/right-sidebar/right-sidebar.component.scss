@@ -16,7 +16,7 @@
     inline-size: var(--w-collapsed);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     :host {
         inline-size: var(--w-expanded);
     }

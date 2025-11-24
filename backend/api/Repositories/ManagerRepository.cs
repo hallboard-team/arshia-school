@@ -656,7 +656,26 @@ public class ManagerRepository : IManagerRepository
       query = query.Where(u =>
           (u.Name ?? string.Empty).ToUpper().Contains(s) ||
           (u.NormalizedUserName ?? string.Empty).Contains(s) ||
-          (u.LastName ?? string.Empty).ToUpper().Contains(s));
+          (u.LastName ?? string.Empty).ToUpper().Contains(s) ||
+           u.EnrolledCourses.Any(c =>
+                (c.CourseTitle ?? string.Empty).ToUpper().Contains(s)
+            ));
+    }
+
+    if (!string.IsNullOrWhiteSpace(memberParams.CourseTitle))
+    {
+      string s = memberParams.CourseTitle.ToUpper();
+
+      query = query.Where(u =>
+          u.EnrolledCourses.Any(c => c.CourseTitle.Contains(s)));
+    }
+
+    if (!string.IsNullOrWhiteSpace(memberParams.ClassName))
+    {
+      string s = memberParams.ClassName.ToUpper();
+
+      query = query.Where(u =>
+          u.EnrolledCourses.Any(c => c.ClassName.Contains(s)));
     }
 
     query = query.Where(u => u.NormalizedUserName != "ADMIN" && u.NormalizedUserName != "MANAGER");

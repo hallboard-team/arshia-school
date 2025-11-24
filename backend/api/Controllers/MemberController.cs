@@ -1,3 +1,6 @@
+using api.DTOs.Account;
+using api.DTOs.Helpers;
+
 namespace api.Controllers;
 
 [Authorize]
@@ -56,21 +59,27 @@ public class MemberController
     [HttpPut]
     public async Task<ActionResult> UpdateMember(MemberUpdateDto memberUpdateDto, CancellationToken cancellationToken)
     {
-        if (memberUpdateDto is null)
-            return BadRequest("ورودی نامعتبر است.");
+        string? hashedUserId = User.GetHashedUserId();
 
-        try
-        {
-            bool? updateResult = await _memberRepository.UpdateMemberAsync(memberUpdateDto, User.GetHashedUserId(), cancellationToken);
+        if (hashedUserId is null)
+            return Unauthorized("شما ورود نکرده اید. لطفا ابتدا ورود کنید.");
 
-            return updateResult is false
-                ? BadRequest("بروزرسانی انجام نشد. لطفاً دوباره تلاش کنید.")
-                : Ok(new { message = "اطلاعات با موفقیت بروزرسانی شد." });
-        }
-        catch (ApplicationException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
+
+        if (userId is null)
+            return Unauthorized("شما ورود نکرده اید. لطفا ابتدا ورود کنید.");
+
+        OperationResult<TargetMemberDto> opResult = await _memberRepository.UpdateMemberAsync(memberUpdateDto, userId.Value, cancellationToken);
+
+        return opResult.IsSuccess
+            ? Ok(opResult.Result)
+            : opResult.Error?.Code switch
+            {
+                ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
+                ErrorCode.IsInvalidType => BadRequest(opResult.Error.Message),
+                ErrorCode.IsOperationFailed => BadRequest(opResult.Error.Message),
+                _ => BadRequest("Operation failed. Try again or contact support.")
+            };
     }
 
     [HttpGet("get-course")]
@@ -93,7 +102,7 @@ public class MemberController
             return BadRequest("No user was found with this userId.");
 
         EnrolledCourse? enrolledCourse = await _memberRepository.GetEnrolledCourseAsync(hashedUserId, courseTitle, cancellationToken);
-        
+
         return enrolledCourse is null ? NotFound("دوره مورد نظر یافت نشد") : Ok(enrolledCourse);
     }
 }

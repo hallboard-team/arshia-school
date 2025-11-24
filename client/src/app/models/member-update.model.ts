@@ -1,6 +1,8 @@
 export interface MemberUpdate {
     email: string;
-    currentPassword: string;
-    password: string;
-    confirmPassword: string;
+    name: string;
+    lastName: string;
+    phoneNum: string;
+    gender: string;
+    dateOfBirth: string | undefined;
 }

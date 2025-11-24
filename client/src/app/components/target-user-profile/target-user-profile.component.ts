@@ -2,7 +2,7 @@ import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ManagerService } from '../../services/manager.service';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { TargetUserProfile } from '../../models/target-user-profile.model';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Member } from '../../models/member.model';
 import { ManagerUpdateMemberDto } from '../../models/manager-update-member.model';
 import { Subscription, take } from 'rxjs';
@@ -24,11 +24,12 @@ import { UpdateEnrolledCourse } from '../../models/update-enrolled-course.model'
 import { CourseParams } from '../../models/helpers/course-params';
 import { CourseService } from '../../services/course.service';
 import { PaginatedResult } from '../../models/helpers/paginatedResult';
-import { PageEvent } from '@angular/material/paginator';
 import { Pagination } from '../../models/helpers/pagination';
 import { CurrencyFormatterDirective } from '../../directives/currency-formatter.directive';
 import { DatepickerComponent } from '../../datepicker/datepicker.component';
 import moment, { Moment } from 'moment-jalaali';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-target-user-profile',
@@ -38,7 +39,8 @@ import moment, { Moment } from 'moment-jalaali';
     MatInputModule, MatButtonModule, NavbarComponent,
     RouterModule, MatTabsModule, MatNativeDateModule,
     MatRadioModule, MatSnackBarModule, MatDatepickerModule,
-    MatSelectModule, CurrencyFormatterDirective, DatepickerComponent
+    MatSelectModule, CurrencyFormatterDirective, DatepickerComponent,
+    MatPaginatorModule
   ],
   templateUrl: './target-user-profile.component.html',
   styleUrl: './target-user-profile.component.scss'
@@ -78,6 +80,7 @@ export class TargetUserProfileComponent implements OnInit {
   uiTodayBtnEnable: boolean = true;
 
   shamsiDisplayDate: string = '';
+  targetProfileEditMode = false;
 
   readonly minAge = 11;
   readonly maxAge = 90;
@@ -94,15 +97,17 @@ export class TargetUserProfileComponent implements OnInit {
     this.getTargetUserCourse();
     this.getTargetCourseTitles();
     this.courseParams = new CourseParams();
-
     this.getAll();
+
+    this.setupInstallmentFieldBehavior();
   }
 
   targetMemberEditFg: FormGroup = this._fb.group({
-    targetNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    targetLastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    targetDateOfBirthCtrl: ['', [Validators.required]],
-    targetPhoneNumCtrl: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]]
+    targetNameCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    targetLastNameCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    targetDateOfBirthCtrl: [{ value: null, disabled: true }, [Validators.required]],
+    targetPhoneNumCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+    targetGenderCtrl: [{ value: '', disabled: true }, [Validators.required]]
   });
 
   addEnrolledCourseFg: FormGroup = this.fb.group({
@@ -117,17 +122,20 @@ export class TargetUserProfileComponent implements OnInit {
     methodCtrl: ['', [Validators.required]]
   })
 
-  get TargetNameCtrl(): AbstractControl {
+  get TargetNameCtrl(): FormControl {
     return this.targetMemberEditFg.get('targetNameCtrl') as FormControl;
   }
-  get TargetLastNameCtrl(): AbstractControl {
+  get TargetLastNameCtrl(): FormControl {
     return this.targetMemberEditFg.get('targetLastNameCtrl') as FormControl;
   }
-  get TargetDateOfBirthCtrl(): AbstractControl {
+  get TargetDateOfBirthCtrl(): FormControl {
     return this.targetMemberEditFg.get('targetDateOfBirthCtrl') as FormControl;
   }
-  get TargetPhoneNumCtrl(): AbstractControl {
+  get TargetPhoneNumCtrl(): FormControl {
     return this.targetMemberEditFg.get('targetPhoneNumCtrl') as FormControl;
+  }
+  get TargetGenderCtrl(): FormControl {
+    return this.targetMemberEditFg.get('targetGenderCtrl') as FormControl;
   }
 
   //add enrolled-course
@@ -139,6 +147,9 @@ export class TargetUserProfileComponent implements OnInit {
   }
   get PaidAmountCtrl(): FormControl {
     return this.addEnrolledCourseFg.get('paidAmountCtrl') as FormControl;
+  }
+  get InstallmentAmountCtrl(): FormControl {
+    return this.addEnrolledCourseFg.get('installmentAmountCtrl') as FormControl;
   }
 
   //update enrolled-course
@@ -225,14 +236,29 @@ export class TargetUserProfileComponent implements OnInit {
     }
   }
 
+  getProfilePhoto(): string {
+    if (this.targetUserProfile?.photoUrl && this.targetUserProfile.photoUrl.trim() !== '') {
+      return this.targetUserProfile.photoUrl;
+    }
+
+    if (this.isMale) {
+      return 'assets/images/menProfilePhoto.png';
+    }
+
+    return 'assets/images/womenProfilePhoto.png';
+  }
+
   initTargetControllersValues(targetUserProfile: TargetUserProfile) {
     this.TargetNameCtrl.setValue(targetUserProfile.name);
     this.TargetLastNameCtrl.setValue(targetUserProfile.lastName);
     this.TargetPhoneNumCtrl.setValue(targetUserProfile.phoneNum?.slice(2) ?? '');
+
     if (targetUserProfile.dateOfBirth) {
       const dobMoment = moment(targetUserProfile.dateOfBirth, 'YYYY-MM-DD');
       this.TargetDateOfBirthCtrl.setValue(dobMoment);
     }
+
+    this.TargetGenderCtrl.setValue(targetUserProfile.gender?.toLowerCase() ?? '');
   }
 
   updateTargetMember() {
@@ -253,8 +279,9 @@ export class TargetUserProfileComponent implements OnInit {
         name: this.TargetNameCtrl.value,
         lastName: this.TargetLastNameCtrl.value,
         dateOfBirth: this.toGregorianDateOnly(dob),
-        phoneNum: '98' + this.TargetPhoneNumCtrl.value
-      }
+        phoneNum: '98' + this.TargetPhoneNumCtrl.value,
+        gender: this.TargetGenderCtrl.value
+      };
 
       this._managerService.updateMember(managerUpdateMember, memberUserName)
         .pipe(take(1)).subscribe({
@@ -265,6 +292,10 @@ export class TargetUserProfileComponent implements OnInit {
               duration: 10000
             });
             this.targetUserProfile = data;
+
+            this.targetProfileEditMode = false;
+            this.targetMemberEditFg.disable();
+            this.initTargetControllersValues(this.targetUserProfile);
           },
           error: err => {
             this._matSnackBar.open("در انجام آپدیت خطا پیش آمده", "Close", {
@@ -441,9 +472,22 @@ export class TargetUserProfileComponent implements OnInit {
 
   onCancelUpdateEnrolledCourse(): void {
     this.updateEnrolledCourseFg.reset();
-
     this.updateEnrolledCourseFg.markAsPristine();
     this.updateEnrolledCourseFg.markAsUntouched();
+  }
+
+  enableTargetProfileEdit(): void {
+    this.targetProfileEditMode = true;
+    this.targetMemberEditFg.enable();
+  }
+
+  cancelTargetProfileEdit(): void {
+    this.targetProfileEditMode = false;
+    this.targetMemberEditFg.disable();
+
+    if (this.targetUserProfile) {
+      this.initTargetControllersValues(this.targetUserProfile);
+    }
   }
 
   private toGregorianDateOnly(value: Moment | Date | string | null | undefined): string | undefined {
@@ -467,6 +511,31 @@ export class TargetUserProfileComponent implements OnInit {
   }
 
   private openSnack(message: string, panel: 'success' | 'error' = 'error'): void {
-    this._matSnackBar.open(message, 'باشه', { duration: 4000, horizontalPosition: 'center', verticalPosition: 'top', panelClass: [panel === 'success' ? 'snack-success' : 'snack-error'], direction: 'rtl' });
+    this._matSnackBar.open(
+      message,
+      'باشه',
+      {
+        duration: 4000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: [panel === 'success' ? 'snack-success' : 'snack-error'],
+        direction: 'rtl'
+      }
+    );
+  }
+
+  private setupInstallmentFieldBehavior(): void {
+    this.InstallmentAmountCtrl.disable();
+
+    this.NumberOfPaymentsCtrl.valueChanges.subscribe(value => {
+      const count = Number(value ?? 0);
+
+      if (!count || count === 0) {
+        this.InstallmentAmountCtrl.reset();
+        this.InstallmentAmountCtrl.disable();
+      } else {
+        this.InstallmentAmountCtrl.enable();
+      }
+    });
   }
 }
