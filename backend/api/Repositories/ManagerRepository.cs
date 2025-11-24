@@ -662,6 +662,22 @@ public class ManagerRepository : IManagerRepository
             ));
     }
 
+    if (!string.IsNullOrWhiteSpace(memberParams.CourseTitle))
+    {
+      string s = memberParams.CourseTitle.ToUpper();
+
+      query = query.Where(u =>
+          u.EnrolledCourses.Any(c => c.CourseTitle.Contains(s)));
+    }
+
+    if (!string.IsNullOrWhiteSpace(memberParams.ClassName))
+    {
+      string s = memberParams.ClassName.ToUpper();
+
+      query = query.Where(u =>
+          u.EnrolledCourses.Any(c => c.ClassName.Contains(s)));
+    }
+
     query = query.Where(u => u.NormalizedUserName != "ADMIN" && u.NormalizedUserName != "MANAGER");
     query = query.Where(u => u.Id != memberParams.UserId);
     query = query.Where(u => u.DateOfBirth >= minDob && u.DateOfBirth <= maxDob);
