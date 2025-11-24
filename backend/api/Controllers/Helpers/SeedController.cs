@@ -64,11 +64,13 @@ public class SeedController : BaseApiController
 
         await _userManager.CreateAsync(admin, "Arshiya123321/"); // Create admin
         await _userManager.AddToRolesAsync(admin, ["admin", "manager", "secretary", "teacher", "student"]);
+
         // Manager
         AppUser manager = new()
         {
             UserName = "manager",
-            Email = "manager@m.com"
+            Email = "manager@m.com",
+            DateOfBirth = new DateOnly(1985, 01, 01)
         };
 
         await _userManager.CreateAsync(manager, "Aaaaaaaa/");
