@@ -67,20 +67,81 @@ public class MemberRepository : IMemberRepository
             );
         }
 
-        UpdateDefinition<AppUser> updatedUser = Builders<AppUser>.Update
-            .Set(doc => doc.Name, memberUpdateDto.Name)
-            .Set(doc => doc.LastName, memberUpdateDto.LastName)
-            .Set(doc => doc.PhoneNum, memberUpdateDto.PhoneNum)
-            .Set(doc => doc.DateOfBirth, memberUpdateDto.DateOfBirth);
+        List<UpdateDefinition<AppUser>> updateDefinitions = new List<UpdateDefinition<AppUser>>();
+        UpdateDefinitionBuilder<AppUser> updateDefinitionBuilder = Builders<AppUser>.Update;
 
-        await _collectionAppUser.UpdateOneAsync(doc => doc.Id == userId, updatedUser, null, cancellationToken);
+        if (!string.IsNullOrWhiteSpace(memberUpdateDto.Name))
+        {
+            string trimmed = memberUpdateDto.Name.Trim();
+            if (!string.Equals(targetAppUser.Name, trimmed, StringComparison.Ordinal))
+            {
+                updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.Name, trimmed));
+            }
+        }
 
-        AppUser? appUser = await _userManager.FindByIdAsync(userId.ToString());
+        if (!string.IsNullOrWhiteSpace(memberUpdateDto.LastName))
+        {
+            string trimmed = memberUpdateDto.LastName.Trim();
+            if (!string.Equals(targetAppUser.LastName, trimmed, StringComparison.Ordinal))
+            {
+                updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.LastName, trimmed));
+            }
+        }
+
+        if (memberUpdateDto.DateOfBirth is not null && targetAppUser.DateOfBirth != memberUpdateDto.DateOfBirth.Value)
+        {
+            updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.DateOfBirth, memberUpdateDto.DateOfBirth.Value));
+        }
+
+        if (!string.IsNullOrWhiteSpace(memberUpdateDto.PhoneNum))
+        {
+            string phone = memberUpdateDto.PhoneNum.Trim();
+
+            if (!string.Equals(targetAppUser.PhoneNum, phone, StringComparison.Ordinal))
+            {
+                updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.PhoneNum, phone));
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(memberUpdateDto.Gender))
+        {
+            if (Enum.TryParse<GenderType>(memberUpdateDto.Gender.Trim(), true, out var parsedGender))
+            {
+                updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.Gender, parsedGender));
+            }
+            else
+            {
+                return new(
+                    false,
+                    Error: new(
+                        ErrorCode.IsInvalidType,
+                        "Enter valid gender."
+                    )
+                );
+            }
+        }
+
+        if (updateDefinitions.Count > 0)
+        {
+            UpdateDefinition<AppUser> updateDef = Builders<AppUser>.Update.Combine(updateDefinitions);
+
+            UpdateResult updateResult = await _collectionAppUser.UpdateOneAsync(doc => doc.Id == userId, updateDef, null, cancellationToken);
+
+            AppUser? appUser = await _userManager.FindByIdAsync(userId.ToString());
+
+            return new(
+                true,
+                Mappers.ConvertAppUserToTargetMemberDto(appUser!),
+                null
+            );
+        }
 
         return new(
-            true,
-            Mappers.ConvertAppUserToTargetMemberDto(appUser!),
-            null
+            false,
+            Error: new(
+                ErrorCode.IsOperationFailed,
+                "No update was made."
+            )
         );
     }
 
