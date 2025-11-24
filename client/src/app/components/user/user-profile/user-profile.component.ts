@@ -32,6 +32,7 @@ import moment, { Moment } from 'moment-jalaali';
 import { UpdatePassword } from '../../../models/password-update.model';
 import { DatepickerComponent } from '../../../datepicker/datepicker.component';
 import { MatSelectModule } from '@angular/material/select';
+import { environment } from '../../../../environments/environment.development';
 
 @Component({
   selector: 'app-user-profile',
@@ -58,6 +59,7 @@ export class UserProfileComponent implements OnInit {
   profile: UserProfile | null = null;
   courses: Course[] | null = [];
   shamsiCourses: (Course & { shamsiStart: string })[] = [];
+  apiPhotoUrl = environment.apiPhotoUrl;
 
   loading = true;
   error: string | null = null;
@@ -179,8 +181,10 @@ export class UserProfileComponent implements OnInit {
     if (this.profile?.photoUrl && this.profile.photoUrl.trim() !== '') {
       return this.profile.photoUrl;
     }
+  
+    console.log(this.profile?.gender);
 
-    if (this.profile?.gender === 'male') {
+    if (this.profile?.gender === 'Male') {
       return 'assets/images/menProfilePhoto.png';
     }
 
@@ -252,7 +256,10 @@ export class UserProfileComponent implements OnInit {
     this._memberService.updateUser(updatedMember)
       .pipe(take(1))
       .subscribe({
-        next: (res: ApiResponse) => {
+        next: (res) => {
+          this.profile = res;
+          this.getProfile();
+          
           const dobMoment = moment(dobGregorian);
           const newAge = dobMoment.isValid()
             ? moment().diff(dobMoment, 'years')
@@ -272,7 +279,7 @@ export class UserProfileComponent implements OnInit {
           this.profileEditMode = false;
           this.profileFg.disable();
 
-          this._matSnackBar.open(res.message ?? 'پروفایل با موفقیت به‌روزرسانی شد', 'بستن', {
+          this._matSnackBar.open('پروفایل با موفقیت به‌روزرسانی شد', 'بستن', {
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
             duration: 4000

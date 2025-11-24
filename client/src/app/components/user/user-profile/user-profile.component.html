@@ -33,7 +33,7 @@
                 <span class="description">شماره تلفن: {{profile?.phoneNum}}</span>
                 <span class="description">سن: {{profile?.age}}</span>
 
-                @if (profile?.gender == 'male') {
+                @if (profile?.gender === 'Male') {
                 <span class="gender-men-span">جنسیت: مرد</span>
                 } @else {
                 <span class="gender-women-span">جنسیت: زن</span>

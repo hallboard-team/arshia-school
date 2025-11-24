@@ -16,6 +16,7 @@ import { Course } from '../models/course.model';
 import { AttendenceParams } from '../models/helpers/attendence-params';
 import { Attendence } from '../models/attendence.model';
 import { EnrolledCourse } from '../models/helpers/enrolled-course.model';
+import { TargetUserProfile } from '../models/target-user-profile.model';
 
 @Injectable({
   providedIn: 'root'
@@ -65,8 +66,8 @@ export class MemberService {
     return this._http.get<Course[]>(this._baseApiUrl + 'get-course', { headers });
   }
 
-  updateUser(memberUpdate: MemberUpdate): Observable<ApiResponse> {
-    return this._http.put<ApiResponse>(this._baseApiUrl, memberUpdate);
+  updateUser(memberUpdate: MemberUpdate): Observable<UserProfile> {
+    return this._http.put<UserProfile>(this._baseApiUrl, memberUpdate);
   }
 
   getEnrolledCourse(courseTitle: string): Observable<EnrolledCourse> {
