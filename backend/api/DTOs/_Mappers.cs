@@ -128,6 +128,7 @@ public static class Mappers
     {
         return new Course(
             Title: managerInput.Title.ToUpper(),
+            ClassName: managerInput.ClassName.ToUpper(),
             ProfessorsIds: [],
             // ProfessorsNames: [],
             Tuition: managerInput.Tuition,
@@ -183,6 +184,7 @@ public static class Mappers
             // Id: Guid.NewGuid(),
             CourseId: course.Id,
             CourseTitle: course.Title.ToUpper(),
+            ClassName: course.ClassName.ToUpper(),
             CourseTuition: course.Tuition,
             NumberOfPayments: managerInput.NumberOfPayments,
             PaidNumber: 0,

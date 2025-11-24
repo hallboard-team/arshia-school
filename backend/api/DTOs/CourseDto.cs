@@ -5,6 +5,10 @@ public record AddCourseDto(
      MaxLength(30, ErrorMessage = "عنوان حداکثر ۳۰ کاراکتر است")]
     string Title,
 
+    [Required, MinLength(1, ErrorMessage = "نام کلاس حداقل ۲ کاراکتر باید باشد"),
+        MaxLength(30, ErrorMessage = "نام کلاس حداکثر باید ۳۰ کاراکتر باشد")]
+    string ClassName,
+
     [Required, Range(10_000, 100_000_000, ErrorMessage = "مبلغ باید بین ۱۰,۰۰۰ تومن و ۱۰۰,۰۰۰,۰۰۰ تومن باشد."),]
     int Tuition,
 
@@ -22,6 +26,7 @@ public class ShowCourseDto
 {
     public string Id { get; init; } = string.Empty;
     public string Title { get; init; } = string.Empty;
+    public string ClassName { get; set; } = string.Empty;
     public List<string> ProfessorUserNames { get; init; } = new();
     public List<string> ProfessorNames { get; init; } = new();
     public int Tuition { get; init; }
