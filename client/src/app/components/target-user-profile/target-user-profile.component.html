@@ -13,7 +13,7 @@
         <div class="profile-card">
 
             <div class="profile-image">
-                <div class="avatar-wrapper" (click)="fileInput.click()">
+                <div ng2FileDrop [uploader]="uploader" (fileOver)="fileOverBase($event)" class="avatar-wrapper" (click)="fileInput.click()">
                     <img [src]="getProfilePhoto()" alt="Profile" />
 
                     <div class="avatar-hover-overlay">
@@ -27,7 +27,7 @@
                     </div>
                 </div>
 
-                <input #fileInput type="file" accept="image/*" hidden />
+                <input #fileInput ng2FileSelect [uploader]="uploader" type="file" accept="image/*" hidden />
             </div>
 
             <div class="profile-info">
