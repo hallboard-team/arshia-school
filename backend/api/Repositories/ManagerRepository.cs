@@ -393,30 +393,100 @@ public class ManagerRepository : IManagerRepository
     return ConvertAppUserToTargetMemberDto(appUser);
   }
 
-  public async Task<TargetMemberDto?> UpdateMemberAsync(
-    string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken
+  public async Task<OperationResult<TargetMemberDto>> UpdateMemberAsync(
+    string memberUserName, ManagerUpdateMemberDto dto, CancellationToken cancellationToken
   )
   {
     AppUser? targetAppUser = await _collectionAppUser.Find(u => u.NormalizedUserName == memberUserName.ToUpper()).
       FirstOrDefaultAsync(cancellationToken);
 
-    if (targetAppUser is null) return null;
+    if (targetAppUser is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsUserNotFound,
+          "Target user not found"
+        )
+      );
+    }
 
-    FilterDefinition<AppUser>? filter = Builders<AppUser>.Filter.Eq(u => u.Id, targetAppUser.Id);
+    List<UpdateDefinition<AppUser>> updateDefinitions = new List<UpdateDefinition<AppUser>>();
+    UpdateDefinitionBuilder<AppUser> updateDefinitionBuilder = Builders<AppUser>.Update;
 
-    UpdateDefinition<AppUser>? update = Builders<AppUser>.Update
-    .Set(u => u.Name, updatedMember.Name)
-    .Set(u => u.LastName, updatedMember.LastName)
-    .Set(u => u.PhoneNum, updatedMember.PhoneNum)
-    .Set(u => u.DateOfBirth, updatedMember.DateOfBirth);
+    if (!string.IsNullOrWhiteSpace(dto.Name))
+    {
+      string trimmed = dto.Name.Trim();
+      if (!string.Equals(targetAppUser.Name, trimmed, StringComparison.Ordinal))
+      {
+        updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.Name, trimmed));
+      }
+    }
 
-    UpdateResult? updateResult = await _collectionAppUser.UpdateOneAsync(
-      filter, update, cancellationToken: cancellationToken
-    );
+    if (!string.IsNullOrWhiteSpace(dto.LastName))
+    {
+      string trimmed = dto.LastName.Trim();
+      if (!string.Equals(targetAppUser.LastName, trimmed, StringComparison.Ordinal))
+      {
+        updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.LastName, trimmed));
+      }
+    }
 
-    AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == memberUserName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+    if (dto.DateOfBirth is not null && targetAppUser.DateOfBirth != dto.DateOfBirth.Value)
+    {
+      updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.DateOfBirth, dto.DateOfBirth.Value));
+    }
 
-    return Mappers.ConvertAppUserToTargetMemberDto(appUser);
+    if (!string.IsNullOrWhiteSpace(dto.PhoneNum))
+    {
+      string phone = dto.PhoneNum.Trim();
+
+      if (!string.Equals(targetAppUser.PhoneNum, phone, StringComparison.Ordinal))
+      {
+        updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.PhoneNum, phone));
+      }
+    }
+
+    if (!string.IsNullOrWhiteSpace(dto.Gender))
+    {
+      if (Enum.TryParse<GenderType>(dto.Gender.Trim(), true, out var parsedGender))
+      {
+        updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.Gender, parsedGender));
+      }
+      else
+      {
+        return new(
+          false,
+          Error: new CustomError(
+            ErrorCode.IsInvalidType,
+            "Enter valid gender"
+          )
+        );
+      }
+    }
+
+    if (updateDefinitions.Count > 0)
+    {
+      UpdateDefinition<AppUser> updateDef = Builders<AppUser>.Update.Combine(updateDefinitions);
+
+      UpdateResult updateResult = await _collectionAppUser.UpdateOneAsync(doc => doc.Id == targetAppUser.Id, updateDef, null, cancellationToken);
+
+      AppUser appUser = await _collectionAppUser.Find(doc => doc.Id == targetAppUser.Id).FirstOrDefaultAsync(cancellationToken);
+
+      return new(
+        true,
+        Mappers.ConvertAppUserToTargetMemberDto(appUser),
+        null
+      );
+    }
+
+    return new(
+     false,
+     Error: new CustomError(
+       ErrorCode.IsOperationFailed,
+       "No update was made."
+     )
+   );
   }
 
   public async Task<OperationResult<MemberPhoto>> UploadMemberPhotoAsync(IFormFile file, string userName, CancellationToken cancellationToken)

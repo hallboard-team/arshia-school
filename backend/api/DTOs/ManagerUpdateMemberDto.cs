@@ -13,5 +13,7 @@ public record ManagerUpdateMemberDto(
     
     [Optional]
     [BirthDateRange(MinYears = 11, MaxYears = 99)]
-    DateOnly DateOfBirth
+    DateOnly? DateOfBirth,
+
+    string Gender
 );
