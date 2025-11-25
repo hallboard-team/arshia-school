@@ -3,6 +3,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 200px;
+    height: 260px;
     gap: 10px;
     padding: 1rem;
 
@@ -22,6 +24,8 @@
         font-size: 15px;
         color: black;
         direction: rtl;
+        white-space: normal;
+        word-wrap: break-word;
     }
 
     .div-btns {
@@ -30,6 +34,8 @@
         flex-direction: column;
         align-items: center;
         gap: 1rem;
+
+        margin-top: auto;
 
         .button-view {
             height: 30px;
