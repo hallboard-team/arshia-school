@@ -1,4 +1,4 @@
-import { EnrolledCourse } from "./helpers/enrolled-course.model";
+import { EnrolledCourse, Photo } from "./helpers/enrolled-course.model";
 
 export interface TargetUserProfile {
     email: string;
@@ -11,4 +11,5 @@ export interface TargetUserProfile {
     dateOfBirth: Date;
     photoUrl: string;
     enrolledCourses: EnrolledCourse[];
+    memberPhoto: Photo
 };

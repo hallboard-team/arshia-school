@@ -30,6 +30,11 @@ import { DatepickerComponent } from '../../datepicker/datepicker.component';
 import moment, { Moment } from 'moment-jalaali';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { PageEvent } from '@angular/material/paginator';
+import { FileUploader, FileUploadModule } from 'ng2-file-upload';
+import { environment } from '../../../environments/environment.development';
+import { Photo } from '../../models/helpers/enrolled-course.model';
+import { LoggedInUser } from '../../models/logged-in-user.model';
+import { AccountService } from '../../services/account.service';
 
 @Component({
   selector: 'app-target-user-profile',
@@ -40,7 +45,7 @@ import { PageEvent } from '@angular/material/paginator';
     RouterModule, MatTabsModule, MatNativeDateModule,
     MatRadioModule, MatSnackBarModule, MatDatepickerModule,
     MatSelectModule, CurrencyFormatterDirective, DatepickerComponent,
-    MatPaginatorModule
+    MatPaginatorModule, FileUploadModule
   ],
   templateUrl: './target-user-profile.component.html',
   styleUrl: './target-user-profile.component.scss'
@@ -52,12 +57,19 @@ export class TargetUserProfileComponent implements OnInit {
   private _fb = inject(FormBuilder);
   private _matSnackBar = inject(MatSnackBar);
   private _platformId = inject(PLATFORM_ID);
+  private _accounService = inject(AccountService);
+  private _snackBar = inject(MatSnackBar);
 
+  apiUrl = environment.apiUrl;
+  apiPhotoUrl = environment.apiPhotoUrl;
+  uploader: FileUploader | undefined;
+  hasBaseDropZoneOver = false;
   targetUserProfile: TargetUserProfile | null = null;
   courses: Course[] | null = [];
   shamsiCourses: (Course & { shamsiStart: string })[] = [];
   courseTitles: string[] | null = [];
   member: Member | undefined;
+  loggedInUser: LoggedInUser | undefined | null;
 
   showCourses: ShowCourse[] | undefined;
   courseParams: CourseParams | undefined;
@@ -92,12 +104,14 @@ export class TargetUserProfileComponent implements OnInit {
     const currentYear = new Date().getFullYear();
     this.minDate = new Date(currentYear - 99, 0, 1);
     this.maxDate = new Date(currentYear - 15, 0, 1);
+    this.loggedInUser = this._accounService.loggedInUserSig();    
 
     this.getTargetUserProfile();
     this.getTargetUserCourse();
     this.getTargetCourseTitles();
     this.courseParams = new CourseParams();
     this.getAll();
+    this.initializeUploader();
 
     this.setupInstallmentFieldBehavior();
   }
@@ -172,6 +186,60 @@ export class TargetUserProfileComponent implements OnInit {
     return this.targetUserProfile?.gender?.toLowerCase() === 'female';
   }
 
+  fileOverBase(event: boolean): void {
+    this.hasBaseDropZoneOver = event;
+  }
+
+  initializeUploader(): void {
+    if (isPlatformBrowser(this._platformId) && this.loggedInUser) {
+      const memberUserName: string | null = this._route.snapshot.paramMap.get('memberUserName');
+
+      this.uploader = new FileUploader({
+        url: this.apiUrl + 'manager/add-member-photo/' + memberUserName,
+        authToken: 'Bearer ' + this.loggedInUser.token,
+        isHTML5: true,
+        allowedFileType: ['image'],
+        removeAfterUpload: true,
+        autoUpload: true,
+        maxFileSize: 4_000_000
+      })
+
+      this.uploader.onAfterAddingFile = (file) => {
+        file.withCredentials = false;
+      }
+
+      this.uploader.onSuccessItem = (item, response, status, headers) => {
+        if (response) {
+          const photo: Photo = JSON.parse(response);
+          this.targetUserProfile!.memberPhoto = photo;
+
+          this._snackBar.open('عکس پروفایل با موفقیت اپلود شد', 'Close', {
+            duration: 7000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+          })
+        }
+      }
+
+      this.uploader.onErrorItem = (item, response, status, headers) => {
+        let message = 'آپلود عکس ناموفق بود. لطفاً دوباره تلاش کنید.';
+
+        try {
+          const errorObj = JSON.parse(response);
+          if (errorObj && errorObj.message) {
+            message = errorObj.message
+          }
+        } catch {}
+
+        this._snackBar.open(message, 'Close', {
+          duration: 7000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
+      }
+    }
+  }
+
   getTargetUserProfile(): void {
     if (isPlatformBrowser(this._platformId)) {
       const memberUserName: string | null = this._route.snapshot.paramMap.get('memberUserName');
@@ -238,8 +306,9 @@ export class TargetUserProfileComponent implements OnInit {
   }
 
   getProfilePhoto(): string {
-    if (this.targetUserProfile?.photoUrl && this.targetUserProfile.photoUrl.trim() !== '') {
-      return this.targetUserProfile.photoUrl;
+    if (this.targetUserProfile?.memberPhoto && this.targetUserProfile.memberPhoto.url_165.trim() !== '') {
+      let profilePhoto = this.apiPhotoUrl + this.targetUserProfile.memberPhoto.url_165; 
+      return profilePhoto;
     }
 
     if (this.isMale) {

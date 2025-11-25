@@ -70,7 +70,8 @@ public static class Mappers
             Gender: appUser.Gender,
             Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth),
             DateOfBirth: appUser.DateOfBirth,
-            EnrolledCourses: appUser.EnrolledCourses
+            EnrolledCourses: appUser.EnrolledCourses,
+            MemberPhoto: appUser.Photo
         );
     }
 
