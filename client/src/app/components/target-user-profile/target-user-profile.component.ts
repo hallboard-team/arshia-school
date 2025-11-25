@@ -220,6 +220,23 @@ export class TargetUserProfileComponent implements OnInit {
           })
         }
       }
+
+      this.uploader.onErrorItem = (item, response, status, headers) => {
+        let message = 'آپلود عکس ناموفق بود. لطفاً دوباره تلاش کنید.';
+
+        try {
+          const errorObj = JSON.parse(response);
+          if (errorObj && errorObj.message) {
+            message = errorObj.message
+          }
+        } catch {}
+
+        this._snackBar.open(message, 'Close', {
+          duration: 7000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
+      }
     }
   }
 
