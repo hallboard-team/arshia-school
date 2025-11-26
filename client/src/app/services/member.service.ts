@@ -83,6 +83,15 @@ export class MemberService {
 
     if (memberParams) {
       params = params.append('search', memberParams.search);
+
+      if (memberParams.className) {  
+        params = params.append('className', memberParams.className);
+      }
+
+      if (memberParams.courseTitle) {
+        params = params.append('courseTitle', memberParams.courseTitle);
+      }
+
       params = params.append('pageSize', memberParams.pageSize);
       params = params.append('pageNumber', memberParams.pageNumber);
       params = params.append('minAge', memberParams.minAge);

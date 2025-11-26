@@ -5,8 +5,10 @@ public class MemberParams : PaginationParams
     [MaxLength(100)]
     public string? Search { get; set; } = string.Empty;
 
+    [MaxLength(50)]
     public string CourseTitle { get; set; } = string.Empty;
 
+    [MaxLength(50)]
     public string ClassName { get; set; } = string.Empty;
     
     [Range(11, 99)]
