@@ -34,12 +34,12 @@
                 <span class="description">سن: {{profile?.age}}</span>
 
                 @if (profile?.gender === 'Male') {
-                <span class="gender-men-span">جنسیت: مرد</span>
+                <span class="gender-men-span">جنسیت: آقا</span>
                 } @else {
-                <span class="gender-women-span">جنسیت: زن</span>
+                <span class="gender-women-span">جنسیت: خانم</span>
                 }
             </div>
-        </div>
+        </div> 
     </div>
 
 
@@ -88,8 +88,8 @@
                             <mat-form-field appearance="outline">
                                 <mat-label>جنسیت</mat-label>
                                 <mat-select formControlName="genderCtrl">
-                                    <mat-option value="female">زن</mat-option>
-                                    <mat-option value="male">مرد</mat-option>
+                                    <mat-option value="female">خانم</mat-option>
+                                    <mat-option value="male">آقا</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
