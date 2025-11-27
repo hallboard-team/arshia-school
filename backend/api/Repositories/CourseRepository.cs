@@ -172,4 +172,23 @@ public class CourseRepository : ICourseRepository
             ProfessorUserNames = safeUserNames
         };
     }
+
+    public async Task<List<ShowClassAndTitleDto>> GetClassesAndTitles(CancellationToken cancellationToken)
+    {
+        IEnumerable<Course> courses = await _collectionCourse.Find(new BsonDocument()).ToListAsync();
+
+        List<ShowClassAndTitleDto> classesAndCourses = [];
+
+        foreach (Course course in courses)
+        {
+            ShowClassAndTitleDto classAndCourse = new(
+                Title: course.Title,
+                ClassName: course.ClassName
+            );
+
+            classesAndCourses.Add(classAndCourse);
+        }
+
+        return classesAndCourses;
+    }
 }

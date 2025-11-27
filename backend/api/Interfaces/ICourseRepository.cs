@@ -10,4 +10,5 @@ public interface ICourseRepository
     public Task<bool> AddProfessorToCourseAsync(string targetCourseTitle, string professorUserName, CancellationToken cancellationToken);
     public Task<bool> RemoveProfessorFromCourseAsync(string targetCourseTitle, string professorName, CancellationToken cancellationToken);
     public Task<ShowCourseDto?> GetCourseByTitleAsync(string courseTitle, CancellationToken cancellationToken);
+    public Task<List<ShowClassAndTitleDto>> GetClassesAndTitles(CancellationToken cancellationToken);
 }

@@ -22,6 +22,11 @@ public record AddCourseDto(
     DateTime Start
 );
 
+public record ShowClassAndTitleDto(
+    string Title,
+    string ClassName
+);
+
 public class ShowCourseDto
 {
     public string Id { get; init; } = string.Empty;

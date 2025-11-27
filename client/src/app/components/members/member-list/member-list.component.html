@@ -4,58 +4,24 @@
   </nav>
 </header>
 
-<form [formGroup]="filterFg" class="form-filters">
-  <div class="filter">
-    <span class="title">جست و جو</span>
-    <span class="filter-by">نام/نام خانوادگی کاربر</span>
-  </div>
-
-  <div class="filter-fields">
-    <mat-form-field appearance="outline" class="my-form-field">
-      <mat-label>نام/نام خانوادگی</mat-label>
-      <input matInput class="input-search" formControlName="searchCtrl" type="text" />
-      <button mat-icon-button matSuffix tabindex="-1" class="search-icon-btn">
-        <mat-icon>search</mat-icon>
-      </button>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="my-form-field">
-      <mat-label>نام دوره</mat-label>
-      <input matInput formControlName="courseCtrl" type="text" class="text-input" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="my-form-field">
-      <mat-label>نام کلاس</mat-label>
-      <input matInput formControlName="classCtrl" type="text" class="text-input" />
-    </mat-form-field>
-  </div>
-
-
-  <div class="age">
-    <span>سن کاربر</span>
-    <div class="slider">
-      <mat-slider discrete [max]="maxAge" [min]="minAge">
-        <input formControlName="minAgeCtrl" matSliderStartThumb />
-        <input formControlName="maxAgeCtrl" matSliderEndThumb />
-      </mat-slider>
-    </div>
-  </div>
-
-  <div class="btns">
-    <button (click)="updateMemberParams(); getAll();" color="primary" mat-stroked-button>
-      جست و جو
-    </button>
-    <button class="remove-filters" (click)="reset()" mat-stroked-button>
-      پاک کردن فیلتر ها
-    </button>
-  </div>
-</form>
-
-
 <section class="members-container">
+  <button class="glass-search-btn" (click)="openDialog()">
+    <mat-icon class="icon">search</mat-icon>
+    جست‌وجو
+  </button>
+
   <div class="div-title">
     <span class="title">کاربران</span>
   </div>
+
+  @if (isFiltered) {
+  <div class="search-result">
+    <span>نتیجه جست و جو: {{members.length}} کاربر یافت شد</span>
+    <button class="clear-filters-btn" (click)="clearFilters()">
+      حذف فیلترها
+    </button>
+  </div>
+  }
 
   <div class="div-cards-member">
     @if (members && members.length > 0) {

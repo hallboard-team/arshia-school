@@ -1,0 +1,25 @@
+.form-filters {
+    // padding: 4rem;
+    padding-bottom: 4rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .filter {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .filter-fields {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .btns {
+        display: flex;
+        gap: 1rem;
+    }
+}

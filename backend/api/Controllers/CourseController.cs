@@ -103,4 +103,17 @@ public class CourseController(ICourseRepository _courseRepository) : BaseApiCont
 
         return course is not null ? Ok(course) : NotFound("Course not found");
     }
+
+    [HttpGet("get-all-class-course")]
+    public async Task<ActionResult<List<ShowClassAndTitleDto>>> GetAllClassAndCourse(CancellationToken cancellationToken)
+    {
+        List<ShowClassAndTitleDto> showClassAndTitleDtos = await _courseRepository.GetClassesAndTitles(cancellationToken);
+
+        if (showClassAndTitleDtos.Count == 0)
+        {
+            return NoContent();
+        }
+
+        return showClassAndTitleDtos;
+    }
 }

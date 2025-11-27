@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { PaginationHandler } from '../extensions/paginationHandler';
 import { environment } from '../../environments/environment';
+import { ShowCourseAndClass } from '../models/show-course-class.model';
 
 @Injectable({
   providedIn: 'root'
@@ -44,5 +45,9 @@ export class CourseService {
 
   removeProfessorFromCourse(targetCourseTitle: string, professorUserName: string): Observable<any> {
     return this._http.delete(this._baseApiUrl + 'remove-professor/' + targetCourseTitle + '/' + professorUserName);
+  }
+
+  getCoursesAndClasses(): Observable<ShowCourseAndClass[]> {
+    return this._http.get<ShowCourseAndClass[]>(this._baseApiUrl + 'get-all-class-course');
   }
 }
