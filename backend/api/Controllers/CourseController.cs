@@ -48,6 +48,7 @@ public class CourseController(ICourseRepository _courseRepository) : BaseApiCont
             {
                 Id = course.Id.ToString(),
                 Title = course.Title,
+                ClassName = course.ClassName,
                 ProfessorUserNames = professorUserNames,
                 ProfessorNames = professorNames,
                 Tuition = course.Tuition,
