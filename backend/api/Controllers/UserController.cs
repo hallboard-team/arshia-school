@@ -17,11 +17,11 @@ public class UserController(ITokenService _tokenService, IUserRepository _userRe
             return Unauthorized("You are not logged in. Please login again");
 
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
-        
-        if(userId is null)
+
+        if (userId is null)
             return Unauthorized();
 
-        OperationResult<MemberPhoto> opResult = await _userRepository.AddProflePhotoAsync(file, userId, cancellationToken);    
+        OperationResult<MemberPhoto> opResult = await _userRepository.AddProflePhotoAsync(file, userId, cancellationToken);
 
         return opResult.IsSuccess
             ? opResult.Result

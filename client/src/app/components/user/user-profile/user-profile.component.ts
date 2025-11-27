@@ -33,6 +33,7 @@ import { UpdatePassword } from '../../../models/password-update.model';
 import { DatepickerComponent } from '../../../datepicker/datepicker.component';
 import { MatSelectModule } from '@angular/material/select';
 import { environment } from '../../../../environments/environment.development';
+import { MemberPhoto } from '../../../models/member-photo.model';
 
 @Component({
   selector: 'app-user-profile',
@@ -130,9 +131,23 @@ export class UserProfileComponent implements OnInit {
             dobMoment = moment(`${approxYear}-01-01`, 'YYYY-MM-DD');
           }
 
+          const anyData = data as any;
+
+          let photoUrl: string | undefined =
+            anyData.photoUrl ??
+            anyData.photo?.url_256 ??
+            anyData.memberPhoto?.url_256;
+
+          if (photoUrl) {
+            photoUrl = photoUrl.startsWith('http')
+              ? photoUrl
+              : this.apiPhotoUrl + photoUrl;
+          }
+
           this.profile = {
             ...(data as any),
-            age
+            age,
+            photoUrl
           } as UserProfile;
 
           this.profileFg.patchValue({
@@ -181,7 +196,7 @@ export class UserProfileComponent implements OnInit {
     if (this.profile?.photoUrl && this.profile.photoUrl.trim() !== '') {
       return this.profile.photoUrl;
     }
-  
+
     console.log(this.profile?.gender);
 
     if (this.profile?.gender === 'Male') {
@@ -259,7 +274,7 @@ export class UserProfileComponent implements OnInit {
         next: (res) => {
           this.profile = res;
           this.getProfile();
-          
+
           const dobMoment = moment(dobGregorian);
           const newAge = dobMoment.isValid()
             ? moment().diff(dobMoment, 'years')
@@ -356,5 +371,55 @@ export class UserProfileComponent implements OnInit {
 
   cancelPasswordEdit(): void {
     this.memberEditFg.reset();
+  }
+
+  // ───── Upload photo
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
+
+    const file = input.files[0];
+
+    const minSize = 250_000;   // 250KB
+    const maxSize = 4_000_000; // 4MB
+
+    if (file.size < minSize || file.size > maxSize) {
+      this._matSnackBar.open('حجم عکس باید بین ۲۵۰ کیلوبایت تا ۴ مگابایت باشد.', 'بستن', {
+        duration: 4000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top'
+      });
+      return;
+    }
+
+    this._memberService.uploadProfilePhoto(file).subscribe({
+      next: (photo: MemberPhoto) => {
+        const fullUrl = photo.url_256.startsWith('http')
+          ? photo.url_256
+          : this.apiPhotoUrl + photo.url_256;
+
+        if (this.profile) {
+          this.profile.photoUrl = fullUrl;
+        }
+
+        this._matSnackBar.open('عکس پروفایل با موفقیت آپلود شد', 'بستن', {
+          duration: 4000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
+      },
+      error: (err) => {
+        const msg = err?.error ?? 'خطا در آپلود عکس پروفایل. لطفاً دوباره تلاش کنید.';
+        this._matSnackBar.open(msg, 'بستن', {
+          duration: 5000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top'
+        });
+      }
+    });
   }
 }
