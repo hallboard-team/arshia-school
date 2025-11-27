@@ -60,24 +60,64 @@
                                 <input class="input" matInput type="email" formControlName="emailCtrl" dir="ltr" />
                             </mat-form-field>
 
+                            <!-- نام -->
                             <mat-form-field appearance="outline">
                                 <mat-label>نام</mat-label>
-                                <input class="input" matInput type="text" formControlName="nameCtrl" />
+                                <input class="input" matInput type="text" formControlName="nameCtrl"
+                                    placeholder="نام خود را وارد نمایید" />
+                                <mat-hint>نام خود را وارد کنید</mat-hint>
+                                @if (NameCtrl.hasError('required')) {
+                                <mat-error>وارد کردن نام الزامیست</mat-error>
+                                }
+                                @if (NameCtrl.errors && NameCtrl.hasError('minlength')) {
+                                <mat-error>کمتر از ۲ کاراکتر</mat-error>
+                                }
+                                @if (NameCtrl.errors && NameCtrl.hasError('maxlength')) {
+                                <mat-error>بیشتر از ۳۰ کاراکتر</mat-error>
+                                }
                             </mat-form-field>
 
+                            <!-- نام خانوادگی -->
                             <mat-form-field appearance="outline">
                                 <mat-label>نام خانوادگی</mat-label>
-                                <input class="input" matInput type="text" formControlName="lastNameCtrl" />
+                                <input class="input" matInput type="text" formControlName="lastNameCtrl"
+                                    placeholder="نام خانوادگی خود را وارد نمایید" />
+                                <mat-hint>نام خانوادگی خود را وارد کنید</mat-hint>
+                                @if (LastNameCtrl.hasError('required')) {
+                                <mat-error>وارد کردن نام خانوادگی الزامیست</mat-error>
+                                }
+                                @if (LastNameCtrl.errors && LastNameCtrl.hasError('minlength')) {
+                                <mat-error>کمتر از ۲ کاراکتر</mat-error>
+                                }
+                                @if (LastNameCtrl.errors && LastNameCtrl.hasError('maxlength')) {
+                                <mat-error>بیشتر از ۳۰ کاراکتر</mat-error>
+                                }
                             </mat-form-field>
 
+                            <!-- شماره تلفن -->
                             <mat-form-field appearance="outline">
                                 <mat-label>شماره تلفن</mat-label>
-                                <input class="input" matInput type="text" formControlName="phoneNumCtrl" dir="ltr" />
+                                <span class="span-phone" matPrefix dir="ltr">+98&nbsp;</span>
+                                <input class="input" type="tel" maxlength="10" matInput formControlName="phoneNumCtrl"
+                                    dir="ltr" placeholder="شماره تلفن بدون صفر" />
+                                <mat-hint>شماره تلفن خود را وارد کنید</mat-hint>
+                                @if (PhoneNumCtrl.hasError('required')) {
+                                <mat-error>لطفا یک شماره تلفن وارد کنید</mat-error>
+                                }
+                                @else if (PhoneNumCtrl.hasError('pattern')) {
+                                <mat-error>فرمت شماره موبایل معتبر نیست</mat-error>
+                                }
                             </mat-form-field>
 
+                            <!-- تاریخ -->
                             <div class="datepicker-wrapper" [class.disabled]="!profileEditMode">
-                                <app-datepicker [formControl]="DateOfBirthCtrl" [maxDate]="maxDob" [minDate]="minDob">
+                                <app-datepicker [formControl]="DateOfBirthCtrl" [maxDate]="maxDob" [minDate]="minDob"
+                                    [label]="'تاریخ تولد'">
                                 </app-datepicker>
+                                <mat-hint *ngIf="!DateOfBirthCtrl.errors">تاریخ تولد خود را وارد کنید</mat-hint>
+                                @if (DateOfBirthCtrl.hasError('required')) {
+                                <mat-error>وارد کردن تاریخ تولد الزامیست</mat-error>
+                                }
                             </div>
 
                             <mat-form-field appearance="outline">
@@ -85,12 +125,17 @@
                                 <input class="input" matInput type="text" formControlName="userNameCtrl" />
                             </mat-form-field>
 
+                            <!-- جنسیت -->
                             <mat-form-field appearance="outline">
                                 <mat-label>جنسیت</mat-label>
                                 <mat-select formControlName="genderCtrl">
                                     <mat-option value="female">خانم</mat-option>
                                     <mat-option value="male">آقا</mat-option>
                                 </mat-select>
+                                <mat-hint>جنسیت را مشخض کنید</mat-hint>
+                                @if (GenderCtrl.invalid && (GenderCtrl.dirty || GenderCtrl.touched)) {
+                                <mat-error>وارد کردن جنسیت الزامی است</mat-error>
+                                }
                             </mat-form-field>
                         </div>
 
@@ -161,7 +206,7 @@
                                     label="Confirm Password" placeholder="****" matInput>
                                 <mat-hint>رمز جدید را مجدد وارد کنید</mat-hint>
                                 <mat-error *ngIf="ConfirmPasswordCtrl.hasError('required')">
-                                    برای تایید رمز، لطفاً رمز جدید را مجدد وارد کنید
+                                    برای تایید، لطفاً رمز جدید را مجدد وارد کنید
                                 </mat-error>
                                 <mat-error
                                     *ngIf="ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('minlength')">حداقل

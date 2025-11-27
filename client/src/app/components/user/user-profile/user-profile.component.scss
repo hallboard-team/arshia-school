@@ -293,6 +293,19 @@
                     align-items: center;
                     gap: 2rem;
 
+                    .span-phone {
+                        margin-left: 8px;
+                    }
+
+                    .datepicker-wrapper {
+                        // background-color: #00c4ad;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 1rem;
+                    }
+
                     mat-form-field {
                         border: none;
                         width: 80%;
@@ -334,7 +347,17 @@
                         padding: 5px;
                     }
 
-                    .button-edit-profile:active {
+                    .button-edit-profile[disabled],
+                    .button-edit-profile:disabled {
+                        background: #e0e0e0 !important;
+                        box-shadow: inset 5px 5px 10px #c3c3c3,
+                            inset -5px -5px 10px #fdfdfd !important;
+                        color: #999;
+                        cursor: not-allowed;
+                    }
+
+
+                    .button-edit-profile:not(:disabled):active {
                         background: #e0e0e0;
                         box-shadow: inset 5px 5px 10px #c3c3c3,
                             inset -5px -5px 10px #fdfdfd;
