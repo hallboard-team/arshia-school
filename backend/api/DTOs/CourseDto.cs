@@ -62,6 +62,8 @@ public class UpdateCourseDto
      MaxLength(30, ErrorMessage = "عنوان حداکثر ۳۰ کاراکتر است")]
     public string Title { get; init; } = string.Empty;
 
+    public string ClassName { get; init; } = string.Empty;
+
     [Required, Range(10_000, 100_000_000, ErrorMessage = "مبلغ باید بین ۱۰,۰۰۰ تومن و ۱۰۰,۰۰۰,۰۰۰ تومن باشد."),]
     public int Tuition { get; init; }
 
