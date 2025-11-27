@@ -114,7 +114,7 @@ export class MemberListComponent {
 
     this.memberParams.search = '';
     this.memberParams.courseTitle = '';
-    this.memberParams.courseTitle = '';
+    this.memberParams.className = '';
     this.memberParams.minAge = 11;
     this.memberParams.maxAge = 99;
     this.memberParams.pageNumber = 1;
