@@ -15,7 +15,7 @@ import { LoggedInUser } from '../../../models/logged-in-user.model';
 import { Course } from '../../../models/course.model';
 import { NavbarComponent } from '../../navbar/navbar.component';
 import { ApiResponse } from '../../../models/helpers/apiResponse.model';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AccountService } from '../../../services/account.service';
 import { MemberService } from '../../../services/member.service';
 import { CourseParams } from '../../../models/helpers/course-params';
@@ -54,6 +54,7 @@ export class UserProfileComponent implements OnInit {
   private readonly _courseService = inject(CourseService);
   private readonly _matSnackBar = inject(MatSnackBar);
   private readonly _fb = inject(FormBuilder);
+  private readonly _router = inject(Router);
 
   loggedInUserSig: Signal<LoggedInUser | null> | undefined;
 
@@ -369,6 +370,9 @@ export class UserProfileComponent implements OnInit {
           });
         }
       });
+
+    this._accountService.logout();
+    this._router.navigateByUrl('/account/login');
   }
 
   cancelPasswordEdit(): void {
