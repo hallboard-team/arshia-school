@@ -244,7 +244,8 @@
                             }
                             @if (shamsiCourses.length === 0) {
                             <div class="no-courses">
-                                <span>هیچ دوره‌ای ثبت‌نام نکرده‌اید.</span>
+                                <img src="../assets/images/no-course.png" alt="">
+                                <span>.هیچ دوره‌ای ثبت‌نام نکرده‌اید</span>
                             </div>
                             }
                         </div>
@@ -253,10 +254,12 @@
                         <div class="loading">در حال بارگذاری...</div>
                         }
 
+                        @if(shamsiCourses.length > 0){
                         <mat-paginator [length]="pagination?.totalItems || 0"
                             [pageSize]="pagination?.itemsPerPage || 10" [pageSizeOptions]="pageSizeOptions"
                             (page)="handlePageEvent($event)">
                         </mat-paginator>
+                        }
                     </div>
                 </ng-container>
                 }
