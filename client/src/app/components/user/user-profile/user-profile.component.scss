@@ -262,7 +262,6 @@
 
             .update-member-form {
                 width: 100%;
-                height: 100%;
                 border-radius: 10px;
                 background-color: #e0e0e0;
                 display: flex;
@@ -305,6 +304,8 @@
                         align-items: center;
                         justify-content: center;
                         gap: 1rem;
+
+                        width: 80%;
                     }
 
                     mat-form-field {
@@ -570,6 +571,10 @@
                         mat-form-field {
                             width: 40%;
                         }
+
+                        .datepicker-wrapper {
+                            width: 40%;
+                        }
                     }
 
                     .div-btn-exit-edit-page {
@@ -598,22 +603,20 @@
 
 @media (min-width: 1100px) {
     .container {
-        height: 83vh;
+        min-height: 83vh;
         width: 100%;
         display: flex;
         flex-direction: row;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start;
         margin-top: 6rem;
 
         .div-profile {
-            height: 100%;
             width: 30%;
             margin: 0;
 
             .profile-card {
                 margin: 0;
-                height: 97%;
                 width: 100%;
 
                 .profile-info {
@@ -627,13 +630,11 @@
 
         .div-tabs {
             width: 65%;
-            // height: 100%;
 
             .div-edit-profile {
 
                 .update-member-form {
                     width: 100%;
-                    height: 100%;
                     border-radius: 10px;
                     background-color: #e0e0e0;
 
@@ -656,7 +657,6 @@
                     }
 
                     .content {
-                        height: 100%;
                         width: 80%;
                         display: flex;
                         flex-direction: row;
@@ -665,6 +665,10 @@
 
                         mat-form-field {
                             border: none;
+                            width: 40%;
+                        }
+
+                        .datepicker-wrapper {
                             width: 40%;
                         }
                     }
@@ -696,20 +700,26 @@
 }
 
 ::ng-deep mat-form-field {
-    height: 40px !important;
+    height: 54px !important;
 
     .mat-mdc-text-field-wrapper {
+        height: 54px;
         padding: 0px !important;
     }
 
     .mat-mdc-form-field-infix {
         text-align: right;
         padding: 0px !important;
+
+        display: flex;
+        align-items: center;
+        height: 54px;
     }
 }
 
-::ng-deep .mat-mdc-select-trigger {
-    height: 54px;
-    display: flex;
-    align-items: center;
+::ng-deep .mat-mdc-tab-body-wrapper,
+::ng-deep .mat-mdc-tab-body,
+::ng-deep .mat-mdc-tab-body-content {
+    height: auto !important;
+    overflow: visible !important;
 }
