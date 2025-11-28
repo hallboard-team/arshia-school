@@ -22,7 +22,7 @@
                     </div>
                 </div>
 
-                <input #fileInput type="file" accept="image/*" hidden>
+                <input #fileInput type="file" accept="image/*" hidden (change)="onFileSelected($event)">
             </div>
 
             <div class="profile-info">

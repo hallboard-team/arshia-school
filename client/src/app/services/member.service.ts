@@ -17,14 +17,18 @@ import { AttendenceParams } from '../models/helpers/attendence-params';
 import { Attendence } from '../models/attendence.model';
 import { EnrolledCourse } from '../models/helpers/enrolled-course.model';
 import { TargetUserProfile } from '../models/target-user-profile.model';
+import { MemberPhoto } from '../models/member-photo.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MemberService {
   private _http = inject(HttpClient);
+
   private readonly _baseApiUrl = environment.apiUrl + 'member/';
   private readonly _apiUrl = environment.apiUrl + 'manager/';
+  private readonly _userApiUrl = environment.apiUrl + 'user/';
+
   private snackBar = inject(MatSnackBar);
   private paginationHandler = new PaginationHandler();
   router = inject(Router);
@@ -76,6 +80,17 @@ export class MemberService {
     });
 
     return this._http.get<EnrolledCourse>(this._baseApiUrl + 'get-enrolled-course/' + courseTitle, { headers });
+  }
+
+  uploadProfilePhoto(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    });
+
+    return this._http.post<MemberPhoto>(this._userApiUrl + 'add-photo', formData, { headers });
   }
 
   private getHttpParams(memberParams: MemberParams): HttpParams {

@@ -95,7 +95,8 @@ public static class Mappers
             LastName: appUser.LastName ?? string.Empty,
             PhoneNum: appUser.PhoneNum,
             Gender: appUser.Gender,
-            Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth)
+            Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth),
+            Photo: appUser.Photo
         );
     }
 
