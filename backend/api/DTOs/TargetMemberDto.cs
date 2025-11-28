@@ -10,5 +10,5 @@ public record TargetMemberDto(
     int Age,
     DateOnly DateOfBirth,
     List<EnrolledCourse> EnrolledCourses,
-    MemberPhoto MemberPhoto
+    MemberPhoto? MemberPhoto
 );

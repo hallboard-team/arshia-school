@@ -136,7 +136,9 @@ export class UserProfileComponent implements OnInit {
           let photoUrl: string | undefined =
             anyData.photoUrl ??
             anyData.photo?.url_256 ??
-            anyData.memberPhoto?.url_256;
+            anyData.memberPhoto?.url_256
+          anyData.photo?.url_165 ??
+            anyData.memberPhoto?.url_165;
 
           if (photoUrl) {
             photoUrl = photoUrl.startsWith('http')
