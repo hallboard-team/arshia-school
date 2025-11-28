@@ -180,7 +180,8 @@ public static class Mappers
 
     public static EnrolledCourse ConvertAddEnrolledCourseDtoToEnrolledCourse
         (AddEnrolledCourseDto managerInput, Course course,
-            int paymentPerMonthCalc, int tuitionReminderCalc
+            int paymentPerMonthCalc, int lastpaymentPerMonthCalc,
+            int tuitionReminderCalc
         )
     {
         return new EnrolledCourse(
@@ -195,6 +196,7 @@ public static class Mappers
             PaymentPerMonth: paymentPerMonthCalc,
             PaidAmount: managerInput.PaidAmount,
             TuitionRemainder: tuitionReminderCalc,
+            LastpaymentPerMonth: lastpaymentPerMonthCalc,
             Payments: []
         );
     }

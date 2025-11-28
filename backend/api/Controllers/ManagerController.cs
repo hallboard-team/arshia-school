@@ -138,7 +138,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         if (string.IsNullOrWhiteSpace(targetUserName))
             return BadRequest("Username is required.");
 
-        if (string.IsNullOrWhiteSpace(managerInput.TitleCourse))
+        if (string.IsNullOrWhiteSpace(managerInput.Title))
             return BadRequest("Course title is required.");
 
         var enrolledCourse = await _managerRepository.AddEnrolledCourseAsync(managerInput, targetUserName, cancellationToken);
