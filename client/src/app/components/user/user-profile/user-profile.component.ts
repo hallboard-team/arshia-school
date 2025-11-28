@@ -77,12 +77,12 @@ export class UserProfileComponent implements OnInit {
 
   profileFg: FormGroup = this._fb.group({
     emailCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
-    nameCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.maxLength(30)]],
-    lastNameCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.maxLength(30)]],
-    phoneNumCtrl: [{ value: '', disabled: true }, [Validators.maxLength(20)]],
+    nameCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    lastNameCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    phoneNumCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
     userNameCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.maxLength(30)]],
-    genderCtrl: [{ value: '', disabled: true }, Validators.required],
-    dateOfBirthCtrl: [{ value: null, disabled: true }, [Validators.required]]
+    genderCtrl: [{ value: '', disabled: true }, [Validators.required]],
+    dateOfBirthCtrl: [{ value: '', disabled: true }, [Validators.required]]
   });
 
   memberEditFg: FormGroup = this._fb.group({
@@ -153,13 +153,19 @@ export class UserProfileComponent implements OnInit {
             photoUrl
           } as UserProfile;
 
+          const rawGender = this.profile.gender?.toLowerCase();
+          const normalizedGender =
+            rawGender === 'male' || rawGender === 'female'
+              ? rawGender
+              : null;
+
           this.profileFg.patchValue({
             emailCtrl: this.profile.email,
             nameCtrl: this.profile.name,
             lastNameCtrl: this.profile.lastName,
             phoneNumCtrl: this.profile.phoneNum,
             userNameCtrl: this.profile.userName,
-            genderCtrl: this.profile.gender?.toLowerCase(),
+            genderCtrl: normalizedGender,
             dateOfBirthCtrl: dobMoment && dobMoment.isValid() ? dobMoment : null
           });
         }
@@ -248,7 +254,12 @@ export class UserProfileComponent implements OnInit {
   }
 
   saveProfileChanges(): void {
-    if (this.profileFg.invalid || !this.profile) return;
+    if (this.profileFg.invalid || !this.profile) {
+      this.profileFg.markAllAsTouched();
+      this.profileFg.updateValueAndValidity();
+      return;
+    }
+    // if (this.profileFg.invalid || !this.profile) return;
 
     const dobControlValue = this.DateOfBirthCtrl.value as Moment | Date | string | null;
     const dobGregorian = this.toGregorianDateOnly(dobControlValue);
@@ -323,13 +334,19 @@ export class UserProfileComponent implements OnInit {
         ? moment(this.profile.dateOfBirth)
         : null;
 
+      const rawGender = this.profile.gender?.toLowerCase();
+      const normalizedGender =
+        rawGender === 'male' || rawGender === 'female'
+          ? rawGender
+          : null;
+
       this.profileFg.patchValue({
         emailCtrl: this.profile.email,
         nameCtrl: this.profile.name,
         lastNameCtrl: this.profile.lastName,
         phoneNumCtrl: this.profile.phoneNum,
         userNameCtrl: this.profile.userName,
-        genderCtrl: this.profile.gender?.toLowerCase(),
+        genderCtrl: normalizedGender,
         dateOfBirthCtrl: dobMoment?.isValid() ? dobMoment : null
       });
     }
