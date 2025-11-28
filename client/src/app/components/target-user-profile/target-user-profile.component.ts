@@ -112,8 +112,6 @@ export class TargetUserProfileComponent implements OnInit {
     this.courseParams = new CourseParams();
     this.getAll();
     this.initializeUploader();
-
-    this.setupInstallmentFieldBehavior();
   }
 
   targetMemberEditFg: FormGroup = this._fb.group({
@@ -128,7 +126,6 @@ export class TargetUserProfileComponent implements OnInit {
     titleCourseCtrl: ['', Validators.required],
     numberOfPaymentsCtrl: ['', [Validators.required]],
     paidAmountCtrl: ['', [Validators.required]],
-    installmentAmountCtrl: [{ value: '', disabled: true }, [Validators.required]]
   });
 
   updateEnrolledCourseFg: FormGroup = this.fb.group({
@@ -162,9 +159,6 @@ export class TargetUserProfileComponent implements OnInit {
   }
   get PaidAmountCtrl(): FormControl {
     return this.addEnrolledCourseFg.get('paidAmountCtrl') as FormControl;
-  }
-  get InstallmentAmountCtrl(): FormControl {
-    return this.addEnrolledCourseFg.get('installmentAmountCtrl') as FormControl;
   }
 
   //update enrolled-course
@@ -592,20 +586,5 @@ export class TargetUserProfileComponent implements OnInit {
         direction: 'rtl'
       }
     );
-  }
-
-  private setupInstallmentFieldBehavior(): void {
-    this.InstallmentAmountCtrl.disable();
-
-    this.NumberOfPaymentsCtrl.valueChanges.subscribe(value => {
-      const count = Number(value ?? 0);
-
-      if (!count || count === 0) {
-        this.InstallmentAmountCtrl.reset();
-        this.InstallmentAmountCtrl.disable();
-      } else {
-        this.InstallmentAmountCtrl.enable();
-      }
-    });
   }
 }
