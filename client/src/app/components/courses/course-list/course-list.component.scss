@@ -21,6 +21,10 @@
         margin-top: 8.5rem;
         margin-bottom: 1.5rem;
 
+        .bf-btns {
+            display: none;
+        }
+
         span {
             font-size: 35px;
             color: black;
@@ -127,6 +131,10 @@
     .courses-container {
         .div-title-course {
             margin-top: 8rem;
+
+            .bf-btns {
+                display: flex;
+            }
         }
     }
 }
