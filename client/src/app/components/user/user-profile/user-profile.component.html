@@ -39,7 +39,7 @@
                 <span class="gender-women-span">جنسیت: خانم</span>
                 }
             </div>
-        </div> 
+        </div>
     </div>
 
 
@@ -56,12 +56,6 @@
 
                         <div class="content">
                             <mat-form-field appearance="outline">
-                                <mat-label>ایمیل</mat-label>
-                                <input class="input" matInput type="email" formControlName="emailCtrl" dir="ltr" />
-                            </mat-form-field>
-
-                            <!-- نام -->
-                            <mat-form-field appearance="outline">
                                 <mat-label>نام</mat-label>
                                 <input class="input" matInput type="text" formControlName="nameCtrl" />
                                 <mat-hint>لطفا نام خود را وارد کنید</mat-hint>
@@ -76,7 +70,6 @@
                                 }
                             </mat-form-field>
 
-                            <!-- نام خانوادگی -->
                             <mat-form-field appearance="outline">
                                 <mat-label>نام خانوادگی</mat-label>
                                 <input class="input" matInput type="text" formControlName="lastNameCtrl" />
@@ -92,7 +85,6 @@
                                 }
                             </mat-form-field>
 
-                            <!-- شماره تلفن -->
                             <mat-form-field appearance="outline">
                                 <mat-label>شماره تلفن</mat-label>
                                 <span class="span-phone" matPrefix dir="ltr">+98&nbsp;</span>
@@ -107,7 +99,6 @@
                                 }
                             </mat-form-field>
 
-                            <!-- تاریخ -->
                             <div class="datepicker-wrapper" [class.disabled]="!profileEditMode">
                                 <app-datepicker [formControl]="DateOfBirthCtrl" [maxDate]="maxDob" [minDate]="minDob"
                                     [label]="'تاریخ تولد'">
@@ -118,12 +109,6 @@
                                 }
                             </div>
 
-                            <mat-form-field appearance="outline">
-                                <mat-label>نام کاربری</mat-label>
-                                <input class="input" matInput type="text" formControlName="userNameCtrl" />
-                            </mat-form-field>
-
-                            <!-- جنسیت -->
                             <mat-form-field appearance="outline">
                                 <mat-label>جنسیت</mat-label>
                                 <mat-select formControlName="genderCtrl">

@@ -1,5 +1,4 @@
 export interface MemberUpdate {
-    email: string;
     name: string;
     lastName: string;
     phoneNum: string;
