@@ -302,6 +302,10 @@
                     align-items: center;
                     gap: 2rem;
 
+                    .span-phone {
+                        padding-left: 4px;
+                    }
+
                     mat-form-field {
                         border: none;
                         width: 80%;
@@ -709,8 +713,9 @@
                         }
 
                         .date-field {
-                            width: 90%;
-                            margin-top: 0.5rem;
+                            width: 55% !important;
+                            display: flex;
+                            justify-content: center;
                         }
                     }
 
@@ -805,7 +810,14 @@
                         }
 
                         .date-field {
-                            width: 80%;
+                            width: 100% !important;
+                            display: flex;
+                            justify-content: center;
+
+                            app-datepicker {
+                                width: 25%;
+                                max-width: 420px;
+                            }
                         }
                     }
 
@@ -944,6 +956,18 @@
                 }
             }
         }
+    }
+}
+
+.div-tabs .div-edit-profile .update-member-form {
+    ::ng-deep .gender-field .mat-mdc-select-trigger {
+        padding: 4px !important;
+    }
+}
+
+.div-tabs .div-edit-profile .update-member-form .date-field {
+    ::ng-deep .mdc-text-field__input {
+        padding: 4px !important;
     }
 }
 
