@@ -25,6 +25,17 @@
                 <mat-error *ngIf="TitleCtrl.hasError('maxlength')">حداکثر ۳۰ کاراکتر</mat-error>
             </mat-form-field>
 
+            <!-- class name -->
+            <mat-form-field appearance="outline">
+                <mat-label>نام کلاس</mat-label>
+                <input class="input" autoFocusDir type="text" formControlName="classNameCtrl" matInput dir="auto"
+                    placeholder="بین ۲ تا ۳۰ کاراکتر باشد">
+                <mat-hint *ngIf="!showErr(ClassNameCtrl),">در صورت تغییر، اسم جدید دوره را وارد کنید</mat-hint>
+                <mat-error *ngIf="ClassNameCtrl.hasError('required')">لطفاً نام دوره را وارد کنید</mat-error>
+                <mat-error *ngIf="ClassNameCtrl.hasError('minlength')">حداقل ۲ کاراکتر</mat-error>
+                <mat-error *ngIf="ClassNameCtrl.hasError('maxlength')">حداکثر ۳۰ کاراکتر</mat-error>
+            </mat-form-field>
+
             <!-- tuition -->
             <mat-form-field appearance="outline" class="tuition-field">
                 <mat-label>شهریه</mat-label>
