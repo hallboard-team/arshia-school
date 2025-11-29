@@ -155,11 +155,17 @@ export class UserProfileComponent implements OnInit {
               ? rawGender
               : null;
 
+          const rawPhone = this.profile.phoneNum ?? '';
+          const phoneForInput =
+            rawPhone.startsWith('98') && rawPhone.length === 12
+              ? rawPhone.substring(2)
+              : rawPhone;
+
           this.profileFg.patchValue({
             emailCtrl: this.profile.email,
             nameCtrl: this.profile.name,
             lastNameCtrl: this.profile.lastName,
-            phoneNumCtrl: this.profile.phoneNum,
+            phoneNumCtrl: phoneForInput,
             userNameCtrl: this.profile.userName,
             genderCtrl: normalizedGender,
             dateOfBirthCtrl: dobMoment && dobMoment.isValid() ? dobMoment : null
@@ -266,10 +272,16 @@ export class UserProfileComponent implements OnInit {
       return;
     }
 
+    const phoneInput = this.PhoneNumCtrl.value as string;
+    const normalizedPhone =
+      phoneInput && phoneInput.length === 10
+        ? '98' + phoneInput
+        : phoneInput;
+
     const updatedMember: MemberUpdate = {
       name: this.NameCtrl.value,
       lastName: this.LastNameCtrl.value,
-      phoneNum: this.PhoneNumCtrl.value,
+      phoneNum: normalizedPhone,
       gender: this.GenderCtrl.value,
       dateOfBirth: dobGregorian
     };
@@ -290,7 +302,7 @@ export class UserProfileComponent implements OnInit {
             ...(this.profile as UserProfile),
             name: updatedMember.name,
             lastName: updatedMember.lastName,
-            phoneNum: updatedMember.phoneNum,
+            phoneNum: normalizedPhone,
             gender: updatedMember.gender,
             age: newAge,
             dateOfBirth: dobGregorian
@@ -331,10 +343,16 @@ export class UserProfileComponent implements OnInit {
           ? rawGender
           : null;
 
+      const rawPhone = this.profile.phoneNum ?? '';
+      const phoneForInput =
+        rawPhone.startsWith('98') && rawPhone.length === 12
+          ? rawPhone.substring(2)
+          : rawPhone;
+
       this.profileFg.patchValue({
         nameCtrl: this.profile.name,
         lastNameCtrl: this.profile.lastName,
-        phoneNumCtrl: this.profile.phoneNum,
+        phoneNumCtrl: phoneForInput,
         genderCtrl: normalizedGender,
         dateOfBirthCtrl: dobMoment?.isValid() ? dobMoment : null
       });
