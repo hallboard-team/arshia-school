@@ -91,7 +91,7 @@
 
                             <mat-form-field appearance="outline">
                                 <mat-label>شماره تلفن</mat-label>
-                                <span matPrefix dir="ltr">+98&nbsp;</span>
+                                <span class="span-phone" matPrefix dir="ltr">+98&nbsp;</span>
                                 <input class="input" type="tel" maxlength="10" matInput
                                     formControlName="targetPhoneNumCtrl" dir="ltr" />
                                 @if (TargetPhoneNumCtrl.hasError('required')) {
@@ -102,7 +102,7 @@
                                 }
                             </mat-form-field>
 
-                            <mat-form-field appearance="outline">
+                            <mat-form-field appearance="outline" class="gender-field">
                                 <mat-label>جنسیت</mat-label>
                                 <mat-select formControlName="targetGenderCtrl">
                                     <mat-option value="male">آقا</mat-option>
