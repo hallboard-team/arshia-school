@@ -7,7 +7,8 @@ public record AddEnrolledCourseDto(
     [Range(1, 99)]
     int NumberOfPayments, //4
 
-    [Range(10000, int.MaxValue, ErrorMessage = "The minimum payment amount must not be less than 10,000 Tomans.")]
+    [Range(1, int.MaxValue,
+        ErrorMessage = "The minimum prepayment amount must be at least 1 and cannot be negative.")]
     int PaidAmount //2_000_000
 );
 
@@ -28,8 +29,8 @@ public class UpdateEnrolledDto
     [Required(ErrorMessage = "Course title is required.")]
     public string TitleCourse { get; init; } = string.Empty;
 
-    // [Range(500000, int.MaxValue, ErrorMessage = "Paid amount must be greater than zero.")]
-    [Range(10000, int.MaxValue, ErrorMessage = "The minimum payment amount must not be less than 10,000 Tomans.")]
+    [Range(1, int.MaxValue,
+        ErrorMessage = "The minimum prepayment amount must be at least 1 and cannot be negative.")]
     public int PaidAmount { get; init; }
 
     [Required]
