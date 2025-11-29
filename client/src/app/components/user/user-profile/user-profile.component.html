@@ -50,10 +50,6 @@
                 <div class="div-edit-profile">
                     <form class="update-member-form" [formGroup]="profileFg" (ngSubmit)="saveProfileChanges()">
 
-                        <div class="div-title">
-                            <span class="title">اصلاح اطلاعات کاربر</span>
-                        </div>
-
                         <div class="content">
                             <mat-form-field appearance="outline">
                                 <mat-label>نام</mat-label>
@@ -147,10 +143,6 @@
                 <div class="div-edit-profile password-tab">
                     <form class="update-member-form password-form" [formGroup]="memberEditFg"
                         (ngSubmit)="memberEditFg.valid && updateMember()">
-
-                        <div class="div-title">
-                            <span class="title">اصلاح رمز ورود</span>
-                        </div>
 
                         <div class="content">
                             <mat-form-field appearance="outline">
