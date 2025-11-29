@@ -61,6 +61,7 @@ export class CourseEditComponent implements OnInit {
 
   courseFg: FormGroup = this._fb.group({
     titleCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+    classNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
     tuitionCtrl: ['', [Validators.required, Validators.min(10_000), Validators.max(100_000_000),]],
     hoursCtrl: ['', [Validators.required, Validators.pattern(/^(0(\.\d+)?|[1-9]\d*(\.\d+)?)$/), Validators.min(0.5), Validators.max(20000)]],
     hoursPerClassCtrl: ['', [Validators.required, Validators.min(0.5), Validators.max(10),
@@ -71,6 +72,7 @@ export class CourseEditComponent implements OnInit {
   });
 
   get TitleCtrl(): FormControl { return this.courseFg.get('titleCtrl') as FormControl; }
+  get ClassNameCtrl(): FormControl { return this.courseFg.get('classNameCtrl') as FormControl; }
   get TuitionCtrl(): FormControl { return this.courseFg.get('tuitionCtrl') as FormControl; }
   get HoursCtrl(): FormControl { return this.courseFg.get('hoursCtrl') as FormControl; }
   get HoursPerClassCtrl(): FormControl { return this.courseFg.get('hoursPerClassCtrl') as FormControl; }
@@ -124,6 +126,7 @@ export class CourseEditComponent implements OnInit {
 
   initControllersValues(course: Course) {
     this.TitleCtrl.setValue(course.title);
+    this.ClassNameCtrl.setValue(course.className);
 
     setTimeout(() => {
       this.TuitionCtrl.setValue(course.tuition);
@@ -156,6 +159,7 @@ export class CourseEditComponent implements OnInit {
 
       const updatedCourse: CourseUpdate = {
         title: this.TitleCtrl.value,
+        className: this.ClassNameCtrl.value,
         tuition: this.TuitionCtrl.value,
         hours: this.HoursCtrl.value,
         hoursPerClass: this.HoursPerClassCtrl.value,

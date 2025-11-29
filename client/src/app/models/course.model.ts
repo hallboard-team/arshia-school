@@ -1,5 +1,6 @@
 export interface Course {
     title: string,
+    className: string,
     professorUserNames: string[],
     professorNames: string[],
     tuition: number,
@@ -14,6 +15,7 @@ export interface Course {
 
 export interface ShowCourse {
     title: string,
+    className: string,
     professorNames: string[],
     tuition: number,
     hours: number,
@@ -25,6 +27,7 @@ export interface ShowCourse {
 
 export interface CourseUpdate {
     title: string,
+    className: string,
     tuition: number,
     hours: number,
     hoursPerClass: number,
@@ -34,6 +37,7 @@ export interface CourseUpdate {
 
 export interface AddCourse {
     title: string,
+    className: string,
     tuition: number,
     hours: number,
     hoursPerClass: number,
