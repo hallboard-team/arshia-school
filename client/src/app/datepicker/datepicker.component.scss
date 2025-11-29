@@ -1,0 +1,15 @@
+:host {
+    width: 100%;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+input[matInput] {
+    height: 54px;
+    padding: 10px;
+    background: #e0e0e0;
+    box-shadow: inset 5px 5px 10px #cecece,
+        inset -5px -5px 10px #f2f2f2;
+}
