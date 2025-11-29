@@ -621,6 +621,7 @@
                             justify-content: center;
                             align-items: center;
 
+
                             .radio-group {
                                 display: flex;
                                 justify-content: center;
@@ -628,14 +629,20 @@
                                 align-items: center;
                                 gap: 1rem;
 
+                                * {
+                                    cursor: pointer;
+                                }
+
                                 .radio-button {
+                                    width: 120px;
+                                    height: 120px;
                                     padding: 10px;
                                     display: flex;
                                     justify-content: center;
                                     align-items: center;
                                     border-radius: 10px;
                                     background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                                    box-shadow: 5px 5px 10px #a4a4a4, -5px -5px 10px #ffffff;
+                                    box-shadow: 5px 5px 10px #a4a4a4, -5px -5px 10px #ffffff;                                
 
                                     .div-radio-items {
                                         display: flex;
