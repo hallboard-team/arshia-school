@@ -76,11 +76,9 @@ export class UserProfileComponent implements OnInit {
   maxDob: Moment = moment().subtract(5, 'jYear').endOf('day');
 
   profileFg: FormGroup = this._fb.group({
-    emailCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
     nameCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
     lastNameCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
     phoneNumCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
-    userNameCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.maxLength(30)]],
     genderCtrl: [{ value: '', disabled: true }, [Validators.required]],
     dateOfBirthCtrl: [{ value: '', disabled: true }, [Validators.required]]
   });
@@ -92,11 +90,9 @@ export class UserProfileComponent implements OnInit {
   });
 
   // Getters: profile tab
-  get EmailCtrl(): FormControl { return this.profileFg.get('emailCtrl') as FormControl; }
   get NameCtrl(): FormControl { return this.profileFg.get('nameCtrl') as FormControl; }
   get LastNameCtrl(): FormControl { return this.profileFg.get('lastNameCtrl') as FormControl; }
   get PhoneNumCtrl(): FormControl { return this.profileFg.get('phoneNumCtrl') as FormControl; }
-  get UserNameCtrl(): FormControl { return this.profileFg.get('userNameCtrl') as FormControl; }
   get GenderCtrl(): FormControl { return this.profileFg.get('genderCtrl') as FormControl; }
   get DateOfBirthCtrl(): FormControl { return this.profileFg.get('dateOfBirthCtrl') as FormControl; }
 
@@ -248,9 +244,6 @@ export class UserProfileComponent implements OnInit {
     this.profileEditMode = true;
 
     this.profileFg.enable();
-
-    this.EmailCtrl.disable();
-    this.UserNameCtrl.disable();
   }
 
   saveProfileChanges(): void {
@@ -274,7 +267,6 @@ export class UserProfileComponent implements OnInit {
     }
 
     const updatedMember: MemberUpdate = {
-      email: this.EmailCtrl.value,
       name: this.NameCtrl.value,
       lastName: this.LastNameCtrl.value,
       phoneNum: this.PhoneNumCtrl.value,
@@ -296,7 +288,6 @@ export class UserProfileComponent implements OnInit {
 
           this.profile = {
             ...(this.profile as UserProfile),
-            email: updatedMember.email,
             name: updatedMember.name,
             lastName: updatedMember.lastName,
             phoneNum: updatedMember.phoneNum,
@@ -341,18 +332,13 @@ export class UserProfileComponent implements OnInit {
           : null;
 
       this.profileFg.patchValue({
-        emailCtrl: this.profile.email,
         nameCtrl: this.profile.name,
         lastNameCtrl: this.profile.lastName,
         phoneNumCtrl: this.profile.phoneNum,
-        userNameCtrl: this.profile.userName,
         genderCtrl: normalizedGender,
         dateOfBirthCtrl: dobMoment?.isValid() ? dobMoment : null
       });
     }
-
-    this.EmailCtrl.disable();
-    this.UserNameCtrl.disable();
   }
 
   // ───── Password edit
