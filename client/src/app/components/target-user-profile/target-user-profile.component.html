@@ -13,7 +13,8 @@
         <div class="profile-card">
 
             <div class="profile-image">
-                <div ng2FileDrop [uploader]="uploader" (fileOver)="fileOverBase($event)" class="avatar-wrapper" (click)="fileInput.click()">
+                <div ng2FileDrop [uploader]="uploader" (fileOver)="fileOverBase($event)" class="avatar-wrapper"
+                    (click)="fileInput.click()">
                     <img [src]="getProfilePhoto()" alt="Profile" />
 
                     <div class="avatar-hover-overlay">
@@ -301,16 +302,6 @@
                                     placeholder="مثلاً 3" />
                                 <mat-hint>اگر ۰ وارد کنید، پرداخت قسطی نخواهد بود</mat-hint>
                                 @if (NumberOfPaymentsCtrl.hasError('required')) {
-                                <mat-error>!این فیلد خالی است</mat-error>
-                                }
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline">
-                                <mat-label>مبلغ هر قسط</mat-label>
-                                <input type="text" matInput formControlName="installmentAmountCtrl"
-                                    placeholder="مثلاً 500,000" appCurrencyFormatter />
-                                <mat-hint>در صورت قسط‌بندی، مبلغ هر قسط را وارد کنید</mat-hint>
-                                @if (InstallmentAmountCtrl.hasError('required') && InstallmentAmountCtrl.enabled) {
                                 <mat-error>!این فیلد خالی است</mat-error>
                                 }
                             </mat-form-field>
