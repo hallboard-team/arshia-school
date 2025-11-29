@@ -384,6 +384,7 @@
             justify-content: center;
             align-items: center;
             margin-top: 1rem;
+            height: auto !important;
 
             .title {
                 display: flex;
@@ -515,14 +516,22 @@
 
                 .no-courses {
                     width: 100%;
+                    flex-direction: column;
                     display: flex;
                     justify-content: center;
                     align-items: center;
 
+                    img {
+                        width: 300px;
+                        height: auto;
+                        margin-top: 1.5rem;
+                    }
+
                     span {
-                        font-size: 16px;
-                        color: red;
+                        font-size: 25px;
+                        color: #71829e;
                         font-weight: bold;
+                        margin-top: 1.5rem;
                     }
                 }
             }
