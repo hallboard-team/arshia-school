@@ -2,7 +2,10 @@ namespace api.DTOs;
 
 public record AddEnrolledCourseDto(
     [Required(ErrorMessage = "Course title is required.")]
-    string TitleCourse,
+    string Title,
+
+    [Required(ErrorMessage = "Course title is required.")]
+    string className,
 
     [Range(1, 99)]
     int NumberOfPayments, //4
@@ -20,6 +23,7 @@ public class ShowEnrolledCourseDto
     public int NumberOfPaymentsLeft { get; init; }
     public int PaymentPerMonth { get; init; }
     public int PaiedAmount { get; init; }
+    public int LastILastpaymentPerMonth { get; init; }  
     public int TuitionRemainder { get; init; }
 };
 
