@@ -117,14 +117,14 @@ export class TargetUserProfileComponent implements OnInit {
   targetMemberEditFg: FormGroup = this._fb.group({
     targetNameCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
     targetLastNameCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    targetDateOfBirthCtrl: [{ value: null, disabled: true }, [Validators.required]],
+    targetDateOfBirthCtrl: [{ value: '', disabled: true }, [Validators.required]],
     targetPhoneNumCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
     targetGenderCtrl: [{ value: '', disabled: true }, [Validators.required]]
   });
 
   addEnrolledCourseFg: FormGroup = this.fb.group({
     titleCourseCtrl: ['', Validators.required],
-    numberOfPaymentsCtrl: ['', [Validators.required]],
+    numberOfPaymentsCtrl: ['', [Validators.required, Validators.min(0)]],
     paidAmountCtrl: ['', [Validators.required]],
   });
 
