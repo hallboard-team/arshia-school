@@ -5,7 +5,7 @@ public record AddEnrolledCourseDto(
     string Title,
 
     [Required(ErrorMessage = "Course title is required.")]
-    string className,
+    string ClassName,
 
     [Range(1, 99)]
     int NumberOfPayments, //4
@@ -19,11 +19,11 @@ public class ShowEnrolledCourseDto
     public ObjectId CourseId { get; init; }
     public int CourseTuition { get; init; }
     public int NumberOfPayments { get; init; }
-    public int PaiedNumber { get; init; }
+    public int PaidNumber { get; init; }
     public int NumberOfPaymentsLeft { get; init; }
     public int PaymentPerMonth { get; init; }
-    public int PaiedAmount { get; init; }
-    public int LastILastpaymentPerMonth { get; init; }  
+    public int PaidAmount { get; init; }
+    public int  LastPaymentPerMonth { get; init; }  
     public int TuitionRemainder { get; init; }
 };
 
