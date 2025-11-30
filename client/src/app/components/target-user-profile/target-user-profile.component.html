@@ -62,31 +62,29 @@
                         <div class="content">
                             <mat-form-field appearance="outline">
                                 <mat-label>نام</mat-label>
-                                <input class="input" type="text" matInput formControlName="targetNameCtrl"
-                                    placeholder="نام مورد نظر خود را وارد کنید" />
+                                <input class="input" type="text" matInput formControlName="targetNameCtrl" />
                                 @if (TargetNameCtrl.hasError('required')) {
-                                <mat-error>فرم رو پرکنید</mat-error>
+                                <mat-error>وارد کردن نام الزامیست</mat-error>
                                 }
                                 @else if (TargetNameCtrl.hasError('minlength')) {
-                                <mat-error>حداقل ۲ حرف مجاز است</mat-error>
+                                <mat-error>حداقل ۲ حرف</mat-error>
                                 }
                                 @else if (TargetNameCtrl.hasError('maxlength')) {
-                                <mat-error>حداکثر ۳۰ حرف مجاز است</mat-error>
+                                <mat-error>حداکثر ۳۰ حرف</mat-error>
                                 }
                             </mat-form-field>
 
                             <mat-form-field appearance="outline">
                                 <mat-label>نام خانوادگی</mat-label>
-                                <input class="input" type="text" matInput formControlName="targetLastNameCtrl"
-                                    placeholder="نام خانوادگی مورد نظر خود را وارد کنید" />
+                                <input class="input" type="text" matInput formControlName="targetLastNameCtrl" />
                                 @if (TargetLastNameCtrl.hasError('required')) {
-                                <mat-error>فرم رو پرکنید</mat-error>
+                                <mat-error>وارد کردن نام خانوادگی الزامیست</mat-error>
                                 }
                                 @else if (TargetLastNameCtrl.hasError('minlength')) {
-                                <mat-error>حداقل ۲ حرف مجاز است</mat-error>
+                                <mat-error>حداقل ۲ حرف</mat-error>
                                 }
                                 @else if (TargetLastNameCtrl.hasError('maxlength')) {
-                                <mat-error>حداکثر ۳۰ حرف مجاز است</mat-error>
+                                <mat-error>حداکثر ۳۰ حرف</mat-error>
                                 }
                             </mat-form-field>
 
@@ -96,10 +94,10 @@
                                 <input class="input" type="tel" maxlength="10" matInput
                                     formControlName="targetPhoneNumCtrl" dir="ltr" />
                                 @if (TargetPhoneNumCtrl.hasError('required')) {
-                                <mat-error>فرم رو پرکنید</mat-error>
+                                <mat-error>وارد کردن شماره تلفن الزامیست</mat-error>
                                 }
                                 @else if (TargetPhoneNumCtrl.hasError('pattern')) {
-                                <mat-error>فرمت شماره موبایل معتبر نیست</mat-error>
+                                <mat-error>شماره تلفن ده رقم و بدون صفر</mat-error>
                                 }
                             </mat-form-field>
 
@@ -119,6 +117,10 @@
                                 <app-datepicker [formControl]="TargetDateOfBirthCtrl" [maxDate]="max" [minDate]="min"
                                     [label]="'تاریخ تولد'">
                                 </app-datepicker>
+                                <mat-error
+                                    *ngIf="TargetDateOfBirthCtrl.hasError('required') && TargetDateOfBirthCtrl.touched">
+                                    وارد کردن تاریخ تولد الزامیست
+                                </mat-error>
                             </div>
                         </div>
 
@@ -284,8 +286,9 @@
                                         {{ course.title }}
                                     </mat-option>
                                 </mat-select>
+                                <mat-hint>یک دوره انتخاب کنید</mat-hint>
                                 <mat-error *ngIf="TitleCourseCtrl.hasError('required')">
-                                    !این فیلد خالی است
+                                    انتخاب دوره الزامیست
                                 </mat-error>
                             </mat-form-field>
 
@@ -293,9 +296,16 @@
                                 <mat-label>پیش پرداخت</mat-label>
                                 <input type="text" matInput formControlName="paidAmountCtrl"
                                     placeholder="مثلاً 1,000,000" appCurrencyFormatter />
-                                <mat-hint>مبلغی که در ابتدا از شهریه پرداخت می‌شود</mat-hint>
+                                <span matSuffix class="suffix-text" *ngIf="PaidAmountCtrl.value">تومان</span>
+                                <mat-hint>مبلغی از شهریه که در ابتدا پرداخت می‌شود</mat-hint>
                                 @if (PaidAmountCtrl.hasError('required')) {
-                                <mat-error>!این فیلد خالی است</mat-error>
+                                <mat-error>وارد کردن مبلغ پیش پرداخت الزامیست</mat-error>
+                                }
+                                @else if (PaidAmountCtrl.hasError('min')) {
+                                <mat-error>مبلغ پیش پرداخت نباید کمتر از ۰ باشد</mat-error>
+                                }
+                                @else if (PaidAmountCtrl.hasError('max')) {
+                                <mat-error> حداکثر پیش پرداخت ۱۰۰.۰۰۰.۰۰۰ تومان (صد میلیون تومان) است</mat-error>
                                 }
                             </mat-form-field>
 
@@ -305,7 +315,13 @@
                                     placeholder="مثلاً 3" />
                                 <mat-hint>اگر ۰ وارد کنید، پرداخت قسطی نخواهد بود</mat-hint>
                                 @if (NumberOfPaymentsCtrl.hasError('required')) {
-                                <mat-error>!این فیلد خالی است</mat-error>
+                                <mat-error>وارد کردن تعداد اقساط الزامیست</mat-error>
+                                }
+                                @else if (NumberOfPaymentsCtrl.hasError('min')) {
+                                <mat-error>تعداد اقساط نباید عدد منفی باشد</mat-error>
+                                }
+                                @else if (NumberOfPaymentsCtrl.hasError('max')) {
+                                <mat-error>حداکثر ۹۹ قسط</mat-error>
                                 }
                             </mat-form-field>
 
@@ -338,16 +354,25 @@
                                         {{ title }}
                                     </mat-option>
                                 </mat-select>
-                                <mat-error *ngIf="TitleCourseUpdateCtrl.hasError('required')">!این فیلد خالی
-                                    است</mat-error>
+                                <mat-hint>یک دوره انتخاب کنید</mat-hint>
+                                <mat-error *ngIf="TitleCourseUpdateCtrl.hasError('required')">انتخاب دوره
+                                    الزامیست</mat-error>
                             </mat-form-field>
 
                             <mat-form-field appearance="outline">
                                 <mat-label>مبلغ پرداختی</mat-label>
-                                <input type="text" formControlName="paidAmountUpdateCtrl" matInput appCurrencyFormatter>
-                                <span matSuffix class="suffix-text">تومان</span>
+                                <input type="text" formControlName="paidAmountUpdateCtrl" matInput appCurrencyFormatter
+                                    placeholder="مثلا 1,000,000" />
+                                <span matSuffix class="suffix-text" *ngIf="PaidAmountUpdateCtrl.value">تومان</span>
+                                <mat-hint>مبلغ پرداختی شهریه را وارد کنید</mat-hint>
                                 @if (PaidAmountUpdateCtrl.hasError('required')) {
-                                <mat-error>!این فیلد خالی است</mat-error>
+                                <mat-error>وارد کردن مبلغ پرداختی شهریه الزامیست</mat-error>
+                                }
+                                @else if (PaidAmountUpdateCtrl.hasError('min')) {
+                                <mat-error>حداقل شهریه ۱۰.۰۰۰ تومان است</mat-error>
+                                }
+                                @else if (PaidAmountUpdateCtrl.hasError('max')) {
+                                <mat-error>حداکثر شهریه ۱۰۰.۰۰۰.۰۰۰ تومان (صد میلیون تومان) است</mat-error>
                                 }
                             </mat-form-field>
 

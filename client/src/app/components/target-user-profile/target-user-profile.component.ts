@@ -104,7 +104,7 @@ export class TargetUserProfileComponent implements OnInit {
     const currentYear = new Date().getFullYear();
     this.minDate = new Date(currentYear - 99, 0, 1);
     this.maxDate = new Date(currentYear - 15, 0, 1);
-    this.loggedInUser = this._accounService.loggedInUserSig();    
+    this.loggedInUser = this._accounService.loggedInUserSig();
 
     this.getTargetUserProfile();
     this.getTargetUserCourse();
@@ -117,20 +117,20 @@ export class TargetUserProfileComponent implements OnInit {
   targetMemberEditFg: FormGroup = this._fb.group({
     targetNameCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
     targetLastNameCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    targetDateOfBirthCtrl: [{ value: null, disabled: true }, [Validators.required]],
+    targetDateOfBirthCtrl: [{ value: '', disabled: true }, [Validators.required]],
     targetPhoneNumCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
     targetGenderCtrl: [{ value: '', disabled: true }, [Validators.required]]
   });
 
   addEnrolledCourseFg: FormGroup = this.fb.group({
     titleCourseCtrl: ['', Validators.required],
-    numberOfPaymentsCtrl: ['', [Validators.required]],
-    paidAmountCtrl: ['', [Validators.required]],
+    numberOfPaymentsCtrl: ['', [Validators.required, Validators.min(0), Validators.max(99)]],
+    paidAmountCtrl: ['', [Validators.required, Validators.min(0), Validators.max(100_000_000),]],
   });
 
   updateEnrolledCourseFg: FormGroup = this.fb.group({
     titleCourseUpdateCtrl: ['', Validators.required],
-    paidAmountUpdateCtrl: ['', [Validators.required]],
+    paidAmountUpdateCtrl: ['', [Validators.required, Validators.min(10_000), Validators.max(100_000_000),]],
     methodCtrl: ['', [Validators.required]]
   })
 
@@ -223,7 +223,7 @@ export class TargetUserProfileComponent implements OnInit {
           if (errorObj && errorObj.message) {
             message = errorObj.message
           }
-        } catch {}
+        } catch { }
 
         this._snackBar.open(message, 'Close', {
           duration: 7000,
@@ -301,7 +301,7 @@ export class TargetUserProfileComponent implements OnInit {
 
   getProfilePhoto(): string {
     if (this.targetUserProfile?.memberPhoto && this.targetUserProfile.memberPhoto.url_165.trim() !== '') {
-      let profilePhoto = this.apiPhotoUrl + this.targetUserProfile.memberPhoto.url_165; 
+      let profilePhoto = this.apiPhotoUrl + this.targetUserProfile.memberPhoto.url_165;
       return profilePhoto;
     }
 
