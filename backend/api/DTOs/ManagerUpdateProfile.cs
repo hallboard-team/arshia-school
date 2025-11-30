@@ -14,6 +14,7 @@ public record ManagerUpdateProfile(
 
     [RegularExpression(@"^98\d{10}$", ErrorMessage = "شماره تلفن باید با 98 شروع شود و ۱۲ رقم باشد.")]
     string? PhoneNum,
-    
+
+    [Required(ErrorMessage = "لطفا جنسیت را مشخص کنید.")]
     string Gender
 );
