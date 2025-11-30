@@ -301,6 +301,12 @@
                                 @if (PaidAmountCtrl.hasError('required')) {
                                 <mat-error>وارد کردن مبلغ پیش پرداخت الزامیست</mat-error>
                                 }
+                                @else if (PaidAmountCtrl.hasError('min')) {
+                                <mat-error>مبلغ پیش پرداخت نباید کمتر از ۰ باشد</mat-error>
+                                }
+                                @else if (PaidAmountCtrl.hasError('max')) {
+                                <mat-error> حداکثر پیش پرداخت ۱۰۰.۰۰۰.۰۰۰ تومان (صد میلیون تومان) است</mat-error>
+                                }
                             </mat-form-field>
 
                             <mat-form-field appearance="outline">
@@ -313,6 +319,9 @@
                                 }
                                 @else if (NumberOfPaymentsCtrl.hasError('min')) {
                                 <mat-error>تعداد اقساط نباید عدد منفی باشد</mat-error>
+                                }
+                                @else if (NumberOfPaymentsCtrl.hasError('max')) {
+                                <mat-error>حداکثر ۹۹ قسط</mat-error>
                                 }
                             </mat-form-field>
 
@@ -358,6 +367,12 @@
                                 <mat-hint>مبلغ پرداختی شهریه را وارد کنید</mat-hint>
                                 @if (PaidAmountUpdateCtrl.hasError('required')) {
                                 <mat-error>وارد کردن مبلغ پرداختی شهریه الزامیست</mat-error>
+                                }
+                                @else if (PaidAmountUpdateCtrl.hasError('min')) {
+                                <mat-error>حداقل شهریه ۱۰.۰۰۰ تومان است</mat-error>
+                                }
+                                @else if (PaidAmountUpdateCtrl.hasError('max')) {
+                                <mat-error>حداکثر شهریه ۱۰۰.۰۰۰.۰۰۰ تومان (صد میلیون تومان) است</mat-error>
                                 }
                             </mat-form-field>
 
