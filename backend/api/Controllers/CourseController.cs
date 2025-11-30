@@ -48,6 +48,7 @@ public class CourseController(ICourseRepository _courseRepository) : BaseApiCont
             {
                 Id = course.Id.ToString(),
                 Title = course.Title,
+                ClassName = course.ClassName,
                 ProfessorUserNames = professorUserNames,
                 ProfessorNames = professorNames,
                 Tuition = course.Tuition,
@@ -102,5 +103,18 @@ public class CourseController(ICourseRepository _courseRepository) : BaseApiCont
         ShowCourseDto? course = await _courseRepository.GetCourseByTitleAsync(courseTitle, cancellationToken);
 
         return course is not null ? Ok(course) : NotFound("Course not found");
+    }
+
+    [HttpGet("get-all-class-course")]
+    public async Task<ActionResult<List<ShowClassAndTitleDto>>> GetAllClassAndCourse(CancellationToken cancellationToken)
+    {
+        List<ShowClassAndTitleDto> showClassAndTitleDtos = await _courseRepository.GetClassesAndTitles(cancellationToken);
+
+        if (showClassAndTitleDtos.Count == 0)
+        {
+            return NoContent();
+        }
+
+        return showClassAndTitleDtos;
     }
 }

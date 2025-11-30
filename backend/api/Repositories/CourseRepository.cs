@@ -77,6 +77,7 @@ public class CourseRepository : ICourseRepository
 
         UpdateDefinition<Course> updatedCourse = Builders<Course>.Update
             .Set(c => c.Title, updateCourseDto.Title?.ToUpper())
+            .Set(c => c.ClassName, updateCourseDto.ClassName?.ToUpper())
             .Set(c => c.Tuition, updateCourseDto.Tuition)
             .Set(c => c.TotalMinutes, totalMinutes)
             .Set(c => c.ClassMinutes, classMinutes)
@@ -164,6 +165,7 @@ public class CourseRepository : ICourseRepository
         return new ShowCourseDto
         {
             Title = course.Title,
+            ClassName = course.ClassName,
             Tuition = course.Tuition,
             Hours = course.TotalMinutes / 60d,
             HoursPerClass = course.ClassMinutes / 60d,
@@ -171,5 +173,24 @@ public class CourseRepository : ICourseRepository
             IsStarted = course.IsStarted,
             ProfessorUserNames = safeUserNames
         };
+    }
+
+    public async Task<List<ShowClassAndTitleDto>> GetClassesAndTitles(CancellationToken cancellationToken)
+    {
+        IEnumerable<Course> courses = await _collectionCourse.Find(new BsonDocument()).ToListAsync();
+
+        List<ShowClassAndTitleDto> classesAndCourses = [];
+
+        foreach (Course course in courses)
+        {
+            ShowClassAndTitleDto classAndCourse = new(
+                Title: course.Title,
+                ClassName: course.ClassName
+            );
+
+            classesAndCourses.Add(classAndCourse);
+        }
+
+        return classesAndCourses;
     }
 }

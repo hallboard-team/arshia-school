@@ -70,7 +70,8 @@ public static class Mappers
             Gender: appUser.Gender,
             Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth),
             DateOfBirth: appUser.DateOfBirth,
-            EnrolledCourses: appUser.EnrolledCourses
+            EnrolledCourses: appUser.EnrolledCourses,
+            MemberPhoto: appUser.Photo
         );
     }
 
@@ -94,7 +95,8 @@ public static class Mappers
             LastName: appUser.LastName ?? string.Empty,
             PhoneNum: appUser.PhoneNum,
             Gender: appUser.Gender,
-            Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth)
+            Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth),
+            Photo: appUser.Photo
         );
     }
 
@@ -128,6 +130,7 @@ public static class Mappers
     {
         return new Course(
             Title: managerInput.Title.ToUpper(),
+            ClassName: managerInput.ClassName.ToUpper(),
             ProfessorsIds: [],
             // ProfessorsNames: [],
             Tuition: managerInput.Tuition,
@@ -145,6 +148,7 @@ public static class Mappers
         {
             Id = course.Id.ToString(),
             Title = course.Title,
+            ClassName = course.ClassName,
             Tuition = course.Tuition,
             // ProfessorNames = course.ProfessorsNames,
             Hours = course.TotalMinutes / 60d,
@@ -176,13 +180,15 @@ public static class Mappers
 
     public static EnrolledCourse ConvertAddEnrolledCourseDtoToEnrolledCourse
         (AddEnrolledCourseDto managerInput, Course course,
-            int paymentPerMonthCalc, int tuitionReminderCalc
+            int paymentPerMonthCalc, int lastpaymentPerMonthCalc,
+            int tuitionReminderCalc
         )
     {
         return new EnrolledCourse(
             // Id: Guid.NewGuid(),
             CourseId: course.Id,
             CourseTitle: course.Title.ToUpper(),
+            ClassName: course.ClassName.ToUpper(),
             CourseTuition: course.Tuition,
             NumberOfPayments: managerInput.NumberOfPayments,
             PaidNumber: 0,
@@ -190,6 +196,7 @@ public static class Mappers
             PaymentPerMonth: paymentPerMonthCalc,
             PaidAmount: managerInput.PaidAmount,
             TuitionRemainder: tuitionReminderCalc,
+            LastpaymentPerMonth: lastpaymentPerMonthCalc,
             Payments: []
         );
     }

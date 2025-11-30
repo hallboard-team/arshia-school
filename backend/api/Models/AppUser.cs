@@ -16,5 +16,5 @@ public class AppUser : MongoIdentityUser<ObjectId>
     public GenderType Gender { get; init; } = GenderType.Unknown;
     public List<EnrolledCourse> EnrolledCourses { get; init; } = [];
     public List<string> appRoles { get; init; } = [];
-    public MemberPhoto Photo = default!;
+    public MemberPhoto? Photo { get; set; } = null;
 }

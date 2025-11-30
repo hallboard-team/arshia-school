@@ -1,0 +1,53 @@
+<form [formGroup]="filterFg" class="form-filters">
+    <div class="filter">
+        <span class="title">جست و جو</span>
+    </div>
+
+    <div class="filter-fields">
+        <mat-form-field appearance="outline" class="my-form-field">
+            <mat-label>نام/نام خانوادگی</mat-label>
+            <input matInput class="input-search" formControlName="searchCtrl" type="text" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="my-form-field">
+            <mat-label>نام دوره</mat-label>
+            <mat-select formControlName="courseCtrl">
+                @for (course of titles; track $index) {
+                <mat-option [value]="course">
+                    {{ course }}
+                </mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="my-form-field">
+            <mat-label>نام کلاس</mat-label>
+            <mat-select formControlName="classCtrl">
+                @for (class of classes; track $index) {
+                <mat-option [value]="class">
+                    {{ class }}
+                </mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <div class="age">
+        <span>سن کاربر</span>
+        <div class="slider">
+            <mat-slider discrete [max]="maxAge" [min]="minAge">
+                <input formControlName="minAgeCtrl" matSliderStartThumb />
+                <input formControlName="maxAgeCtrl" matSliderEndThumb />
+            </mat-slider>
+        </div>
+    </div>
+
+    <div class="btns">
+        <button class="remove-filters" (click)="reset()" mat-stroked-button>
+            پاک کردن فیلتر ها
+        </button>
+        <button (click)="updateMemberParams();" color="primary" mat-flat-button>
+            جست و جو
+        </button>
+    </div>
+</form>

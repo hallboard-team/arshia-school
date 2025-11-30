@@ -7,5 +7,6 @@ public record ProfileDto(
     string LastName,
     string? PhoneNum,
     GenderType Gender,
-    int Age
+    int Age,
+    MemberPhoto? Photo
 );

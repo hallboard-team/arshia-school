@@ -15,5 +15,7 @@ public record MemberUpdateDto(
 
     [Optional]
     [BirthDateRange(MinYears = 11, MaxYears = 99)]
-    DateOnly DateOfBirth
+    DateOnly? DateOfBirth,
+
+    string Gender
 );

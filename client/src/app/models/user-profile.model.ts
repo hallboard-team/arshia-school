@@ -1,3 +1,5 @@
+import { Photo } from "./helpers/enrolled-course.model";
+
 export interface UserProfile {
     email: string;
     userName: string;
@@ -8,4 +10,5 @@ export interface UserProfile {
     dateOfBirth: string;
     gender: string;
     photoUrl: string;
+    memberPhoto: Photo;
 }

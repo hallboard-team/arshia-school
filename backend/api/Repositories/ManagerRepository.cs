@@ -280,18 +280,40 @@ public class ManagerRepository : IManagerRepository
       FirstOrDefaultAsync(cancellationToken);
     if (appUser is null) return null;
 
-    Course? course = await _collectionCourse.Find(doc => doc.Title == addEnrolledCourseDto.TitleCourse.ToUpper()).
+    Course? course = await _collectionCourse.Find(doc => doc.Title == addEnrolledCourseDto.Title.ToUpper()).
       FirstOrDefaultAsync(cancellationToken);
     if (course is null) return null;
 
     bool alreadyEnrolledAdded = appUser.EnrolledCourses.Any(doc => doc.CourseId == course.Id);
     if (alreadyEnrolledAdded) return null;
 
-    int tuitionReminderCalc = course.Tuition / 1 - addEnrolledCourseDto.PaidAmount;
-    int paymentPerMonthCalc = course.Tuition / addEnrolledCourseDto.NumberOfPayments;
+    int tuition = course.Tuition;                       // شهریه کل (int)
+    int paidAmount = addEnrolledCourseDto.PaidAmount;   // پیش‌پرداخت (int)
+
+    // مبلغ باقی‌مانده بعد از پیش‌پرداخت
+    int tuitionReminderCalc = tuition - paidAmount;
+    if (tuitionReminderCalc < 0)
+      tuitionReminderCalc = 0;
+
+    int paymentPerMonthCalc = 0;
+    int lastpaymentPerMonthCalc = 0;
+
+    if (tuitionReminderCalc > 0 && addEnrolledCourseDto.NumberOfPayments > 0)
+    {
+      int n = addEnrolledCourseDto.NumberOfPayments;
+
+      // مبلغ پایه هر قسط
+      paymentPerMonthCalc = tuitionReminderCalc / n;
+
+      // باقیمانده‌ی تقسیم که باید روی قسط آخر اعمال شود
+      int remainder = tuitionReminderCalc % n;
+
+      // قسط آخر = قسط پایه + باقیمانده
+      lastpaymentPerMonthCalc = paymentPerMonthCalc + remainder;
+    }
 
     EnrolledCourse enrolledCourse = ConvertAddEnrolledCourseDtoToEnrolledCourse(
-      addEnrolledCourseDto, course, paymentPerMonthCalc, tuitionReminderCalc
+      addEnrolledCourseDto, course, paymentPerMonthCalc, lastpaymentPerMonthCalc, tuitionReminderCalc
     );
 
     FilterDefinition<AppUser>? filter = Builders<AppUser>.Filter.Eq(u => u.Id, appUser.Id);
@@ -660,6 +682,22 @@ public class ManagerRepository : IManagerRepository
            u.EnrolledCourses.Any(c =>
                 (c.CourseTitle ?? string.Empty).ToUpper().Contains(s)
             ));
+    }
+
+    if (!string.IsNullOrWhiteSpace(memberParams.CourseTitle))
+    {
+      string s = memberParams.CourseTitle.ToUpper();
+
+      query = query.Where(u =>
+          u.EnrolledCourses.Any(c => c.CourseTitle.Contains(s)));
+    }
+
+    if (!string.IsNullOrWhiteSpace(memberParams.ClassName))
+    {
+      string s = memberParams.ClassName.ToUpper();
+
+      query = query.Where(u =>
+          u.EnrolledCourses.Any(c => c.ClassName.Contains(s)));
     }
 
     query = query.Where(u => u.NormalizedUserName != "ADMIN" && u.NormalizedUserName != "MANAGER");
