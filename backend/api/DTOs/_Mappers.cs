@@ -83,7 +83,8 @@ public static class Mappers
             Name: appUser.Name,
             LastName: appUser.LastName,
             PhoneNum: appUser.PhoneNum,
-            Gender: appUser.Gender
+            Gender: appUser.Gender,
+            Photo: appUser.Photo
         );
     }
 
