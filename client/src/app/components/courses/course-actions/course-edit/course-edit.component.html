@@ -105,10 +105,15 @@
 
             @for (teacher of teachers; track $index) {
             <div class="teacher-card">
+                @if (teacher.photo) {
+                <img class="profile" [src]="photoUrl + teacher.photo.url_165" alt="">
+                }
+                @else {
                 @if (teacher.gender == 'Male') {
-                <img class="profile" src="../assets/images/menProfilePhoto1.png" alt="">
+                <img class="profile" src="../assets/images/menProfilePhoto.png" alt="">
                 } @else {
                 <img class="profile" src="../assets/images/womenProfilePhoto.png" alt="">
+                }
                 }
                 <span>نام: <span class="information">{{teacher.name}}</span></span>
                 <span>نام خانوادگی: <span class="information">{{teacher.lastName}}</span></span>
