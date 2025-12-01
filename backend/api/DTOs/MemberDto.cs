@@ -7,5 +7,6 @@ public record MemberDto(
     GenderType Gender,
     int Age,
     DateOnly DateOfBirth,
-    bool IsAbsent
+    bool IsAbsent,
+    MemberPhoto? Photo
 );

@@ -55,7 +55,8 @@ public static class Mappers
             Gender: appUser.Gender,
             Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth),
             DateOfBirth: appUser.DateOfBirth,
-            IsAbsent: isAbsent
+            IsAbsent: isAbsent,
+            Photo: appUser.Photo
         );
     }
 
