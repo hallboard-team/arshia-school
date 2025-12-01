@@ -9,6 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { AccountService } from '../../../services/account.service';
 import { MemberService } from '../../../services/member.service';
+import { environment } from '../../../../environments/environment.development';
 
 @Component({
     selector: 'app-member-card',
@@ -22,6 +23,8 @@ import { MemberService } from '../../../services/member.service';
 export class MemberCardComponent {
   @Input('memberInput') memberIn: Member | undefined;
   loggedInUserSig: Signal<LoggedInUser | null> | undefined;
+
+  photoUrl = environment.apiPhotoUrl;
 
   private _memberService = inject(MemberService);
   private _snack = inject(MatSnackBar);

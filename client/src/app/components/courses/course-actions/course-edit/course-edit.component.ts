@@ -21,6 +21,8 @@ import moment, { Moment } from 'moment-jalaali';
 import { DatepickerComponent } from '../../../../datepicker/datepicker.component';
 import { DecimalFormatterDirective } from '../../../../directives/decimal-formatter.directive';
 import { BackForwardButtonComponent } from "../../../back-forward-button/back-forward-button.component";
+import { Photo } from '../../../../models/helpers/enrolled-course.model';
+import { environment } from '../../../../../environments/environment.development';
 
 @Component({
   selector: 'app-course-update',
@@ -47,6 +49,7 @@ export class CourseEditComponent implements OnInit {
 
   course: Course | undefined;
   teachers: Teacher[] = [];
+  photoUrl = environment.apiPhotoUrl;
 
   professorUserNames: string[] = [];
 

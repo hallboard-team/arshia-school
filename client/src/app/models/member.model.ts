@@ -1,3 +1,5 @@
+import { Photo } from "./helpers/enrolled-course.model";
+
 export interface Member {
     email: string;
     userName: string;
@@ -7,7 +9,7 @@ export interface Member {
     gender: string;
     age: number;
     isAbsent: boolean;
-    photo?: string | null;
+    photo: Photo;
 }
 
 export interface ShowMember {
