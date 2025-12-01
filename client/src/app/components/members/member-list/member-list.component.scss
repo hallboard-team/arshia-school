@@ -5,6 +5,7 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 2rem;
+    margin-top: 2rem;
 
     .no-result {
         font-size: 14px;
@@ -26,7 +27,7 @@
         max-width: 900px;
         display: flex;
         flex-direction: row-reverse;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
         gap: 1rem;
         padding: 0.5rem 1rem;
@@ -124,20 +125,6 @@
     }
 }
 
-@media (min-width: 768px) {
-    .members-container {
-        position: relative;
-
-        .glass-search-btn {
-            position: absolute;
-            left: 2rem;
-        }
-
-        .paginator {
-            width: 490px;
-        }
-    }
-}
 
 @media (min-width: 1100px) {
     .form-filters {
