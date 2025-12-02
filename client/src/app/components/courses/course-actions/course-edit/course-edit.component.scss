@@ -310,6 +310,43 @@
                     margin-bottom: 10px;
                 }
 
+                .info {
+                    width: 100%;
+                    padding: 0.5rem 0.75rem;
+                    margin-top: 0.25rem;
+
+                    border-radius: 8px;
+                    background: rgba(255, 255, 255, 0.55);
+                    box-shadow: inset 2px 2px 4px #d0d0d0,
+                        inset -2px -2px 4px #ffffff;
+
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.4rem;
+                    direction: rtl;
+                }
+
+                .field {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 2px;
+                }
+
+                .label {
+                    font-size: 13px;
+                    font-weight: 600;
+                    color: #333;
+                }
+
+                .value {
+                    font-size: 15px;
+                    font-weight: 400;
+                    color: #000;
+                    white-space: normal;
+                    word-wrap: break-word;
+                }
+
                 span {
                     direction: rtl;
                     font-size: 15px;
