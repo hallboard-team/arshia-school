@@ -147,8 +147,14 @@
                         <div class="content">
                             <mat-form-field appearance="outline">
                                 <mat-label>رمز قدیمی</mat-label>
-                                <input class="input" type="password" formControlName="currentPasswordCtrl"
-                                    placeholder="****" matInput>
+                                <input class="input" [type]="hideCurrentPassword ? 'password' : 'text'"
+                                    formControlName="currentPasswordCtrl" placeholder="****" matInput>
+
+                                <button mat-icon-button matSuffix tabindex="-1" type="button"
+                                    (click)="hideCurrentPassword = !hideCurrentPassword">
+                                    <mat-icon>{{ hideCurrentPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                                </button>
+
                                 <mat-hint>لطفا رمز فعلی خود را وارد کنید</mat-hint>
                                 <mat-error *ngIf="CurrentPasswordCtrl.hasError('required')">
                                     رمز فعلی را وارد نکرده اید
@@ -163,8 +169,14 @@
 
                             <mat-form-field appearance="outline">
                                 <mat-label>رمز جدید</mat-label>
-                                <input class="input" type="password" formControlName="passwordCtrl" placeholder="****"
-                                    matInput>
+                                <input class="input" [type]="hideNewPassword? 'password' : 'text'"
+                                    formControlName="passwordCtrl" placeholder="****" matInput>
+
+                                <button mat-icon-button matSuffix tabindex="-1" type="button"
+                                    (click)="hideNewPassword  = !hideNewPassword ">
+                                    <mat-icon>{{ hideNewPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                                </button>
+
                                 <mat-hint>لطفا رمز جدید را وارد کنید</mat-hint>
                                 <mat-error *ngIf="PasswordCtrl.hasError('required')">
                                     برای تغییر رمز، لطفاً رمز جدید را وارد کنید
@@ -177,8 +189,15 @@
 
                             <mat-form-field appearance="outline">
                                 <mat-label>تکرار رمز جدید</mat-label>
-                                <input class="input" type="password" formControlName="confirmPasswordCtrl"
-                                    label="Confirm Password" placeholder="****" matInput>
+                                <input class="input" [type]="hideConfirmPassword ? 'password' : 'text'"
+                                    formControlName="confirmPasswordCtrl" label="Confirm Password" placeholder="****"
+                                    matInput>
+
+                                <button mat-icon-button matSuffix tabindex="-1" type="button"
+                                    (click)="hideConfirmPassword = !hideConfirmPassword">
+                                    <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                                </button>
+
                                 <mat-hint>لطفا رمز جدید را مجدد وارد کنید</mat-hint>
                                 <mat-error *ngIf="ConfirmPasswordCtrl.hasError('required')">
                                     برای تایید، لطفاً رمز جدید را مجدد وارد کنید
