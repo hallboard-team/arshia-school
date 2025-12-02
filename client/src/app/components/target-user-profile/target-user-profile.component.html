@@ -32,12 +32,30 @@
             </div>
 
             <div class="profile-info">
-                <span class="description">نام: {{targetUserProfile?.name}}</span>
-                <span class="description">نام خانوادگی: {{targetUserProfile?.lastName}}</span>
-                <span class="description">نام کاربری: {{targetUserProfile?.userName}}</span>
-                <span class="description">ایمیل: {{targetUserProfile?.email}}</span>
-                <span class="description">شماره تلفن: {{targetUserProfile?.phoneNum}}</span>
-                <span class="description">سن: {{targetUserProfile?.age}}</span>
+                <div class="description-group">
+                    <span class="description">نام:</span>
+                    <span class="description">{{targetUserProfile?.name}}</span>
+                </div>
+
+                <div class="description-group">
+                    <span class="description">نام خانوادگی:</span>
+                    <span class="description">{{targetUserProfile?.lastName}}</span>
+                </div>
+
+                <div class="description-group">
+                    <span class="description">ایمیل:</span>
+                    <span class="description">{{targetUserProfile?.email}}</span>
+                </div>
+
+                <div class="description-group">
+                    <span class="description">شماره تلفن:</span>
+                    <span class="description">{{targetUserProfile?.phoneNum}}</span>
+                </div>
+
+                <div class="description-group">
+                    <span class="description">سن:</span>
+                    <span class="description">{{targetUserProfile?.age}}</span>
+                </div>
 
                 @if (isMale) {
                 <span class="gender-men-span">جنسیت: آقا</span>
@@ -54,10 +72,6 @@
                 <div class="div-edit-profile">
                     <form class="update-member-form" [formGroup]="targetMemberEditFg"
                         (ngSubmit)="targetMemberEditFg.valid && updateTargetMember()">
-
-                        <div class="div-title">
-                            <span class="title">اصلاح اطلاعات کاربر</span>
-                        </div>
 
                         <div class="content">
                             <mat-form-field appearance="outline">
