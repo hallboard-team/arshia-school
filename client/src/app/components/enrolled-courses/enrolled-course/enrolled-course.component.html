@@ -17,12 +17,12 @@
                     <div class="content">
                         <mat-form-field appearance="outline">
                             <mat-label>اسم دوره</mat-label>
-                            <mat-select formControlName="titleCourseCtrl">
+                            <mat-select formControlName="titleCtrl">
                                 <mat-option *ngFor="let course of showCourses" [value]="course.title">
                                     {{ course.title }}
                                 </mat-option>
                             </mat-select>
-                            <mat-error *ngIf="TitleCourseCtrl.hasError('required')">!این فیلد خالی است</mat-error>
+                            <mat-error *ngIf="TitleCtrl.hasError('required')">!این فیلد خالی است</mat-error>
                         </mat-form-field>
 
                         <mat-form-field appearance="outline">
@@ -56,12 +56,12 @@
                     <div class="content">
                         <mat-form-field appearance="outline">
                             <mat-label>اسم دوره</mat-label>
-                            <mat-select formControlName="titleCourseCtrl">
+                            <mat-select formControlName="titleCtrl">
                                 <mat-option *ngFor="let course of showCourses" [value]="course.title">
                                     {{ course.title }}
                                 </mat-option>
                             </mat-select>
-                            <mat-error *ngIf="TitleCourseCtrl.hasError('required')">!این فیلد خالی است</mat-error>
+                            <mat-error *ngIf="TitleCtrl.hasError('required')">!این فیلد خالی است</mat-error>
                         </mat-form-field>
 
                         <mat-form-field appearance="outline">
