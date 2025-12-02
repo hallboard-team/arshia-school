@@ -16,8 +16,17 @@
     }
     }
 
-    <span>نام: {{memberIn.name}}</span>
-    <span>نام خانوادگی: {{memberIn.lastName}}</span>
+    <div class="info">
+        <div class="field">
+            <span class="label">نام:</span>
+            <span class="value">{{ memberIn.name }}</span>
+        </div>
+
+        <div class="field">
+            <span class="label">نام خانوادگی:</span>
+            <span class="value">{{ memberIn.lastName }}</span>
+        </div>
+    </div>
 
     <div class="div-btns">
         <button [routerLink]="['/' + 'dashboard/target-user-profile/' + memberIn.userName]" routerLinkActive

@@ -114,9 +114,17 @@
                 } @else {
                 <img class="profile" src="../assets/images/womenProfilePhoto.png" alt="">
                 }
-                }
-                <span>نام: <span class="information">{{teacher.name}}</span></span>
-                <span>نام خانوادگی: <span class="information">{{teacher.lastName}}</span></span>
+                <div class="info">
+                    <div class="field">
+                        <span class="label">نام:</span>
+                        <span class="value">{{ teacher.name }}</span>
+                    </div>
+
+                    <div class="field">
+                        <span class="label">نام خانوادگی:</span>
+                        <span class="value">{{ teacher.lastName }}</span>
+                    </div>
+                </div>
 
                 <div class="div-add-or-remove-teacher-btn">
                     <button class="button add-professor" *ngIf="!professorUserNames.includes(teacher.userName)"
