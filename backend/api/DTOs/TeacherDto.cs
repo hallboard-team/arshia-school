@@ -3,5 +3,6 @@ public record TeacherDto(
     string Name,
     string LastName,
     string? PhoneNum,
-    GenderType Gender
+    GenderType Gender,
+    MemberPhoto? Photo
 );
