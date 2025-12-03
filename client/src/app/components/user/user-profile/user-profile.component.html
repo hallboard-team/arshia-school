@@ -26,17 +26,23 @@
             </div>
 
             <div class="profile-info">
-                <span class="description">نام: {{profile?.name}}</span>
-                <span class="description">نام خانوادگی: {{profile?.lastName}}</span>
-                <span class="description">نام کاربری: {{profile?.userName}}</span>
-                <span class="description">ایمیل: {{profile?.email}}</span>
-                <span class="description">شماره تلفن: {{profile?.phoneNum}}</span>
-                <span class="description">سن: {{profile?.age}}</span>
+                <span>نام:</span>
+                <span>{{profile?.name}}</span>
+                <span>نام خانوادگی:</span>
+                <span>{{profile?.lastName}}</span>
+                <span>ایمیل:</span>
+                <span>{{profile?.email}}</span>
+                <span>شماره تلفن:</span>
+                <span>{{profile?.phoneNum}}</span>
+                <span>سن:</span>
+                <span>{{profile?.age}}</span>
 
                 @if (profile?.gender === 'Male') {
-                <span class="gender-men-span">جنسیت: آقا</span>
+                <span>جنسیت:</span>
+                <span>آقا</span>
                 } @else {
-                <span class="gender-women-span">جنسیت: خانم</span>
+                <span>جنسیت:</span>
+                <span>خانم</span>
                 }
             </div>
         </div>
@@ -54,7 +60,6 @@
                             <mat-form-field appearance="outline">
                                 <mat-label>نام</mat-label>
                                 <input class="input" matInput type="text" formControlName="nameCtrl" />
-                                <mat-hint>لطفا نام خود را وارد کنید</mat-hint>
                                 @if (NameCtrl.hasError('required')) {
                                 <mat-error>وارد کردن نام الزامیست</mat-error>
                                 }
@@ -69,7 +74,6 @@
                             <mat-form-field appearance="outline">
                                 <mat-label>نام خانوادگی</mat-label>
                                 <input class="input" matInput type="text" formControlName="lastNameCtrl" />
-                                <mat-hint>لطفا نام خانوادگی خود را وارد کنید</mat-hint>
                                 @if (LastNameCtrl.hasError('required')) {
                                 <mat-error>وارد کردن نام خانوادگی الزامیست</mat-error>
                                 }
@@ -84,9 +88,8 @@
                             <mat-form-field appearance="outline">
                                 <mat-label>شماره تلفن</mat-label>
                                 <span class="span-phone" matPrefix dir="ltr">+98&nbsp;</span>
-                                <input class="input" type="tel" maxlength="10" matInput formControlName="phoneNumCtrl"
+                                <input type="tel" maxlength="10" matInput formControlName="phoneNumCtrl"
                                     dir="ltr" />
-                                <mat-hint>لطفا شماره تلفن خود را بدون صفر وارد کنید</mat-hint>
                                 @if (PhoneNumCtrl.hasError('required')) {
                                 <mat-error>وارد کردن شماره تلفن الزامیست</mat-error>
                                 }
@@ -95,27 +98,25 @@
                                 }
                             </mat-form-field>
 
-                            <div class="datepicker-wrapper" [class.disabled]="!profileEditMode">
-                                <app-datepicker [formControl]="DateOfBirthCtrl" [maxDate]="maxDob" [minDate]="minDob"
-                                    [label]="'تاریخ تولد'">
-                                </app-datepicker>
-                                <mat-hint *ngIf="!DateOfBirthCtrl.errors">لطفا تاریخ تولد خود را وارد کنید</mat-hint>
-                                @if (DateOfBirthCtrl.hasError('required')) {
-                                <mat-error>وارد کردن تاریخ تولد الزامیست</mat-error>
-                                }
-                            </div>
-
                             <mat-form-field appearance="outline">
                                 <mat-label>جنسیت</mat-label>
                                 <mat-select formControlName="genderCtrl">
                                     <mat-option value="female">خانم</mat-option>
                                     <mat-option value="male">آقا</mat-option>
                                 </mat-select>
-                                <mat-hint>لطفا جنسیت را مشخض کنید</mat-hint>
                                 @if (GenderCtrl.invalid && (GenderCtrl.dirty || GenderCtrl.touched)) {
                                 <mat-error>وارد کردن جنسیت الزامی است</mat-error>
                                 }
                             </mat-form-field>
+
+                            <div class="datepicker-wrapper" [class.disabled]="!profileEditMode">
+                                <app-datepicker [formControl]="DateOfBirthCtrl" [maxDate]="maxDob" [minDate]="minDob"
+                                    [label]="'تاریخ تولد'">
+                                </app-datepicker>
+                                @if (DateOfBirthCtrl.hasError('required')) {
+                                <mat-error>وارد کردن تاریخ تولد الزامیست</mat-error>
+                                }
+                            </div>
                         </div>
 
                         <div class="div-button-submit">
@@ -147,8 +148,14 @@
                         <div class="content">
                             <mat-form-field appearance="outline">
                                 <mat-label>رمز قدیمی</mat-label>
-                                <input class="input" type="password" formControlName="currentPasswordCtrl"
-                                    placeholder="****" matInput>
+                                <input class="input" [type]="hideCurrentPassword ? 'password' : 'text'"
+                                    formControlName="currentPasswordCtrl" placeholder="****" matInput>
+
+                                <button mat-icon-button matSuffix tabindex="-1" type="button"
+                                    (click)="hideCurrentPassword = !hideCurrentPassword">
+                                    <mat-icon>{{ hideCurrentPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                                </button>
+
                                 <mat-hint>لطفا رمز فعلی خود را وارد کنید</mat-hint>
                                 <mat-error *ngIf="CurrentPasswordCtrl.hasError('required')">
                                     رمز فعلی را وارد نکرده اید
@@ -163,8 +170,14 @@
 
                             <mat-form-field appearance="outline">
                                 <mat-label>رمز جدید</mat-label>
-                                <input class="input" type="password" formControlName="passwordCtrl" placeholder="****"
-                                    matInput>
+                                <input class="input" [type]="hideNewPassword? 'password' : 'text'"
+                                    formControlName="passwordCtrl" placeholder="****" matInput>
+
+                                <button mat-icon-button matSuffix tabindex="-1" type="button"
+                                    (click)="hideNewPassword  = !hideNewPassword ">
+                                    <mat-icon>{{ hideNewPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                                </button>
+
                                 <mat-hint>لطفا رمز جدید را وارد کنید</mat-hint>
                                 <mat-error *ngIf="PasswordCtrl.hasError('required')">
                                     برای تغییر رمز، لطفاً رمز جدید را وارد کنید
@@ -177,8 +190,15 @@
 
                             <mat-form-field appearance="outline">
                                 <mat-label>تکرار رمز جدید</mat-label>
-                                <input class="input" type="password" formControlName="confirmPasswordCtrl"
-                                    label="Confirm Password" placeholder="****" matInput>
+                                <input class="input" [type]="hideConfirmPassword ? 'password' : 'text'"
+                                    formControlName="confirmPasswordCtrl" label="Confirm Password" placeholder="****"
+                                    matInput>
+
+                                <button mat-icon-button matSuffix tabindex="-1" type="button"
+                                    (click)="hideConfirmPassword = !hideConfirmPassword">
+                                    <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                                </button>
+
                                 <mat-hint>لطفا رمز جدید را مجدد وارد کنید</mat-hint>
                                 <mat-error *ngIf="ConfirmPasswordCtrl.hasError('required')">
                                     برای تایید، لطفاً رمز جدید را مجدد وارد کنید
