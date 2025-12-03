@@ -358,6 +358,7 @@
             <mat-tab label="پرداخت شهریه">
                 @if (courseTitles) {
                 <div class="div-enrolled-course">
+                    @if (shamsiCourses.length > 0){
                     <form class="enrolled-form" [formGroup]="updateEnrolledCourseFg"
                         (ngSubmit)="updateEnrolledCourseFg.valid && updateEnrolledCourse()">
                         <div class="content">
@@ -407,7 +408,7 @@
                                     </mat-radio-button>
                                     <mat-radio-button class="radio-button" [value]="0">
                                         <div class="div-radio-items">
-                                            <span>کارت به کارت</span>
+                                             <span>کارت به کارت</span>
                                             <img src="../assets/images/iconKartBeKart.png" alt="">
                                         </div>
                                     </mat-radio-button>
@@ -428,6 +429,14 @@
                             </div>
                         </div>
                     </form>
+                    }
+
+                    @else {
+                    <div class="no-courses">
+                        <img src="../assets/images/no-course.png" alt="">
+                        <span>.هیچ دوره‌ای ثبت‌نام نکرده‌اید</span>
+                    </div>
+                    }
                 </div>
                 }
             </mat-tab>

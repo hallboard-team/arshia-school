@@ -647,7 +647,7 @@
                             }
 
                             .radio-button {
-                                width: 120px;
+                                min-width: 140px;
                                 height: 120px;
                                 padding: 10px;
                                 display: flex;
@@ -668,6 +668,7 @@
                                         font-size: 15px;
                                         color: black;
                                         font-weight: 500;
+                                        white-space: nowrap;
                                     }
 
                                     img {
@@ -678,6 +679,27 @@
                             }
                         }
                     }
+                }
+            }
+
+            .no-courses {
+                width: 100%;
+                flex-direction: column;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                img {
+                    width: 300px;
+                    height: auto;
+                    margin-top: 1.5rem;
+                }
+
+                span {
+                    font-size: 25px;
+                    color: #71829e;
+                    font-weight: bold;
+                    margin-top: 1.5rem;
                 }
             }
         }
@@ -778,6 +800,38 @@
             .div-enrolled-course {
                 .enrolled-form {
                     width: 80%;
+                }
+
+                .radio-button {
+                    min-width: 140px;
+                }
+
+                span {
+                    font-size: 15px;
+                    color: black;
+                    font-weight: 500;
+                    white-space: nowrap;
+                }
+
+                .no-courses {
+                    width: 100%;
+                    flex-direction: column;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    img {
+                        width: 300px;
+                        height: auto;
+                        margin-top: 1.5rem;
+                    }
+
+                    span {
+                        font-size: 25px;
+                        color: #71829e;
+                        font-weight: bold;
+                        margin-top: 1.5rem;
+                    }
                 }
             }
         }
@@ -946,6 +1000,7 @@
                                 gap: 1rem;
 
                                 .radio-button {
+                                    min-width: 140px;
                                     padding: 10px;
                                     display: flex;
                                     justify-content: center;
@@ -965,6 +1020,7 @@
                                             font-size: 15px;
                                             color: black;
                                             font-weight: 500;
+                                            white-space: nowrap;
                                         }
 
                                         img {
@@ -975,6 +1031,27 @@
                                 }
                             }
                         }
+                    }
+                }
+
+                .no-courses {
+                    width: 100%;
+                    flex-direction: column;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    img {
+                        width: 300px;
+                        height: auto;
+                        margin-top: 1.5rem;
+                    }
+
+                    span {
+                        font-size: 25px;
+                        color: #71829e;
+                        font-weight: bold;
+                        margin-top: 1.5rem;
                     }
                 }
             }
