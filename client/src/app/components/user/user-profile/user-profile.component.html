@@ -26,17 +26,23 @@
             </div>
 
             <div class="profile-info">
-                <span class="description">نام: {{profile?.name}}</span>
-                <span class="description">نام خانوادگی: {{profile?.lastName}}</span>
-                <span class="description">نام کاربری: {{profile?.userName}}</span>
-                <span class="description">ایمیل: {{profile?.email}}</span>
-                <span class="description">شماره تلفن: {{profile?.phoneNum}}</span>
-                <span class="description">سن: {{profile?.age}}</span>
+                <span>نام:</span>
+                <span>{{profile?.name}}</span>
+                <span>نام خانوادگی:</span>
+                <span>{{profile?.lastName}}</span>
+                <span>ایمیل:</span>
+                <span>{{profile?.email}}</span>
+                <span>شماره تلفن:</span>
+                <span>{{profile?.phoneNum}}</span>
+                <span>سن:</span>
+                <span>{{profile?.age}}</span>
 
                 @if (profile?.gender === 'Male') {
-                <span class="gender-men-span">جنسیت: آقا</span>
+                <span>جنسیت:</span>
+                <span>آقا</span>
                 } @else {
-                <span class="gender-women-span">جنسیت: خانم</span>
+                <span>جنسیت:</span>
+                <span>خانم</span>
                 }
             </div>
         </div>
@@ -82,7 +88,7 @@
                             <mat-form-field appearance="outline">
                                 <mat-label>شماره تلفن</mat-label>
                                 <span class="span-phone" matPrefix dir="ltr">+98&nbsp;</span>
-                                <input class="input" type="tel" maxlength="10" matInput formControlName="phoneNumCtrl"
+                                <input type="tel" maxlength="10" matInput formControlName="phoneNumCtrl"
                                     dir="ltr" />
                                 @if (PhoneNumCtrl.hasError('required')) {
                                 <mat-error>وارد کردن شماره تلفن الزامیست</mat-error>

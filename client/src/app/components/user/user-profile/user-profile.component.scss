@@ -122,20 +122,11 @@
                 width: 100%;
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
+                justify-content: space-evenly;
                 align-items: center;
                 gap: 10px;
-
-                .description {
-                    direction: rtl;
-                    font-size: 17px;
-                }
-
-                .gender-men-span,
-                .gender-women-span {
-                    direction: rtl;
-                    font-size: 15px;
-                }
+                direction: rtl;
+                font-size: 17px;
             }
 
             .div-button-edit-profile {
@@ -550,13 +541,6 @@
         .div-profile {
             .profile-card {
                 width: 70%;
-
-                .profile-info {
-                    flex-direction: row;
-                    flex-wrap: wrap;
-                    direction: rtl;
-                    justify-content: space-evenly;
-                }
             }
         }
 
