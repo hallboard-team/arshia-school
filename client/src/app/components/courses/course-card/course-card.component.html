@@ -1,9 +1,11 @@
 @if (courseIn) {
-<div class="card-items">
+@if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
+<div class="card-items" [routerLink]="['/' + 'dashboard/' + 'update-course/' + courseIn.title]" routerLinkActive
+    #rla="routerLinkActive">
     <span class="course-title">{{ courseIn.title }}</span>
-    <span class="text">🕒 مدت دوره: {{ courseIn.hours }} ساعت</span>
     <span class="text">نام کلاس: {{ courseIn.className }}</span>
-    <span class="text">📅 روزهای دوره: {{ courseIn.days }}</span>
+    <span class="text">🕒 مدت دوره: {{ courseIn.hours }} ساعت</span>
+    <span class="text">📅 تعداد جلسات: {{ courseIn.days }}</span>
     <span class="text">⏳ ساعت به ازای هر کلاس: {{ courseIn.hoursPerClass }}</span>
 
     <div class="div-start-day">
@@ -28,11 +30,7 @@
     <span class="text-isStarted-false">هنوز شروع نشده ⏳</span>
     }
 
-    @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
-    <div class="div-button-edit-course" [routerLink]="['/' + 'dashboard/' + 'update-course/' + courseIn.title]"
-        routerLinkActive #rla="routerLinkActive">
-        <button>ادیت دوره</button>
-    </div>
-    }
+    <button mat-stroked-button>ویرایش دوره</button>
 </div>
+}
 }

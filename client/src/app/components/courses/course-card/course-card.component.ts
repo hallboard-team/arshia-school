@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnInit, Signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 
 import moment from 'moment-jalaali';
@@ -14,7 +15,7 @@ moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
   selector: 'app-course-card',
   imports: [
     CommonModule, RouterModule,
-    MatCardModule, MatIconModule
+    MatButtonModule, MatCardModule, MatIconModule
   ],
   templateUrl: './course-card.component.html',
   styleUrl: './course-card.component.scss'
