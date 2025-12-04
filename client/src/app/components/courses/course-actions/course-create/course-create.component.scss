@@ -2,6 +2,10 @@
     width: 100%;
     margin-top: 8rem;
 
+    .bf-btns {
+        display: none;
+    }
+
     .course-form {
         width: 100%;
         display: flex;
@@ -113,14 +117,25 @@
 }
 
 @media (min-width: 1200px) {
+    .background {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .bf-btns {
+            display: flex;
+        }
+    }
+
     .background .course-form .content {
-        width: 60%;
+        width: 75%;
         justify-content: space-between;
     }
 
     .background .course-form .content .form-item {
-        flex: 1 1 30%;
-        max-width: 30%;
+        flex: 1 1 45%;
+        max-width: 45%;
     }
 }
 
@@ -141,15 +156,39 @@
 }
 
 @media (min-width: 1200px) {
+    .background {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .bf-btns {
+            display: flex;
+        }
+    }
+
     .background .course-form .content {
-        width: 60%;
+        width: 75%;
         justify-content: flex-start;
         gap: 2rem;
     }
 
     .background .course-form .content .form-item {
-        flex: 1 1 30%;
-        max-width: 30%;
+        flex: 1 1 45%;
+        max-width: 45%;
+    }
+}
+
+@media (min-width: 1100px) {
+    .background {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .bf-btns {
+            display: flex;
+        }
     }
 }
 
