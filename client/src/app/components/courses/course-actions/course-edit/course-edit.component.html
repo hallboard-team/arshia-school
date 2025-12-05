@@ -134,9 +134,6 @@
                         <ng-container>
                             <mat-icon>person_add</mat-icon>
                         </ng-container>
-                        <ng-template #loadingAdd>
-                            <mat-spinner class="spinner-icon" diameter="20"></mat-spinner>
-                        </ng-template>
                     </button>
 
                     <button class="button delete-professor" *ngIf="professorUserNames.includes(teacher.userName)"
@@ -144,9 +141,6 @@
                         <ng-container>
                             <mat-icon>person_remove</mat-icon>
                         </ng-container>
-                        <ng-template #loadingDelete>
-                            <mat-spinner class="spinner-icon" diameter="20"></mat-spinner>
-                        </ng-template>
                     </button>
                 </div>
             </div>
