@@ -10,8 +10,8 @@ public record AddEnrolledCourseDto(
     [Range(1, 99)]
     int NumberOfPayments, //4
 
-    [Range(1, int.MaxValue,
-        ErrorMessage = "The minimum prepayment amount must be at least 1 and cannot be negative.")]
+    [Range(0, int.MaxValue,
+        ErrorMessage = "The minimum prepayment amount must be at least 0 and cannot be negative.")]
     int PaidAmount //2_000_000
 );
 
@@ -33,8 +33,8 @@ public class UpdateEnrolledDto
     [Required(ErrorMessage = "Course title is required.")]
     public string TitleCourse { get; init; } = string.Empty;
 
-    [Range(1, int.MaxValue,
-        ErrorMessage = "The minimum prepayment amount must be at least 1 and cannot be negative.")]
+    [Range(0, int.MaxValue,
+        ErrorMessage = "The minimum prepayment amount must be at least 0 and cannot be negative.")]
     public int PaidAmount { get; init; }
 
     [Required]
