@@ -73,7 +73,7 @@ public class AccountRepository : IAccountRepository
         false,
         new CustomError(
           ErrorCode.IsPasswordInvalid,
-          ".برای تغییر رمز عبور، هر سه فیلد باید تکمیل شوند"
+          "برای تغییر رمز عبور، هر سه فیلد باید تکمیل شوند."
         )
       );
     }
@@ -84,7 +84,7 @@ public class AccountRepository : IAccountRepository
         false,
         new CustomError(
           ErrorCode.ArePasswordsNotMatch,
-          ".رمز عبور جدید و تکرار رمز عبور یکسان نمی باشد"
+          "رمز عبور جدید و تکرار رمز عبور یکسان نمی باشد."
         )
       );
     }
@@ -96,7 +96,7 @@ public class AccountRepository : IAccountRepository
         false,
         new CustomError(
           ErrorCode.IsUserNotFound,
-          ".کاربر پیدا نشد"
+          "کاربر پیدا نشد."
         )
       );
     }
@@ -106,7 +106,7 @@ public class AccountRepository : IAccountRepository
     {
       string Message = string.Join(" | ", result.Errors.Select(e => e.Description));
 
-      Message = ".خطا در تغییر رمز عبور. لطفا دوباره تلاش کنید";
+      Message = "خطا در تغییر رمز عبور. لطفا دوباره تلاش کنید.";
 
       return new OperationResult(
         false,
