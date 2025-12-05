@@ -19,7 +19,7 @@
                 <mat-label>نام دوره</mat-label>
                 <input class="input" autoFocusDir type="text" formControlName="titleCtrl" matInput dir="auto"
                     placeholder="بین ۲ تا ۳۰ کاراکتر باشد">
-                <mat-hint *ngIf="!showErr(TitleCtrl),">در صورت تغییر، اسم جدید دوره را وارد کنید</mat-hint>
+                <mat-hint *ngIf="!showErr(TitleCtrl)">در صورت تغییر، اسم جدید دوره را وارد کنید</mat-hint>
                 <mat-error *ngIf="TitleCtrl.hasError('required')">لطفاً نام دوره را وارد کنید</mat-error>
                 <mat-error *ngIf="TitleCtrl.hasError('minlength')">حداقل ۲ کاراکتر</mat-error>
                 <mat-error *ngIf="TitleCtrl.hasError('maxlength')">حداکثر ۳۰ کاراکتر</mat-error>
@@ -41,7 +41,7 @@
                 <mat-label>شهریه</mat-label>
                 <input class="input" type="text" matInput formControlName="tuitionCtrl" appCurrencyFormatter
                     inputmode="numeric" dir="ltr" placeholder="از ۱۰.۰۰۰ تومان">
-                <span matSuffix matSuffix *ngIf="TuitionCtrl.value">تومان</span>
+                <span matSuffix *ngIf="TuitionCtrl.value">تومان</span>
                 <mat-hint *ngIf="!showErr(TuitionCtrl)">بین ۱۰,۰۰۰ تا ۱۰۰,۰۰۰,۰۰۰</mat-hint>
                 <mat-error *ngIf="TuitionCtrl.hasError('required')">لطفاً مبلغ شهریه را مشخص کنید</mat-error>
                 <mat-error *ngIf="TuitionCtrl.hasError('min')">حداقل شهریه ۱۰.۰۰۰ تومان است</mat-error>
@@ -105,11 +105,17 @@
 
             @for (teacher of teachers; track $index) {
             <div class="teacher-card">
+                @if (teacher.photo) {
+                <img class="profile" [src]="photoUrl + teacher.photo.url_165" alt="">
+                }
+                @else {
                 @if (teacher.gender == 'Male') {
-                <img class="profile" src="../assets/images/menProfilePhoto1.png" alt="">
+                <img class="profile" src="../assets/images/menProfilePhoto.png" alt="">
                 } @else {
                 <img class="profile" src="../assets/images/womenProfilePhoto.png" alt="">
                 }
+                }
+
                 <div class="info">
                     <div class="field">
                         <span class="label">نام:</span>
@@ -122,33 +128,20 @@
                     </div>
                 </div>
 
-                <div class="bottom">
-                    <span>نام: <span class="information">{{teacher.name}}</span></span>
-                    <span>نام خانوادگی: <span class="information">{{teacher.lastName}}</span></span>
+                <div class="div-add-or-remove-teacher-btn">
+                    <button class="button add-professor" *ngIf="!professorUserNames.includes(teacher.userName)"
+                        (click)="addProfessor(teacher)">
+                        <ng-container>
+                            <mat-icon>person_add</mat-icon>
+                        </ng-container>
+                    </button>
 
-                    <div class="div-add-or-remove-teacher-btn">
-                        <button class="button add-professor" *ngIf="!professorUserNames.includes(teacher.userName)"
-                            (click)="addProfessor(teacher)">
-
-                            <ng-container>
-                                <mat-icon>person_add</mat-icon>
-                            </ng-container>
-                            <ng-template #loadingAdd>
-                                <mat-spinner class="spinner-icon" diameter="20"></mat-spinner>
-                            </ng-template>
-                        </button>
-
-                        <button class="button delete-professor" *ngIf="professorUserNames.includes(teacher.userName)"
-                            (click)="removeProfessor(teacher)">
-
-                            <ng-container>
-                                <mat-icon>person_remove</mat-icon>
-                            </ng-container>
-                            <ng-template #loadingDelete>
-                                <mat-spinner class="spinner-icon" diameter="20"></mat-spinner>
-                            </ng-template>
-                        </button>
-                    </div>
+                    <button class="button delete-professor" *ngIf="professorUserNames.includes(teacher.userName)"
+                        (click)="removeProfessor(teacher)">
+                        <ng-container>
+                            <mat-icon>person_remove</mat-icon>
+                        </ng-container>
+                    </button>
                 </div>
             </div>
             }

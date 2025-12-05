@@ -5,7 +5,7 @@
     #rla="routerLinkActive">
 
     @if (memberIn.photo) {
-    <img class="profile" [src]="memberIn.photo">
+    <img class="profile" [src]="photoUrl + memberIn.photo.url_165">
     }
     @else {
     @if (memberIn.gender && memberIn.gender.toLowerCase() === 'female') {
