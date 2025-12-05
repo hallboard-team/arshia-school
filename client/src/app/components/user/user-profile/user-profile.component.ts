@@ -74,8 +74,8 @@ export class UserProfileComponent implements OnInit {
   profileEditMode = false;
 
   hideCurrentPassword: boolean = true;
-  hideNewPassword : boolean = true;
-  hideConfirmPassword : boolean = true;
+  hideNewPassword: boolean = true;
+  hideConfirmPassword: boolean = true;
 
   minDob: Moment = moment().subtract(100, 'jYear').startOf('day');
   maxDob: Moment = moment().subtract(5, 'jYear').endOf('day');
@@ -379,22 +379,25 @@ export class UserProfileComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: (response: ApiResponse) => {
+          this._accountService.logout();
+          this._router.navigateByUrl('/account/login');
           this._matSnackBar.open(response.message ?? 'رمز عبور با موفقیت به‌روزرسانی شد', 'بستن', {
             horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            duration: 5000
+            verticalPosition: 'top',
+            duration: 5000,
+            direction: 'rtl'
           });
 
           this.memberEditFg.reset();
-          this._accountService.logout();
-          this._router.navigateByUrl('/account/login');
+
         },
         error: err => {
-          const msg = err?.error ?? 'خطا در تغییر رمز عبور. لطفاً دوباره تلاش کنید.';
+          const msg = err?.error ?? 'خطا در تغییر رمز عبور. لطفاً دوباره تلاش کنید';
           this._matSnackBar.open(msg, 'بستن', {
             horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            duration: 6000
+            verticalPosition: 'top',
+            duration: 6000,
+            direction: 'rtl'
           });
         }
       });
