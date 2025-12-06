@@ -21,7 +21,7 @@
 
         @if (user.roles.includes('manager')) {
         <li routerLinkActive="active">
-            <a [routerLink]="['/dashboard/members']" title="کاربران">
+            <a [routerLink]="['/dashboard/students']" title="کاربران">
                 <span class="icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24">
                         <path
@@ -31,6 +31,19 @@
                 <span class="label">دانشجویان</span>
             </a>
         </li>
+
+        <li routerLinkActive="active">
+            <a [routerLink]="['/dashboard/staffs']" title="کاربران">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm-1-7h2v2h-2zm-3 9h8v2H8z" />
+                    </svg>
+                </span>
+                <span class="label">پرسنل</span>
+            </a>
+        </li>
+
         }
 
         @if (user.userName.toLowerCase() !== 'admin' && user.roles.includes('teacher')) {

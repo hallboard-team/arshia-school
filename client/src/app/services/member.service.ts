@@ -107,6 +107,12 @@ export class MemberService {
         params = params.append('courseTitle', memberParams.courseTitle);
       }
 
+      if (memberParams.roles && memberParams.roles.length > 0) {
+        memberParams.roles.forEach(role =>{
+          params = params.append('roles', role);
+        })
+      }
+
       params = params.append('pageSize', memberParams.pageSize);
       params = params.append('pageNumber', memberParams.pageNumber);
       params = params.append('minAge', memberParams.minAge);

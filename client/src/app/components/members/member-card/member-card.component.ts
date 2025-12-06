@@ -32,6 +32,6 @@ export class MemberCardComponent {
   private _route = inject(ActivatedRoute);
 
   ngOnInit(): void {
-    this.loggedInUserSig = this._accountService.loggedInUserSig;
+    this.loggedInUserSig = this._accountService.loggedInUserSig;  
   }
 }
