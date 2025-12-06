@@ -9,6 +9,7 @@ public static class AppVariablesExtensions
     public const string CollectionAttendencesDemo = "attendences";
     public const string CollectionFollows = "follows";
     public const string CollectionExceptionLogs = "exception-logs";
+    public const string CollectionRoles = "roles";
 
     public static readonly string[] AppVersions = ["1", "1.0.2"];
 

@@ -10,6 +10,9 @@ public class MemberParams : PaginationParams
 
     [MaxLength(50)]
     public string ClassName { get; set; } = string.Empty;
+
+    [Length(1, 30)]
+    public List<string>? Roles { get; set; } = [];
     
     [Range(11, 99)]
     public int MinAge { get; set; }
