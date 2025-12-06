@@ -700,6 +700,19 @@ public class ManagerRepository : IManagerRepository
           u.EnrolledCourses.Any(c => c.ClassName.Contains(s)));
     }
 
+    if (memberParams.Roles != null && memberParams.Roles.Count > 0)
+    {
+      List<string> roleNames = memberParams.Roles
+        .Select(r => r.Trim().ToUpper()).ToList();
+
+      List<ObjectId> roleIds = _collectionRole.AsQueryable()
+        .Where(r => roleNames.Contains(r.NormalizedName!))
+        .Select(r => r.Id)
+        .ToList();
+
+      query = query.Where(u => u.Roles.Any(rId => roleIds.Contains(rId)));
+    }
+
     query = query.Where(u => u.NormalizedUserName != "ADMIN" && u.NormalizedUserName != "MANAGER");
     query = query.Where(u => u.Id != memberParams.UserId);
     query = query.Where(u => u.DateOfBirth >= minDob && u.DateOfBirth <= maxDob);
@@ -741,6 +754,7 @@ public class ManagerRepository : IManagerRepository
   private readonly IMongoCollection<AppUser> _collectionAppUser;
   private readonly IMongoCollection<Course> _collectionCourse;
   private readonly IMongoCollection<Attendence> _collectionAttendence;
+  private readonly IMongoCollection<AppRole> _collectionRole;
   private readonly UserManager<AppUser> _userManager;
   private readonly ITokenService _tokenService;
   private readonly IMongoClient _client;
@@ -762,6 +776,7 @@ public class ManagerRepository : IManagerRepository
     _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.CollectionUsers);
     _collectionCourse = database.GetCollection<Course>(AppVariablesExtensions.CollectionCourses);
     _collectionAttendence = database.GetCollection<Attendence>(AppVariablesExtensions.CollectionAttendences);
+    _collectionRole = database.GetCollection<AppRole>(AppVariablesExtensions.CollectionRoles);
 
     _userManager = userManager;
     _tokenService = tokenService;
