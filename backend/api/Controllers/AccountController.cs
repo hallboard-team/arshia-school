@@ -54,19 +54,19 @@ public class AccountController(IAccountRepository _accountRepository, ITokenServ
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
         if (userId is null)
-            return Unauthorized("Please login again");
+            return Unauthorized("لطفا وارد شوید.");
 
         OperationResult opResult = await _accountRepository.UpdatePasswordAsync(request, userId.Value, cancellationToken);
 
         return opResult.IsSuccess
-            ? Ok(new Response("Password successfully updated"))
+            ? Ok(new Response("رمز عبور با موفقیت بروزرسانی شد."))
             : opResult.Error?.Code switch
             {
                 ErrorCode.IsPasswordInvalid => BadRequest(opResult.Error.Message),
                 ErrorCode.ArePasswordsNotMatch => BadRequest(opResult.Error.Message),
                 ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
                 ErrorCode.IsIdentityFailed => BadRequest(opResult.Error.Message),
-                _ => BadRequest("Operation failed. Try again or contact support.")
+                _ => BadRequest("عملیات انجام نشد. دوباره تلاش کنید یا با پشتیبانی تماس بگیرید.")
             };
     }
 

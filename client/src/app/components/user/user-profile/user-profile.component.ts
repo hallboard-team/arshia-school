@@ -34,6 +34,7 @@ import { DatepickerComponent } from '../../../datepicker/datepicker.component';
 import { MatSelectModule } from '@angular/material/select';
 import { environment } from '../../../../environments/environment.development';
 import { MemberPhoto } from '../../../models/member-photo.model';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-user-profile',
@@ -43,7 +44,7 @@ import { MemberPhoto } from '../../../models/member-photo.model';
     MatCardModule, MatFormFieldModule, MatInputModule,
     MatButtonModule, NavbarComponent, RouterModule,
     MatTabsModule, MatSnackBarModule, DatepickerComponent,
-    MatSelectModule
+    MatSelectModule, MatIconModule
   ],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss'
@@ -71,6 +72,10 @@ export class UserProfileComponent implements OnInit {
   courseLoaded = false;
 
   profileEditMode = false;
+
+  hideCurrentPassword: boolean = true;
+  hideNewPassword: boolean = true;
+  hideConfirmPassword: boolean = true;
 
   minDob: Moment = moment().subtract(100, 'jYear').startOf('day');
   maxDob: Moment = moment().subtract(5, 'jYear').endOf('day');
@@ -374,26 +379,28 @@ export class UserProfileComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: (response: ApiResponse) => {
+          this._accountService.logout();
+          this._router.navigateByUrl('/account/login');
           this._matSnackBar.open(response.message ?? 'رمز عبور با موفقیت به‌روزرسانی شد', 'بستن', {
             horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            duration: 5000
+            verticalPosition: 'top',
+            duration: 5000,
+            direction: 'rtl'
           });
 
           this.memberEditFg.reset();
+
         },
         error: err => {
-          const msg = err?.error ?? 'خطا در تغییر رمز عبور. لطفاً دوباره تلاش کنید.';
+          const msg = err?.error ?? 'خطا در تغییر رمز عبور. لطفاً دوباره تلاش کنید';
           this._matSnackBar.open(msg, 'بستن', {
             horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            duration: 6000
+            verticalPosition: 'top',
+            duration: 6000,
+            direction: 'rtl'
           });
         }
       });
-
-    this._accountService.logout();
-    this._router.navigateByUrl('/account/login');
   }
 
   cancelPasswordEdit(): void {

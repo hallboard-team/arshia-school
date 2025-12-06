@@ -5,7 +5,7 @@
     #rla="routerLinkActive">
 
     @if (memberIn.photo) {
-    <img class="profile" [src]="memberIn.photo">
+    <img class="profile" [src]="photoUrl + memberIn.photo.url_165">
     }
     @else {
     @if (memberIn.gender && memberIn.gender.toLowerCase() === 'female') {
@@ -15,9 +15,18 @@
     <img class="profile" src="../assets/images/menProfilePhoto.png">
     }
     }
-    
-    <span>نام: {{memberIn.name}}</span>
-    <span>نام خانوادگی: {{memberIn.lastName}}</span>
+
+    <div class="info">
+        <div class="field">
+            <span class="label">نام:</span>
+            <span class="value">{{ memberIn.name }}</span>
+        </div>
+
+        <div class="field">
+            <span class="label">نام خانوادگی:</span>
+            <span class="value">{{ memberIn.lastName }}</span>
+        </div>
+    </div>
 
     <div class="div-btns">
         <button [routerLink]="['/' + 'dashboard/target-user-profile/' + memberIn.userName]" routerLinkActive
