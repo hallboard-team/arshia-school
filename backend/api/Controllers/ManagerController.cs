@@ -109,6 +109,8 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
 
         if (userId is null) return Unauthorized("You are unauthorized. Login again.");
 
+        List<AppRole> appRoles = await _managerRepository.GetAllRoleAsync(cancellationToken);
+        Dictionary<ObjectId, string?> roleIdsToName = appRoles.ToDictionary(r => r.Id, r => r.Name);
 
         List<MemberDto> memberDtos = [];
 
@@ -116,7 +118,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         {
             bool isAbsent = false;
 
-            memberDtos.Add(Mappers.ConvertAppUserToMemberDto(appUser, isAbsent));
+            memberDtos.Add(Mappers.ConvertAppUserToMemberDto(appUser, isAbsent, roleIdsToName!));
         }
 
         return memberDtos;

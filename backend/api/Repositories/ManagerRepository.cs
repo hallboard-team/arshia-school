@@ -400,7 +400,10 @@ public class ManagerRepository : IManagerRepository
     AppUser? appUser = await _userManager.FindByEmailAsync(targetMemberEmail);
     if (appUser is null) return null;
 
-    return ConvertAppUserToMemberDto(appUser, isAbsent: false);
+    List<AppRole> appRoles = await GetAllRoleAsync(cancellationToken);
+    Dictionary<ObjectId, string?> roleIdsToName = appRoles.ToDictionary(r => r.Id, r => r.Name);
+
+    return ConvertAppUserToMemberDto(appUser, isAbsent: false, roleIdsToName!);
   }
 
   public async Task<TargetMemberDto?> GetMemberByUserNameAsync(
@@ -700,17 +703,25 @@ public class ManagerRepository : IManagerRepository
           u.EnrolledCourses.Any(c => c.ClassName.Contains(s)));
     }
 
-    if (memberParams.Roles != null && memberParams.Roles.Count > 0)
+    if (memberParams.Roles is not null)
     {
-      List<string> roleNames = memberParams.Roles
-        .Select(r => r.Trim().ToUpper()).ToList();
-
-      List<ObjectId> roleIds = _collectionRole.AsQueryable()
-        .Where(r => roleNames.Contains(r.NormalizedName!))
-        .Select(r => r.Id)
+      var roleNames = memberParams.Roles
+        .Where(r => !string.IsNullOrWhiteSpace(r))
+        .Select(r => r.Trim().ToUpper())
         .ToList();
 
-      query = query.Where(u => u.Roles.Any(rId => roleIds.Contains(rId)));
+      if (roleNames.Count > 0)
+      {
+        List<ObjectId> roleIds = _collectionRole.AsQueryable()
+          .Where(r => roleNames.Contains(r.NormalizedName!))
+          .Select(r => r.Id)
+          .ToList();
+
+        if (roleIds.Count > 0)
+        {
+          query = query.Where(u => u.Roles.Any(rId => roleIds.Contains(rId)));
+        }
+      }
     }
 
     query = query.Where(u => u.NormalizedUserName != "ADMIN" && u.NormalizedUserName != "MANAGER");
@@ -747,6 +758,11 @@ public class ManagerRepository : IManagerRepository
       Select(u => u.Id).SingleOrDefaultAsync(cancellationToken);
 
     return ValidationsExtensions.ValidateObjectId(userId);
+  }
+
+  public async Task<List<AppRole>> GetAllRoleAsync(CancellationToken cancellationToken)
+  {
+    return await _collectionRole.Find(_ => true).ToListAsync();
   }
 
   #region Vars and Constructor
