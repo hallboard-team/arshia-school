@@ -1,7 +1,25 @@
 <section class="section-upload-photo">
     <section class="top">
 
-        <ng-container *ngIf="payment?.photo; else noPhoto">
+        @if (payment?.photo) {
+        <div class="gallery">
+            <div class="photos">
+                <img [ngSrc]="photoUrl + payment?.photo?.url_256" width="265" height="265"
+                    [alt]="payment?.method + ' photo'" priority />
+            </div>
+            <div class="buttons">
+                <button mat-stroked-button color="primary" disabled>انتخاب عکس</button>
+                <button (click)="deletePhotoComp(payment!.photo!.url_165!)" mat-mini-fab color="warn">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </div>
+        } @else {
+        <div class="no-photo-placeholder">
+        </div>
+        }
+
+        <!-- <ng-container *ngIf="payment?.photo; else noPhoto">
             <div class="gallery">
                 <div class="photos">
                     <img [ngSrc]="photoUrl + payment?.photo?.url_256" width="265" height="265"
@@ -15,7 +33,7 @@
                     </div>
                 </div>
             </div>
-        </ng-container>
+        </ng-container> -->
 
         <ng-template #noPhoto>
             <div class="div-empty-album">
