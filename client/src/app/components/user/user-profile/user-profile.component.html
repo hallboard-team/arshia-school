@@ -88,8 +88,7 @@
                             <mat-form-field appearance="outline">
                                 <mat-label>شماره تلفن</mat-label>
                                 <span class="span-phone" matPrefix dir="ltr">+98&nbsp;</span>
-                                <input type="tel" maxlength="10" matInput formControlName="phoneNumCtrl"
-                                    dir="ltr" />
+                                <input type="tel" maxlength="10" matInput formControlName="phoneNumCtrl" dir="ltr" />
                                 @if (PhoneNumCtrl.hasError('required')) {
                                 <mat-error>وارد کردن شماره تلفن الزامیست</mat-error>
                                 }
@@ -172,20 +171,25 @@
                                 <mat-label>رمز جدید</mat-label>
                                 <input class="input" [type]="hideNewPassword? 'password' : 'text'"
                                     formControlName="passwordCtrl" placeholder="****" matInput>
-
                                 <button mat-icon-button matSuffix tabindex="-1" type="button"
                                     (click)="hideNewPassword  = !hideNewPassword ">
                                     <mat-icon>{{ hideNewPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
                                 </button>
-
                                 <mat-hint>لطفا رمز جدید را وارد کنید</mat-hint>
-                                <mat-error *ngIf="PasswordCtrl.hasError('required')">
+                                @if (PasswordCtrl.hasError('required')) {
+                                <mat-error>
                                     برای تغییر رمز، لطفاً رمز جدید را وارد کنید
                                 </mat-error>
-                                <mat-error *ngIf="PasswordCtrl.errors && PasswordCtrl.hasError('minlength')">حداقل ۷
-                                    کاراکتر</mat-error>
-                                <mat-error *ngIf="PasswordCtrl.errors && PasswordCtrl.hasError('maxlength')">حداکثر ۲۰
-                                    کاراکتر</mat-error>
+                                }
+                                @else if (PasswordCtrl.errors && PasswordCtrl.hasError('pattern')) {
+                                <mat-error>رمز عبور باید شامل حروف بزرگ، کوچک، عدد و کاراکتر ویژه باشد</mat-error>
+                                }
+                                @else if (PasswordCtrl.errors && PasswordCtrl.hasError('minlength')) {
+                                <mat-error>حداقل ۷ کاراکتر</mat-error>
+                                }
+                                @else if (PasswordCtrl.errors && PasswordCtrl.hasError('maxlength')) {
+                                <mat-error>حداکثر ۲۰ کاراکتر</mat-error>
+                                }
                             </mat-form-field>
 
                             <mat-form-field appearance="outline">
