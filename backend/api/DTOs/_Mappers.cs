@@ -172,6 +172,7 @@ public static class Mappers
         {
             Id = course.Id.ToString(),
             Title = course.Title,
+            ClassName = course.ClassName,
             ProfessorUserNames = userNames,
             ProfessorNames = names,
             Tuition = course.Tuition,

@@ -123,7 +123,8 @@ export class TargetUserProfileComponent implements OnInit {
   });
 
   addEnrolledCourseFg: FormGroup = this.fb.group({
-    titleCourseCtrl: ['', Validators.required],
+    titleCtrl: ['', Validators.required],
+    classNameCtrl: ['', Validators.required],
     numberOfPaymentsCtrl: ['', [Validators.required, Validators.min(0), Validators.max(99)]],
     paidAmountCtrl: ['', [Validators.required, Validators.min(0), Validators.max(100_000_000),]],
   });
@@ -151,8 +152,11 @@ export class TargetUserProfileComponent implements OnInit {
   }
 
   //add enrolled-course
-  get TitleCourseCtrl(): FormControl {
-    return this.addEnrolledCourseFg.get('titleCourseCtrl') as FormControl;
+  get TitleCtrl(): FormControl {
+    return this.addEnrolledCourseFg.get('titleCtrl') as FormControl;
+  }
+  get ClassNameCtrl(): FormControl {
+    return this.addEnrolledCourseFg.get('classNameCtrl') as FormControl;
   }
   get NumberOfPaymentsCtrl(): FormControl {
     return this.addEnrolledCourseFg.get('numberOfPaymentsCtrl') as FormControl;
@@ -377,7 +381,8 @@ export class TargetUserProfileComponent implements OnInit {
 
     if (memberUserName) {
       let addEnrolledCourse: AddEnrolledCourse = {
-        titleCourse: this.TitleCourseCtrl.value,
+        title: this.TitleCtrl.value,
+        className: this.ClassNameCtrl.value,
         numberOfPayments: this.NumberOfPaymentsCtrl.value,
         paidAmount: this.PaidAmountCtrl.value
       }
