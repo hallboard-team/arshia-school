@@ -21,7 +21,7 @@
                 <mat-error>حداقل ۲ حرف</mat-error>
                 }
                 @else if (TeacherNameCtrl.errors && TeacherNameCtrl.hasError('maxlength')) {
-                <mat-error>حداکثر 30 حرف</mat-error>
+                <mat-error>حداکثر ۳۰ حرف</mat-error>
                 }
                 @else if (TeacherNameCtrl.errors && TeacherNameCtrl.hasError('pattern')) {
                 <mat-error>فقط حروف فارسی/انگلیسی، فاصله و خط‌تیره مجاز
@@ -37,13 +37,13 @@
                 <input class="input" type="text" formControlName="lastNameCtrl" matInput dir="auto">
                 <mat-hint>نام خانوادگی را وارد کنید</mat-hint>
                 @if (TeacherLastNameCtrl.hasError('required')) {
-                <mat-error>وارد کردن خانوادگی نام الزامیست</mat-error>
+                <mat-error>وارد کردن نام خانوادگی الزامیست</mat-error>
                 }
                 @else if (TeacherLastNameCtrl.errors && TeacherLastNameCtrl.hasError('minlength')) {
                 <mat-error>حداقل ۲ حرف</mat-error>
                 }
                 @else if (TeacherLastNameCtrl.errors && TeacherLastNameCtrl.hasError('maxlength')) {
-                <mat-error>حداکثر 30 حرف</mat-error>
+                <mat-error>حداکثر ۳۰ حرف</mat-error>
                 }
                 @else if (TeacherLastNameCtrl.errors && TeacherLastNameCtrl.hasError('pattern')) {
                 <mat-error>فقط حروف فارسی/انگلیسی، فاصله و خط‌تیره مجاز
@@ -142,7 +142,7 @@
             </mat-form-field>
         </div>
 
-        <div>
+        <div class="form-item date-item">
             <app-datepicker [formControl]="TeacherDateOfBirthCtrl" [maxDate]="max" [minDate]="min"
                 [label]="'تاریخ تولد'">
             </app-datepicker>

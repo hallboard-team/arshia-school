@@ -21,7 +21,7 @@
                 <mat-error>حداقل ۲ حرف</mat-error>
                 }
                 @else if (StudentNameCtrl.errors && StudentNameCtrl.hasError('maxlength')) {
-                <mat-error>حداکثر 30 حرف</mat-error>
+                <mat-error>حداکثر ۳۰ حرف</mat-error>
                 }
                 @else if (StudentNameCtrl.errors && StudentNameCtrl.hasError('pattern')) {
                 <mat-error>فقط حروف فارسی/انگلیسی، فاصله و خط‌تیره مجاز
@@ -37,13 +37,13 @@
                 <input class="input" type="text" formControlName="lastNameCtrl" matInput dir="auto">
                 <mat-hint>نام خانوادگی را وارد کنید</mat-hint>
                 @if (StudentLastNameCtrl.hasError('required')) {
-                <mat-error>وارد کردن خانوادگی نام الزامیست</mat-error>
+                <mat-error>وارد کردن نام خانوادگی الزامیست</mat-error>
                 }
                 @else if (StudentLastNameCtrl.errors && StudentLastNameCtrl.hasError('minlength')) {
                 <mat-error>حداقل ۲ حرف</mat-error>
                 }
                 @else if (StudentLastNameCtrl.errors && StudentLastNameCtrl.hasError('maxlength')) {
-                <mat-error>حداکثر 30 حرف</mat-error>
+                <mat-error>حداکثر ۳۰ حرف</mat-error>
                 }
                 @else if (StudentLastNameCtrl.errors && StudentLastNameCtrl.hasError('pattern')) {
                 <mat-error>فقط حروف فارسی/انگلیسی، فاصله و خط‌تیره مجاز
@@ -56,21 +56,18 @@
         <div class="form-item">
             <mat-form-field appearance="outline">
                 <mat-label>ایمیل</mat-label>
-                <input class="input" autoFocusDir type="email" formControlName="emailCtrl" matInput maxlength="50"
-                    dir="auto">
-                <mat-hint>ایمیل وارد کنید</mat-hint>
+                <input class="input" autoFocusDir type="email" formControlName="emailCtrl" matInput dir="auto">
+                <mat-hint>ایمیل را وارد کنید</mat-hint>
                 @if (StudentEmailCtrl.hasError('required')) {
                 <mat-error>وارد کردن ایمیل الزامیست</mat-error>
-                }
-                @else if (StudentEmailCtrl.errors && StudentEmailCtrl.hasError('pattern')) {
-                <mat-error>ایمیل رو به درستی وارد کنید</mat-error>
                 }
                 @else if (StudentEmailCtrl.errors && StudentEmailCtrl.hasError('maxlength')) {
                 <mat-error>حداکثر 50 کاراکتر</mat-error>
                 }
-                @else if (StudentEmailCtrl.errors && StudentEmailCtrl.hasError('server')) {
-                <mat-error>{{StudentEmailCtrl.getError('server')}}</mat-error>
-                } </mat-form-field>
+                @else if (StudentEmailCtrl.errors && StudentEmailCtrl.hasError('pattern')) {
+                <mat-error>ایمیل را به درستی وارد کنید</mat-error>
+                }
+            </mat-form-field>
         </div>
 
         <!-- phone -->
@@ -141,7 +138,7 @@
             </mat-form-field>
         </div>
 
-        <div>
+        <div class="form-item date-item">
             <app-datepicker [formControl]="StudentDateOfBirthCtrl" [maxDate]="max" [minDate]="min"
                 [label]="'تاریخ تولد'"></app-datepicker>
         </div>
