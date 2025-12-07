@@ -190,6 +190,9 @@
                                     برای تغییر رمز، لطفاً رمز جدید را وارد کنید
                                 </mat-error>
                                 }
+                                @else if (PasswordCtrl.errors && PasswordCtrl.hasError('pattern')) {
+                                <mat-error>رمز عبور باید شامل حروف بزرگ، کوچک، عدد و کاراکتر ویژه باشد</mat-error>
+                                }
                                 @else if (PasswordCtrl.errors && PasswordCtrl.hasError('minlength')) {
                                 <mat-error>حداقل ۷ کاراکتر</mat-error>
                                 }

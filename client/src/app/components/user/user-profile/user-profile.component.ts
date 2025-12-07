@@ -90,7 +90,8 @@ export class UserProfileComponent implements OnInit {
 
   memberEditFg: FormGroup = this._fb.group({
     currentPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
-    passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
+    passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20),
+      Validators.pattern(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*/]).*$/)]],
     confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]]
   });
 
