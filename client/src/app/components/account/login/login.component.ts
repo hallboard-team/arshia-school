@@ -23,7 +23,7 @@ import { MatIconModule } from '@angular/material/icon';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   accountService = inject(AccountService);
   fb = inject(FormBuilder);
   private router = inject(Router);
@@ -36,14 +36,6 @@ export class LoginComponent implements OnInit {
     emailCtrl: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w\.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
     passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]]
   })
-
-  ngOnInit() {
-    this.EmailCtrl.valueChanges.subscribe(v => {
-      if (typeof v === 'string' && v.length > 50) {
-        this.EmailCtrl.setValue(v.slice(0, 50), { emitEvent: false });
-      }
-    });
-  }
 
   get EmailCtrl(): FormControl {
     return this.loginFg.get('emailCtrl') as FormControl;

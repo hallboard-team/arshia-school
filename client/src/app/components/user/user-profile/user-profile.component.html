@@ -57,6 +57,7 @@
                     <form class="update-member-form" [formGroup]="profileFg" (ngSubmit)="saveProfileChanges()">
 
                         <div class="content">
+                            <!-- Name -->
                             <mat-form-field appearance="outline">
                                 <mat-label>نام</mat-label>
                                 <input class="input" matInput type="text" formControlName="nameCtrl" />
@@ -71,6 +72,7 @@
                                 }
                             </mat-form-field>
 
+                            <!-- LastName -->
                             <mat-form-field appearance="outline">
                                 <mat-label>نام خانوادگی</mat-label>
                                 <input class="input" matInput type="text" formControlName="lastNameCtrl" />
@@ -85,11 +87,11 @@
                                 }
                             </mat-form-field>
 
+                            <!-- PhoneNumber -->
                             <mat-form-field appearance="outline">
                                 <mat-label>شماره تلفن</mat-label>
                                 <span class="span-phone" matPrefix dir="ltr">+98&nbsp;</span>
-                                <input type="tel" maxlength="10" matInput formControlName="phoneNumCtrl"
-                                    dir="ltr" />
+                                <input type="tel" maxlength="10" matInput formControlName="phoneNumCtrl" dir="ltr" />
                                 @if (PhoneNumCtrl.hasError('required')) {
                                 <mat-error>وارد کردن شماره تلفن الزامیست</mat-error>
                                 }
@@ -98,6 +100,7 @@
                                 }
                             </mat-form-field>
 
+                            <!-- Gender -->
                             <mat-form-field appearance="outline">
                                 <mat-label>جنسیت</mat-label>
                                 <mat-select formControlName="genderCtrl">
@@ -109,6 +112,7 @@
                                 }
                             </mat-form-field>
 
+                            <!-- DateOfBirth -->
                             <div class="datepicker-wrapper" [class.disabled]="!profileEditMode">
                                 <app-datepicker [formControl]="DateOfBirthCtrl" [maxDate]="maxDob" [minDate]="minDob"
                                     [label]="'تاریخ تولد'">
@@ -120,20 +124,23 @@
                         </div>
 
                         <div class="div-button-submit">
-                            <button *ngIf="!profileEditMode" class="button-edit-profile" type="button" mat-raised-button
+                            @if (!profileEditMode) {
+                            <button class="button-edit-profile" type="button" mat-raised-button
                                 (click)="enableProfileEdit()">
                                 ایجاد تغییرات
                             </button>
-
-                            <button *ngIf="profileEditMode" class="button-edit-profile" type="submit" mat-raised-button
-                                color="primary" [disabled]="profileFg.invalid">
+                            }
+                            @else if (profileEditMode) {
+                            <button class="button-edit-profile" type="submit" mat-raised-button color="primary"
+                                [disabled]="profileFg.invalid">
                                 ذخیره تغییرات
                             </button>
 
-                            <button *ngIf="profileEditMode" class="button-cancel" type="button" mat-stroked-button
+                            <button class="button-cancel" type="button" mat-stroked-button
                                 (click)="cancelProfileEdit()">
                                 انصراف
                             </button>
+                            }
                         </div>
 
                     </form>
@@ -147,68 +154,72 @@
 
                         <div class="content">
                             <mat-form-field appearance="outline">
+
+                                <!-- CurrentPassword -->
                                 <mat-label>رمز قدیمی</mat-label>
                                 <input class="input" [type]="hideCurrentPassword ? 'password' : 'text'"
                                     formControlName="currentPasswordCtrl" placeholder="****" matInput>
-
                                 <button mat-icon-button matSuffix tabindex="-1" type="button"
                                     (click)="hideCurrentPassword = !hideCurrentPassword">
                                     <mat-icon>{{ hideCurrentPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
                                 </button>
-
                                 <mat-hint>لطفا رمز فعلی خود را وارد کنید</mat-hint>
-                                <mat-error *ngIf="CurrentPasswordCtrl.hasError('required')">
-                                    رمز فعلی را وارد نکرده اید
-                                </mat-error>
-                                <mat-error
-                                    *ngIf="CurrentPasswordCtrl.errors && CurrentPasswordCtrl.hasError('minlength')">حداقل
-                                    ۷ کاراکتر</mat-error>
-                                <mat-error
-                                    *ngIf="CurrentPasswordCtrl.errors && CurrentPasswordCtrl.hasError('maxlength')">حداکثر
-                                    ۲۰ کاراکتر</mat-error>
+                                @if (CurrentPasswordCtrl.hasError('required')) {
+                                <mat-error>رمز فعلی را وارد نکرده اید</mat-error>
+                                }
+                                @else if (CurrentPasswordCtrl.errors && CurrentPasswordCtrl.hasError('minlength')) {
+                                <mat-error>حداقل۷ کاراکتر</mat-error>
+                                }
+                                @else if (CurrentPasswordCtrl.errors && CurrentPasswordCtrl.hasError('maxlength')) {
+                                <mat-error>حداکثر۲۰ کاراکتر</mat-error>
+                                }
                             </mat-form-field>
 
+                            <!-- Password -->
                             <mat-form-field appearance="outline">
                                 <mat-label>رمز جدید</mat-label>
                                 <input class="input" [type]="hideNewPassword? 'password' : 'text'"
                                     formControlName="passwordCtrl" placeholder="****" matInput>
-
                                 <button mat-icon-button matSuffix tabindex="-1" type="button"
                                     (click)="hideNewPassword  = !hideNewPassword ">
                                     <mat-icon>{{ hideNewPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
                                 </button>
-
                                 <mat-hint>لطفا رمز جدید را وارد کنید</mat-hint>
-                                <mat-error *ngIf="PasswordCtrl.hasError('required')">
+                                @if (PasswordCtrl.hasError('required')) {
+                                <mat-error>
                                     برای تغییر رمز، لطفاً رمز جدید را وارد کنید
                                 </mat-error>
-                                <mat-error *ngIf="PasswordCtrl.errors && PasswordCtrl.hasError('minlength')">حداقل ۷
-                                    کاراکتر</mat-error>
-                                <mat-error *ngIf="PasswordCtrl.errors && PasswordCtrl.hasError('maxlength')">حداکثر ۲۰
-                                    کاراکتر</mat-error>
+                                }
+                                @else if (PasswordCtrl.errors && PasswordCtrl.hasError('minlength')) {
+                                <mat-error>حداقل ۷ کاراکتر</mat-error>
+                                }
+                                @else if (PasswordCtrl.errors && PasswordCtrl.hasError('maxlength')) {
+                                <mat-error>حداکثر ۲۰ کاراکتر</mat-error>
+                                }
                             </mat-form-field>
 
+                            <!-- ConfirmPassword -->
                             <mat-form-field appearance="outline">
                                 <mat-label>تکرار رمز جدید</mat-label>
                                 <input class="input" [type]="hideConfirmPassword ? 'password' : 'text'"
                                     formControlName="confirmPasswordCtrl" label="Confirm Password" placeholder="****"
                                     matInput>
-
                                 <button mat-icon-button matSuffix tabindex="-1" type="button"
                                     (click)="hideConfirmPassword = !hideConfirmPassword">
                                     <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
                                 </button>
-
                                 <mat-hint>لطفا رمز جدید را مجدد وارد کنید</mat-hint>
-                                <mat-error *ngIf="ConfirmPasswordCtrl.hasError('required')">
-                                    برای تایید، لطفاً رمز جدید را مجدد وارد کنید
+                                @if (ConfirmPasswordCtrl.hasError('required')) {
+                                <mat-error>
+                                    برای تغییر رمز، لطفاً رمز جدید را وارد کنید
                                 </mat-error>
-                                <mat-error
-                                    *ngIf="ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('minlength')">حداقل
-                                    ۷ کاراکتر</mat-error>
-                                <mat-error
-                                    *ngIf="ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('maxlength')">حداکثر
-                                    ۲۰ کاراکتر</mat-error>
+                                }
+                                @else if (ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('minlength')) {
+                                <mat-error>حداقل ۷ کاراکتر</mat-error>
+                                }
+                                @else if (ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('maxlength')) {
+                                <mat-error>حداکثر ۲۰ کاراکتر</mat-error>
+                                }
                             </mat-form-field>
                         </div>
 

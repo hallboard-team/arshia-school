@@ -1,11 +1,11 @@
 @if (courseIn) {
-    <div class="card-items">
-        <span class="course-title">{{ courseIn.title }}</span>
-        @if (courseIn.isStarted == 'true') {
-            <span class="text-isStarted-true">در حال اجرا ✅</span>
-        }@else {
-            <span class="text-isStarted-false">هنوز شروع نشده ❌</span>
-        }
-    </div>
-    <mat-divider></mat-divider>
+<div class="card-items">
+    <span class="course-title">{{ courseIn.title }}</span>
+    @if (courseIn.isStarted == true) {
+    <span class="text-isStarted-true">در حال اجرا ✅</span>
+    }@else {
+    <span class="text-isStarted-false">هنوز شروع نشده ❌</span>
+    }
+</div>
+<mat-divider></mat-divider>
 }

@@ -131,28 +131,29 @@
                                 <app-datepicker [formControl]="TargetDateOfBirthCtrl" [maxDate]="max" [minDate]="min"
                                     [label]="'تاریخ تولد'">
                                 </app-datepicker>
-                                <mat-error
-                                    *ngIf="TargetDateOfBirthCtrl.hasError('required') && TargetDateOfBirthCtrl.touched">
-                                    وارد کردن تاریخ تولد الزامیست
-                                </mat-error>
+                                @if (TargetDateOfBirthCtrl.hasError('required') && TargetDateOfBirthCtrl.touched) {
+                                <mat-error>وارد کردن تاریخ تولد الزامیست</mat-error>
+                                }
                             </div>
                         </div>
 
                         <div class="div-button-submit">
-                            <button *ngIf="!targetProfileEditMode" class="button-edit-profile" type="button"
-                                mat-raised-button (click)="enableTargetProfileEdit()">
+                            @if (!targetProfileEditMode) {
+                            <button class="button-edit-profile" type="button" mat-raised-button
+                                (click)="enableTargetProfileEdit()">
                                 ایجاد تغییرات
                             </button>
-
-                            <button *ngIf="targetProfileEditMode" class="button-edit-profile" type="submit"
-                                mat-raised-button color="primary" [disabled]="targetMemberEditFg.invalid">
+                            }
+                            @else if (targetProfileEditMode) {
+                            <button class="button-edit-profile" type="submit" mat-raised-button color="primary"
+                                [disabled]="targetMemberEditFg.invalid">
                                 ذخیره تغییرات
                             </button>
-
-                            <button *ngIf="targetProfileEditMode" class="button-cancel" type="button" mat-stroked-button
+                            <button class="button-cancel" type="button" mat-stroked-button
                                 (click)="cancelTargetProfileEdit()">
                                 انصراف
                             </button>
+                            }
                         </div>
                     </form>
                 </div>
@@ -301,16 +302,18 @@
                                     </mat-option>
                                 </mat-select>
                                 <mat-hint>یک دوره انتخاب کنید</mat-hint>
-                                <mat-error *ngIf="TitleCourseCtrl.hasError('required')">
-                                    انتخاب دوره الزامیست
-                                </mat-error>
+                                @if (TitleCourseCtrl.hasError('required')) {
+                                <mat-error>انتخاب دوره الزامیست</mat-error>
+                                }
                             </mat-form-field>
 
                             <mat-form-field appearance="outline">
                                 <mat-label>پیش پرداخت</mat-label>
                                 <input type="text" matInput formControlName="paidAmountCtrl"
                                     placeholder="مثلاً 1,000,000" appCurrencyFormatter />
-                                <span matSuffix class="suffix-text" *ngIf="PaidAmountCtrl.value">تومان</span>
+                                @if (PaidAmountCtrl.value) {
+                                <span matSuffix class="suffix-text">تومان</span>
+                                }
                                 <mat-hint>مبلغی از شهریه که در ابتدا پرداخت می‌شود</mat-hint>
                                 @if (PaidAmountCtrl.hasError('required')) {
                                 <mat-error>وارد کردن مبلغ پیش پرداخت الزامیست</mat-error>
@@ -370,15 +373,18 @@
                                     </mat-option>
                                 </mat-select>
                                 <mat-hint>یک دوره انتخاب کنید</mat-hint>
-                                <mat-error *ngIf="TitleCourseUpdateCtrl.hasError('required')">انتخاب دوره
-                                    الزامیست</mat-error>
+                                @if (TitleCourseUpdateCtrl.hasError('required')) {
+                                <mat-error>انتخاب دوره الزامیست</mat-error>
+                                }
                             </mat-form-field>
 
                             <mat-form-field appearance="outline">
                                 <mat-label>مبلغ پرداختی</mat-label>
                                 <input type="text" formControlName="paidAmountUpdateCtrl" matInput appCurrencyFormatter
                                     placeholder="مثلا 1,000,000" />
-                                <span matSuffix class="suffix-text" *ngIf="PaidAmountUpdateCtrl.value">تومان</span>
+                                @if (PaidAmountUpdateCtrl.value) {
+                                <span matSuffix class="suffix-text">تومان</span>
+                                }
                                 <mat-hint>مبلغ پرداختی شهریه را وارد کنید</mat-hint>
                                 @if (PaidAmountUpdateCtrl.hasError('required')) {
                                 <mat-error>وارد کردن مبلغ پرداختی شهریه الزامیست</mat-error>
@@ -408,7 +414,7 @@
                                     </mat-radio-button>
                                     <mat-radio-button class="radio-button" [value]="0">
                                         <div class="div-radio-items">
-                                             <span>کارت به کارت</span>
+                                            <span>کارت به کارت</span>
                                             <img src="../assets/images/iconKartBeKart.png" alt="">
                                         </div>
                                     </mat-radio-button>
