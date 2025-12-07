@@ -10,6 +10,7 @@ export interface Member {
     age: number;
     isAbsent: boolean;
     photo: Photo;
+    roles: string[];
 }
 
 export interface ShowMember {

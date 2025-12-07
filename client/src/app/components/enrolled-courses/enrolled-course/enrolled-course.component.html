@@ -17,7 +17,7 @@
                     <div class="content">
                         <mat-form-field appearance="outline">
                             <mat-label>اسم دوره</mat-label>
-                            <mat-select formControlName="titleCourseCtrl">
+                            <mat-select formControlName="titleCtrl">
                                 <mat-option *ngFor="let course of showCourses" [value]="course.title">
                                     {{ course.title }}
                                 </mat-option>
@@ -58,7 +58,7 @@
                     <div class="content">
                         <mat-form-field appearance="outline">
                             <mat-label>اسم دوره</mat-label>
-                            <mat-select formControlName="titleCourseCtrl">
+                            <mat-select formControlName="titleCtrl">
                                 <mat-option *ngFor="let course of showCourses" [value]="course.title">
                                     {{ course.title }}
                                 </mat-option>

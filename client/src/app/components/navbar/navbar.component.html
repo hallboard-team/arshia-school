@@ -51,7 +51,7 @@
             <button [routerLink]="['/dashboard/manager-panel']"><span>پنل-مدیر</span></button>
             }
             @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
-            <button [routerLink]="['/dashboard/members']"><span>کاربران</span></button>
+            <button [routerLink]="['/dashboard/students']"><span>کاربران</span></button>
             }
             @if (loggedInUserSig && loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
             loggedInUserSig()?.roles?.includes('teacher')) {

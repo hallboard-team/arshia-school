@@ -163,10 +163,6 @@
                 @if (courses && targetUserProfile) {
                 <ng-container>
                     <div class="div-courses">
-                        <div class="title">
-                            <span>دوره های کاربر</span>
-                        </div>
-
                         @if (!loading) {
                         <div class="course-container">
                             @if (error) {
@@ -185,6 +181,11 @@
                                     <span class="name-of-course-women">{{ course.title }}</span>
                                     }
                                     <div class="tozihat-course">
+                                        <span class="text">
+                                            نام کلاس:
+                                            {{ course.className }}
+                                        </span>
+
                                         <span class="text">
                                             شهریه:
                                             {{ course.tuition | currency:'IRR' }}
@@ -296,7 +297,7 @@
 
                             <mat-form-field appearance="outline">
                                 <mat-label>نام دوره</mat-label>
-                                <mat-select formControlName="titleCourseCtrl">
+                                <mat-select formControlName="titleCtrl">
                                     <mat-option *ngFor="let course of showCourses" [value]="course.title">
                                         {{ course.title }}
                                     </mat-option>
@@ -305,6 +306,19 @@
                                 @if (TitleCourseCtrl.hasError('required')) {
                                 <mat-error>انتخاب دوره الزامیست</mat-error>
                                 }
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>نام کلاس</mat-label>
+                                <mat-select formControlName="classNameCtrl">
+                                    <mat-option *ngFor="let course of showCourses" [value]="course.className">
+                                        {{ course.className }}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-hint>یک کلاس انتخاب کنید</mat-hint>
+                                <mat-error *ngIf="ClassNameCtrl.hasError('required')">
+                                    انتخاب کلاس الزامی هست
+                                </mat-error>
                             </mat-form-field>
 
                             <mat-form-field appearance="outline">

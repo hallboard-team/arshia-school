@@ -419,30 +419,59 @@ public class ManagerRepository : IManagerRepository
   }
 
   public async Task<TargetMemberDto?> UpdateMemberAsync(
-    string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken
-  )
+       string memberUserName,
+       ManagerUpdateMemberDto updatedMember,
+       CancellationToken cancellationToken
+   )
   {
-    AppUser? targetAppUser = await _collectionAppUser.Find(u => u.NormalizedUserName == memberUserName.ToUpper()).
-      FirstOrDefaultAsync(cancellationToken);
+    AppUser? targetAppUser = await _collectionAppUser
+        .Find(u => u.NormalizedUserName == memberUserName.ToUpper())
+        .FirstOrDefaultAsync(cancellationToken);
 
     if (targetAppUser is null) return null;
 
-    FilterDefinition<AppUser>? filter = Builders<AppUser>.Filter.Eq(u => u.Id, targetAppUser.Id);
+    var builder = Builders<AppUser>.Update;
+    var updateDefinitions = new List<UpdateDefinition<AppUser>>();
 
-    UpdateDefinition<AppUser>? update = Builders<AppUser>.Update
-    .Set(u => u.Name, updatedMember.Name)
-    .Set(u => u.LastName, updatedMember.LastName)
-    .Set(u => u.PhoneNum, updatedMember.PhoneNum)
-    .Set(u => u.DateOfBirth, updatedMember.DateOfBirth);
+    if (!string.Equals(targetAppUser.Name, updatedMember.Name, StringComparison.Ordinal))
+      updateDefinitions.Add(builder.Set(u => u.Name, updatedMember.Name));
 
-    UpdateResult? updateResult = await _collectionAppUser.UpdateOneAsync(
-      filter, update, cancellationToken: cancellationToken
-    );
+    if (!string.Equals(targetAppUser.LastName, updatedMember.LastName, StringComparison.Ordinal))
+      updateDefinitions.Add(builder.Set(u => u.LastName, updatedMember.LastName));
 
-    AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == memberUserName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+    if (!string.Equals(targetAppUser.PhoneNum, updatedMember.PhoneNum, StringComparison.Ordinal))
+      updateDefinitions.Add(builder.Set(u => u.PhoneNum, updatedMember.PhoneNum));
 
-    return Mappers.ConvertAppUserToTargetMemberDto(appUser);
+    if (targetAppUser.DateOfBirth != updatedMember.DateOfBirth)
+      updateDefinitions.Add(builder.Set(u => u.DateOfBirth, updatedMember.DateOfBirth));
+
+    if (!string.IsNullOrWhiteSpace(updatedMember.Gender))
+    {
+      if (Enum.TryParse<GenderType>(updatedMember.Gender.Trim(), true, out var parsedGender))
+      {
+        updateDefinitions.Add(builder.Set(u => u.Gender, parsedGender));
+      }
+      else
+      {
+        return null;
+      }
+    }
+
+    if (updateDefinitions.Count > 0)
+    {
+      var filter = Builders<AppUser>.Filter.Eq(u => u.Id, targetAppUser.Id);
+      var combinedUpdate = builder.Combine(updateDefinitions);
+
+      await _collectionAppUser.UpdateOneAsync(filter, combinedUpdate, cancellationToken: cancellationToken);
+    }
+
+    AppUser? updatedAppUser = await _collectionAppUser
+        .Find(u => u.NormalizedUserName == memberUserName.ToUpper())
+        .FirstOrDefaultAsync(cancellationToken);
+
+    return updatedAppUser is null ? null : Mappers.ConvertAppUserToTargetMemberDto(updatedAppUser);
   }
+
 
   public async Task<OperationResult<MemberPhoto>> UploadMemberPhotoAsync(IFormFile file, string userName, CancellationToken cancellationToken)
   {
