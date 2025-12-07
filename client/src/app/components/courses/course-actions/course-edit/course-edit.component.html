@@ -19,10 +19,16 @@
                 <mat-label>نام دوره</mat-label>
                 <input class="input" autoFocusDir type="text" formControlName="titleCtrl" matInput dir="auto"
                     placeholder="بین ۲ تا ۳۰ کاراکتر باشد">
-                <mat-hint *ngIf="!showErr(TitleCtrl)">در صورت تغییر، اسم جدید دوره را وارد کنید</mat-hint>
-                <mat-error *ngIf="TitleCtrl.hasError('required')">لطفاً نام دوره را وارد کنید</mat-error>
-                <mat-error *ngIf="TitleCtrl.hasError('minlength')">حداقل ۲ کاراکتر</mat-error>
-                <mat-error *ngIf="TitleCtrl.hasError('maxlength')">حداکثر ۳۰ کاراکتر</mat-error>
+                <mat-hint>در صورت تغییر، اسم جدید دوره را وارد کنید</mat-hint>
+                @if (TitleCtrl.hasError('required')) {
+                <mat-error>لطفاً نام دوره را وارد کنید</mat-error>
+                }
+                @else if (TitleCtrl.errors && TitleCtrl.hasError('minlength')) {
+                <mat-error>حداقل ۲ کاراکتر</mat-error>
+                }
+                @else if (TitleCtrl.errors && TitleCtrl.hasError('maxlength')) {
+                <mat-error>حداکثر ۳۰ کاراکتر</mat-error>
+                }
             </mat-form-field>
 
             <!-- class name -->
@@ -30,10 +36,16 @@
                 <mat-label>نام کلاس</mat-label>
                 <input class="input" autoFocusDir type="text" formControlName="classNameCtrl" matInput dir="auto"
                     placeholder="بین ۲ تا ۳۰ کاراکتر باشد">
-                <mat-hint *ngIf="!showErr(ClassNameCtrl)">در صورت تغییر، اسم جدید دوره را وارد کنید</mat-hint>
-                <mat-error *ngIf="ClassNameCtrl.hasError('required')">لطفاً نام دوره را وارد کنید</mat-error>
-                <mat-error *ngIf="ClassNameCtrl.hasError('minlength')">حداقل ۲ کاراکتر</mat-error>
-                <mat-error *ngIf="ClassNameCtrl.hasError('maxlength')">حداکثر ۳۰ کاراکتر</mat-error>
+                <mat-hint>در صورت تغییر، اسم جدید دوره را وارد کنید</mat-hint>
+                @if(ClassNameCtrl.hasError('required')) {
+                <mat-error>لطفاً نام دوره را وارد کنید</mat-error>
+                }
+                @else if (ClassNameCtrl.errors && ClassNameCtrl.hasError('minlength')) {
+                <mat-error>حداقل ۲ کاراکتر</mat-error>
+                }
+                @else if (ClassNameCtrl.errors && ClassNameCtrl.hasError('maxlength')) {
+                <mat-error>حداکثر ۳۰ کاراکتر</mat-error>
+                }
             </mat-form-field>
 
             <!-- tuition -->
@@ -42,11 +54,17 @@
                 <input class="input" type="text" matInput formControlName="tuitionCtrl" appCurrencyFormatter
                     inputmode="numeric" dir="ltr" placeholder="از ۱۰.۰۰۰ تومان">
                 <span matSuffix *ngIf="TuitionCtrl.value">تومان</span>
-                <mat-hint *ngIf="!showErr(TuitionCtrl)">بین ۱۰,۰۰۰ تا ۱۰۰,۰۰۰,۰۰۰</mat-hint>
-                <mat-error *ngIf="TuitionCtrl.hasError('required')">لطفاً مبلغ شهریه را مشخص کنید</mat-error>
-                <mat-error *ngIf="TuitionCtrl.hasError('min')">حداقل شهریه ۱۰.۰۰۰ تومان است</mat-error>
-                <mat-error *ngIf="TuitionCtrl.hasError('max')">حداکثر شهریه ۱۰۰.۰۰۰.۰۰۰ تومان (صد میلیون تومان)
+                <mat-hint>بین ۱۰,۰۰۰ تا ۱۰۰,۰۰۰,۰۰۰</mat-hint>
+                @if (TuitionCtrl.hasError('required')) {
+                <mat-error>لطفاً مبلغ شهریه را مشخص کنید</mat-error>
+                }
+                @else if (TuitionCtrl.errors && TuitionCtrl.hasError('min')) {
+                <mat-error>حداقل شهریه ۱۰.۰۰۰ تومان است</mat-error>
+                }
+                @else if (TuitionCtrl.errors && TuitionCtrl.hasError('max')) {
+                <mat-error>حداکثر شهریه ۱۰۰.۰۰۰.۰۰۰ تومان (صد میلیون تومان)
                     است</mat-error>
+                }
             </mat-form-field>
 
             <!-- total hours -->
@@ -54,12 +72,16 @@
                 <mat-label>ساعت دوره</mat-label>
                 <input class="input" type="text" formControlName="hoursCtrl" matInput min="0.5" max="20000"
                     appDecimalFormatter inputmode="decimal" step="0.5" dir="ltr" placeholder="مجموع ساعت دوره">
-                <mat-hint *ngIf="!showErr(HoursCtrl)">
-                    بین ۰۰:۳۰ تا ۲۰.۰۰۰
-                </mat-hint>
-                <mat-error *ngIf="HoursCtrl.hasError('required')">لطفاً ساعت کل دوره را وارد کنید</mat-error>
-                <mat-error *ngIf="HoursCtrl.hasError('min')">حداقل ۰,۵ ساعت</mat-error>
-                <mat-error *ngIf="HoursCtrl.hasError('max')">حداکثر ۲۰,۰۰۰ ساعت</mat-error>
+                <mat-hint>بین ۰۰:۳۰ تا ۲۰.۰۰۰</mat-hint>
+                @if (HoursCtrl.hasError('required')) {
+                <mat-error>لطفاً ساعت کل دوره را وارد کنید</mat-error>
+                }
+                @else if (HoursCtrl.errors && HoursCtrl.hasError('min')) {
+                <mat-error>حداقل ۰,۵ ساعت</mat-error>
+                }
+                @else if (HoursCtrl.errors && HoursCtrl.hasError('max')) {
+                <mat-error>حداکثر ۲۰,۰۰۰ ساعت</mat-error>
+                }
             </mat-form-field>
 
             <!-- hours per class -->
@@ -67,18 +89,28 @@
                 <mat-label>ساعت هرکلاس</mat-label>
                 <input class="input" type="number" formControlName="hoursPerClassCtrl" matInput min="0.5" max="10"
                     step="0.5" inputmode="decimal" dir="ltr" placeholder="شروع از 0.5 ساعت">
-                <mat-hint *ngIf="!showErr(HoursPerClassCtrl)">بین ۰۰:۳۰ تا ۱۰</mat-hint>
-                <mat-error *ngIf="HoursPerClassCtrl.hasError('required')">لطفا ساعت هر کلاس را مشخص کنید</mat-error>
-                <mat-error *ngIf="HoursPerClassCtrl.hasError('pattern')">فقط اعداد ۰,۵ تا ۱۰ با گام ۰,۵ مجاز
+                <mat-hint>بین ۰۰:۳۰ تا ۱۰</mat-hint>
+                @if (HoursPerClassCtrl.hasError('required')) {
+                <mat-error>لطفا ساعت هر کلاس را مشخص کنید</mat-error>
+                }
+                @else if (HoursPerClassCtrl.errors && HoursPerClassCtrl.hasError('pattern')) {
+                <mat-error>فقط اعداد ۰,۵ تا ۱۰ با گام ۰,۵ مجاز
                     است</mat-error>
-                <mat-error *ngIf="HoursPerClassCtrl.hasError('min')">حداقل زمان کلاس: نیم ساعت</mat-error>
-                <mat-error *ngIf="HoursPerClassCtrl.hasError('max')">حداکثر زمان کلاس: ۱۰ ساعت</mat-error>
+                }
+                @else if (HoursPerClassCtrl.errors && HoursPerClassCtrl.hasError('min')) {
+                <mat-error>حداقل زمان کلاس: نیم ساعت</mat-error>
+                }
+                @else if (HoursPerClassCtrl.errors && HoursPerClassCtrl.hasError('max')) {
+                <mat-error>حداکثر زمان کلاس: ۱۰ ساعت</mat-error>
+                }
             </mat-form-field>
 
             <div class="start-date-field">
                 <app-datepicker [formControl]="StartCtrl" [maxDate]="max" [minDate]="min"></app-datepicker>
-                <mat-error *ngIf="StartCtrl.hasError('required')">بدون وارد کردن تاریخ شروع، ثبت دوره ممکن
+                @if (StartCtrl.hasError('required')) {
+                <mat-error>بدون وارد کردن تاریخ شروع، ثبت دوره ممکن
                     نیست</mat-error>
+                }
             </div>
 
             <div class="div-isStarted">
@@ -129,19 +161,20 @@
                 </div>
 
                 <div class="div-add-or-remove-teacher-btn">
-                    <button class="button add-professor" *ngIf="!professorUserNames.includes(teacher.userName)"
-                        (click)="addProfessor(teacher)">
+                    @if (professorUserNames.includes(teacher.userName)) {
+                    <button class="button add-professor" (click)="addProfessor(teacher)">
                         <ng-container>
                             <mat-icon>person_add</mat-icon>
                         </ng-container>
                     </button>
-
-                    <button class="button delete-professor" *ngIf="professorUserNames.includes(teacher.userName)"
-                        (click)="removeProfessor(teacher)">
+                    }
+                    @if (professorUserNames.includes(teacher.userName)) {
+                    <button class="button delete-professor" (click)="removeProfessor(teacher)">
                         <ng-container>
                             <mat-icon>person_remove</mat-icon>
                         </ng-container>
                     </button>
+                    }
                 </div>
             </div>
             }

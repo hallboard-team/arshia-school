@@ -19,8 +19,12 @@
                 <span class="title">📅 تاریخ شروع دوره</span>
                 <span class="result">{{ course.shamsiStart }}</span>
             </div>
-            <span class="text-isStarted-true" *ngIf="course.isStarted">در حال اجرا ✅</span>
-            <span class="text-isStarted-false" *ngIf="!course.isStarted">هنوز شروع نشده ❌</span>
+            @if (course.isStarted) {
+            <span class="text-isStarted-true">در حال اجرا ✅</span>
+            }
+            @else if (!course.isStarted) {
+            <span class="text-isStarted-false">هنوز شروع نشده ❌</span>
+            }
 
             <button class="btn-click-student-show" [routerLink]="['/students-card/' + course.title]">
                 مشاهده دانش‌آموزان 📚

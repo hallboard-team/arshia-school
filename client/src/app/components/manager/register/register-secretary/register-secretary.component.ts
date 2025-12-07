@@ -49,7 +49,7 @@ export class RegisterSecretaryComponent {
     nameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validators.pattern(this.NAME_REGEX)]],
     lastNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30), Validators.pattern(this.NAME_REGEX)]],
     phoneNumCtrl: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
-    dateOfBirthCtrl: [null, [Validators.required]],
+    dateOfBirthCtrl: ['', [Validators.required]],
     genderCtrl: ['', [Validators.required]]
   });
 
