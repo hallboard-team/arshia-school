@@ -76,6 +76,18 @@
                 }
             }
 
+            app-datepicker {
+                display: flex;
+                width: 100%;
+            }
+
+            .form-item.date-item {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
             .field-error {
                 margin-top: 6px;
                 padding: 0 4px;
@@ -120,17 +132,27 @@
         max-width: 45%;
         width: auto;
     }
+
+    .register-form .content .form-item.date-item {
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 @media (min-width: 1200px) {
     .register-form .content {
-        width: 60%;
+        width: 75%;
         justify-content: space-between;
     }
 
     .register-form .content .form-item {
-        flex: 1 1 30%;
-        max-width: 30%;
+        flex: 1 1 45%;
+        max-width: 45%;
+    }
+
+    .register-form .content .form-item.date-item {
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
