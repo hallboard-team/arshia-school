@@ -309,7 +309,11 @@
 
                             <mat-form-field appearance="outline">
                                 <mat-label>نام کلاس</mat-label>
-                                <input type="text" matInput formControlName="classNameCtrl" />
+                                <mat-select formControlName="classNameCtrl">
+                                    <mat-option *ngFor="let course of showCourses" [value]="course.className">
+                                        {{ course.className }}
+                                    </mat-option>
+                                </mat-select>
                                 <mat-hint>یک کلاس انتخاب کنید</mat-hint>
                                 <mat-error *ngIf="ClassNameCtrl.hasError('required')">
                                     انتخاب کلاس الزامی هست
@@ -418,7 +422,7 @@
                                     </mat-radio-button>
                                     <mat-radio-button class="radio-button" [value]="0">
                                         <div class="div-radio-items">
-                                             <span>کارت به کارت</span>
+                                            <span>کارت به کارت</span>
                                             <img src="../assets/images/iconKartBeKart.png" alt="">
                                         </div>
                                     </mat-radio-button>
