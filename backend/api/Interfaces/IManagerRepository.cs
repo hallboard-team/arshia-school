@@ -25,4 +25,5 @@ public interface IManagerRepository
     Task<Payment?> GetTargetPaymentByIdAsync(string targetPaymentId, CancellationToken cancellationToken);
     Task<List<string>> GetTargetCourseTitleAsync(string targetUserName, CancellationToken cancellationToken);
     Task<PagedList<Attendence>> GetAllAttendenceAsync(AttendenceParams attendenceParams, string targetMemberUserName, string targetCourseTitle, CancellationToken cancellationToken);
+    Task<List<AppRole>> GetAllRoleAsync(CancellationToken cancellationToken);
 }

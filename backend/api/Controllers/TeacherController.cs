@@ -1,7 +1,7 @@
 namespace api.Controllers;
 
 [Authorize(Policy = "RequiredTeacherRole")]
-public class TeacherController(ITeacherRepository _teacherRepository, ITokenService _tokenService) : BaseApiController
+public class TeacherController(ITeacherRepository _teacherRepository, ITokenService _tokenService, IManagerRepository _managerRepository) : BaseApiController
 {
     // [HttpGet("get-course")]
     // public async Task<ActionResult<List<Course>>> GetCourse(CancellationToken cancellationToken)
@@ -153,11 +153,14 @@ public class TeacherController(ITeacherRepository _teacherRepository, ITokenServ
 
         var absences = await _teacherRepository.CheckIsAbsentAsync(studentIds, courseId.Value, cancellationToken);
 
+        List<AppRole> appRoles = await _managerRepository.GetAllRoleAsync(cancellationToken);
+        Dictionary<ObjectId, string?> roleIdsToName = appRoles.ToDictionary(r => r.Id, r => r.Name);
+
         var memberDtos = new List<MemberDto>();
         foreach (var appUser in pagedAppUsers)
         {
             bool isAbsent = absences.TryGetValue(appUser.Id, out var val) && val;
-            memberDtos.Add(Mappers.ConvertAppUserToMemberDto(appUser, isAbsent));
+            memberDtos.Add(Mappers.ConvertAppUserToMemberDto(appUser, isAbsent, roleIdsToName!));
         }
 
         return Ok(memberDtos);

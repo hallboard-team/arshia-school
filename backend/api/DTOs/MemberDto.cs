@@ -8,5 +8,6 @@ public record MemberDto(
     int Age,
     DateOnly DateOfBirth,
     bool IsAbsent,
-    MemberPhoto? Photo
+    MemberPhoto? Photo,
+    List<string> Roles
 );

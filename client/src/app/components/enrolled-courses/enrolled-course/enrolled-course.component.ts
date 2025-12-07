@@ -67,7 +67,8 @@ export class EnrolledCourseComponent {
   }
 
   addEnrolledCourseFg: FormGroup = this.fb.group({
-    titleCourseCtrl: ['', Validators.required],
+    titleCtrl: ['', Validators.required],
+    classNameCtrl: ['', Validators.required],
     numberOfPaymentsCtrl: ['', [Validators.required]],
     paidAmountCtrl: ['', [Validators.required]]
   })
@@ -78,8 +79,11 @@ export class EnrolledCourseComponent {
     methodCtrl: ['', [Validators.required]]
   })
 
-  get TitleCourseCtrl(): FormControl {
+  get TitleCtrl(): FormControl {
     return this.addEnrolledCourseFg.get('titleCourseCtrl') as FormControl;
+  }
+  get ClassNameCtrl(): FormControl {
+    return this.addEnrolledCourseFg.get('classNameCtrl') as FormControl;
   }
   get NumberOfPaymentsCtrl(): FormControl {
     return this.addEnrolledCourseFg.get('numberOfPaymentsCtrl') as FormControl;
@@ -103,7 +107,8 @@ export class EnrolledCourseComponent {
 
     if (memberUserName) {
       let addEnrolledCourse: AddEnrolledCourse = {
-        titleCourse: this.TitleCourseCtrl.value,
+        title: this.TitleCtrl.value,
+        className: this.ClassNameCtrl.value,
         numberOfPayments: this.NumberOfPaymentsCtrl.value,
         paidAmount: this.PaidAmountCtrl.value
       }

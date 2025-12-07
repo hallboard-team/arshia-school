@@ -26,9 +26,12 @@
         <img src="../assets/images/logo-education.png" alt="Tolou Fanavari" />
     </a>
 
-    <div class="backdrop" *ngIf="showMobileMenu" (click)="closeMenu()"></div>
+    @if (showMobileMenu) {
+    <div class="backdrop" (click)="closeMenu()"></div>
+    }
 
-    <div class="hamburger-menu" *ngIf="showMobileMenu" (click)="$event.stopPropagation()">
+    @if (showMobileMenu) {
+    <div class="hamburger-menu" (click)="$event.stopPropagation()">
         <div class="top">
             <button class="Btn" (click)="closeMenu()">
                 <div class="sign">
@@ -48,7 +51,7 @@
             <button [routerLink]="['/dashboard/manager-panel']"><span>پنل-مدیر</span></button>
             }
             @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
-            <button [routerLink]="['/dashboard/members']"><span>کاربران</span></button>
+            <button [routerLink]="['/dashboard/students']"><span>کاربران</span></button>
             }
             @if (loggedInUserSig && loggedInUserSig()?.userName?.toLowerCase() !== 'admin' &&
             loggedInUserSig()?.roles?.includes('teacher')) {
@@ -57,6 +60,8 @@
             <button [routerLink]="['/dashboard/courses']">دوره ها</button>
         </div>
     </div>
+    }
+
 
     <section class="left">
         <div class="div-btns">
@@ -78,9 +83,12 @@
             </button>
             }
 
-            <div class="profile-backdrop" *ngIf="showProfile" (click)="closeProfile()"></div>
+            @if (showProfile) {
+            <div class="profile-backdrop" (click)="closeProfile()"></div>
+            }
 
-            <div class="div-open-profile" *ngIf="showProfile" #profilePanel (click)="$event.stopPropagation()">
+            @if (showProfile) {
+            <div class="div-open-profile" #profilePanel (click)="$event.stopPropagation()">
                 <div class="div-button-back-page">
                     <button class="back-to-page" (click)="closeProfile()"><mat-icon>close</mat-icon></button>
                 </div>
@@ -104,6 +112,8 @@
                     </button>
                 </div>
             </div>
+            }
+
         </div>
     </section>
 </nav>

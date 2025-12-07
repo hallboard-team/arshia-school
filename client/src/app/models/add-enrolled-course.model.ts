@@ -1,5 +1,6 @@
 export interface AddEnrolledCourse {
-    titleCourse: string,
+    title: string,
+    className: string,
     numberOfPayments: number,
     paidAmount: number
 }

@@ -46,6 +46,7 @@ public class CourseResponse
 {
     public string Id { get; init; } = string.Empty;
     public string Title { get; init; } = string.Empty;
+    public string ClassName { get; init; } = string.Empty;
     public List<string> ProfessorUserNames { get; init; } = new();
     public List<string> ProfessorNames { get; init; } = new();
     public int Tuition { get; init; }

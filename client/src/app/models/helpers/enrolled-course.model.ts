@@ -1,5 +1,6 @@
 export interface EnrolledCourse {
     courseTitle: string;
+    className: string;
     courseTuition: number;
     numberOfPayments: number;
     paidNumber: number;

@@ -44,8 +44,10 @@ public static class Mappers
         };
     }
 
-    public static MemberDto ConvertAppUserToMemberDto(AppUser appUser, bool isAbsent)
+    public static MemberDto ConvertAppUserToMemberDto(AppUser appUser, bool isAbsent, Dictionary<ObjectId, string> roleIdToName)
     {
+        List<string> roles = [.. appUser.Roles.Select(rId => roleIdToName.ContainsKey(rId) ? roleIdToName[rId] : string.Empty).Where(r => !string.IsNullOrEmpty(r))];
+
         return new MemberDto(
             Email: appUser.Email ?? string.Empty,
             UserName: appUser.NormalizedUserName ?? string.Empty,
@@ -56,7 +58,8 @@ public static class Mappers
             Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth),
             DateOfBirth: appUser.DateOfBirth,
             IsAbsent: isAbsent,
-            Photo: appUser.Photo
+            Photo: appUser.Photo,
+            Roles: roles
         );
     }
 
@@ -169,6 +172,7 @@ public static class Mappers
         {
             Id = course.Id.ToString(),
             Title = course.Title,
+            ClassName = course.ClassName,
             ProfessorUserNames = userNames,
             ProfessorNames = names,
             Tuition = course.Tuition,

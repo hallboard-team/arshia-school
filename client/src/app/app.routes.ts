@@ -30,6 +30,7 @@ import { CourseCardComponent } from './components/courses/course-card/course-car
 import { CourseEditComponent } from './components/courses/course-actions/course-edit/course-edit.component';
 import { CoursesListComponent } from './components/courses/course-list/course-list.component';
 import { MainDashboardComponent } from './components/dashboard/main-dashboard/main-dashboard.component';
+import { StaffListComponent } from './components/members/staff-list/staff-list.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -70,7 +71,8 @@ export const routes: Routes = [
 
                     // manager-only
                     { path: 'target-user-profile/:memberUserName', component: TargetUserProfileComponent, canActivate: [managerGuard] },
-                    { path: 'members', component: MemberListComponent, canActivate: [managerGuard] },
+                    { path: 'students', component: MemberListComponent, canActivate: [managerGuard] },
+                    { path: 'staffs', component: StaffListComponent, canActivate: [managerGuard]},
                     { path: 'manager-panel', component: ManagerPanelComponent, canActivate: [managerGuard] },
                     { path: 'add-course', component: CourseCreateComponent, canActivate: [managerGuard] },
                     { path: 'update-course/:courseTitle', component: CourseEditComponent, canActivate: [managerGuard] },

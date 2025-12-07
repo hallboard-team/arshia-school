@@ -1,0 +1,107 @@
+.member-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    height: 310px;
+    gap: 10px;
+    padding: 1rem;
+
+    border-radius: 10px;
+    background: linear-gradient(145deg, #f0f0f0, #cacaca);
+    box-shadow: 5px 5px 10px #929292, -5px -5px 10px #ffffff;
+
+    .profile {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-top: 5px;
+    }
+
+    span {
+        font-size: 15px;
+        color: black;
+        direction: rtl;
+        white-space: normal;
+        word-wrap: break-word;
+    }
+
+    .info {
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        margin-top: 0.25rem;
+
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.55);
+        box-shadow: inset 2px 2px 4px #d0d0d0,
+            inset -2px -2px 4px #ffffff;
+
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+        direction: rtl;
+    }
+
+    .field {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+
+    .label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .value {
+        font-size: 15px;
+        font-weight: 500;
+        color: #000;
+        white-space: normal;
+        word-wrap: break-word;
+    }
+
+    .div-btns {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+
+        margin-top: auto;
+
+        .button-view {
+            height: 30px;
+            padding: 1rem;
+            font-size: 15px;
+
+            border: none;
+            border-radius: 10px;
+
+            background: #e0e0e0;
+            box-shadow: inset 5px 5px 10px #a8a8a8,
+                inset -5px -5px 10px #ffffff;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            transition: 0.3s;
+        }
+
+        .button-view:hover {
+            cursor: pointer;
+            background: linear-gradient(145deg, #f0f0f0, #cacaca);
+            box-shadow: 5px 5px 10px #a8a8a8,
+                -5px -5px 10px #ffffff;
+        }
+    }
+}
+
+.member-card:hover {
+    cursor: pointer;
+}

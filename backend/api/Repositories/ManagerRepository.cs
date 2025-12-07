@@ -400,7 +400,10 @@ public class ManagerRepository : IManagerRepository
     AppUser? appUser = await _userManager.FindByEmailAsync(targetMemberEmail);
     if (appUser is null) return null;
 
-    return ConvertAppUserToMemberDto(appUser, isAbsent: false);
+    List<AppRole> appRoles = await GetAllRoleAsync(cancellationToken);
+    Dictionary<ObjectId, string?> roleIdsToName = appRoles.ToDictionary(r => r.Id, r => r.Name);
+
+    return ConvertAppUserToMemberDto(appUser, isAbsent: false, roleIdsToName!);
   }
 
   public async Task<TargetMemberDto?> GetMemberByUserNameAsync(
@@ -416,30 +419,59 @@ public class ManagerRepository : IManagerRepository
   }
 
   public async Task<TargetMemberDto?> UpdateMemberAsync(
-    string memberUserName, ManagerUpdateMemberDto updatedMember, CancellationToken cancellationToken
-  )
+       string memberUserName,
+       ManagerUpdateMemberDto updatedMember,
+       CancellationToken cancellationToken
+   )
   {
-    AppUser? targetAppUser = await _collectionAppUser.Find(u => u.NormalizedUserName == memberUserName.ToUpper()).
-      FirstOrDefaultAsync(cancellationToken);
+    AppUser? targetAppUser = await _collectionAppUser
+        .Find(u => u.NormalizedUserName == memberUserName.ToUpper())
+        .FirstOrDefaultAsync(cancellationToken);
 
     if (targetAppUser is null) return null;
 
-    FilterDefinition<AppUser>? filter = Builders<AppUser>.Filter.Eq(u => u.Id, targetAppUser.Id);
+    var builder = Builders<AppUser>.Update;
+    var updateDefinitions = new List<UpdateDefinition<AppUser>>();
 
-    UpdateDefinition<AppUser>? update = Builders<AppUser>.Update
-    .Set(u => u.Name, updatedMember.Name)
-    .Set(u => u.LastName, updatedMember.LastName)
-    .Set(u => u.PhoneNum, updatedMember.PhoneNum)
-    .Set(u => u.DateOfBirth, updatedMember.DateOfBirth);
+    if (!string.Equals(targetAppUser.Name, updatedMember.Name, StringComparison.Ordinal))
+      updateDefinitions.Add(builder.Set(u => u.Name, updatedMember.Name));
 
-    UpdateResult? updateResult = await _collectionAppUser.UpdateOneAsync(
-      filter, update, cancellationToken: cancellationToken
-    );
+    if (!string.Equals(targetAppUser.LastName, updatedMember.LastName, StringComparison.Ordinal))
+      updateDefinitions.Add(builder.Set(u => u.LastName, updatedMember.LastName));
 
-    AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == memberUserName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+    if (!string.Equals(targetAppUser.PhoneNum, updatedMember.PhoneNum, StringComparison.Ordinal))
+      updateDefinitions.Add(builder.Set(u => u.PhoneNum, updatedMember.PhoneNum));
 
-    return Mappers.ConvertAppUserToTargetMemberDto(appUser);
+    if (targetAppUser.DateOfBirth != updatedMember.DateOfBirth)
+      updateDefinitions.Add(builder.Set(u => u.DateOfBirth, updatedMember.DateOfBirth));
+
+    if (!string.IsNullOrWhiteSpace(updatedMember.Gender))
+    {
+      if (Enum.TryParse<GenderType>(updatedMember.Gender.Trim(), true, out var parsedGender))
+      {
+        updateDefinitions.Add(builder.Set(u => u.Gender, parsedGender));
+      }
+      else
+      {
+        return null;
+      }
+    }
+
+    if (updateDefinitions.Count > 0)
+    {
+      var filter = Builders<AppUser>.Filter.Eq(u => u.Id, targetAppUser.Id);
+      var combinedUpdate = builder.Combine(updateDefinitions);
+
+      await _collectionAppUser.UpdateOneAsync(filter, combinedUpdate, cancellationToken: cancellationToken);
+    }
+
+    AppUser? updatedAppUser = await _collectionAppUser
+        .Find(u => u.NormalizedUserName == memberUserName.ToUpper())
+        .FirstOrDefaultAsync(cancellationToken);
+
+    return updatedAppUser is null ? null : Mappers.ConvertAppUserToTargetMemberDto(updatedAppUser);
   }
+
 
   public async Task<OperationResult<MemberPhoto>> UploadMemberPhotoAsync(IFormFile file, string userName, CancellationToken cancellationToken)
   {
@@ -700,6 +732,27 @@ public class ManagerRepository : IManagerRepository
           u.EnrolledCourses.Any(c => c.ClassName.Contains(s)));
     }
 
+    if (memberParams.Roles is not null)
+    {
+      var roleNames = memberParams.Roles
+        .Where(r => !string.IsNullOrWhiteSpace(r))
+        .Select(r => r.Trim().ToUpper())
+        .ToList();
+
+      if (roleNames.Count > 0)
+      {
+        List<ObjectId> roleIds = _collectionRole.AsQueryable()
+          .Where(r => roleNames.Contains(r.NormalizedName!))
+          .Select(r => r.Id)
+          .ToList();
+
+        if (roleIds.Count > 0)
+        {
+          query = query.Where(u => u.Roles.Any(rId => roleIds.Contains(rId)));
+        }
+      }
+    }
+
     query = query.Where(u => u.NormalizedUserName != "ADMIN" && u.NormalizedUserName != "MANAGER");
     query = query.Where(u => u.Id != memberParams.UserId);
     query = query.Where(u => u.DateOfBirth >= minDob && u.DateOfBirth <= maxDob);
@@ -736,11 +789,17 @@ public class ManagerRepository : IManagerRepository
     return ValidationsExtensions.ValidateObjectId(userId);
   }
 
+  public async Task<List<AppRole>> GetAllRoleAsync(CancellationToken cancellationToken)
+  {
+    return await _collectionRole.Find(_ => true).ToListAsync();
+  }
+
   #region Vars and Constructor
 
   private readonly IMongoCollection<AppUser> _collectionAppUser;
   private readonly IMongoCollection<Course> _collectionCourse;
   private readonly IMongoCollection<Attendence> _collectionAttendence;
+  private readonly IMongoCollection<AppRole> _collectionRole;
   private readonly UserManager<AppUser> _userManager;
   private readonly ITokenService _tokenService;
   private readonly IMongoClient _client;
@@ -762,6 +821,7 @@ public class ManagerRepository : IManagerRepository
     _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.CollectionUsers);
     _collectionCourse = database.GetCollection<Course>(AppVariablesExtensions.CollectionCourses);
     _collectionAttendence = database.GetCollection<Attendence>(AppVariablesExtensions.CollectionAttendences);
+    _collectionRole = database.GetCollection<AppRole>(AppVariablesExtensions.CollectionRoles);
 
     _userManager = userManager;
     _tokenService = tokenService;
