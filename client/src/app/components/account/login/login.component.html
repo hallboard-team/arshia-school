@@ -12,21 +12,25 @@
       <div class="content">
         <span class="title">به آکادمی طلوع فناوری خوش آمدید</span>
 
+        <!-- Email -->
         <mat-form-field appearance="outline">
           <mat-label>ایمیل</mat-label>
-          <input matInput type="email" formControlName="emailCtrl" maxlength="50" placeholder="ایمیل خود را وارد کنید"
+          <input matInput type="email" formControlName="emailCtrl" placeholder="ایمیل خود را وارد کنید"
             autocomplete="email" />
-
           <mat-hint>ایمیل خودرا وارد کنید</mat-hint>
-
-          <mat-error *ngIf="EmailCtrl.hasError('required')">این فیلد الزامی است</mat-error>
-          <mat-error *ngIf="EmailCtrl.hasError('pattern')">ایمیل را به‌درستی وارد کنید</mat-error>
-          <mat-error *ngIf="EmailCtrl.hasError('maxlength')">حداکثر ۵۰ کاراکتر</mat-error>
-
-          <mat-hint align="end">{{ (EmailCtrl.value?.length || 0) }}/50</mat-hint>
+          @if (EmailCtrl.hasError('required')) {
+          <mat-error>این فیلد الزامی است</mat-error>
+          }
+          @else if (EmailCtrl.errors && EmailCtrl.hasError('pattern')) {
+          <mat-error>ایمیل را به‌درستی وارد کنید</mat-error>
+          }
+          @else if (EmailCtrl.errors && EmailCtrl.hasError('maxlength')) {
+          <mat-error>حداکثر ۵۰ کاراکتر</mat-error>
+          }
         </mat-form-field>
 
 
+        <!-- Password -->
         <mat-form-field appearance="outline">
           <mat-label>رمز عبور</mat-label>
           <input [type]="hidePassword ? 'password' : 'text'" formControlName="passwordCtrl" matInput

@@ -21,20 +21,16 @@
 
                     <input class="input" autoFocusDir type="text" matInput dir="auto" formControlName="titleCtrl"
                         placeholder="بین ۲ تا ۳۰ کاراکتر باشد">
-
-                    <mat-hint *ngIf="!showErr(TitleCtrl)">
-                        اسم دوره جدید را وارد کنید
-                    </mat-hint>
-
-                    <mat-error *ngIf="TitleCtrl.hasError('required')">
-                        لطفاً نام دوره را وارد کنید
-                    </mat-error>
-                    <mat-error *ngIf="TitleCtrl.hasError('minlength')">
-                        حداقل ۲ کاراکتر
-                    </mat-error>
-                    <mat-error *ngIf="TitleCtrl.hasError('maxlength')">
-                        حداکثر ۳۰ کاراکتر
-                    </mat-error>
+                    <mat-hint>اسم دوره جدید را وارد کنید</mat-hint>
+                    @if (TitleCtrl.hasError('required')) {
+                    <mat-error>لطفاً نام دوره را وارد کنید</mat-error>
+                    }
+                    @else if (TitleCtrl.errors && TitleCtrl.hasError('minlength')) {
+                    <mat-error>حداقل ۲ کاراکتر</mat-error>
+                    }
+                    @else if (TitleCtrl.errors && TitleCtrl.hasError('maxlength')) {
+                    <mat-error>حداکثر ۳۰ کاراکتر</mat-error>
+                    }
                 </mat-form-field>
             </div>
 
@@ -45,20 +41,16 @@
 
                     <input class="input" autoFocusDir type="text" matInput dir="auto" formControlName="classNameCtrl"
                         placeholder="بین ۲ تا ۳۰ کاراکتر باشد">
-
-                    <mat-hint *ngIf="!showErr(ClassNameCtrl)">
-                        نام کلاس جدید را وارد کنید
-                    </mat-hint>
-
-                    <mat-error *ngIf="ClassNameCtrl.hasError('required')">
-                        لطفاً نام کلاس را وارد کنید
-                    </mat-error>
-                    <mat-error *ngIf="ClassNameCtrl.hasError('minlength')">
-                        حداقل ۲ کاراکتر
-                    </mat-error>
-                    <mat-error *ngIf="ClassNameCtrl.hasError('maxlength')">
-                        حداکثر ۳۰ کاراکتر
-                    </mat-error>
+                    <mat-hint>نام کلاس جدید را وارد کنید</mat-hint>
+                    @if (ClassNameCtrl.hasError('required')) {
+                    <mat-error>لطفاً نام کلاس را وارد کنید</mat-error>
+                    }
+                    @else if (ClassNameCtrl.errors && ClassNameCtrl.hasError('minlength')) {
+                    <mat-error>حداقل ۲ کاراکتر</mat-error>
+                    }
+                    @else if (ClassNameCtrl.errors && ClassNameCtrl.hasError('maxlength')) {
+                    <mat-error>حداکثر ۳۰ کاراکتر</mat-error>
+                    }
                 </mat-form-field>
             </div>
 
@@ -66,27 +58,22 @@
             <div class="form-item">
                 <mat-form-field appearance="outline" class="tuition-field">
                     <mat-label>شهریه</mat-label>
-
                     <input class="input" type="text" matInput formControlName="tuitionCtrl" appCurrencyFormatter
                         inputmode="numeric" dir="ltr" placeholder="از ۱۰.۰۰۰ تومان">
-
                     <span matSuffix *ngIf="TuitionCtrl.value">
                         تومان
                     </span>
-
-                    <mat-hint *ngIf="!showErr(TuitionCtrl)">
-                        بین ۱۰,۰۰۰ تا ۱۰۰,۰۰۰,۰۰۰
+                    <mat-hint>بین ۱۰,۰۰۰ تا ۱۰۰,۰۰۰,۰۰۰
                     </mat-hint>
-
-                    <mat-error *ngIf="TuitionCtrl.hasError('required')">
-                        لطفاً مبلغ شهریه را مشخص کنید
-                    </mat-error>
-                    <mat-error *ngIf="TuitionCtrl.hasError('min')">
-                        حداقل شهریه ۱۰.۰۰۰ تومان است
-                    </mat-error>
-                    <mat-error *ngIf="TuitionCtrl.hasError('max')">
-                        حداکثر شهریه ۱۰۰.۰۰۰.۰۰۰ تومان (صد میلیون تومان) است
-                    </mat-error>
+                    @if (TuitionCtrl.hasError('required')) {
+                    <mat-error>لطفاً مبلغ شهریه را مشخص کنید</mat-error>
+                    }
+                    @else if (TuitionCtrl.errors && TuitionCtrl.hasError('min')) {
+                    <mat-error>حداقل شهریه ۱۰.۰۰۰ تومان است</mat-error>
+                    }
+                    @else if (TuitionCtrl.errors && TuitionCtrl.hasError('max')) {
+                    <mat-error>حداکثر شهریه ۱۰۰.۰۰۰.۰۰۰ تومان (صد میلیون تومان) است</mat-error>
+                    }
                 </mat-form-field>
             </div>
 
@@ -94,23 +81,18 @@
             <div class="form-item">
                 <mat-form-field appearance="outline">
                     <mat-label>ساعت دوره</mat-label>
-
                     <input class="input" type="text" matInput formControlName="hoursCtrl" min="0.5" max="20000"
                         appDecimalFormatter inputmode="decimal" step="0.5" dir="ltr" placeholder="مجموع ساعت دوره">
-
-                    <mat-hint *ngIf="!showErr(HoursCtrl)">
-                        بین ۰۰:۳۰ تا ۲۰.۰۰۰
-                    </mat-hint>
-
-                    <mat-error *ngIf="HoursCtrl.hasError('required')">
-                        لطفاً ساعت کل دوره را وارد کنید
-                    </mat-error>
-                    <mat-error *ngIf="HoursCtrl.hasError('min')">
-                        حداقل ۰,۵ ساعت
-                    </mat-error>
-                    <mat-error *ngIf="HoursCtrl.hasError('max')">
-                        حداکثر ۲۰,۰۰۰ ساعت
-                    </mat-error>
+                    <mat-hint>بین ۰۰:۳۰ تا ۲۰.۰۰۰</mat-hint>
+                    @if (HoursCtrl.hasError('required')) {
+                    <mat-error>لطفاً ساعت کل دوره را وارد کنید</mat-error>
+                    }
+                    @else if (HoursCtrl.errors && HoursCtrl.hasError('min')) {
+                    <mat-error>حداقل ۰,۵ ساعت</mat-error>
+                    }
+                    @else if (HoursCtrl.errors && HoursCtrl.hasError('max')) {
+                    <mat-error>حداکثر ۲۰,۰۰۰ ساعت</mat-error>
+                    }
                 </mat-form-field>
             </div>
 
@@ -118,42 +100,32 @@
             <div class="form-item">
                 <mat-form-field appearance="outline">
                     <mat-label>ساعت هر کلاس</mat-label>
-
                     <input class="input" type="number" matInput formControlName="hoursPerClassCtrl" min="0.5" max="10"
                         step="0.5" inputmode="decimal" dir="ltr" placeholder="شروع از 0.5 ساعت">
-
-                    <mat-hint *ngIf="!showErr(HoursPerClassCtrl)">
-                        بین ۰۰:۳۰ تا ۱۰
-                    </mat-hint>
-
-                    <mat-error *ngIf="HoursPerClassCtrl.hasError('required')">
-                        لطفاً ساعت هر کلاس را مشخص کنید
-                    </mat-error>
-                    <mat-error *ngIf="HoursPerClassCtrl.hasError('pattern')">
-                        فقط اعداد ۰,۵ تا ۱۰ با گام ۰,۵ مجاز است
-                    </mat-error>
-                    <mat-error *ngIf="HoursPerClassCtrl.hasError('min')">
-                        حداقل زمان کلاس: نیم ساعت
-                    </mat-error>
-                    <mat-error *ngIf="HoursPerClassCtrl.hasError('max')">
-                        حداکثر زمان کلاس: ۱۰ ساعت
-                    </mat-error>
+                    <mat-hint>بین ۰۰:۳۰ تا ۱۰</mat-hint>
+                    @if (HoursPerClassCtrl.hasError('required')) {
+                    <mat-error>لطفاً ساعت هر کلاس را مشخص کنید</mat-error>
+                    }
+                    @else if (HoursPerClassCtrl.errors && HoursPerClassCtrl.hasError('pattern')) {
+                    <mat-error>فقط اعداد ۰,۵ تا ۱۰ با گام ۰,۵ مجاز است</mat-error>
+                    }
+                    @else if (HoursPerClassCtrl.errors && HoursPerClassCtrl.hasError('min')) {
+                    <mat-error>حداقل زمان کلاس: نیم ساعت</mat-error>
+                    }
+                    @else if (HoursPerClassCtrl.errors && HoursPerClassCtrl.hasError('max')) {
+                    <mat-error>حداکثر زمان کلاس: ۱۰ ساعت</mat-error>
+                    }
                 </mat-form-field>
             </div>
 
             <!-- start date -->
             <div class="form-item">
                 <app-datepicker [formControl]="StartCtrl" [maxDate]="max" [minDate]="min" [label]="'تاریخ شروع'">
-
-                    <mat-error *ngIf="StartCtrl.hasError('required') && showErr(StartCtrl)">
-                        بدون وارد کردن تاریخ شروع، ثبت دوره ممکن نیست
-                    </mat-error>
-
-                    <mat-error *ngIf="StartCtrl.hasError('outOfRange') && showErr(StartCtrl)">
-                        تاریخ باید بین {{ min.format('jYYYY/jMM/jDD') }}
-                        و {{ max.format('jYYYY/jMM/jDD') }} باشد.
-                    </mat-error>
                 </app-datepicker>
+                @if (StartCtrl.hasError('required')) {
+                <mat-error>بدون وارد کردن تاریخ شروع، ثبت دوره ممکن
+                    نیست</mat-error>
+                }
             </div>
 
             <div class="div-btn-add">

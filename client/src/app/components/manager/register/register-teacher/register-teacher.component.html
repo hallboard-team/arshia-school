@@ -56,16 +56,20 @@
         <div class="form-item">
             <mat-form-field appearance="outline">
                 <mat-label>ایمیل</mat-label>
-                <input class="input" autoFocusDir type="email" formControlName="emailCtrl" matInput dir="auto">
-                <mat-hint>ایمیل خودرا وارد کنید</mat-hint>
+                <input class="input" autoFocusDir type="email" formControlName="emailCtrl" matInput maxlength="50"
+                    dir="auto">
+                <mat-hint>ایمیل وارد کنید</mat-hint>
                 @if (TeacherEmailCtrl.hasError('required')) {
                 <mat-error>وارد کردن ایمیل الزامیست</mat-error>
+                }
+                @else if (TeacherEmailCtrl.errors && TeacherEmailCtrl.hasError('pattern')) {
+                <mat-error>ایمیل رو به درستی وارد کنید</mat-error>
                 }
                 @else if (TeacherEmailCtrl.errors && TeacherEmailCtrl.hasError('maxlength')) {
                 <mat-error>حداکثر 50 کاراکتر</mat-error>
                 }
-                @else if (TeacherEmailCtrl.errors && TeacherEmailCtrl.hasError('pattern')) {
-                <mat-error>ایمیل را به درستی وارد کنید</mat-error>
+                @else if (TeacherEmailCtrl.errors && TeacherEmailCtrl.hasError('server')) {
+                <mat-error>{{TeacherEmailCtrl.getError('server')}}</mat-error>
                 }
             </mat-form-field>
         </div>
@@ -76,12 +80,12 @@
                 <mat-label>شماره موبایل</mat-label>
                 <span matPrefix dir="ltr" class="phone-label">+98&nbsp;</span>
                 <input class="input" type="tel" maxlength="10" matInput formControlName="phoneNumCtrl" dir="ltr">
-                <mat-hint>شماره تلفن را وارد کنید</mat-hint>
+                <mat-hint>شماره تلفن را بدون 0 وارد کنید</mat-hint>
                 @if (TeacherPhoneNumCtrl.hasError('required')) {
                 <mat-error>وارد کردن شماره تلفن الزامیست</mat-error>
                 }
                 @else if (TeacherPhoneNumCtrl.errors && TeacherPhoneNumCtrl.hasError('pattern')) {
-                <mat-error>شماره تلفن ده رقم و بدون صفر</mat-error>
+                <mat-error>شماره موبایل باید 10 رقم و بدون 0 باشد</mat-error>
                 }
             </mat-form-field>
         </div>
@@ -101,6 +105,9 @@
                 }
                 @else if (TeacherPasswordCtrl.errors && TeacherPasswordCtrl.hasError('maxlength')) {
                 <mat-error>حداکثر 20 کاراکتر</mat-error>
+                }
+                @else if (TeacherPasswordCtrl.errors && TeacherPasswordCtrl.hasError('server')) {
+                <mat-error>{{TeacherPasswordCtrl.hasError('server')}}</mat-error>
                 }
                 <button mat-icon-button matSuffix tabindex="-1" type="button"
                     (click)="hideTeacherPassword = !hideTeacherPassword">
@@ -124,6 +131,9 @@
                 }
                 @else if (TeacherConfirmPasswordCtrl.errors && TeacherConfirmPasswordCtrl.hasError('maxlength')) {
                 <mat-error>حداکثر 20 کاراکتر</mat-error>
+                }
+                @else if (TeacherConfirmPasswordCtrl.errors && TeacherConfirmPasswordCtrl.hasError('server')) {
+                <mat-error>{{TeacherConfirmPasswordCtrl.hasError('server')}}</mat-error>
                 }
                 <button mat-icon-button matSuffix tabindex="-1" type="button"
                     (click)="hideTeacherConfirmPassword = !hideTeacherConfirmPassword">

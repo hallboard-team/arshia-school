@@ -76,12 +76,12 @@
                 <mat-label>شماره موبایل</mat-label>
                 <span matPrefix dir="ltr" class="phone-label">+98&nbsp;</span>
                 <input class="input" type="tel" maxlength="10" matInput formControlName="phoneNumCtrl" dir="ltr">
-                <mat-hint>شماره تلفن را وارد کنید</mat-hint>
+                <mat-hint>شماره تلفن را بدون 0 وارد کنید</mat-hint>
                 @if (StudentPhoneNumCtrl.hasError('required')) {
                 <mat-error>وارد کردن شماره تلفن الزامیست</mat-error>
                 }
                 @else if (StudentPhoneNumCtrl.errors && StudentPhoneNumCtrl.hasError('pattern')) {
-                <mat-error>شماره تلفن ده رقم و بدون صفر</mat-error>
+                <mat-error>شماره موبایل باید 10 رقم و بدون 0 باشد</mat-error>
                 }
             </mat-form-field>
         </div>
@@ -101,6 +101,9 @@
                 }
                 @else if (StudentPasswordCtrl.errors && StudentPasswordCtrl.hasError('maxlength')) {
                 <mat-error>حداکثر 20 کاراکتر</mat-error>
+                }
+                @else if (StudentPasswordCtrl.errors && StudentPasswordCtrl.hasError('server')) {
+                <mat-error>{{StudentPasswordCtrl.hasError('server')}}</mat-error>
                 }
                 <button mat-icon-button matSuffix tabindex="-1" type="button"
                     (click)="hideStudentPassword = !hideStudentPassword">
@@ -124,6 +127,9 @@
                 }
                 @else if (StudentConfirmPasswordCtrl.errors && StudentConfirmPasswordCtrl.hasError('maxlength')) {
                 <mat-error>حداکثر 20 کاراکتر</mat-error>
+                }
+                @else if (StudentConfirmPasswordCtrl.errors && StudentConfirmPasswordCtrl.hasError('server')) {
+                <mat-error>{{StudentConfirmPasswordCtrl.hasError('server')}}</mat-error>
                 }
                 <button mat-icon-button matSuffix tabindex="-1" type="button"
                     (click)="hideStudentConfirmPassword = !hideStudentConfirmPassword">
