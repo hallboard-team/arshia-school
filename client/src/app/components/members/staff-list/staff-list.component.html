@@ -1,0 +1,41 @@
+<header>
+    <nav>
+        <app-navbar />
+    </nav>
+</header>
+
+<section class="members-container">
+    <button class="glass-search-btn" (click)="openDialog()">
+        <mat-icon class="icon">search</mat-icon>
+        جست‌وجو
+    </button>
+
+    @if (isFiltered) {
+    <div class="search-result">
+        <span>نتیجه جست و جو: {{members.length}} کاربر یافت شد</span>
+        <button class="clear-filters-btn" (click)="clearFilters()">
+            حذف فیلترها
+        </button>
+    </div>
+    }
+
+    <div class="div-cards-member">
+        @if (members && members.length > 0) {
+        @for (member of members; track $index) {
+        <app-staff-card [memberInput]="member"></app-staff-card>
+        }
+        } @else {
+        <div class="no-result">
+            کاربری با این مشخصات پیدا نشد.
+        </div>
+        }
+    </div>
+
+    @if (pagination && memberParams) {
+    <mat-paginator #paginator (page)="handlePageEvent($event)" [length]="pagination.totalItems"
+        [pageSize]="memberParams.pageSize" [pageIndex]="memberParams.pageNumber - 1" [pageSizeOptions]="pageSizeOptions"
+        [disabled]="false" [showFirstLastButtons]="true" [hidePageSize]="false" aria-label="Select page"
+        class="paginator">
+    </mat-paginator>
+    }
+</section>

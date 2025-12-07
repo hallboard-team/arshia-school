@@ -1,0 +1,35 @@
+<form [formGroup]="filterFg" class="form-filters">
+    <div class="filter">
+        <span class="title">جست و جو</span>
+    </div>
+
+    <div class="filter-fields">
+        <mat-form-field appearance="outline" class="my-form-field">
+            <mat-label>نام/نام خانوادگی</mat-label>
+            <input matInput class="input-search" formControlName="searchCtrl" type="text" />
+        </mat-form-field>
+
+        <div formArrayName="rolesCtrl" class="roles-filter">
+            <p class="roles-label">سمت ها</p>
+
+            @for (role of roleOptions; track $index) {
+            <label class="role-item">
+                <mat-checkbox [value]="role" [checked]="RolesCtrl.value.includes(role)" (change)="onRoleChange($event, role)">
+                    {{ roleOptionsView[$index]}}
+                </mat-checkbox>
+            </label>
+            }
+
+            <p class="roles-help">می‌توانید یک یا چند نقش را انتخاب کنید.</p>
+        </div>
+
+        <div class="btns">
+            <button class="remove-filters" (click)="reset()" mat-stroked-button>
+                پاک کردن فیلتر ها
+            </button>
+            <button (click)="updateMemberParams();" color="primary" mat-flat-button>
+                جست و جو
+            </button>
+        </div>
+    </div>
+</form>
