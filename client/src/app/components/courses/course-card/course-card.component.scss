@@ -1,6 +1,5 @@
 .card-items {
     width: 250px;
-    height: 400px;
     border-radius: 15px;
     background: linear-gradient(145deg, #f0f0f0, #cacaca);
     box-shadow: 5px 5px 10px #b1b1b1,
@@ -8,7 +7,8 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 15px;
     align-items: center;
     padding: 1rem;
     cursor: pointer;
@@ -23,59 +23,6 @@
         font-size: 15px;
         margin: 0;
         padding: 0;
-        direction: rtl;
-    }
-
-    .div-start-day {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        .title {
-            color: black;
-            font-size: 15px;
-        }
-
-        .result {
-            font-size: 15px;
-            color: blue;
-        }
-    }
-
-    .div-professors-name {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 5px;
-        align-items: flex-end;
-
-        .teachers-name {
-            font-weight: bold;
-            font-size: 15px;
-        }
-
-        .result-teachers-name {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-end;
-
-            span {
-                border-radius: 4px;
-            }
-        }
-    }
-
-
-    .teachers-name {
-        color: black;
-        font-size: 15px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
         direction: rtl;
     }
 
@@ -101,72 +48,8 @@
             -5px -5px 10px #ffffff;
     }
 
-    .btn-click-student-show:hover {
-        cursor: pointer;
-    }
-
-    .div-button-enrolled-course {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        button {
-            margin-top: 10px;
-            height: 40px;
-            width: 150px;
-            border: none;
-            border-radius: 15px;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: linear-gradient(145deg, #f0f0f0, #cacaca);
-            box-shadow: 5px 5px 10px #989898,
-                -5px -5px 10px #ffffff;
-
-            &:hover {
-                box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.15), -6px -6px 15px rgba(255, 255, 255, 0.8);
-            }
-        }
-
-        button:active {
-            transition: all .1s ease-in-out 0s;
-            background: #e0e0e0;
-            box-shadow: inset 5px 5px 10px #989898,
-                inset -5px -5px 10px #ffffff;
-        }
-    }
-
-    .div-button-edit-course {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        button {
-            margin-top: 10px;
-            height: 40px;
-            width: 150px;
-            border: none;
-            border-radius: 15px;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: linear-gradient(145deg, #f0f0f0, #cacaca);
-            box-shadow: 5px 5px 10px #989898,
-                -5px -5px 10px #ffffff;
-
-            &:hover {
-                box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.15), -6px -6px 15px rgba(255, 255, 255, 0.8);
-            }
-        }
-
-        button:active {
-            transition: all .1s ease-in-out 0s;
-            background: #e0e0e0;
-            box-shadow: inset 5px 5px 10px #989898,
-                inset -5px -5px 10px #ffffff;
-        }
+    .btn-edit-course {
+        margin-top: 1rem;
     }
 }
 

@@ -30,9 +30,5 @@ export class CourseCardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loggedInUserSig = this._accountService.loggedInUserSig;
-
-    if (this.courseIn?.start) {
-      this.shamsiStartDate = moment(this.courseIn.start).format('jYYYY/jMM/jDD');
-    }
   }
 }
