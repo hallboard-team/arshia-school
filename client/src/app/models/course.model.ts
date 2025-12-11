@@ -34,9 +34,7 @@ export interface CourseUpdate {
 
 export interface AddCourse {
     title: string,
-    className: string,
-    tuition: number,
+    description: string,
     hours: number,
-    hoursPerClass: number,
-    start: string | undefined
+    isStarted: boolean
 }

@@ -1,9 +1,31 @@
+$bg-color: #e0e0e0;
+$shadow-light: #ffffff;
+$shadow-dark: #bebebe;
+$text-color: #333;
+
 .background {
     width: 100%;
     margin-top: 8rem;
 
     .bf-btns {
         display: none;
+    }
+
+    .div-title-radio-input {
+        flex: 0 0 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-top: .5rem;
+        gap: 1rem;
+
+        .title {
+            font-size: 25px;
+            color: #000;
+            font-weight: 800;
+        }
     }
 
     .course-form {
@@ -20,36 +42,15 @@
             flex-wrap: wrap;
             gap: 2rem;
             align-items: center;
-            padding: 1.5rem 1rem;
+            padding: 2rem 1rem;
 
-            border-radius: 10px;
+            border-radius: 20px;
             background: linear-gradient(145deg, #f0f0f0, #cacaca);
             box-shadow: 5px 5px 10px #5a5a5a, -5px -5px 10px #ffffff;
-
-            .div-title-radio-input {
-                flex: 0 0 100%;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                width: 100%;
-                margin-top: .5rem;
-                gap: 1rem;
-
-                .title {
-                    font-size: 20px;
-                    color: #000;
-                    font-weight: 800;
-                }
-            }
 
             .form-item {
                 width: 90%;
                 max-width: 700px;
-                display: flex;
-                flex-direction: column;
-                align-items: stretch;
-                min-width: 0;
 
                 mat-form-field {
                     display: block;
@@ -65,36 +66,79 @@
                         box-shadow: none;
                     }
                 }
-
-                .hint {
-                    margin-top: 6px;
-                    font-size: 12px;
-                    opacity: .75;
-                    padding: 0 4px;
-                }
             }
 
-            .div-btn-add {
-                flex: 0 0 100%;
+            .radio-section {
                 width: 100%;
                 display: flex;
                 justify-content: center;
-                align-items: center;
-                margin: .5rem 0 1rem;
+                margin: 1rem 0;
 
-                button {
-                    border-radius: 10px;
-                    border: none;
-                    height: 40px;
-                    width: 140px;
-                    background: linear-gradient(145deg, #f0f0f0, #cacaca);
-                    box-shadow: 5px 5px 10px #989898, -5px -5px 10px #ffffff;
+                .custom-radio-group {
+                    display: flex;
+                    gap: 2rem;
 
-                    &:active {
-                        transition: all .1s ease-in-out 0s;
-                        background: #e0e0e0;
-                        box-shadow: inset 5px 5px 10px #989898, inset -5px -5px 10px #ffffff;
+                    ::ng-deep .mat-mdc-radio-button .mdc-label {
+                        font-family: 'Vazir', sans-serif;
+                        font-weight: 700;
+                        font-size: 16px;
+                        color: #444;
                     }
+                }
+            }
+
+            .action-buttons {
+                width: 100%;
+                max-width: 500px;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                gap: 1.5rem;
+                margin-top: 1rem;
+
+                .neumorphic-btn {
+                    flex: 1;
+                    height: 50px;
+                    border: none;
+                    border-radius: 15px;
+                    background: #e0e0e0;
+                    color: #333;
+                    font-family: inherit;
+                    font-weight: 800;
+                    font-size: 16px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+
+                    box-shadow:
+                        6px 6px 12px $shadow-dark,
+                        -6px -6px 12px $shadow-light;
+
+                    &:hover:not(:disabled) {
+                        transform: translateY(-2px);
+                        box-shadow:
+                            8px 8px 16px $shadow-dark,
+                            -8px -8px 16px $shadow-light;
+                    }
+
+                    &:active:not(:disabled) {
+                        transform: translateY(0);
+                        box-shadow:
+                            inset 4px 4px 8px $shadow-dark,
+                            inset -4px -4px 8px $shadow-light;
+                    }
+
+                    &:disabled {
+                        color: #999;
+                        opacity: 0.7;
+                        box-shadow: none;
+                        background: #dcdcdc;
+                        cursor: not-allowed;
+                    }
+                }
+
+                .cancel-btn:hover {
+                    color: #d32f2f;
                 }
             }
         }
