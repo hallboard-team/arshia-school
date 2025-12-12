@@ -74,7 +74,7 @@ public static class Mappers
             Gender: appUser.Gender,
             Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth),
             DateOfBirth: appUser.DateOfBirth,
-            EnrolledCourses: appUser.EnrolledCourses,
+            EnrolledCourses: appUser.EnrolledClasses,
             MemberPhoto: appUser.Photo
         );
     }
@@ -117,7 +117,7 @@ public static class Mappers
     {
         return new Attendence(
             StudentId: studentId,
-            CourseId: courseId,
+            ClassId: courseId,
             Date: currentDate
         );
     }
@@ -127,11 +127,11 @@ public static class Mappers
         return new ShowStudentStatusDto
         {
             Date = attendence.Date,
-            CourseId = attendence.CourseId.ToString()
+            CourseId = attendence.ClassId.ToString()
         };
     }
 
-    public static Course ConvertAddCourseDtoToCourse(CreateCourseDto managerInput, int daysCalc)
+    public static Course ConvertAddCourseDtoToCourse(CreateCourseDto managerInput)
     {
         return new Course
         {
@@ -215,12 +215,14 @@ public static class Mappers
         };
     }
 
-    public static ShowClassDto ConvertClassToShowClassDto(Class model, ShowCourseDto course, ShowSiteDto site)
+    public static ShowClassDto ConvertClassToShowClassDto(Class model, ShowCourseDto course, ShowSiteDto site, List<string> userNames, List<string> names)
     {
         return new ShowClassDto(
             ClassName: model.ClassName,
             Course: course,
             Site: site,
+            ProfessorUserNames: userNames,
+            ProfessorNames: names,
             Tuition: model.Tuition,
             ClassMinutes: model.ClassMinutes,
             Days: model.Days,
@@ -230,7 +232,7 @@ public static class Mappers
             IsEnded: model.IsEnded,
             IsActive: model.IsActive
         );
-    }  
+    }
 
     // public static ShowCourseDto ConvertCourseToCourseRes(Course course, List<string> userNames, List<string> names)
     // {
@@ -250,13 +252,13 @@ public static class Mappers
     //     };
     // }
 
-    public static EnrolledCourse ConvertAddEnrolledCourseDtoToEnrolledCourse
+    public static EnrolledClass ConvertAddEnrolledCourseDtoToEnrolledCourse
         (AddEnrolledCourseDto managerInput, Class model,
             int paymentPerMonthCalc, int lastpaymentPerMonthCalc,
             int tuitionReminderCalc
         )
     {
-        return new EnrolledCourse(
+        return new EnrolledClass(
             // Id: Guid.NewGuid(),
             ClassId: model.Id,
             NumberOfPayments: managerInput.NumberOfPayments,
@@ -266,7 +268,7 @@ public static class Mappers
             PaidAmount: managerInput.PaidAmount,
             TuitionRemainder: tuitionReminderCalc,
             LastpaymentPerMonth: lastpaymentPerMonthCalc,
-            PaymentsId: []
+            Payments: []
         );
     }
 
