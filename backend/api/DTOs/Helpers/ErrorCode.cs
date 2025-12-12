@@ -3,10 +3,12 @@ namespace api.DTOs.Account;
 public enum ErrorCode
 {
     IsWrongCreds,
-    IsUserNotFound,
+    IsNotFound,
     IsOperationFailed,
     IsInvalidType,
     IsPasswordInvalid,
     IsIdentityFailed,
-    ArePasswordsNotMatch
+    ArePasswordsNotMatch,
+    IsDuplicateSite,
+
 }
