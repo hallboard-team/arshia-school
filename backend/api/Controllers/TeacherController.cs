@@ -1,7 +1,10 @@
 namespace api.Controllers;
 
 [Authorize(Policy = "RequiredTeacherRole")]
-public class TeacherController(ITeacherRepository _teacherRepository, ITokenService _tokenService, IManagerRepository _managerRepository) : BaseApiController
+public class TeacherController(ITeacherRepository _teacherRepository,
+ ITokenService _tokenService, IManagerRepository _managerRepository,
+ IClassRepository _classRepository
+) : BaseApiController
 {
     // [HttpGet("get-course")]
     // public async Task<ActionResult<List<Course>>> GetCourse(CancellationToken cancellationToken)
@@ -26,7 +29,7 @@ public class TeacherController(ITeacherRepository _teacherRepository, ITokenServ
     // }
 
     [HttpGet("get-course")]
-    public async Task<ActionResult<List<Course>>> GetCourse(CancellationToken cancellationToken)
+    public async Task<ActionResult<List<Class>>> GetCourse(CancellationToken cancellationToken)
     {
         if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authHeader))
             return Unauthorized("Token is expired or invalid. Login again.");
@@ -35,7 +38,7 @@ public class TeacherController(ITeacherRepository _teacherRepository, ITokenServ
         if (string.IsNullOrEmpty(hashedUserId))
             return BadRequest("No user was found with this user Id.");
 
-        var courses = await _teacherRepository.GetCourseAsync(hashedUserId, cancellationToken);
+        var courses = await _teacherRepository.GetClassAsync(hashedUserId, cancellationToken);
         return courses.Count == 0 ? NoContent() : Ok(courses);
     }
 
@@ -145,13 +148,12 @@ public class TeacherController(ITeacherRepository _teacherRepository, ITokenServ
 
         var studentIds = pagedAppUsers.Select(u => u.Id).ToList();
 
-        ObjectId? courseId = pagedAppUsers.FirstOrDefault()?.EnrolledCourses
-            .FirstOrDefault(c => c.CourseTitle == targetTitle.ToUpper())?.CourseId;
+        ObjectId? classId = await _classRepository.GetClassIdByName(targetTitle, cancellationToken);
 
-        if (courseId is null)
-            return BadRequest("Course not found.");
+        if (classId is null)
+            return BadRequest("Class not found");
 
-        var absences = await _teacherRepository.CheckIsAbsentAsync(studentIds, courseId.Value, cancellationToken);
+        var absences = await _teacherRepository.CheckIsAbsentAsync(studentIds, classId.Value, cancellationToken);
 
         List<AppRole> appRoles = await _managerRepository.GetAllRoleAsync(cancellationToken);
         Dictionary<ObjectId, string?> roleIdsToName = appRoles.ToDictionary(r => r.Id, r => r.Name);
