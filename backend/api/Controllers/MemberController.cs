@@ -75,7 +75,7 @@ public class MemberController
             ? Ok(opResult.Result)
             : opResult.Error?.Code switch
             {
-                ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
+                ErrorCode.IsNotFound => BadRequest(opResult.Error.Message),
                 ErrorCode.IsInvalidType => BadRequest(opResult.Error.Message),
                 ErrorCode.IsOperationFailed => BadRequest(opResult.Error.Message),
                 _ => BadRequest("Operation failed. Try again or contact support.")
@@ -83,25 +83,25 @@ public class MemberController
     }
 
     [HttpGet("get-course")]
-    public async Task<ActionResult<List<Course>>> GetCourse(CancellationToken cancellationToken)
+    public async Task<ActionResult<List<Class>>> GetCourse(CancellationToken cancellationToken)
     {
         string? hashedUserId = User.GetHashedUserId();
         if (string.IsNullOrEmpty(hashedUserId))
             return BadRequest("No user was found with this userId.");
 
-        var courses = await _memberRepository.GetCourseAsync(hashedUserId, cancellationToken);
-        return courses.Count == 0 ? Ok(new List<Course>()) : Ok(courses);
+        var courses = await _memberRepository.GetClassAsync(hashedUserId, cancellationToken);
+        return courses.Count == 0 ? Ok(new List<Class>()) : Ok(courses);
     }
 
     [HttpGet("get-enrolled-course/{courseTitle}")]
-    public async Task<ActionResult<EnrolledCourse>> GetEnrolledCourse(string courseTitle, CancellationToken cancellationToken)
+    public async Task<ActionResult<EnrolledClass>> GetEnrolledCourse(string courseTitle, CancellationToken cancellationToken)
     {
         string? hashedUserId = User.GetHashedUserId();
 
         if (string.IsNullOrEmpty(hashedUserId))
             return BadRequest("No user was found with this userId.");
 
-        EnrolledCourse? enrolledCourse = await _memberRepository.GetEnrolledCourseAsync(hashedUserId, courseTitle, cancellationToken);
+        EnrolledClass? enrolledCourse = await _memberRepository.GetEnrolledCourseAsync(hashedUserId, courseTitle, cancellationToken);
 
         return enrolledCourse is null ? NotFound("دوره مورد نظر یافت نشد") : Ok(enrolledCourse);
     }
