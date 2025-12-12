@@ -5,7 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 
 import { RouterModule } from '@angular/router';
 import { Course, ShowCourse } from '../../../models/course.model';
-import { CourseParams } from '../../../models/helpers/course-params';
+import { CourseParams } from '../../../models/helpers/application-params';
 import { PaginatedResult } from '../../../models/helpers/paginatedResult';
 import { Pagination } from '../../../models/helpers/pagination';
 import { LoggedInUser } from '../../../models/logged-in-user.model';
@@ -53,7 +53,7 @@ export class CoursesListComponent implements OnInit, OnDestroy {
   }
 
   @HostListener('window:scroll', [])
-  onWindowScroll() {
+  onWindowScroll(): void {
     const scrollOffset = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
     if (scrollOffset > 280) {

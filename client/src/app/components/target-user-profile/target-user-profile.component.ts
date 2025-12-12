@@ -21,7 +21,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { Course, ShowCourse } from '../../models/course.model';
 import { UpdateEnrolledCourse } from '../../models/update-enrolled-course.model';
-import { CourseParams } from '../../models/helpers/course-params';
+import { CourseParams } from '../../models/helpers/application-params';
 import { CourseService } from '../../services/course.service';
 import { PaginatedResult } from '../../models/helpers/paginatedResult';
 import { Pagination } from '../../models/helpers/pagination';

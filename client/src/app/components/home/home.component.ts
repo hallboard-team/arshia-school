@@ -23,7 +23,7 @@ import { MemberService } from '../../services/member.service';
 import { UserProfile } from '../../models/user-profile.model';
 import { Observable, Subscription } from 'rxjs';
 import { Course, ShowCourse } from '../../models/course.model';
-import { CourseParams } from '../../models/helpers/course-params';
+import { CourseParams } from '../../models/helpers/application-params';
 import { CourseService } from '../../services/course.service';
 import { Pagination } from '../../models/helpers/pagination';
 

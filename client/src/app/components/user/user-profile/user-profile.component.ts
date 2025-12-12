@@ -18,7 +18,7 @@ import { ApiResponse } from '../../../models/helpers/apiResponse.model';
 import { Router, RouterModule } from '@angular/router';
 import { AccountService } from '../../../services/account.service';
 import { MemberService } from '../../../services/member.service';
-import { CourseParams } from '../../../models/helpers/course-params';
+import { CourseParams } from '../../../models/helpers/application-params';
 import { CourseService } from '../../../services/course.service';
 import { Pagination } from '../../../models/helpers/pagination';
 import { MatButtonModule } from '@angular/material/button';
@@ -91,7 +91,7 @@ export class UserProfileComponent implements OnInit {
   memberEditFg: FormGroup = this._fb.group({
     currentPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
     passwordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20),
-      Validators.pattern(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*/]).*$/)]],
+    Validators.pattern(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*/]).*$/)]],
     confirmPasswordCtrl: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]]
   });
 
