@@ -13,18 +13,15 @@ public class Class
     public int Tuition { get; init; }
     public int ClassMinutes { get; init; }
     public int Days { get; init; }
-    public DateOnly StartDate  { get; init; }
+    public DateOnly StartDate { get; init; }
     public DateOnly EndedDate { get; init; }
     public bool IsStarted { get; init; }
     public bool IsEnded { get; init; }
     public bool IsActive { get; init; }
 }
 
-public record EnrolledCourse(
+public record EnrolledClass(
     ObjectId ClassId,
-    // string CourseTitle,
-    // string ClassName,
-    // int CourseTuition,
     int NumberOfPayments,
     int PaidNumber,
     int NumberOfPaymentsLeft,
@@ -32,12 +29,12 @@ public record EnrolledCourse(
     int PaidAmount,
     int TuitionRemainder,
     int LastpaymentPerMonth,
-    List<ObjectId> PaymentsId
+    List<Payment> Payments
 );
 
 public record Payment(
-    [property: BsonId] string Id,
-    string CourseTitle,
+    [property: BsonId] ObjectId Id,
+    string ClassTitle,
     int Amount,
     DateTime PaidOn,
     PaymentMethod Method,

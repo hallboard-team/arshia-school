@@ -21,6 +21,8 @@ public record ShowClassDto(
     string ClassName,
     ShowCourseDto Course,
     ShowSiteDto Site,
+    List<string> ProfessorUserNames,
+    List<string> ProfessorNames,
     int Tuition,
     double ClassMinutes,
     int Days,
@@ -36,9 +38,16 @@ public record UpdateClassDto(
     string ClassName,
     [Required, Range(10_000, 100_000_000, ErrorMessage = "مبلغ باید بین ۱۰,۰۰۰ تومن و ۱۰۰,۰۰۰,۰۰۰ تومن باشد."),]
     int Tuition,
+    [Required, HalfStepRange(0.5, 10, ErrorMessage = "ساعت هر کلاس باید بین ۰,۵ تا ۱۰ ساعت باشد.")]
+    double ClassMinutes,
     DateOnly StartDate,
     DateOnly EndedDate,
     bool IsStarted,
     bool IsEnded,
     bool IsActive
+);
+
+public record CourseAndSite(
+    string ClassName,
+    string CourseName
 );
