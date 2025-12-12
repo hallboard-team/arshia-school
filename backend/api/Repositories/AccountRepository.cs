@@ -95,7 +95,7 @@ public class AccountRepository : IAccountRepository
       return new OperationResult(
         false,
         new CustomError(
-          ErrorCode.IsUserNotFound,
+          ErrorCode.IsNotFound,
           "کاربر پیدا نشد."
         )
       );
