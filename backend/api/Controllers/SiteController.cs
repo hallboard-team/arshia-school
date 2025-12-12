@@ -22,12 +22,28 @@ public class SiteController(ISiteRepository _siteRepository) : BaseApiController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ShowSiteDto>>> GetAll(CancellationToken cancellationToken)
+    public async Task<ActionResult<IEnumerable<ShowSiteDto>>> GetAll([FromQuery] PaginationParams paginationParams, CancellationToken cancellationToken)
     {
-        IEnumerable<ShowSiteDto> sites = await _siteRepository.GetAllSitesAsync(cancellationToken);
+        PagedList<Site> pagedSites = await _siteRepository.GetAllSitesAsync(paginationParams, cancellationToken);
 
-        if (!sites.Any())
+        if (!pagedSites.Any())
             return NoContent();
+
+        PaginationHeader paginationHeader = new(
+            CurrentPage: pagedSites.CurrentPage,
+            ItemsPerPage: pagedSites.PageSize,
+            TotalItems: pagedSites.TotalItemsCount,
+            TotalPages: pagedSites.TotalPages
+        );
+
+        Response.AddPaginationHeader(paginationHeader);
+
+        List<ShowSiteDto> sites = [];
+
+        foreach(Site site in pagedSites)
+        {
+            sites.Add(Mappers.ConvertSiteToShowSiteDto(site));
+        }
 
         return Ok(sites);
     }

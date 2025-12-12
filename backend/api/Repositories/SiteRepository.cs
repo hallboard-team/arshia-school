@@ -6,7 +6,6 @@ namespace api.Repositories;
 public class SiteRepository : ISiteRepository
 {
     private readonly IMongoClient _client;
-    private readonly IMongoCollection<AppUser> _collectionAppUser;
     private readonly IMongoCollection<Site> _collectionSite;
 
     public SiteRepository(IMongoClient client, IMyMongoDbSettings dbSettings)
@@ -14,7 +13,6 @@ public class SiteRepository : ISiteRepository
         _client = client;
         IMongoDatabase database = client.GetDatabase(dbSettings.DatabaseName);
 
-        _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.CollectionUsers);
         _collectionSite = database.GetCollection<Site>(AppVariablesExtensions.CollectionSites);
     }
 
@@ -35,6 +33,8 @@ public class SiteRepository : ISiteRepository
 
         Site site = Mappers.ConvertCreateSiteDtoToSite(request);
 
+        await _collectionSite.InsertOneAsync(site, null, cancellationToken);
+
         return new(
             true,
             Mappers.ConvertSiteToShowSiteDto(site),
@@ -42,18 +42,11 @@ public class SiteRepository : ISiteRepository
         );
     }
 
-    public async Task<IEnumerable<ShowSiteDto>> GetAllSitesAsync(CancellationToken cancellationToken)
+    public async Task<PagedList<Site>> GetAllSitesAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
     {
-        IEnumerable<Site> sites = await _collectionSite.Find(new BsonDocument()).ToListAsync();
+        IQueryable<Site> query = _collectionSite.AsQueryable();
 
-        List<ShowSiteDto> showSiteDtos = [];
-
-        foreach (Site site in sites)
-        {
-            showSiteDtos.Add(Mappers.ConvertSiteToShowSiteDto(site));
-        }
-
-        return showSiteDtos;
+        return await PagedList<Site>.CreatePagedListAsync(query, paginationParams.PageNumber, paginationParams.PageSize, cancellationToken);
     }
 
     public async Task<OperationResult<ShowSiteDto>> GetSiteByNameAsync(string siteName, CancellationToken cancellationToken)
@@ -102,7 +95,7 @@ public class SiteRepository : ISiteRepository
 
     public async Task<OperationResult<ShowSiteDto>> UpdateSiteAsync(string siteName, UpdateSiteDto request, CancellationToken cancellationToken)
     {
-        Site? targetSite = await _collectionSite.Find(doc => doc.Name.ToUpper() == request.Name.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        Site? targetSite = await _collectionSite.Find(doc => doc.Name.ToUpper() == siteName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
         if (targetSite is null)
         {
@@ -138,7 +131,7 @@ public class SiteRepository : ISiteRepository
             await _collectionSite.UpdateOneAsync(filter, combinedUpdate, null, cancellationToken);
         }
 
-        Site? updatedSite = await _collectionSite.Find(doc => doc.Name.ToUpper() == siteName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        Site? updatedSite = await _collectionSite.Find(doc => doc.Name.ToUpper() == request.Name.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
         return new(
             true,
