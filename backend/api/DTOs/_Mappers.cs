@@ -131,71 +131,134 @@ public static class Mappers
         };
     }
 
-    public static Course ConvertAddCourseDtoToCourse(AddCourseDto managerInput, int daysCalc)
+    public static Course ConvertAddCourseDtoToCourse(CreateCourseDto managerInput, int daysCalc)
     {
-        return new Course(
-            Title: managerInput.Title.ToUpper(),
-            ClassName: managerInput.ClassName.ToUpper(),
-            ProfessorsIds: [],
-            // ProfessorsNames: [],
-            Tuition: managerInput.Tuition,
-            TotalMinutes: (int)Math.Round(managerInput.Hours * 60d),
-            ClassMinutes: (int)Math.Round(managerInput.HoursPerClass * 60d),
-            Days: daysCalc,
-            Start: managerInput.Start,
-            IsStarted: false
-        );
+        return new Course
+        {
+            Title = managerInput.Title.Trim().ToLower(),
+            Description = managerInput.Description.Trim().ToLower(),
+            TotalMinutes = managerInput.TotalMinutes,
+            IsActive = managerInput.IsActive
+        };
+
+        // Title: managerInput.Title.ToUpper(),
+        // ClassName: managerInput.ClassName.ToUpper(),
+        // ProfessorsIds: [],
+        // // ProfessorsNames: [],
+        // Tuition: managerInput.Tuition,
+        // TotalMinutes: (int)Math.Round(managerInput.Hours * 60d),
+        // ClassMinutes: (int)Math.Round(managerInput.HoursPerClass * 60d),
+        // Days: daysCalc,
+        // Start: managerInput.Start,
+        // IsStarted: false
     }
 
     public static ShowCourseDto ConvertCourseToShowCourseDto(Course course)
     {
-        return new ShowCourseDto
+        return new ShowCourseDto(
+            Title: course.Title,
+            Description: course.Description,
+            TotalMinutes: course.TotalMinutes,
+            IsActive: course.IsActive
+        );
+
+        // Id = course.Id.ToString(),
+        // Title = course.Title,
+        // ClassName = course.ClassName,
+        // Tuition = course.Tuition,
+        // // ProfessorNames = course.ProfessorsNames,
+        // Hours = course.TotalMinutes / 60d,
+        // HoursPerClass = course.ClassMinutes / 60d,
+        // Days = course.Days,
+        // Start = course.Start,
+        // IsStarted = course.IsStarted,
+        // ProfessorUserNames = new List<string>(),
+        // ProfessorNames = new List<string>()
+    }
+
+    public static Site ConvertCreateSiteDtoToSite(CreateSiteDto request)
+    {
+        return new Site
         {
-            Id = course.Id.ToString(),
-            Title = course.Title,
-            ClassName = course.ClassName,
-            Tuition = course.Tuition,
-            // ProfessorNames = course.ProfessorsNames,
-            Hours = course.TotalMinutes / 60d,
-            HoursPerClass = course.ClassMinutes / 60d,
-            Days = course.Days,
-            Start = course.Start,
-            IsStarted = course.IsStarted,
-            ProfessorUserNames = new List<string>(),
-            ProfessorNames = new List<string>()
+            Name = request.Name.ToLower().Trim(),
+            Department = request.Department,
+            Floor = request.Floor,
+            Capacity = request.Capacity
         };
     }
 
-    public static CourseResponse ConvertCourseToCourseRes(Course course, List<string> userNames, List<string> names)
+    public static ShowSiteDto ConvertSiteToShowSiteDto(Site site)
     {
-        return new CourseResponse
+        return new ShowSiteDto(
+            Name: site.Name,
+            Department: site.Department,
+            Floor: site.Floor,
+            Capacity: site.Capacity
+        );
+    }
+
+    public static Class ConvertCreateClassDtoToClass(CreateClassDto request, ObjectId? courseId, ObjectId siteId, int daysCalc)
+    {
+        return new Class
         {
-            Id = course.Id.ToString(),
-            Title = course.Title,
-            ClassName = course.ClassName,
-            ProfessorUserNames = userNames,
-            ProfessorNames = names,
-            Tuition = course.Tuition,
-            TotalMinutes = course.TotalMinutes,
-            ClassMinutes = course.ClassMinutes,
-            Days = course.Days,
-            Start = course.Start,
-            IsStarted = course.IsStarted
+            ClassName = request.ClassName.Trim().ToLower(),
+            CourseId = courseId,
+            SiteId = siteId,
+            ProfessorsIds = [],
+            Tuition = request.Tuition,
+            ClassMinutes = (int)Math.Round(request.ClassMinutes * 60d),
+            Days = daysCalc,
+            StartDate = request.StartDate,
+            EndedDate = request.EndedDate,
+            IsStarted = request.IsStarted,
+            IsActive = request.IsActive
         };
     }
+
+    public static ShowClassDto ConvertClassToShowClassDto(Class model, ShowCourseDto course, ShowSiteDto site)
+    {
+        return new ShowClassDto(
+            ClassName: model.ClassName,
+            Course: course,
+            Site: site,
+            Tuition: model.Tuition,
+            ClassMinutes: model.ClassMinutes,
+            Days: model.Days,
+            StartDate: model.StartDate,
+            EndedDate: model.EndedDate,
+            IsStarted: model.IsStarted,
+            IsEnded: model.IsEnded,
+            IsActive: model.IsActive
+        );
+    }  
+
+    // public static ShowCourseDto ConvertCourseToCourseRes(Course course, List<string> userNames, List<string> names)
+    // {
+    //     return new CourseResponse
+    //     {
+    //         Id = course.Id.ToString(),
+    //         Title = course.Title,
+    //         ClassName = course.ClassName,
+    //         ProfessorUserNames = userNames,
+    //         ProfessorNames = names,
+    //         Tuition = course.Tuition,
+    //         TotalMinutes = course.TotalMinutes,
+    //         ClassMinutes = course.ClassMinutes,
+    //         Days = course.Days,
+    //         Start = course.Start,
+    //         IsStarted = course.IsStarted
+    //     };
+    // }
 
     public static EnrolledCourse ConvertAddEnrolledCourseDtoToEnrolledCourse
-        (AddEnrolledCourseDto managerInput, Course course,
+        (AddEnrolledCourseDto managerInput, Class model,
             int paymentPerMonthCalc, int lastpaymentPerMonthCalc,
             int tuitionReminderCalc
         )
     {
         return new EnrolledCourse(
             // Id: Guid.NewGuid(),
-            CourseId: course.Id,
-            CourseTitle: course.Title.ToUpper(),
-            ClassName: course.ClassName.ToUpper(),
-            CourseTuition: course.Tuition,
+            ClassId: model.Id,
             NumberOfPayments: managerInput.NumberOfPayments,
             PaidNumber: 0,
             NumberOfPaymentsLeft: managerInput.NumberOfPayments,
@@ -203,7 +266,7 @@ public static class Mappers
             PaidAmount: managerInput.PaidAmount,
             TuitionRemainder: tuitionReminderCalc,
             LastpaymentPerMonth: lastpaymentPerMonthCalc,
-            Payments: []
+            PaymentsId: []
         );
     }
 
