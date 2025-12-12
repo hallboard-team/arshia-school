@@ -13,7 +13,7 @@ public class ManagerRepository : IManagerRepository
       return new OperationResult(
         false,
         Error: new CustomError(
-          ErrorCode.IsUserNotFound,
+          ErrorCode.IsNotFound,
           Message: "User not found."
         )
       );
@@ -268,7 +268,7 @@ public class ManagerRepository : IManagerRepository
     return usersWithRoles;
   }
 
-  public async Task<EnrolledCourse?> AddEnrolledCourseAsync(
+  public async Task<EnrolledClass?> AddEnrolledClassAsync(
     AddEnrolledCourseDto addEnrolledCourseDto,
     string targetUserName,
     CancellationToken cancellationToken
@@ -280,14 +280,14 @@ public class ManagerRepository : IManagerRepository
       FirstOrDefaultAsync(cancellationToken);
     if (appUser is null) return null;
 
-    Course? course = await _collectionCourse.Find(doc => doc.Title == addEnrolledCourseDto.Title.ToUpper()).
+    Class? targetClass = await _collectionClass.Find(doc => doc.ClassName.ToUpper() == addEnrolledCourseDto.ClassName.ToUpper()).
       FirstOrDefaultAsync(cancellationToken);
-    if (course is null) return null;
+    if (targetClass is null) return null;
 
-    bool alreadyEnrolledAdded = appUser.EnrolledCourses.Any(doc => doc.CourseId == course.Id);
+    bool alreadyEnrolledAdded = appUser.EnrolledClasses.Any(doc => doc.ClassId == targetClass.Id);
     if (alreadyEnrolledAdded) return null;
 
-    int tuition = course.Tuition;                       // شهریه کل (int)
+    int tuition = targetClass.Tuition;                       // شهریه کل (int)
     int paidAmount = addEnrolledCourseDto.PaidAmount;   // پیش‌پرداخت (int)
 
     // مبلغ باقی‌مانده بعد از پیش‌پرداخت
@@ -312,12 +312,12 @@ public class ManagerRepository : IManagerRepository
       lastpaymentPerMonthCalc = paymentPerMonthCalc + remainder;
     }
 
-    EnrolledCourse enrolledCourse = ConvertAddEnrolledCourseDtoToEnrolledCourse(
-      addEnrolledCourseDto, course, paymentPerMonthCalc, lastpaymentPerMonthCalc, tuitionReminderCalc
+    EnrolledClass enrolledCourse = ConvertAddEnrolledCourseDtoToEnrolledCourse(
+      addEnrolledCourseDto, targetClass, paymentPerMonthCalc, lastpaymentPerMonthCalc, tuitionReminderCalc
     );
 
     FilterDefinition<AppUser>? filter = Builders<AppUser>.Filter.Eq(u => u.Id, appUser.Id);
-    UpdateDefinition<AppUser>? update = Builders<AppUser>.Update.AddToSet(u => u.EnrolledCourses, enrolledCourse);
+    UpdateDefinition<AppUser>? update = Builders<AppUser>.Update.AddToSet(u => u.EnrolledClasses, enrolledCourse);
 
     UpdateResult? result = await _collectionAppUser.UpdateOneAsync(
       filter, update, cancellationToken: cancellationToken
@@ -326,7 +326,7 @@ public class ManagerRepository : IManagerRepository
     return result.ModifiedCount > 0 ? enrolledCourse : null;
   }
 
-  public async Task<UpdateResult?> UpdateEnrolledCourseAsync(
+  public async Task<UpdateResult?> UpdateEnrolledClassAsync(
     UpdateEnrolledDto updateEnrolledDto,
     string targetUserName,
     CancellationToken cancellationToken
@@ -334,21 +334,23 @@ public class ManagerRepository : IManagerRepository
   {
     AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == targetUserName.ToUpper()).
       FirstOrDefaultAsync(cancellationToken);
+
     if (appUser is null) return null;
 
-    EnrolledCourse? enrolledCourse = appUser.EnrolledCourses.FirstOrDefault(ec => ec.CourseTitle.ToUpper() ==
-      updateEnrolledDto.TitleCourse.ToUpper()
-    );
-    if (enrolledCourse is null) return null;
+    Class targetClass = await _collectionClass.Find(doc => doc.ClassName.ToUpper() == updateEnrolledDto.ClassName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
-    int newTotalPaidAmount = enrolledCourse.PaidAmount + updateEnrolledDto.PaidAmount;
-    int tuitionReminder = enrolledCourse.CourseTuition - newTotalPaidAmount;
-    int newPaidNumber = newTotalPaidAmount / enrolledCourse.PaymentPerMonth;
-    int numberOfPaymentsLeft = enrolledCourse.NumberOfPayments - newPaidNumber;
+    EnrolledClass? enrolledClass = appUser.EnrolledClasses.FirstOrDefault(ec => ec.ClassId == targetClass.Id);
+
+    if (enrolledClass is null) return null;
+
+    int newTotalPaidAmount = enrolledClass.PaidAmount + updateEnrolledDto.PaidAmount;
+    int tuitionReminder = targetClass.Tuition - newTotalPaidAmount;
+    int newPaidNumber = newTotalPaidAmount / enrolledClass.PaymentPerMonth;
+    int numberOfPaymentsLeft = enrolledClass.NumberOfPayments - newPaidNumber;
 
     var newPayment = new Payment(
-      ObjectId.GenerateNewId().ToString(),
-      updateEnrolledDto.TitleCourse.ToUpper(),
+      ObjectId.GenerateNewId(),
+      updateEnrolledDto.ClassName.ToUpper(),
       updateEnrolledDto.PaidAmount,
       DateTime.UtcNow,
       updateEnrolledDto.Method,
@@ -358,8 +360,8 @@ public class ManagerRepository : IManagerRepository
     FilterDefinition<AppUser>? filter = Builders<AppUser>.Filter.And(
       Builders<AppUser>.Filter.Eq(u => u.Id, appUser.Id),
       Builders<AppUser>.Filter.ElemMatch(
-        u => u.EnrolledCourses,
-        ec => ec.CourseTitle.ToUpper() == updateEnrolledDto.TitleCourse.ToUpper()
+        u => u.EnrolledClasses,
+        ec => ec.ClassId == targetClass.Id
       )
     );
 
@@ -483,7 +485,7 @@ public class ManagerRepository : IManagerRepository
       return new OperationResult<MemberPhoto>(
         false,
         Error: new CustomError(
-          ErrorCode.IsUserNotFound,
+          ErrorCode.IsNotFound,
           "Target user not found"
         )
       );
@@ -519,23 +521,22 @@ public class ManagerRepository : IManagerRepository
     );
   }
 
-  public async Task<Photo?> AddPhotoAsync(IFormFile file, string targetPaymentId, CancellationToken cancellationToken)
+  public async Task<Photo?> AddPhotoAsync(IFormFile file, ObjectId targetPaymentId, CancellationToken cancellationToken)
   {
     AppUser? appUser = await _collectionAppUser.
-      Find(u => u.EnrolledCourses.Any(ec => ec.Payments.Any(p => p.Id == targetPaymentId))).
+      Find(u => u.EnrolledClasses.Any(ec => ec.Payments.Any(p => p.Id == targetPaymentId))).
       FirstOrDefaultAsync(cancellationToken);
+
     if (appUser is null) return null;
 
-    EnrolledCourse? enrolledCourse =
-      appUser.EnrolledCourses.FirstOrDefault(ec => ec.Payments.Any(p => p.Id == targetPaymentId));
+    EnrolledClass? enrolledCourse =
+      appUser.EnrolledClasses.FirstOrDefault(ec => ec.Payments.Any(p => p.Id == targetPaymentId));
     if (enrolledCourse is null) return null;
 
     Payment? payment = enrolledCourse.Payments.FirstOrDefault(p => p.Id == targetPaymentId);
     if (payment is null) return null;
 
-    bool isSuccess = ObjectId.TryParse(payment.Id, out ObjectId targetPaymentIdObjectId);
-    if (!isSuccess) return null;
-    string[]? imageUrls = await _photoService.AddPhotoToDiskAsync(file, targetPaymentIdObjectId);
+    string[]? imageUrls = await _photoService.AddPhotoToDiskAsync(file, payment.Id);
     if (imageUrls is null) throw new ArgumentNullException("Saving photo has failed. Error from PhotoService.");
 
     Photo photo = ConvertPhotoUrlsToPhoto(imageUrls.ToArray(), isMain: true);
@@ -550,7 +551,7 @@ public class ManagerRepository : IManagerRepository
     var arrayFilters = new List<ArrayFilterDefinition>
     {
       new BsonDocumentArrayFilterDefinition<BsonDocument>(
-        new BsonDocument("ec.CourseTitle", enrolledCourse.CourseTitle)
+        new BsonDocument("ec.ClassId", enrolledCourse.ClassId)
       ),
       new BsonDocumentArrayFilterDefinition<BsonDocument>(new BsonDocument("p._id", updatedPayment.Id))
     };
@@ -562,15 +563,15 @@ public class ManagerRepository : IManagerRepository
     return result.ModifiedCount > 0 ? photo : null;
   }
 
-  public async Task<bool> DeletePhotoAsync(string targetPaymentId, CancellationToken cancellationToken)
+  public async Task<bool> DeletePhotoAsync(ObjectId targetPaymentId, CancellationToken cancellationToken)
   {
     AppUser? appUser = await _collectionAppUser.
-      Find(u => u.EnrolledCourses.Any(ec => ec.Payments.Any(p => p.Id == targetPaymentId))).
+      Find(u => u.EnrolledClasses.Any(ec => ec.Payments.Any(p => p.Id == targetPaymentId))).
       FirstOrDefaultAsync(cancellationToken);
     if (appUser is null) return false;
 
-    EnrolledCourse? enrolledCourse =
-      appUser.EnrolledCourses.FirstOrDefault(ec => ec.Payments.Any(p => p.Id == targetPaymentId));
+    EnrolledClass? enrolledCourse =
+      appUser.EnrolledClasses.FirstOrDefault(ec => ec.Payments.Any(p => p.Id == targetPaymentId));
     if (enrolledCourse is null) return false;
 
     Payment? payment = enrolledCourse.Payments.FirstOrDefault(p => p.Id == targetPaymentId);
@@ -589,7 +590,7 @@ public class ManagerRepository : IManagerRepository
     var arrayFilters = new List<ArrayFilterDefinition>
     {
       new BsonDocumentArrayFilterDefinition<BsonDocument>(
-        new BsonDocument("ec.CourseTitle", enrolledCourse.CourseTitle)
+        new BsonDocument("ec.ClassId", enrolledCourse.ClassId)
       ),
       new BsonDocumentArrayFilterDefinition<BsonDocument>(new BsonDocument("p._id", payment.Id))
     };
@@ -601,72 +602,83 @@ public class ManagerRepository : IManagerRepository
     return result.ModifiedCount > 0;
   }
 
-  public async Task<List<CourseResponse>> GetTargetMemberCourseAsync(
+  public async Task<List<ShowClassDto>> GetTargetMemberClassAsync(
     string targetUserName, CancellationToken cancellationToken
   )
   {
-    List<string>? enrolledCourseIds = await _collectionAppUser.AsQueryable().
-      Where(u => u.NormalizedUserName == targetUserName.ToUpper()).SelectMany(u => u.EnrolledCourses).
-      Select(ec => ec.CourseId.ToString()).ToListAsync(cancellationToken);
+    List<string>? enrolledClassIds = await _collectionAppUser.AsQueryable().
+      Where(u => u.NormalizedUserName == targetUserName.ToUpper()).SelectMany(u => u.EnrolledClasses).
+      Select(ec => ec.ClassId.ToString()).ToListAsync(cancellationToken);
 
-    if (enrolledCourseIds is null || enrolledCourseIds.Count == 0) return new List<CourseResponse>();
+    if (enrolledClassIds is null || enrolledClassIds.Count == 0) return new List<ShowClassDto>();
 
-    List<Course> courses = await _collectionCourse.Find(doc => enrolledCourseIds.Contains(doc.Id.ToString())).
+    List<Class> classes = await _collectionClass.Find(doc => enrolledClassIds.Contains(doc.Id.ToString())).
       ToListAsync(cancellationToken);
 
     List<string> userNames = [];
     List<string> names = [];
-    List<CourseResponse> coursesRes = [];
+    List<ShowClassDto> classRes = [];
 
-    foreach (var course in courses)
+    foreach (var model in classes)
     {
-      userNames = await _courseRepository.GetProfessorUserNamesByIdsAsync(course.ProfessorsIds, cancellationToken);
-      names = await _courseRepository.GetProfessorNamesByIdsAsync(course.ProfessorsIds, cancellationToken);
+      userNames = await _classRepository.GetProfessorUserNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
+      names = await _classRepository.GetProfessorNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
 
-      coursesRes.Add(Mappers.ConvertCourseToCourseRes(course, userNames, names));
+      OperationResult<ShowCourseDto> courseDto = await _courseRepository.GetCourseByIdAsync(model.CourseId!.Value, cancellationToken);
+      OperationResult<ShowSiteDto> siteDto = await _siteRepository.GetSiteById(model.SiteId!.Value, cancellationToken);
+
+      classRes.Add(Mappers.ConvertClassToShowClassDto(model, courseDto.Result, siteDto.Result, userNames, names));
     }
 
-    return coursesRes ?? new List<CourseResponse>();
+    return classRes ?? [];
   }
 
-  public async Task<EnrolledCourse?> GetTargetMemberEnrolledCourseAsync(
-    string targetUserName, string courseTitle, CancellationToken cancellationToken
+  public async Task<EnrolledClass?> GetTargetMemberEnrolledClassAsync(
+    string targetUserName, string classTitle, CancellationToken cancellationToken
   )
   {
     AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == targetUserName.ToUpper()).
       FirstOrDefaultAsync(cancellationToken);
+
     if (appUser is null) return null;
 
-    return appUser.EnrolledCourses.FirstOrDefault(ec => ec.CourseTitle == courseTitle.ToUpper());
+    Class? targetClass = await _collectionClass.Find(doc => doc.ClassName.ToUpper() == classTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+
+    return appUser.EnrolledClasses.FirstOrDefault(ec => ec.ClassId == targetClass.Id);
   }
 
-  public async Task<Payment?> GetTargetPaymentByIdAsync(string targetPaymentId, CancellationToken cancellationToken)
+  public async Task<Payment?> GetTargetPaymentByIdAsync(ObjectId targetPaymentId, CancellationToken cancellationToken)
   {
     AppUser? appUser = await _collectionAppUser.
-      Find(doc => doc.EnrolledCourses.Any(ec => ec.Payments.Any(p => p.Id == targetPaymentId))).
+      Find(doc => doc.EnrolledClasses.Any(ec => ec.Payments.Any(p => p.Id == targetPaymentId))).
       FirstOrDefaultAsync(cancellationToken);
     if (appUser is null) return null;
 
-    EnrolledCourse? enrolledCourse =
-      appUser.EnrolledCourses.FirstOrDefault(ec => ec.Payments.Any(p => p.Id == targetPaymentId));
+    EnrolledClass? enrolledCourse =
+      appUser.EnrolledClasses.FirstOrDefault(ec => ec.Payments.Any(p => p.Id == targetPaymentId));
     if (enrolledCourse is null) return null;
 
     return enrolledCourse.Payments.FirstOrDefault(p => p.Id == targetPaymentId);
   }
 
-  public async Task<List<string>> GetTargetCourseTitleAsync(string targetUserName, CancellationToken cancellationToken)
+  public async Task<List<string>> GetTargetClassTitleAsync(string targetUserName, CancellationToken cancellationToken)
   {
-    List<string>? courseTitles = await _collectionAppUser.AsQueryable().
-      Where(u => u.NormalizedUserName == targetUserName.ToUpper()).SelectMany(u => u.EnrolledCourses).
-      Select(ec => ec.CourseTitle.ToUpper()).ToListAsync(cancellationToken);
+    List<ObjectId>? classIds = await _collectionAppUser.AsQueryable().
+      Where(u => u.NormalizedUserName == targetUserName.ToUpper()).SelectMany(u => u.EnrolledClasses).
+      Select(ec => ec.ClassId).ToListAsync(cancellationToken);
 
-    return courseTitles ?? new List<string>();
+    List<string> classNames = await _collectionClass
+      .Find(c => classIds.Contains(c.Id))
+      .Project(c => c.ClassName ?? string.Empty)
+      .ToListAsync(cancellationToken);
+
+    return classNames ?? new List<string>();
   }
 
   public async Task<PagedList<Attendence>> GetAllAttendenceAsync(
     AttendenceParams attendenceParams,
     string targetMemberUserName,
-    string targetCourseTitle,
+    string targetClassTitle,
     CancellationToken cancellationToken
   )
   {
@@ -679,8 +691,8 @@ public class ManagerRepository : IManagerRepository
           emptyQuery, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
     }
 
-    ObjectId targetCourseId = await _collectionCourse.AsQueryable().
-      Where(doc => doc.Title == targetCourseTitle.ToUpper()).Select(doc => doc.Id).
+    ObjectId targetCourseId = await _collectionClass.AsQueryable().
+      Where(doc => doc.ClassName == targetClassTitle.ToUpper()).Select(doc => doc.Id).
       FirstOrDefaultAsync(cancellationToken);
     if (targetCourseId == default)
     {
@@ -690,7 +702,7 @@ public class ManagerRepository : IManagerRepository
     }
 
     IQueryable<Attendence>? query = _collectionAttendence.AsQueryable().
-      Where(doc => doc.StudentId == appUser.Id && doc.CourseId == targetCourseId);
+      Where(doc => doc.StudentId == appUser.Id && doc.ClassId == targetCourseId);
 
     return await PagedList<Attendence>.CreatePagedListAsync(
       query, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken
@@ -710,26 +722,38 @@ public class ManagerRepository : IManagerRepository
       query = query.Where(u =>
           (u.Name ?? string.Empty).ToUpper().Contains(s) ||
           (u.NormalizedUserName ?? string.Empty).Contains(s) ||
-          (u.LastName ?? string.Empty).ToUpper().Contains(s) ||
-           u.EnrolledCourses.Any(c =>
-                (c.CourseTitle ?? string.Empty).ToUpper().Contains(s)
-            ));
+          (u.LastName ?? string.Empty).ToUpper().Contains(s));
     }
 
     if (!string.IsNullOrWhiteSpace(memberParams.CourseTitle))
     {
       string s = memberParams.CourseTitle.ToUpper();
 
+      var targetCourseIds = _collectionCourse.AsQueryable()
+             .Where(c => c.Title.ToUpper().Contains(s))
+             .Select(c => c.Id)
+             .ToList();
+
+      var targetClassIds = _collectionClass.AsQueryable()
+            .Where(c => targetCourseIds.Contains(c.CourseId!.Value))
+            .Select(c => c.Id)
+            .ToList();
+
       query = query.Where(u =>
-          u.EnrolledCourses.Any(c => c.CourseTitle.Contains(s)));
+      u.EnrolledClasses.Any(ec => targetClassIds.Contains(ec.ClassId)));
     }
 
     if (!string.IsNullOrWhiteSpace(memberParams.ClassName))
     {
       string s = memberParams.ClassName.ToUpper();
 
+      var targetClassIds = _collectionClass.AsQueryable()
+             .Where(c => c.ClassName.ToUpper().Contains(s))
+             .Select(c => c.Id)
+             .ToList();
+
       query = query.Where(u =>
-          u.EnrolledCourses.Any(c => c.ClassName.Contains(s)));
+            u.EnrolledClasses.Any(ec => targetClassIds.Contains(ec.ClassId)));
     }
 
     if (memberParams.Roles is not null)
@@ -800,11 +824,14 @@ public class ManagerRepository : IManagerRepository
   private readonly IMongoCollection<Course> _collectionCourse;
   private readonly IMongoCollection<Attendence> _collectionAttendence;
   private readonly IMongoCollection<AppRole> _collectionRole;
+  private readonly IMongoCollection<Class> _collectionClass;
   private readonly UserManager<AppUser> _userManager;
   private readonly ITokenService _tokenService;
   private readonly IMongoClient _client;
   private readonly IPhotoService _photoService;
   private readonly ICourseRepository _courseRepository;
+  private readonly IClassRepository _classRepository;
+  private readonly ISiteRepository _siteRepository;
 
   public ManagerRepository(
     IMongoClient client,
@@ -812,7 +839,9 @@ public class ManagerRepository : IManagerRepository
     IMyMongoDbSettings dbSettings,
     UserManager<AppUser> userManager,
     IPhotoService photoService,
-    ICourseRepository courseRepository
+    ICourseRepository courseRepository,
+    IClassRepository classRepository,
+    ISiteRepository siteRepository
   )
   {
     _client = client; // used for Session
@@ -822,11 +851,14 @@ public class ManagerRepository : IManagerRepository
     _collectionCourse = database.GetCollection<Course>(AppVariablesExtensions.CollectionCourses);
     _collectionAttendence = database.GetCollection<Attendence>(AppVariablesExtensions.CollectionAttendences);
     _collectionRole = database.GetCollection<AppRole>(AppVariablesExtensions.CollectionRoles);
+    _collectionClass = database.GetCollection<Class>(AppVariablesExtensions.CollectionClasses);
 
     _userManager = userManager;
     _tokenService = tokenService;
     _photoService = photoService;
     _courseRepository = courseRepository;
+    _classRepository = classRepository;
+    _siteRepository = siteRepository;
   }
 
   #endregion
