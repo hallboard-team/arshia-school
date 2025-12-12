@@ -4,6 +4,6 @@ namespace api.Models;
 public record Attendence(
     [Optional][property: BsonId, BsonRepresentation(BsonType.ObjectId)] ObjectId Id,
     ObjectId StudentId,
-    ObjectId CourseId,
+    ObjectId ClassId,
     DateOnly Date //25/6/1402
 );
