@@ -32,7 +32,7 @@ public class MemberController
 
         attendenceParams.UserId = userId;
 
-        PagedList<Attendence> pagedAttendences = await _memberRepository.GetAllAttendenceAsync(attendenceParams, userId, targetCourseTitle, cancellationToken);
+        PagedList<Attendance> pagedAttendences = await _memberRepository.GetAllAttendenceAsync(attendenceParams, userId, targetCourseTitle, cancellationToken);
 
         if (pagedAttendences.Count == 0)
             return NoContent();
@@ -48,7 +48,7 @@ public class MemberController
 
         List<ShowStudentStatusDto> showStudentStatusDtos = [];
 
-        foreach (Attendence attendence in pagedAttendences)
+        foreach (Attendance attendence in pagedAttendences)
         {
             showStudentStatusDtos.Add(Mappers.ConvertAttendenceToShowStudentStatusDto(attendence));
         }

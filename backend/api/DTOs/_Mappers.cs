@@ -113,16 +113,16 @@ public static class Mappers
         );
     }
 
-    public static Attendence ConvertAddStudentStatusDtoToAttendence(AddStudentStatusDto teacherInput, ObjectId studentId, ObjectId courseId, DateOnly currentDate)
+    public static Attendance ConvertAddStudentStatusDtoToAttendence(AddStudentStatusDto teacherInput, ObjectId studentId, ObjectId courseId, DateOnly currentDate)
     {
-        return new Attendence(
+        return new Attendance(
             StudentId: studentId,
             ClassId: courseId,
             Date: currentDate
         );
     }
 
-    public static ShowStudentStatusDto ConvertAttendenceToShowStudentStatusDto(Attendence attendence)
+    public static ShowStudentStatusDto ConvertAttendenceToShowStudentStatusDto(Attendance attendence)
     {
         return new ShowStudentStatusDto
         {

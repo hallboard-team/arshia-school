@@ -1,7 +1,7 @@
 namespace api.Models;
 
 [CollectionName("attendences")]
-public record Attendence(
+public record Attendance(
     [Optional][property: BsonId, BsonRepresentation(BsonType.ObjectId)] ObjectId Id,
     ObjectId StudentId,
     ObjectId ClassId,

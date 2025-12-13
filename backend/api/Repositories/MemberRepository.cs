@@ -7,7 +7,7 @@ public class MemberRepository : IMemberRepository
 {
     #region Constructor
     IMongoCollection<AppUser> _collectionAppUser;
-    IMongoCollection<Attendence> _collectionAttendence;
+    IMongoCollection<Attendance> _collectionAttendence;
     IMongoCollection<Class> _collectionClass;
     private readonly ITokenService _tokenService;
     private readonly UserManager<AppUser> _userManager;
@@ -16,7 +16,7 @@ public class MemberRepository : IMemberRepository
     {
         var database = client.GetDatabase(dbSettings.DatabaseName);
         _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.CollectionUsers);
-        _collectionAttendence = database.GetCollection<Attendence>(AppVariablesExtensions.CollectionAttendences);
+        _collectionAttendence = database.GetCollection<Attendance>(AppVariablesExtensions.CollectionAttendences);
         _collectionClass = database.GetCollection<Class>(AppVariablesExtensions.CollectionCourses);
 
         _tokenService = tokenService;
@@ -24,14 +24,14 @@ public class MemberRepository : IMemberRepository
     }
     #endregion Constructor
 
-    public async Task<PagedList<Attendence>> GetAllAttendenceAsync(AttendenceParams attendenceParams, ObjectId? userId, string targetClassTitle, CancellationToken cancellationToken)
+    public async Task<PagedList<Attendance>> GetAllAttendenceAsync(AttendenceParams attendenceParams, ObjectId? userId, string targetClassTitle, CancellationToken cancellationToken)
     {
         AppUser? appUser = await _collectionAppUser.Find<AppUser>(
             doc => doc.Id == userId).FirstOrDefaultAsync(cancellationToken);
         if (appUser is null)
         {
             var emptyQuery = _collectionAttendence.AsQueryable().Where(_ => false);
-            return await PagedList<Attendence>.CreatePagedListAsync(
+            return await PagedList<Attendance>.CreatePagedListAsync(
                 emptyQuery, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
         }
 
@@ -43,14 +43,14 @@ public class MemberRepository : IMemberRepository
         if (targetClassId == default)
         {
             var emptyQuery = _collectionAttendence.AsQueryable().Where(_ => false);
-            return await PagedList<Attendence>.CreatePagedListAsync(
+            return await PagedList<Attendance>.CreatePagedListAsync(
                 emptyQuery, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
         }
 
-        IQueryable<Attendence>? query = _collectionAttendence.AsQueryable<Attendence>()
+        IQueryable<Attendance>? query = _collectionAttendence.AsQueryable<Attendance>()
             .Where(doc => doc.StudentId == appUser.Id && doc.ClassId == targetClassId);
 
-        return await PagedList<Attendence>.CreatePagedListAsync(query, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
+        return await PagedList<Attendance>.CreatePagedListAsync(query, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
     }
 
     public async Task<OperationResult<TargetMemberDto>> UpdateMemberAsync(MemberUpdateDto memberUpdateDto, ObjectId userId, CancellationToken cancellationToken)

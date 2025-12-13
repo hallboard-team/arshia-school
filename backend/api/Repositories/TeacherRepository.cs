@@ -8,13 +8,13 @@ public class TeacherRepository : ITeacherRepository
     private readonly IMongoCollection<Class> _collectionClass;
     private readonly UserManager<AppUser> _userManager;
     private readonly ITokenService _tokenService;
-    private readonly IMongoCollection<Attendence> _collectionAttendence;
+    private readonly IMongoCollection<Attendance> _collectionAttendence;
 
     public TeacherRepository(IMongoClient client, ITokenService tokenService, IMyMongoDbSettings dbSettings, UserManager<AppUser> userManager)
     {
         var database = client.GetDatabase(dbSettings.DatabaseName);
         _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.CollectionUsers);
-        _collectionAttendence = database.GetCollection<Attendence>(AppVariablesExtensions.CollectionAttendences);
+        _collectionAttendence = database.GetCollection<Attendance>(AppVariablesExtensions.CollectionAttendences);
         _collectionCourse = database.GetCollection<Course>(AppVariablesExtensions.CollectionCourses);
         _collectionClass = database.GetCollection<Class>(AppVariablesExtensions.CollectionClasses);
 
@@ -68,14 +68,14 @@ public class TeacherRepository : ITeacherRepository
         if (teacherInput.IsAbsent == false)
             return null;
 
-        Attendence existingAttendence = await _collectionAttendence
+        Attendance existingAttendence = await _collectionAttendence
             .Find(doc => doc.StudentId == targetAppUser.Id && doc.Date == currentDate && doc.ClassId == targetCourseId)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (existingAttendence != null)
             return null;
 
-        Attendence? attendence = Mappers.ConvertAddStudentStatusDtoToAttendence(teacherInput, targetAppUser.Id, targetCourseId, currentDate);
+        Attendance? attendence = Mappers.ConvertAddStudentStatusDtoToAttendence(teacherInput, targetAppUser.Id, targetCourseId, currentDate);
 
         if (_collectionAttendence is not null)
         {

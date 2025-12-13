@@ -373,7 +373,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
             return BadRequest("دوره مورد نظر باید وارد بشود");
         }
 
-        PagedList<Attendence> pagedAttendences = await _managerRepository.GetAllAttendenceAsync(attendenceParams, targetMemberUserName, targetCourseTitle, cancellationToken);
+        PagedList<Attendance> pagedAttendences = await _managerRepository.GetAllAttendenceAsync(attendenceParams, targetMemberUserName, targetCourseTitle, cancellationToken);
 
         if (pagedAttendences.Count == 0)
             return NoContent();
@@ -389,7 +389,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
 
         List<ShowStudentStatusDto> showStudentStatusDtos = [];
 
-        foreach (Attendence attendence in pagedAttendences)
+        foreach (Attendance attendence in pagedAttendences)
         {
             showStudentStatusDtos.Add(Mappers.ConvertAttendenceToShowStudentStatusDto(attendence));
         }
