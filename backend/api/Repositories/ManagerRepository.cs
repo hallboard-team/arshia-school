@@ -602,7 +602,7 @@ public class ManagerRepository : IManagerRepository
     return result.ModifiedCount > 0;
   }
 
-  public async Task<List<ShowClassDto>> GetTargetMemberClassAsync(
+  public async Task<List<ShowClassDto>> GetTargetMemberClassesAsync(
     string targetUserName, CancellationToken cancellationToken
   )
   {
@@ -661,7 +661,7 @@ public class ManagerRepository : IManagerRepository
     return enrolledCourse.Payments.FirstOrDefault(p => p.Id == targetPaymentId);
   }
 
-  public async Task<List<string>> GetTargetClassTitleAsync(string targetUserName, CancellationToken cancellationToken)
+  public async Task<List<string>> GetTargetClassTitlesAsync(string targetUserName, CancellationToken cancellationToken)
   {
     List<ObjectId>? classIds = await _collectionAppUser.AsQueryable().
       Where(u => u.NormalizedUserName == targetUserName.ToUpper()).SelectMany(u => u.EnrolledClasses).

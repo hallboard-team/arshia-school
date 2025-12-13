@@ -20,10 +20,10 @@ public interface IManagerRepository
     public Task<OperationResult<MemberPhoto>> UploadMemberPhotoAsync(IFormFile file, string userName, CancellationToken cancellationToken);
     Task<Photo?> AddPhotoAsync(IFormFile file, ObjectId targetPaymentId, CancellationToken cancellationToken);
     Task<bool> DeletePhotoAsync(ObjectId targetPaymentId, CancellationToken cancellationToken);
-    Task<List<ShowClassDto>> GetTargetMemberClassAsync(string targetUserName, CancellationToken cancellationToken);
+    Task<List<ShowClassDto>> GetTargetMemberClassesAsync(string targetUserName, CancellationToken cancellationToken);
     Task<EnrolledClass?> GetTargetMemberEnrolledClassAsync(string targetUserName, string classTitle, CancellationToken cancellationToken);
     Task<Payment?> GetTargetPaymentByIdAsync(ObjectId targetPaymentId, CancellationToken cancellationToken);
-    Task<List<string>> GetTargetClassTitleAsync(string targetUserName, CancellationToken cancellationToken);
+    Task<List<string>> GetTargetClassTitlesAsync(string targetUserName, CancellationToken cancellationToken);
     Task<PagedList<Attendance>> GetAllAttendenceAsync(AttendenceParams attendenceParams, string targetMemberUserName, string targetClassTitle, CancellationToken cancellationToken);
     Task<List<AppRole>> GetAllRoleAsync(CancellationToken cancellationToken);
 }

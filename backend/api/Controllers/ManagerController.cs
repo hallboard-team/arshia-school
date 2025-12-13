@@ -313,7 +313,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
             return BadRequest("userName is required.");
         }
 
-        List<ShowClassDto>? classRes = await _managerRepository.GetTargetMemberClassAsync(targetUserName, cancellationToken);
+        List<ShowClassDto>? classRes = await _managerRepository.GetTargetMemberClassesAsync(targetUserName, cancellationToken);
 
         return Ok(classRes ?? []);
     }
@@ -355,7 +355,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
             return BadRequest("نام کاربری باید وارد بشود");
         }
 
-        List<string> courseTitles = await _managerRepository.GetTargetClassTitleAsync(targetUserName, cancellationToken);
+        List<string> courseTitles = await _managerRepository.GetTargetClassTitlesAsync(targetUserName, cancellationToken);
 
         return Ok(courseTitles ?? new List<string>());
     }
