@@ -5,7 +5,7 @@ using ZstdSharp.Unsafe;
 
 namespace api.Repositories;
 
-public class ClassRespository : IClassRepository
+public class ClassRepository : IClassRepository
 {
     private readonly IMongoClient _client;
     private readonly IMongoCollection<Class> _collectionClass;
@@ -13,7 +13,7 @@ public class ClassRespository : IClassRepository
     private readonly IMongoCollection<Site> _collectionSite;
     private readonly IMongoCollection<AppUser> _collectionAppUser;
 
-    public ClassRespository(
+    public ClassRepository(
         IMongoClient client,
         IMyMongoDbSettings dbSettings
     )
