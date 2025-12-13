@@ -87,7 +87,7 @@ public class ClassRespository : IClassRepository
         );
     }
 
-    public async Task<PagedList<Class>> GetAllClassAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
+    public async Task<PagedList<Class>> GetAllClassesAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
     {
         IQueryable<Class> query = _collectionClass.AsQueryable();
 

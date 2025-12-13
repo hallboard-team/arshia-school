@@ -5,7 +5,7 @@ namespace api.Interfaces;
 public interface IClassRepository
 {
     public Task<OperationResult<ShowClassDto>> CreateClassAsync(CreateClassDto request, CancellationToken cancellationToken);
-    public Task<PagedList<Class>> GetAllClassAsync(PaginationParams paginationParams, CancellationToken cancellationToken);
+    public Task<PagedList<Class>> GetAllClassesAsync(PaginationParams paginationParams, CancellationToken cancellationToken);
     public Task<OperationResult<ShowClassDto>> GetClassByNameAsync(string className, CancellationToken cancellationToken);
     public Task<List<string>> GetProfessorUserNamesByIdsAsync(List<ObjectId> professorIds, CancellationToken cancellationToken);
     public Task<List<string>> GetProfessorNamesByIdsAsync(List<ObjectId> professorIds, CancellationToken cancellationToken);
