@@ -22,7 +22,8 @@ public class ClassController(IClassRepository _classRepository, ICourseRepositor
         };
     }
 
-    [HttpGet]
+    [AllowAnonymous]
+    [HttpGet("get-all-classes")]
     public async Task<ActionResult<IEnumerable<ShowClassDto>>> GetAll([FromQuery] PaginationParams paginationParams, CancellationToken cancellationToken)
     {
         PagedList<Class> pagedClasses = await _classRepository.GetAllClassAsync(paginationParams, cancellationToken);
