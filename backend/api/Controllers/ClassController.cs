@@ -18,7 +18,7 @@ public class ClassController(IClassRepository _classRepository, ICourseRepositor
             ErrorCode.IsDuplicateClass => BadRequest(opResult.Error.Message),
             ErrorCode.IsCourseNotFound => BadRequest(opResult.Error.Message),
             ErrorCode.IsSiteNotFound => BadRequest(opResult.Error.Message),
-            _ => BadRequest("Operation failed! Try agian or contact support")
+            _ => BadRequest("Operation failed! Try again or contact support")
         };
     }
 
@@ -72,13 +72,13 @@ public class ClassController(IClassRepository _classRepository, ICourseRepositor
     [HttpPut("update-class/{className}")]
     public async Task<ActionResult<ShowClassDto>> UpdateClass(string className, UpdateClassDto request, CancellationToken cancellationToken)
     {
-        OperationResult<ShowClassDto> opResullt = await _classRepository.UpdateClassAsync(className, request, cancellationToken);
+        OperationResult<ShowClassDto> opResult = await _classRepository.UpdateClassAsync(className, request, cancellationToken);
 
-        return opResullt.IsSuccess
-        ? opResullt.Result
-        : opResullt.Error?.Code switch
+        return opResult.IsSuccess
+        ? opResult.Result
+        : opResult.Error?.Code switch
         {
-            ErrorCode.IsNotFound => BadRequest(opResullt.Error.Message),
+            ErrorCode.IsNotFound => BadRequest(opResult.Error.Message),
             _ => BadRequest("Operation failed! Try again or contact support")
         };
     }
@@ -94,7 +94,7 @@ public class ClassController(IClassRepository _classRepository, ICourseRepositor
         {
             ErrorCode.IsNotFound => BadRequest(opResult.Error.Message),
             ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
-            _ => BadRequest("Operation failed! Try again or contatact support")
+            _ => BadRequest("Operation failed! Try again or contact support")
         };
     }
 
@@ -109,7 +109,7 @@ public class ClassController(IClassRepository _classRepository, ICourseRepositor
         {
             ErrorCode.IsNotFound => BadRequest(opResult.Error.Message),
             ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
-            _ => BadRequest("Operation failed! Try again or contatact support")
+            _ => BadRequest("Operation failed! Try again or contact support")
         };
     }
 }
