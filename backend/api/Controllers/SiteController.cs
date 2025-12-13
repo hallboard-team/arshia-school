@@ -82,7 +82,7 @@ public class SiteController(ISiteRepository _siteRepository) : BaseApiController
         OperationResult opResult = await _siteRepository.DeleteSiteAsync(siteName, cancellationToken);
 
         return opResult.IsSuccess
-        ? new Response(Message: "Site deleted successfully")
+        ? Ok(new Response(Message: "Site deleted successfully"))
         : opResult.Error?.Code switch
         {
             ErrorCode.IsNotFound => BadRequest(opResult.Error.Message),
