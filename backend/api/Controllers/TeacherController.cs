@@ -38,7 +38,7 @@ public class TeacherController(ITeacherRepository _teacherRepository,
         if (string.IsNullOrEmpty(hashedUserId))
             return BadRequest("No user was found with this user Id.");
 
-        var courses = await _teacherRepository.GetClassAsync(hashedUserId, cancellationToken);
+        var courses = await _teacherRepository.GetClassesAsync(hashedUserId, cancellationToken);
         return courses.Count == 0 ? NoContent() : Ok(courses);
     }
 
