@@ -1,6 +1,5 @@
 using api.DTOs.Account;
 using api.DTOs.Helpers;
-using ZstdSharp.Unsafe;
 
 namespace api.Controllers;
 
