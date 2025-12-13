@@ -109,7 +109,7 @@ public static class Mappers
     {
         return new UserWithRoleDto(
             UserName: appUser.NormalizedUserName!,
-            Roles: appUser.appRoles
+            Roles: appUser.AppRoles
         );
     }
 
