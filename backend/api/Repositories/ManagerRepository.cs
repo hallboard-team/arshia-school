@@ -625,7 +625,7 @@ public class ManagerRepository : IManagerRepository
       names = await _classRepository.GetProfessorNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
 
       OperationResult<ShowCourseDto> courseDto = await _courseRepository.GetCourseByIdAsync(model.CourseId!.Value, cancellationToken);
-      OperationResult<ShowSiteDto> siteDto = await _siteRepository.GetSiteById(model.SiteId!.Value, cancellationToken);
+      OperationResult<ShowSiteDto> siteDto = await _siteRepository.GetSiteByIdAsync(model.SiteId!.Value, cancellationToken);
 
       classRes.Add(Mappers.ConvertClassToShowClassDto(model, courseDto.Result, siteDto.Result, userNames, names));
     }

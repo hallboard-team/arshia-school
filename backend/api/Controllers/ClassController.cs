@@ -45,7 +45,7 @@ public class ClassController(IClassRepository _classRepository, ICourseRepositor
         foreach (Class model in pagedClasses)
         {
             OperationResult<ShowCourseDto> courseDto = await _courseRepository.GetCourseByIdAsync(model.CourseId!.Value, cancellationToken);
-            OperationResult<ShowSiteDto> siteDto = await _siteRepository.GetSiteById(model.SiteId!.Value, cancellationToken);
+            OperationResult<ShowSiteDto> siteDto = await _siteRepository.GetSiteByIdAsync(model.SiteId!.Value, cancellationToken);
 
             List<string> userNames = await _classRepository.GetProfessorUserNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
             List<string> names = await _classRepository.GetProfessorNamesByIdsAsync(model.ProfessorsIds, cancellationToken);

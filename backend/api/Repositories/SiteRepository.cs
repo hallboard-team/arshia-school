@@ -71,7 +71,7 @@ public class SiteRepository : ISiteRepository
         );
     }
 
-    public async Task<OperationResult<ShowSiteDto>> GetSiteById(ObjectId siteId, CancellationToken cancellationToken)
+    public async Task<OperationResult<ShowSiteDto>> GetSiteByIdAsync(ObjectId siteId, CancellationToken cancellationToken)
     {
         Site? site = await _collectionSite.Find(doc => doc.Id == siteId).FirstOrDefaultAsync(cancellationToken);
 
