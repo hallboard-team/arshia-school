@@ -167,7 +167,7 @@ public class MemberRepository : IMemberRepository
             : Mappers.ConvertAppUserToProfileDto(appUser);
     }
 
-    public async Task<List<Class>> GetClassAsync(string hashedUserId, CancellationToken cancellationToken)
+    public async Task<List<Class>> GetClassesAsync(string hashedUserId, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 

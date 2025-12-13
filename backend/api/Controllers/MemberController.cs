@@ -89,7 +89,7 @@ public class MemberController
         if (string.IsNullOrEmpty(hashedUserId))
             return BadRequest("No user was found with this userId.");
 
-        var courses = await _memberRepository.GetClassAsync(hashedUserId, cancellationToken);
+        var courses = await _memberRepository.GetClassesAsync(hashedUserId, cancellationToken);
         return courses.Count == 0 ? Ok(new List<Class>()) : Ok(courses);
     }
 
