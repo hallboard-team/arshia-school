@@ -267,7 +267,7 @@ public static class Mappers
             PaymentPerMonth: paymentPerMonthCalc,
             PaidAmount: managerInput.PaidAmount,
             TuitionRemainder: tuitionReminderCalc,
-            LastpaymentPerMonth: lastPaymentPerMonthCalc,
+            LastPaymentPerMonth: lastPaymentPerMonthCalc,
             Payments: []
         );
     }

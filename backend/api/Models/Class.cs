@@ -28,7 +28,7 @@ public record EnrolledClass(
     int PaymentPerMonth,
     int PaidAmount,
     int TuitionRemainder,
-    int LastpaymentPerMonth,
+    int LastPaymentPerMonth,
     List<Payment> Payments
 );
 
