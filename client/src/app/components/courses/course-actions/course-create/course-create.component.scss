@@ -64,6 +64,18 @@ $text-color: #333;
                         background: transparent;
                         box-shadow: none;
                     }
+
+                    textarea {
+                        min-height: 54px;
+
+                        padding-top: 12px;
+
+                        resize: none;
+
+                        background: transparent;
+                        box-shadow: none;
+                        border: none;
+                    }
                 }
             }
 

@@ -37,7 +37,7 @@
                 <mat-form-field appearance="outline">
                     <mat-label>توضیحات دوره</mat-label>
 
-                    <textarea matInput dir="auto" formControlName="descriptionCtrl"
+                    <textarea matInput cdkTextareaAutosize dir="auto" formControlName="descriptionCtrl"
                         placeholder="توضیحات دوره را وارد کنید"></textarea>
                     @if (DescriptionCtrl.hasError('required')) {
                     <mat-error>لطفاً توضیحات دوره را وارد کنید</mat-error>

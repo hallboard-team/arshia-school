@@ -57,11 +57,12 @@
             loggedInUserSig()?.roles?.includes('teacher')) {
             <button [routerLink]="['/dashboard/teacher-panel']"><span>پنل-معلم</span></button>
             }
-            <button [routerLink]="['/dashboard/courses']">دوره ها</button>
+            <button [routerLink]="['/dashboard/classes']"><span>کلاس ها</span></button>
+            <button [routerLink]="['/dashboard/courses']"><span>دوره ها</span></button>
+            <button [routerLink]="['/dashboard/sites']"><span>سایت ها</span></button>
         </div>
     </div>
     }
-
 
     <section class="left">
         <div class="div-btns">
