@@ -7,14 +7,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { HttpClient } from '@angular/common/http';
-import { CurrencyFormatterDirective } from '../../../../directives/currency-formatter.directive';
 import { NavbarComponent } from '../../../navbar/navbar.component';
 import { AddCourse } from '../../../../models/course.model';
 import { CourseService } from '../../../../services/course.service';
-import moment, { Moment } from 'moment-jalaali';
-import { DatepickerComponent } from '../../../../datepicker/datepicker.component';
 import { DecimalFormatterDirective } from '../../../../directives/decimal-formatter.directive';
 import { BackForwardButtonComponent } from "../../../back-forward-button/back-forward-button.component";
+import { MatRadioModule } from '@angular/material/radio';
 
 @Component({
   selector: 'app-add-course',
@@ -22,9 +20,8 @@ import { BackForwardButtonComponent } from "../../../back-forward-button/back-fo
     CommonModule, FormsModule,
     ReactiveFormsModule, MatFormFieldModule, MatInputModule,
     MatButtonModule, MatSnackBarModule,
-    DatepickerComponent,
-    MatIconModule, NavbarComponent, CurrencyFormatterDirective,
-    DecimalFormatterDirective,
+    MatIconModule, NavbarComponent,
+    DecimalFormatterDirective, MatRadioModule,
     BackForwardButtonComponent
   ],
   templateUrl: './course-create.component.html',
@@ -36,39 +33,26 @@ export class CourseCreateComponent {
   private _courseService = inject(CourseService);
   private _matSnackBar = inject(MatSnackBar);
 
-  min = moment().startOf('day');
-  max = moment().add(10, 'jYear').endOf('day');
-
   constructor(private http: HttpClient) { }
 
   courseFg = this.fb.group({
     titleCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    classNameCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    tuitionCtrl: ['', [Validators.required, Validators.min(10_000), Validators.max(100_000_000),]],
+    descriptionCtrl: ['', [Validators.required]],
     hoursCtrl: ['', [Validators.required, Validators.pattern(/^(0(\.\d+)?|[1-9]\d*(\.\d+)?)$/), Validators.min(0.5), Validators.max(20000)]],
-    hoursPerClassCtrl: ['', [Validators.required, Validators.min(0.5), Validators.max(10),
-    Validators.pattern(/^(?:0\.5|[1-9](?:\.5)?|10)$/),
-    ]],
-    startCtrl: ['', [Validators.required]]
+    isStartedCtrl: ['', [Validators.required]]
   });
 
   get TitleCtrl(): FormControl {
     return this.courseFg.get('titleCtrl') as FormControl;
   }
-  get ClassNameCtrl(): FormControl {
-    return this.courseFg.get('classNameCtrl') as FormControl;
-  }
-  get TuitionCtrl(): FormControl {
-    return this.courseFg.get('tuitionCtrl') as FormControl;
+  get DescriptionCtrl(): FormControl {
+    return this.courseFg.get('descriptionCtrl') as FormControl;
   }
   get HoursCtrl(): FormControl {
     return this.courseFg.get('hoursCtrl') as FormControl;
   }
-  get HoursPerClassCtrl(): FormControl {
-    return this.courseFg.get('hoursPerClassCtrl') as FormControl;
-  }
-  get StartCtrl(): FormControl {
-    return this.courseFg.get('startCtrl') as FormControl;
+  get IsStartedCtrl(): FormControl {
+    return this.courseFg.get('isStartedCtrl') as FormControl;
   }
 
   private openSnack(message: string, panel: 'success' | 'error' = 'error'): void {
@@ -79,45 +63,12 @@ export class CourseCreateComponent {
     return !!value && value.invalid && (value.dirty || value.touched);
   }
 
-  private toGregorianDateOnly(value: Moment | Date | string | null | undefined): string | undefined {
-    if (!value) return undefined;
-
-    if (moment.isMoment(value)) {
-      return value.locale('en').format('YYYY-MM-DD');
-    }
-
-    if (typeof value === 'string') {
-      const m = moment(value);
-      if (m.isValid()) {
-        return m.locale('en').format('YYYY-MM-DD');
-      }
-      const d = new Date(value);
-      return new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString().slice(0, 10);
-    }
-
-    const d = value as Date;
-    return new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString().slice(0, 10);
-  }
-
   createCourse(): void {
-    const start = this.StartCtrl.value as any;
-
-    if (!start || !start.isBetween(this.min, this.max, undefined, '[]')) {
-      this.openSnack(
-        `تاریخ شروع دوره باید بین ${this.min.format('jYYYY/jMM/jDD')} و ${this.max.format('jYYYY/jMM/jDD')} باشد.`,
-        'error'
-      );
-      this.StartCtrl.markAsTouched();
-      return;
-    }
-
     let addCourse: AddCourse = {
       title: this.TitleCtrl.value,
-      className: this.ClassNameCtrl.value,
-      tuition: this.TuitionCtrl.value,
+      description: this.DescriptionCtrl.value,
       hours: this.HoursCtrl.value,
-      hoursPerClass: this.HoursPerClassCtrl.value,
-      start: this.toGregorianDateOnly(start)
+      isStarted: this.IsStartedCtrl.value
     }
 
     this._courseService.addCourse(addCourse).subscribe({
@@ -136,5 +87,9 @@ export class CourseCreateComponent {
         });
       }
     })
+  }
+
+  onCancel(): void {
+    this.courseFg.reset();
   }
 }

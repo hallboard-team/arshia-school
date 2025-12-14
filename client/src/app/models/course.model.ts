@@ -15,13 +15,10 @@ export interface Course {
 
 export interface ShowCourse {
     title: string,
-    className: string,
-    professorNames: string[],
-    tuition: number,
+    description: string,
     hours: number,
     hoursPerClass: number,
     days: number,
-    start: string | undefined,
     isStarted: boolean
 }
 
@@ -37,9 +34,7 @@ export interface CourseUpdate {
 
 export interface AddCourse {
     title: string,
-    className: string,
-    tuition: number,
+    description: string,
     hours: number,
-    hoursPerClass: number,
-    start: string | undefined
+    isStarted: boolean
 }

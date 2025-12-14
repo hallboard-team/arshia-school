@@ -311,9 +311,7 @@
                             <mat-form-field appearance="outline">
                                 <mat-label>نام کلاس</mat-label>
                                 <mat-select formControlName="classNameCtrl">
-                                    <mat-option *ngFor="let course of showCourses" [value]="course.className">
-                                        {{ course.className }}
-                                    </mat-option>
+
                                 </mat-select>
                                 <mat-hint>یک کلاس انتخاب کنید</mat-hint>
                                 <mat-error *ngIf="ClassNameCtrl.hasError('required')">

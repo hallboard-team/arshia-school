@@ -7,17 +7,16 @@
 <div class="background">
     <app-back-forward-button class="bf-btns"></app-back-forward-button>
 
+    <div class="div-title-radio-input">
+        <span class="title">افزودن دوره جدید</span>
+    </div>
+
     <form class="course-form" [formGroup]="courseFg" (ngSubmit)="courseFg.valid && createCourse()">
         <div class="content">
 
-            <div class="div-title-radio-input">
-                <span class="title">اضافه کردن دوره جدید</span>
-            </div>
-
-            <!-- title -->
             <div class="form-item">
                 <mat-form-field appearance="outline">
-                    <mat-label>اسم دوره</mat-label>
+                    <mat-label>نام دوره</mat-label>
 
                     <input class="input" autoFocusDir type="text" matInput dir="auto" formControlName="titleCtrl"
                         placeholder="بین ۲ تا ۳۰ کاراکتر باشد">
@@ -34,53 +33,21 @@
                 </mat-form-field>
             </div>
 
-            <!-- class name -->
             <div class="form-item">
                 <mat-form-field appearance="outline">
-                    <mat-label>نام کلاس</mat-label>
+                    <mat-label>توضیحات دوره</mat-label>
 
-                    <input class="input" autoFocusDir type="text" matInput dir="auto" formControlName="classNameCtrl"
-                        placeholder="بین ۲ تا ۳۰ کاراکتر باشد">
-                    <mat-hint>نام کلاس جدید را وارد کنید</mat-hint>
-                    @if (ClassNameCtrl.hasError('required')) {
-                    <mat-error>لطفاً نام کلاس را وارد کنید</mat-error>
-                    }
-                    @else if (ClassNameCtrl.errors && ClassNameCtrl.hasError('minlength')) {
-                    <mat-error>حداقل ۲ کاراکتر</mat-error>
-                    }
-                    @else if (ClassNameCtrl.errors && ClassNameCtrl.hasError('maxlength')) {
-                    <mat-error>حداکثر ۳۰ کاراکتر</mat-error>
+                    <textarea matInput cdkTextareaAutosize dir="auto" formControlName="descriptionCtrl"
+                        placeholder="توضیحات دوره را وارد کنید"></textarea>
+                    @if (DescriptionCtrl.hasError('required')) {
+                    <mat-error>لطفاً توضیحات دوره را وارد کنید</mat-error>
                     }
                 </mat-form-field>
             </div>
 
-            <!-- tuition -->
-            <div class="form-item">
-                <mat-form-field appearance="outline" class="tuition-field">
-                    <mat-label>شهریه</mat-label>
-                    <input class="input" type="text" matInput formControlName="tuitionCtrl" appCurrencyFormatter
-                        inputmode="numeric" dir="ltr" placeholder="از ۱۰.۰۰۰ تومان">
-                    <span matSuffix *ngIf="TuitionCtrl.value">
-                        تومان
-                    </span>
-                    <mat-hint>بین ۱۰,۰۰۰ تا ۱۰۰,۰۰۰,۰۰۰
-                    </mat-hint>
-                    @if (TuitionCtrl.hasError('required')) {
-                    <mat-error>لطفاً مبلغ شهریه را مشخص کنید</mat-error>
-                    }
-                    @else if (TuitionCtrl.errors && TuitionCtrl.hasError('min')) {
-                    <mat-error>حداقل شهریه ۱۰.۰۰۰ تومان است</mat-error>
-                    }
-                    @else if (TuitionCtrl.errors && TuitionCtrl.hasError('max')) {
-                    <mat-error>حداکثر شهریه ۱۰۰.۰۰۰.۰۰۰ تومان (صد میلیون تومان) است</mat-error>
-                    }
-                </mat-form-field>
-            </div>
-
-            <!-- total hours -->
             <div class="form-item">
                 <mat-form-field appearance="outline">
-                    <mat-label>ساعت دوره</mat-label>
+                    <mat-label>مدت دوره</mat-label>
                     <input class="input" type="text" matInput formControlName="hoursCtrl" min="0.5" max="20000"
                         appDecimalFormatter inputmode="decimal" step="0.5" dir="ltr" placeholder="مجموع ساعت دوره">
                     <mat-hint>بین ۰۰:۳۰ تا ۲۰.۰۰۰</mat-hint>
@@ -96,44 +63,25 @@
                 </mat-form-field>
             </div>
 
-            <!-- hours per class -->
-            <div class="form-item">
-                <mat-form-field appearance="outline">
-                    <mat-label>ساعت هر کلاس</mat-label>
-                    <input class="input" type="number" matInput formControlName="hoursPerClassCtrl" min="0.5" max="10"
-                        step="0.5" inputmode="decimal" dir="ltr" placeholder="شروع از 0.5 ساعت">
-                    <mat-hint>بین ۰۰:۳۰ تا ۱۰</mat-hint>
-                    @if (HoursPerClassCtrl.hasError('required')) {
-                    <mat-error>لطفاً ساعت هر کلاس را مشخص کنید</mat-error>
-                    }
-                    @else if (HoursPerClassCtrl.errors && HoursPerClassCtrl.hasError('pattern')) {
-                    <mat-error>فقط اعداد ۰,۵ تا ۱۰ با گام ۰,۵ مجاز است</mat-error>
-                    }
-                    @else if (HoursPerClassCtrl.errors && HoursPerClassCtrl.hasError('min')) {
-                    <mat-error>حداقل زمان کلاس: نیم ساعت</mat-error>
-                    }
-                    @else if (HoursPerClassCtrl.errors && HoursPerClassCtrl.hasError('max')) {
-                    <mat-error>حداکثر زمان کلاس: ۱۰ ساعت</mat-error>
-                    }
-                </mat-form-field>
+            <div class="radio-section">
+                <mat-radio-group aria-label="Select an option" formControlName="isStartedCtrl"
+                    class="custom-radio-group">
+                    <mat-radio-button [value]="false">غیر فعال</mat-radio-button>
+                    <mat-radio-button [value]="true">فعال</mat-radio-button>
+                </mat-radio-group>
             </div>
 
-            <!-- start date -->
-            <div class="form-item">
-                <app-datepicker [formControl]="StartCtrl" [maxDate]="max" [minDate]="min" [label]="'تاریخ شروع'">
-                </app-datepicker>
-                @if (StartCtrl.hasError('required')) {
-                <mat-error>بدون وارد کردن تاریخ شروع، ثبت دوره ممکن
-                    نیست</mat-error>
-                }
-            </div>
+            <div class="action-buttons">
 
-            <div class="div-btn-add">
-                <button type="submit" [disabled]="courseFg.invalid" mat-raised-button color="warn">
+                <button type="button" class="neumorphic-btn cancel-btn" (click)="onCancel()">
+                    انصراف
+                </button>
+
+                <button type="submit" [disabled]="courseFg.invalid" class="neumorphic-btn submit-btn">
                     ثبت دوره جدید
                 </button>
-            </div>
 
+            </div>
         </div>
     </form>
 </div>
