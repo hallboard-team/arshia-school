@@ -64,7 +64,7 @@ public class AccountController(IAccountRepository _accountRepository, ITokenServ
             {
                 ErrorCode.IsPasswordInvalid => BadRequest(opResult.Error.Message),
                 ErrorCode.ArePasswordsNotMatch => BadRequest(opResult.Error.Message),
-                ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
+                ErrorCode.IsNotFound => BadRequest(opResult.Error.Message),
                 ErrorCode.IsIdentityFailed => BadRequest(opResult.Error.Message),
                 _ => BadRequest("عملیات انجام نشد. دوباره تلاش کنید یا با پشتیبانی تماس بگیرید.")
             };

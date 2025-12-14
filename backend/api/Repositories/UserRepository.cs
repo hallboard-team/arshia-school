@@ -30,7 +30,7 @@ public class UserRepository : IUserRepository
             return new(
                 false,
                 Error: new(
-                    ErrorCode.IsUserNotFound,
+                    ErrorCode.IsNotFound,
                     "User not found"
                 )
             );

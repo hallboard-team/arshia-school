@@ -1,3 +1,6 @@
+using api.DTOs.Account;
+using api.DTOs.Helpers;
+
 namespace api.Repositories;
 
 public class CourseRepository : ICourseRepository
@@ -17,20 +20,30 @@ public class CourseRepository : ICourseRepository
     }
     #endregion Vars and Constructor
 
-    public async Task<ShowCourseDto> AddCourseAsync(AddCourseDto managerInput, CancellationToken cancellationToken)
+    public async Task<OperationResult<ShowCourseDto>> AddCourseAsync(CreateCourseDto managerInput, CancellationToken cancellationToken)
     {
-        int totalMinutes = (int)Math.Round(managerInput.Hours * 60d);
-        int classMinutes = (int)Math.Round(managerInput.HoursPerClass * 60d);
+        Course? targetCourse = await _collectionCourse.Find(doc => doc.Title.ToUpper() == managerInput.Title.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
-        if (classMinutes <= 0) throw new ArgumentOutOfRangeException(nameof(classMinutes));
+        if (targetCourse is not null)
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsDuplicateCourse,
+                    "The course is already registered"
+                )
+            );
+        }
 
-        int calcDays = (int)Math.Ceiling((double)totalMinutes / classMinutes);
+        Course? course = Mappers.ConvertAddCourseDtoToCourse(managerInput);
 
-        Course? course = Mappers.ConvertAddCourseDtoToCourse(managerInput, calcDays);
+        await _collectionCourse.InsertOneAsync(course, null, cancellationToken);
 
-        await _collectionCourse.InsertOneAsync(course, cancellationToken: cancellationToken);
-
-        return Mappers.ConvertCourseToShowCourseDto(course);
+        return new(
+            true,
+            Mappers.ConvertCourseToShowCourseDto(course),
+            null
+        );
     }
 
     public async Task<PagedList<Course>> GetAllAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
@@ -40,157 +53,127 @@ public class CourseRepository : ICourseRepository
             paginationParams.PageSize, cancellationToken);
     }
 
-    public async Task<List<string>> GetProfessorUserNamesByIdsAsync(List<ObjectId> professorIds, CancellationToken cancellationToken)
-    {
-        if (professorIds == null || professorIds.Count == 0)
-            return new List<string>();
-
-        List<string> usernames = await _collectionAppUser
-            .Find(p => professorIds.Contains(p.Id))
-            .Project(p => p.NormalizedUserName ?? string.Empty)
-            .ToListAsync(cancellationToken);
-
-        return usernames
-            .Where(u => !string.IsNullOrWhiteSpace(u))
-            .Select(u => u.Trim())
-            .ToList();
-    }
-
-    public async Task<List<string>> GetProfessorNamesByIdsAsync(List<ObjectId> professorIds, CancellationToken cancellationToken)
-    {
-        List<AppUser> professors = await _collectionAppUser
-            .Find(professor => professorIds.Contains(professor.Id))
-            .ToListAsync(cancellationToken);
-
-        return professors.Select(p => $"{p.Name} {p.LastName}").ToList();
-    }
-
-    public async Task<bool> UpdateCourseAsync(
+    public async Task<OperationResult<ShowCourseDto>> UpdateCourseAsync(
         UpdateCourseDto updateCourseDto, string targetCourseTitle,
         CancellationToken cancellationToken)
     {
-        int totalMinutes = (int)Math.Round(updateCourseDto.Hours * 60d);
-        int classMinutes = (int)Math.Round(updateCourseDto.HoursPerClass * 60d);
-        if (classMinutes <= 0) throw new ArgumentOutOfRangeException(nameof(updateCourseDto.HoursPerClass));
+        Course? targetCourse = await _collectionCourse.Find(doc => doc.Title.ToUpper() == targetCourseTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
-        int? calcDays = (int)Math.Ceiling((double)totalMinutes / classMinutes);
-
-        UpdateDefinition<Course> updatedCourse = Builders<Course>.Update
-            .Set(c => c.Title, updateCourseDto.Title?.ToUpper())
-            .Set(c => c.ClassName, updateCourseDto.ClassName?.ToUpper())
-            .Set(c => c.Tuition, updateCourseDto.Tuition)
-            .Set(c => c.TotalMinutes, totalMinutes)
-            .Set(c => c.ClassMinutes, classMinutes)
-            .Set(c => c.Days, calcDays)
-            .Set(c => c.Start, updateCourseDto.Start)
-            .Set(c => c.IsStarted, updateCourseDto.IsStarted);
-
-        UpdateResult updateResult = await _collectionCourse.UpdateOneAsync(
-            doc => doc.Title == targetCourseTitle.ToUpper(), updatedCourse, null, cancellationToken
-        );
-
-        return updateResult.ModifiedCount == 1;
-    }
-
-    public async Task<bool> AddProfessorToCourseAsync(string targetCourseTitle, string professorUserName, CancellationToken cancellationToken)
-    {
-        Course course = await _collectionCourse.Find(c =>
-            c.Title == targetCourseTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
-
-        if (course is null)
-            return false;
-
-        ObjectId professorId = await _collectionAppUser.AsQueryable()
-            .Where(doc => doc.NormalizedUserName == professorUserName.ToUpper())
-            .Select(doc => doc.Id)
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (professorId.Equals(null))
-            return false;
-
-        UpdateDefinition<Course> updateCourse = Builders<Course>.Update
-            .AddToSet(doc => doc.ProfessorsIds, professorId);
-
-        var result = await _collectionCourse.UpdateOneAsync(
-            doc => doc.Title == targetCourseTitle.ToUpper(), updateCourse
-        );
-
-        return result.ModifiedCount > 0;
-    }
-
-    public async Task<bool> RemoveProfessorFromCourseAsync(string targetCourseTitle, string professorName, CancellationToken cancellationToken)
-    {
-        Course course = await _collectionCourse.Find(c =>
-            c.Title == targetCourseTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
-
-        if (course is null)
-            return false;
-
-        ObjectId professorId = await _collectionAppUser.AsQueryable()
-            .Where(doc => doc.NormalizedUserName == professorName.ToUpper())
-            .Select(doc => doc.Id)
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (professorId.Equals(null))
-            return false;
-
-        UpdateDefinition<Course> deleteProfessor = Builders<Course>.Update
-            .Pull(doc => doc.ProfessorsIds, professorId);
-
-        var result = await _collectionCourse.UpdateOneAsync(
-            doc => doc.Title == targetCourseTitle.ToUpper(), deleteProfessor
-        );
-
-        return result.ModifiedCount > 0;
-    }
-
-    public async Task<ShowCourseDto?> GetCourseByTitleAsync(string courseTitle, CancellationToken cancellationToken)
-    {
-        Course? course = await _collectionCourse
-            .Find(c => c.Title == courseTitle.ToUpper())
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (course is null) return null;
-
-        List<string> professorUserNames = await _collectionAppUser
-            .Find(doc => course.ProfessorsIds.Contains(doc.Id))
-            .Project(doc => doc.NormalizedUserName ?? string.Empty)
-            .ToListAsync(cancellationToken);
-
-        List<string> safeUserNames = professorUserNames
-            .Where(u => !string.IsNullOrWhiteSpace(u))
-            .Select(u => u!)
-            .ToList();
-
-        return new ShowCourseDto
+        if (targetCourse is null)
         {
-            Title = course.Title,
-            ClassName = course.ClassName,
-            Tuition = course.Tuition,
-            Hours = course.TotalMinutes / 60d,
-            HoursPerClass = course.ClassMinutes / 60d,
-            Start = course.Start,
-            IsStarted = course.IsStarted,
-            ProfessorUserNames = safeUserNames
-        };
-    }
-
-    public async Task<List<ShowClassAndTitleDto>> GetClassesAndTitles(CancellationToken cancellationToken)
-    {
-        IEnumerable<Course> courses = await _collectionCourse.Find(new BsonDocument()).ToListAsync();
-
-        List<ShowClassAndTitleDto> classesAndCourses = [];
-
-        foreach (Course course in courses)
-        {
-            ShowClassAndTitleDto classAndCourse = new(
-                Title: course.Title,
-                ClassName: course.ClassName
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsNotFound,
+                    "Course not found"
+                )
             );
-
-            classesAndCourses.Add(classAndCourse);
         }
 
-        return classesAndCourses;
+        UpdateDefinition<Course> updatedDef = Builders<Course>.Update
+            .Set(c => c.Title, updateCourseDto.Title?.Trim().ToLower())
+            .Set(c => c.Description, updateCourseDto.Description.Trim().ToLower())
+            .Set(c => c.TotalMinutes, updateCourseDto.TotalMinutes)
+            .Set(c => c.IsActive, updateCourseDto.IsActive);
+
+        UpdateResult updateResult = await _collectionCourse.UpdateOneAsync(
+            doc => doc.Id == targetCourse.Id, updatedDef, null, cancellationToken
+        );
+
+        Course? updatedCourse = await _collectionCourse.Find(doc => doc.Title.ToUpper() == updateCourseDto.Title.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+
+        return new(
+            true,
+            Mappers.ConvertCourseToShowCourseDto(updatedCourse),
+            null
+        );
     }
+
+    public async Task<OperationResult<ShowCourseDto>> GetCourseByTitleAsync(string courseTitle, CancellationToken cancellationToken)
+    {
+        Course? course = await _collectionCourse
+            .Find(c => c.Title.ToUpper() == courseTitle.ToUpper())
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (course is null)
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsNotFound,
+                    "Course not found"
+                )
+            );
+        }
+
+        return new(
+            true,
+            Mappers.ConvertCourseToShowCourseDto(course),
+            null
+        );
+    }
+
+    public async Task<OperationResult> DeleteCourseAsync(string courseName, CancellationToken cancellationToken)
+    {
+        Course? course = await _collectionCourse.Find(doc => doc.Title.ToUpper() == courseName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+
+        if (course is null)
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsNotFound,
+                    "Course not found"
+                )
+            );
+        }
+
+        await _collectionCourse.DeleteOneAsync(doc => doc.Id == course.Id, cancellationToken);
+
+        return new(
+            true,
+            null
+        );
+    }
+
+    public async Task<OperationResult<ShowCourseDto>> GetCourseByIdAsync(ObjectId courseId, CancellationToken cancellationToken)
+    {
+        Course? course = await _collectionCourse.Find(doc => doc.Id == courseId).FirstOrDefaultAsync(cancellationToken);
+
+        if (course is null)
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsCourseNotFound,
+                    "Course not found"
+                )
+            );
+        }
+
+        return new(
+            true,
+            Mappers.ConvertCourseToShowCourseDto(course),
+            null
+        );
+    }
+
+    // public async Task<List<ShowClassAndTitleDto>> GetClassesAndTitles(CancellationToken cancellationToken)
+    // {
+    //     IEnumerable<Class> courses = await _collectionCourse.Find(new BsonDocument()).ToListAsync();
+
+    //     List<ShowClassAndTitleDto> classesAndCourses = [];
+
+    //     foreach (Class course in courses)
+    //     {
+    //         ShowClassAndTitleDto classAndCourse = new(
+    //             Title: course.Title,
+    //             ClassName: course.ClassName
+    //         );
+
+    //         classesAndCourses.Add(classAndCourse);
+    //     }
+
+    //     return classesAndCourses;
+    // }
 }

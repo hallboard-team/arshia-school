@@ -1,0 +1,13 @@
+using api.DTOs.Helpers;
+
+namespace api.Interfaces;
+
+public interface ISiteRepository
+{
+    public Task<OperationResult<ShowSiteDto>> CreateSiteAsync(CreateSiteDto request, CancellationToken cancellationToken);
+    public Task<PagedList<Site>> GetAllSitesAsync(PaginationParams paginationParams, CancellationToken cancellationToken);
+    public Task<OperationResult<ShowSiteDto>> GetSiteByNameAsync(string siteName, CancellationToken cancellationToken);
+    public Task<OperationResult<ShowSiteDto>> GetSiteByIdAsync(ObjectId siteId, CancellationToken cancellationToken);
+    public Task<OperationResult<ShowSiteDto>> UpdateSiteAsync(string siteName, UpdateSiteDto request, CancellationToken cancellationToken);
+    public Task<OperationResult> DeleteSiteAsync(string siteName, CancellationToken cancellationToken);
+}
