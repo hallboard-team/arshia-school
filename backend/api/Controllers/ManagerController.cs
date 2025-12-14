@@ -373,7 +373,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
             return BadRequest("دوره مورد نظر باید وارد بشود");
         }
 
-        PagedList<Attendance> pagedAttendences = await _managerRepository.GetAllAttendenceAsync(attendenceParams, targetMemberUserName, targetCourseTitle, cancellationToken);
+        PagedList<Attendance> pagedAttendences = await _managerRepository.GetAllAttendanceAsync(attendenceParams, targetMemberUserName, targetCourseTitle, cancellationToken);
 
         if (pagedAttendences.Count == 0)
             return NoContent();

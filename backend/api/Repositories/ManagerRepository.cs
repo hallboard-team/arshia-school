@@ -675,8 +675,8 @@ public class ManagerRepository : IManagerRepository
     return classNames ?? new List<string>();
   }
 
-  public async Task<PagedList<Attendance>> GetAllAttendenceAsync(
-    AttendenceParams attendenceParams,
+  public async Task<PagedList<Attendance>> GetAllAttendanceAsync(
+    AttendenceParams attendanceParams,
     string targetMemberUserName,
     string targetClassTitle,
     CancellationToken cancellationToken
@@ -686,9 +686,9 @@ public class ManagerRepository : IManagerRepository
       FirstOrDefaultAsync(cancellationToken);
     if (appUser is null)
     {
-      var emptyQuery = _collectionAttendence.AsQueryable().Where(_ => false);
+      var emptyQuery = _collectionAttendance.AsQueryable().Where(_ => false);
       return await PagedList<Attendance>.CreatePagedListAsync(
-          emptyQuery, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
+          emptyQuery, attendanceParams.PageNumber, attendanceParams.PageSize, cancellationToken);
     }
 
     ObjectId targetCourseId = await _collectionClass.AsQueryable().
@@ -696,16 +696,16 @@ public class ManagerRepository : IManagerRepository
       FirstOrDefaultAsync(cancellationToken);
     if (targetCourseId == default)
     {
-      var emptyQuery = _collectionAttendence.AsQueryable().Where(_ => false);
+      var emptyQuery = _collectionAttendance.AsQueryable().Where(_ => false);
       return await PagedList<Attendance>.CreatePagedListAsync(
-          emptyQuery, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
+          emptyQuery, attendanceParams.PageNumber, attendanceParams.PageSize, cancellationToken);
     }
 
-    IQueryable<Attendance>? query = _collectionAttendence.AsQueryable().
+    IQueryable<Attendance>? query = _collectionAttendance.AsQueryable().
       Where(doc => doc.StudentId == appUser.Id && doc.ClassId == targetCourseId);
 
     return await PagedList<Attendance>.CreatePagedListAsync(
-      query, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken
+      query, attendanceParams.PageNumber, attendanceParams.PageSize, cancellationToken
     );
   }
 
@@ -822,7 +822,7 @@ public class ManagerRepository : IManagerRepository
 
   private readonly IMongoCollection<AppUser> _collectionAppUser;
   private readonly IMongoCollection<Course> _collectionCourse;
-  private readonly IMongoCollection<Attendance> _collectionAttendence;
+  private readonly IMongoCollection<Attendance> _collectionAttendance;
   private readonly IMongoCollection<AppRole> _collectionRole;
   private readonly IMongoCollection<Class> _collectionClass;
   private readonly UserManager<AppUser> _userManager;
@@ -849,7 +849,7 @@ public class ManagerRepository : IManagerRepository
 
     _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.CollectionUsers);
     _collectionCourse = database.GetCollection<Course>(AppVariablesExtensions.CollectionCourses);
-    _collectionAttendence = database.GetCollection<Attendance>(AppVariablesExtensions.CollectionAttendences);
+    _collectionAttendance = database.GetCollection<Attendance>(AppVariablesExtensions.CollectionAttendences);
     _collectionRole = database.GetCollection<AppRole>(AppVariablesExtensions.CollectionRoles);
     _collectionClass = database.GetCollection<Class>(AppVariablesExtensions.CollectionClasses);
 
