@@ -1,0 +1,31 @@
+<div class="profile-card">
+  <div class="profile-image">
+      <div class="avatar-wrapper" (click)="fileInput.click()">
+          <img [src]="getProfilePhoto()" alt="Profile" />
+
+          <div class="avatar-hover-overlay">
+              <div class="hover-circle">
+                  <span class="hover-plus">+</span>
+              </div>
+          </div>
+
+          <div class="avatar-plus-badge" (click)="$event.stopPropagation(); fileInput.click()">
+              <span>+</span>
+          </div>
+      </div>
+      <input #fileInput type="file" accept="image/*" hidden (change)="onFileSelected($event)">
+  </div>
+
+  <div class="profile-info">
+      <div class="info-row"><span>نام:</span> <span class="val">{{user?.name}}</span></div>
+      <div class="info-row"><span>نام خانوادگی:</span> <span class="val">{{user?.lastName}}</span></div>
+      <div class="info-row"><span>ایمیل:</span> <span class="val">{{user?.email}}</span></div>
+      <div class="info-row"><span>شماره تلفن:</span> <span class="val">{{user?.phoneNum}}</span></div>
+      <div class="info-row"><span>سن:</span> <span class="val">{{user?.age}}</span></div>
+      
+      <div class="info-row">
+        <span>جنسیت:</span>
+        <span class="val">{{ user?.gender?.toLowerCase() === 'male' ? 'آقا' : 'خانم' }}</span>
+      </div>
+  </div>
+</div>

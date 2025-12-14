@@ -1,149 +1,20 @@
-<header>
-    <nav>
-        <app-navbar />
-    </nav>
-</header>
+<header><app-navbar /></header>
 
-<div class="container">
+<div class="container" *ngIf="profile">
+
     <div class="div-profile">
-        <div class="profile-card">
-            <div class="profile-image">
-                <div class="avatar-wrapper" (click)="fileInput.click()">
-                    <img [src]="getProfilePhoto()" alt="Profile" />
-
-                    <div class="avatar-hover-overlay">
-                        <div class="hover-circle">
-                            <span class="hover-plus">+</span>
-                        </div>
-                    </div>
-
-                    <div class="avatar-plus-badge" (click)="$event.stopPropagation(); fileInput.click()">
-                        <span>+</span>
-                    </div>
-                </div>
-
-                <input #fileInput type="file" accept="image/*" hidden (change)="onFileSelected($event)">
-            </div>
-
-            <div class="profile-info">
-                <span>نام:</span>
-                <span>{{profile?.name}}</span>
-                <span>نام خانوادگی:</span>
-                <span>{{profile?.lastName}}</span>
-                <span>ایمیل:</span>
-                <span>{{profile?.email}}</span>
-                <span>شماره تلفن:</span>
-                <span>{{profile?.phoneNum}}</span>
-                <span>سن:</span>
-                <span>{{profile?.age}}</span>
-
-                @if (profile?.gender === 'Male') {
-                <span>جنسیت:</span>
-                <span>آقا</span>
-                } @else {
-                <span>جنسیت:</span>
-                <span>خانم</span>
-                }
-            </div>
-        </div>
+        <app-profile-info-card [user]="profile" (avatarChange)="onAvatarUpload($event)">
+        </app-profile-info-card>
     </div>
 
-
     <div class="div-tabs">
-        <mat-tab-group (selectedTabChange)="onTabChange($event)">
+        <mat-tab-group>
 
             <mat-tab label="ویرایش پروفایل">
                 <div class="div-edit-profile">
-                    <form class="update-member-form" [formGroup]="profileFg" (ngSubmit)="saveProfileChanges()">
-
-                        <div class="content">
-                            <!-- Name -->
-                            <mat-form-field appearance="outline">
-                                <mat-label>نام</mat-label>
-                                <input class="input" matInput type="text" formControlName="nameCtrl" />
-                                @if (NameCtrl.hasError('required')) {
-                                <mat-error>وارد کردن نام الزامیست</mat-error>
-                                }
-                                @if (NameCtrl.errors && NameCtrl.hasError('minlength')) {
-                                <mat-error>حداقل ۲ کاراکتر</mat-error>
-                                }
-                                @if (NameCtrl.errors && NameCtrl.hasError('maxlength')) {
-                                <mat-error>حداکثر ۳۰ کاراکتر</mat-error>
-                                }
-                            </mat-form-field>
-
-                            <!-- LastName -->
-                            <mat-form-field appearance="outline">
-                                <mat-label>نام خانوادگی</mat-label>
-                                <input class="input" matInput type="text" formControlName="lastNameCtrl" />
-                                @if (LastNameCtrl.hasError('required')) {
-                                <mat-error>وارد کردن نام خانوادگی الزامیست</mat-error>
-                                }
-                                @if (LastNameCtrl.errors && LastNameCtrl.hasError('minlength')) {
-                                <mat-error>حداقل ۲ کاراکتر</mat-error>
-                                }
-                                @if (LastNameCtrl.errors && LastNameCtrl.hasError('maxlength')) {
-                                <mat-error>حداکثر ۳۰ کاراکتر</mat-error>
-                                }
-                            </mat-form-field>
-
-                            <!-- PhoneNumber -->
-                            <mat-form-field appearance="outline">
-                                <mat-label>شماره تلفن</mat-label>
-                                <span class="span-phone" matPrefix dir="ltr">+98&nbsp;</span>
-                                <input type="tel" maxlength="10" matInput formControlName="phoneNumCtrl" dir="ltr" />
-                                @if (PhoneNumCtrl.hasError('required')) {
-                                <mat-error>وارد کردن شماره تلفن الزامیست</mat-error>
-                                }
-                                @else if (PhoneNumCtrl.hasError('pattern')) {
-                                <mat-error>فرمت شماره موبایل معتبر نیست</mat-error>
-                                }
-                            </mat-form-field>
-
-                            <!-- Gender -->
-                            <mat-form-field appearance="outline">
-                                <mat-label>جنسیت</mat-label>
-                                <mat-select formControlName="genderCtrl">
-                                    <mat-option value="female">خانم</mat-option>
-                                    <mat-option value="male">آقا</mat-option>
-                                </mat-select>
-                                @if (GenderCtrl.invalid && (GenderCtrl.dirty || GenderCtrl.touched)) {
-                                <mat-error>وارد کردن جنسیت الزامی است</mat-error>
-                                }
-                            </mat-form-field>
-
-                            <!-- DateOfBirth -->
-                            <div class="datepicker-wrapper" [class.disabled]="!profileEditMode">
-                                <app-datepicker [formControl]="DateOfBirthCtrl" [maxDate]="maxDob" [minDate]="minDob"
-                                    [label]="'تاریخ تولد'">
-                                </app-datepicker>
-                                @if (DateOfBirthCtrl.hasError('required')) {
-                                <mat-error>وارد کردن تاریخ تولد الزامیست</mat-error>
-                                }
-                            </div>
-                        </div>
-
-                        <div class="div-button-submit">
-                            @if (!profileEditMode) {
-                            <button class="button-edit-profile" type="button" mat-raised-button
-                                (click)="enableProfileEdit()">
-                                ایجاد تغییرات
-                            </button>
-                            }
-                            @else if (profileEditMode) {
-                            <button class="button-edit-profile" type="submit" mat-raised-button color="primary"
-                                [disabled]="profileFg.invalid">
-                                ذخیره تغییرات
-                            </button>
-
-                            <button class="button-cancel" type="button" mat-stroked-button
-                                (click)="cancelProfileEdit()">
-                                انصراف
-                            </button>
-                            }
-                        </div>
-
-                    </form>
+                    <app-profile-edit-form [user]="profile" [isLoading]="loading"
+                        (formSubmit)="onProfileUpdate($event)">
+                    </app-profile-edit-form>
                 </div>
             </mat-tab>
 
@@ -154,8 +25,6 @@
 
                         <div class="content">
                             <mat-form-field appearance="outline">
-
-                                <!-- CurrentPassword -->
                                 <mat-label>رمز قدیمی</mat-label>
                                 <input class="input" [type]="hideCurrentPassword ? 'password' : 'text'"
                                     formControlName="currentPasswordCtrl" placeholder="****" matInput>
@@ -164,65 +33,36 @@
                                     <mat-icon>{{ hideCurrentPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
                                 </button>
                                 <mat-hint>لطفا رمز فعلی خود را وارد کنید</mat-hint>
-                                @if (CurrentPasswordCtrl.hasError('required')) {
-                                <mat-error>رمز فعلی را وارد نکرده اید</mat-error>
-                                }
-                                @else if (CurrentPasswordCtrl.errors && CurrentPasswordCtrl.hasError('minlength')) {
-                                <mat-error>حداقل۷ کاراکتر</mat-error>
-                                }
-                                @else if (CurrentPasswordCtrl.errors && CurrentPasswordCtrl.hasError('maxlength')) {
-                                <mat-error>حداکثر۲۰ کاراکتر</mat-error>
-                                }
+                                <mat-error *ngIf="CurrentPasswordCtrl.hasError('required')">رمز فعلی الزامی
+                                    است</mat-error>
                             </mat-form-field>
 
-                            <!-- Password -->
                             <mat-form-field appearance="outline">
                                 <mat-label>رمز جدید</mat-label>
-                                <input class="input" [type]="hideNewPassword? 'password' : 'text'"
+                                <input class="input" [type]="hideNewPassword ? 'password' : 'text'"
                                     formControlName="passwordCtrl" placeholder="****" matInput>
                                 <button mat-icon-button matSuffix tabindex="-1" type="button"
-                                    (click)="hideNewPassword  = !hideNewPassword ">
+                                    (click)="hideNewPassword = !hideNewPassword">
                                     <mat-icon>{{ hideNewPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
                                 </button>
                                 <mat-hint>لطفا رمز جدید را وارد کنید</mat-hint>
-                                @if (PasswordCtrl.hasError('required')) {
-                                <mat-error>
-                                    برای تغییر رمز، لطفاً رمز جدید را وارد کنید
-                                </mat-error>
-                                }
-                                @else if (PasswordCtrl.errors && PasswordCtrl.hasError('pattern')) {
-                                <mat-error>رمز عبور باید شامل حروف بزرگ، کوچک، عدد و کاراکتر ویژه باشد</mat-error>
-                                }
-                                @else if (PasswordCtrl.errors && PasswordCtrl.hasError('minlength')) {
-                                <mat-error>حداقل ۷ کاراکتر</mat-error>
-                                }
-                                @else if (PasswordCtrl.errors && PasswordCtrl.hasError('maxlength')) {
-                                <mat-error>حداکثر ۲۰ کاراکتر</mat-error>
-                                }
+                                <mat-error *ngIf="PasswordCtrl.hasError('required')">رمز جدید الزامی است</mat-error>
+                                <mat-error *ngIf="PasswordCtrl.hasError('pattern')">شامل حروف بزرگ، کوچک و عدد
+                                    باشد</mat-error>
+                                <mat-error *ngIf="PasswordCtrl.hasError('minlength')">حداقل ۷ کاراکتر</mat-error>
                             </mat-form-field>
 
-                            <!-- ConfirmPassword -->
                             <mat-form-field appearance="outline">
                                 <mat-label>تکرار رمز جدید</mat-label>
                                 <input class="input" [type]="hideConfirmPassword ? 'password' : 'text'"
-                                    formControlName="confirmPasswordCtrl" label="Confirm Password" placeholder="****"
-                                    matInput>
+                                    formControlName="confirmPasswordCtrl" placeholder="****" matInput>
                                 <button mat-icon-button matSuffix tabindex="-1" type="button"
                                     (click)="hideConfirmPassword = !hideConfirmPassword">
                                     <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
                                 </button>
-                                <mat-hint>لطفا رمز جدید را مجدد وارد کنید</mat-hint>
-                                @if (ConfirmPasswordCtrl.hasError('required')) {
-                                <mat-error>
-                                    برای تغییر رمز، لطفاً رمز جدید را وارد کنید
-                                </mat-error>
-                                }
-                                @else if (ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('minlength')) {
-                                <mat-error>حداقل ۷ کاراکتر</mat-error>
-                                }
-                                @else if (ConfirmPasswordCtrl.errors && ConfirmPasswordCtrl.hasError('maxlength')) {
-                                <mat-error>حداکثر ۲۰ کاراکتر</mat-error>
-                                }
+                                <mat-hint>رمز جدید را مجدد وارد کنید</mat-hint>
+                                <mat-error *ngIf="ConfirmPasswordCtrl.hasError('required')">تکرار رمز الزامی
+                                    است</mat-error>
                             </mat-form-field>
                         </div>
 
@@ -241,76 +81,16 @@
                 </div>
             </mat-tab>
 
-            @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('student') && courses) {
+            @if (loggedInUserSig()?.roles?.includes('student')) {
             <mat-tab label="دوره ها">
                 <div class="div-courses">
-                    <div class="div-title-course">
-                        <span class="title-course">دوره‌های شما</span>
+                    <div style="padding: 2rem; text-align: center; color: #666;">
+                        لیست دوره‌های ثبت‌نام شده...
                     </div>
-
-                    @if (!loading) {
-                    <div class="course-container">
-                        @if (error) {
-                        <div class="error-message">
-                            {{ error }}
-                        </div>
-                        }
-
-                        @if (courses.length > 0) {
-                        <div class="course-list">
-                            @for (course of shamsiCourses; track $index) {
-                            <div class="course-card">
-                                @if (profile?.gender == 'male') {
-                                <span class="name-of-course-men">{{ course.title }}</span>
-                                }@else {
-                                <span class="name-of-course-women">{{ course.title }}</span>
-                                }
-                                <div class="tozihat-course">
-                                    <span class="text">شهریه: {{ course.tuition | currency:'IRR' }}</span>
-                                    <span class="text">مدت زمان کلاس: <span class="red-text">{{ course.hours }}</span>
-                                        ساعت</span>
-                                    <span class="text">تاریخ شروع: {{ course.shamsiStart }}</span>
-                                    @if (course.isStarted == true) {
-                                    <span class="text">آغاز شده: <span class="green-text">بله</span></span>
-                                    }@else {
-                                    <span class="text">آغاز شده: <span class="red-text">خیر</span></span>
-                                    }
-                                </div>
-
-                                <div class="div-button-show-classmate">
-                                    <button [routerLink]="['/students-card/' + course.title]">مشاهده دانشجویان</button>
-                                    <button [routerLink]="['/attendences-card/' + course.title]">دیدن حضور و
-                                        غیاب
-                                    </button>
-                                    <button [routerLink]="['/' + 'member-enrolled-course/' + course.title]">مشاهده
-                                        پرداخت ها
-                                    </button>
-                                </div>
-                            </div>
-                            }
-                        </div>
-                        }
-                        @if (courses.length === 0) {
-                        <div class="no-courses">
-                            <span>
-                                هیچ دوره‌ای ثبت‌نام نکرده‌اید.
-                            </span>
-                        </div>
-                        }
-                    </div>
-                    }
-                    @else {
-                    <div class="loading">در حال بارگذاری...</div>
-                    }
                 </div>
-
-                @if (courses.length === 0) {
-                <div class="no-courses">
-                    <span>هیچ دوره‌ای ثبت‌نام نکرده‌اید.</span>
-                </div>
-                }
             </mat-tab>
             }
+
         </mat-tab-group>
     </div>
 </div>

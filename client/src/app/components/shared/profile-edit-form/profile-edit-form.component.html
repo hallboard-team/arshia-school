@@ -1,0 +1,53 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="update-member-form">
+    
+    <div class="content">
+        <mat-form-field appearance="outline">
+            <mat-label>نام</mat-label>
+            <input class="input" matInput type="text" formControlName="name" />
+            <mat-error *ngIf="f['name'].hasError('required')">الزامی</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>نام خانوادگی</mat-label>
+            <input class="input" matInput type="text" formControlName="lastName" />
+            <mat-error *ngIf="f['lastName'].hasError('required')">الزامی</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>شماره تلفن</mat-label>
+            <span matPrefix dir="ltr" style="margin-right: 5px;">+98</span>
+            <input matInput type="tel" maxlength="10" formControlName="phoneNum" dir="ltr" />
+            <mat-error *ngIf="f['phoneNum'].hasError('pattern')">نامعتبر</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>جنسیت</mat-label>
+            <mat-select formControlName="gender">
+                <mat-option value="female">خانم</mat-option>
+                <mat-option value="male">آقا</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div class="datepicker-wrapper" [class.disabled]="!editMode">
+            <app-datepicker [formControl]="$any(f['dateOfBirth'])" [maxDate]="maxDob" [minDate]="minDob" label="تاریخ تولد">
+            </app-datepicker>
+        </div>
+    </div>
+
+    <div class="div-button-submit">
+        <ng-container *ngIf="!editMode">
+            <button type="button" class="button-edit-profile" mat-raised-button (click)="toggleEditMode()">
+                ایجاد تغییرات
+            </button>
+        </ng-container>
+        
+        <ng-container *ngIf="editMode">
+            <button type="submit" class="button-edit-profile" mat-raised-button color="primary" [disabled]="form.invalid || isLoading">
+                {{ isLoading ? 'در حال ذخیره...' : 'ذخیره تغییرات' }}
+            </button>
+            <button type="button" class="button-cancel" mat-stroked-button (click)="toggleEditMode()">
+                انصراف
+            </button>
+        </ng-container>
+    </div>
+</form>
