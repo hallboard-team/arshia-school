@@ -1,51 +1,48 @@
-import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { ManagerService } from '../../services/manager.service';
-import { ActivatedRoute, RouterModule } from '@angular/router';
-import { TargetUserProfile } from '../../models/target-user-profile.model';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Member } from '../../models/member.model';
-import { ManagerUpdateMemberDto } from '../../models/manager-update-member.model';
-import { Subscription, take } from 'rxjs';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { AddEnrolledCourse } from '../../models/add-enrolled-course.model';
+import { Component, inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatSelectModule } from '@angular/material/select';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule, FormControl } from '@angular/forms'; // FormControl رو برای تب های دیگه نگه دار
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
-import { NavbarComponent } from '../navbar/navbar.component';
-import { Course, ShowCourse } from '../../models/course.model';
-import { UpdateEnrolledCourse } from '../../models/update-enrolled-course.model';
-import { CourseParams } from '../../models/helpers/course-params';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { FileUploader, FileUploadModule } from 'ng2-file-upload';
+import moment from 'moment-jalaali';
+
+import { ManagerService } from '../../services/manager.service';
 import { CourseService } from '../../services/course.service';
+import { AccountService } from '../../services/account.service';
+import { NavbarComponent } from '../navbar/navbar.component';
+import { ProfileInfoCardComponent } from '../shared/profile-info-card/profile-info-card.component';
+import { ProfileEditFormComponent } from '../shared/profile-edit-form/profile-edit-form.component';
+import { CurrencyFormatterDirective } from '../../directives/currency-formatter.directive';
+
+import { TargetUserProfile } from '../../models/target-user-profile.model';
+import { Course, ShowCourse } from '../../models/course.model';
+import { AddEnrolledCourse } from '../../models/add-enrolled-course.model';
+import { UpdateEnrolledCourse } from '../../models/update-enrolled-course.model';
+import { ManagerUpdateMemberDto } from '../../models/manager-update-member.model';
+import { CourseParams } from '../../models/helpers/course-params';
 import { PaginatedResult } from '../../models/helpers/paginatedResult';
 import { Pagination } from '../../models/helpers/pagination';
-import { CurrencyFormatterDirective } from '../../directives/currency-formatter.directive';
-import { DatepickerComponent } from '../../datepicker/datepicker.component';
-import moment, { Moment } from 'moment-jalaali';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { PageEvent } from '@angular/material/paginator';
-import { FileUploader, FileUploadModule } from 'ng2-file-upload';
-import { environment } from '../../../environments/environment.development';
 import { Photo } from '../../models/helpers/enrolled-course.model';
-import { LoggedInUser } from '../../models/logged-in-user.model';
-import { AccountService } from '../../services/account.service';
+import { environment } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-target-user-profile',
+  standalone: true,
   imports: [
-    CommonModule, FormsModule, ReactiveFormsModule,
-    MatCardModule, MatFormFieldModule,
-    MatInputModule, MatButtonModule, NavbarComponent,
-    RouterModule, MatTabsModule, MatNativeDateModule,
-    MatRadioModule, MatSnackBarModule, MatDatepickerModule,
-    MatSelectModule, CurrencyFormatterDirective, DatepickerComponent,
-    MatPaginatorModule, FileUploadModule
+    CommonModule, FormsModule, ReactiveFormsModule, RouterModule,
+    MatTabsModule, MatFormFieldModule, MatInputModule, MatButtonModule,
+    MatSelectModule, MatRadioModule, MatPaginatorModule, MatSnackBarModule,
+    FileUploadModule,
+    NavbarComponent, CurrencyFormatterDirective,
+    // 👇 ایمپورت کامپوننت‌های اشتراکی
+    ProfileInfoCardComponent, ProfileEditFormComponent
   ],
   templateUrl: './target-user-profile.component.html',
   styleUrl: './target-user-profile.component.scss'
@@ -55,541 +52,245 @@ export class TargetUserProfileComponent implements OnInit {
   private _courseService = inject(CourseService);
   private _route = inject(ActivatedRoute);
   private _fb = inject(FormBuilder);
-  private _matSnackBar = inject(MatSnackBar);
-  private _platformId = inject(PLATFORM_ID);
-  private _accounService = inject(AccountService);
   private _snackBar = inject(MatSnackBar);
+  private _platformId = inject(PLATFORM_ID);
+  private _accountService = inject(AccountService);
 
   apiUrl = environment.apiUrl;
   apiPhotoUrl = environment.apiPhotoUrl;
+
+  // متغیرهای مربوط به آپلود عکس (چون لاجیکش خاصه همینجا نگه میداریم)
   uploader: FileUploader | undefined;
   hasBaseDropZoneOver = false;
-  targetUserProfile: TargetUserProfile | null = null;
+
+  targetUserProfile: any = null; // میتونی تایپ دقیق بدی
   courses: Course[] | null = [];
-  shamsiCourses: (Course & { shamsiStart: string })[] = [];
+  shamsiCourses: any[] = [];
   courseTitles: string[] | null = [];
-  member: Member | undefined;
-  loggedInUser: LoggedInUser | undefined | null;
-
   showCourses: ShowCourse[] | undefined;
-  courseParams: CourseParams | undefined;
-  subscribed: Subscription | undefined;
 
-  loading: boolean = true;
+  loading = true;
   error: string | null = null;
-  minDate = new Date();
-  maxDate = new Date();
-  fb = inject(FormBuilder);
-  pageSizeOptions = [5, 10, 25];
-  pageEvent: PageEvent | undefined;
+  isSavingProfile = false; // برای لودینگ دکمه فرم ویرایش
+
+  // Pagination & Filters
+  courseParams = new CourseParams();
   pagination: Pagination | undefined;
+  pageSizeOptions = [5, 10, 25];
 
-  uiIsVisible: boolean = true;
-  uiYearView: boolean = true;
-  uiMonthView: boolean = true;
-  uiHideAfterSelectDate: boolean = false;
-  uiHideOnOutsideClick: boolean = false;
-  uiTodayBtnEnable: boolean = true;
-
-  shamsiDisplayDate: string = '';
-  targetProfileEditMode = false;
-
-  readonly minAge = 11;
-  readonly maxAge = 90;
-
-  min = moment().subtract(this.maxAge, 'jYear').startOf('day');
-  max = moment().subtract(this.minAge, 'jYear').endOf('day');
-
-  ngOnInit(): void {
-    const currentYear = new Date().getFullYear();
-    this.minDate = new Date(currentYear - 99, 0, 1);
-    this.maxDate = new Date(currentYear - 15, 0, 1);
-    this.loggedInUser = this._accounService.loggedInUserSig();
-
-    this.getTargetUserProfile();
-    this.getTargetUserCourse();
-    this.getTargetCourseTitles();
-    this.courseParams = new CourseParams();
-    this.getAll();
-    this.initializeUploader();
-  }
-
-  targetMemberEditFg: FormGroup = this._fb.group({
-    targetNameCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    targetLastNameCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    targetDateOfBirthCtrl: [{ value: '', disabled: true }, [Validators.required]],
-    targetPhoneNumCtrl: [{ value: '', disabled: true }, [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
-    targetGenderCtrl: [{ value: '', disabled: true }, [Validators.required]]
-  });
-
-  addEnrolledCourseFg: FormGroup = this.fb.group({
+  // Forms for OTHER tabs
+  addEnrolledCourseFg: FormGroup = this._fb.group({
     titleCtrl: ['', Validators.required],
     classNameCtrl: ['', Validators.required],
     numberOfPaymentsCtrl: ['', [Validators.required, Validators.min(0), Validators.max(99)]],
-    paidAmountCtrl: ['', [Validators.required, Validators.min(0), Validators.max(100_000_000),]],
+    paidAmountCtrl: ['', [Validators.required, Validators.min(0), Validators.max(100_000_000)]],
   });
 
-  updateEnrolledCourseFg: FormGroup = this.fb.group({
+  updateEnrolledCourseFg: FormGroup = this._fb.group({
     titleCourseUpdateCtrl: ['', Validators.required],
-    paidAmountUpdateCtrl: ['', [Validators.required, Validators.min(10_000), Validators.max(100_000_000),]],
+    paidAmountUpdateCtrl: ['', [Validators.required, Validators.min(10_000), Validators.max(100_000_000)]],
     methodCtrl: ['', [Validators.required]]
-  })
+  });
 
-  get TargetNameCtrl(): FormControl {
-    return this.targetMemberEditFg.get('targetNameCtrl') as FormControl;
-  }
-  get TargetLastNameCtrl(): FormControl {
-    return this.targetMemberEditFg.get('targetLastNameCtrl') as FormControl;
-  }
-  get TargetDateOfBirthCtrl(): FormControl {
-    return this.targetMemberEditFg.get('targetDateOfBirthCtrl') as FormControl;
-  }
-  get TargetPhoneNumCtrl(): FormControl {
-    return this.targetMemberEditFg.get('targetPhoneNumCtrl') as FormControl;
-  }
-  get TargetGenderCtrl(): FormControl {
-    return this.targetMemberEditFg.get('targetGenderCtrl') as FormControl;
-  }
+  // Getters for other forms
+  get TitleCtrl(): FormControl { return this.addEnrolledCourseFg.get('titleCtrl') as FormControl; }
+  get ClassNameCtrl(): FormControl { return this.addEnrolledCourseFg.get('classNameCtrl') as FormControl; }
+  get NumberOfPaymentsCtrl(): FormControl { return this.addEnrolledCourseFg.get('numberOfPaymentsCtrl') as FormControl; }
+  get PaidAmountCtrl(): FormControl { return this.addEnrolledCourseFg.get('paidAmountCtrl') as FormControl; }
 
-  //add enrolled-course
-  get TitleCtrl(): FormControl {
-    return this.addEnrolledCourseFg.get('titleCtrl') as FormControl;
-  }
-  get ClassNameCtrl(): FormControl {
-    return this.addEnrolledCourseFg.get('classNameCtrl') as FormControl;
-  }
-  get NumberOfPaymentsCtrl(): FormControl {
-    return this.addEnrolledCourseFg.get('numberOfPaymentsCtrl') as FormControl;
-  }
-  get PaidAmountCtrl(): FormControl {
-    return this.addEnrolledCourseFg.get('paidAmountCtrl') as FormControl;
+  get TitleCourseUpdateCtrl(): FormControl { return this.updateEnrolledCourseFg.get('titleCourseUpdateCtrl') as FormControl; }
+  get PaidAmountUpdateCtrl(): FormControl { return this.updateEnrolledCourseFg.get('paidAmountUpdateCtrl') as FormControl; }
+  get MethodCtrl(): FormControl { return this.updateEnrolledCourseFg.get('methodCtrl') as FormControl; }
+
+  ngOnInit(): void {
+    this.getTargetUserProfile();
+    this.getTargetUserCourse();
+    this.getTargetCourseTitles();
+    this.getAllCourses();
+    this.initializeUploader();
   }
 
-  //update enrolled-course
-  get TitleCourseUpdateCtrl(): FormControl {
-    return this.updateEnrolledCourseFg.get('titleCourseUpdateCtrl') as FormControl;
-  }
-  get PaidAmountUpdateCtrl(): FormControl {
-    return this.updateEnrolledCourseFg.get('paidAmountUpdateCtrl') as FormControl;
-  }
-  get MethodCtrl(): FormControl {
-    return this.updateEnrolledCourseFg.get('methodCtrl') as FormControl;
-  }
-
-  //Gender Getter
-  get isMale(): boolean {
-    return this.targetUserProfile?.gender?.toLowerCase() === 'male';
-  }
-  get isFemale(): boolean {
-    return this.targetUserProfile?.gender?.toLowerCase() === 'female';
-  }
-
-  fileOverBase(event: boolean): void {
-    this.hasBaseDropZoneOver = event;
-  }
-
-  initializeUploader(): void {
-    if (isPlatformBrowser(this._platformId) && this.loggedInUser) {
-      const memberUserName: string | null = this._route.snapshot.paramMap.get('memberUserName');
-
-      this.uploader = new FileUploader({
-        url: this.apiUrl + 'manager/add-member-photo/' + memberUserName,
-        authToken: 'Bearer ' + this.loggedInUser.token,
-        isHTML5: true,
-        allowedFileType: ['image'],
-        removeAfterUpload: true,
-        autoUpload: true,
-        maxFileSize: 4_000_000
-      })
-
-      this.uploader.onAfterAddingFile = (file) => {
-        file.withCredentials = false;
-      }
-
-      this.uploader.onSuccessItem = (item, response, status, headers) => {
-        if (response) {
-          const photo: Photo = JSON.parse(response);
-          this.targetUserProfile!.memberPhoto = photo;
-
-          this._snackBar.open('عکس پروفایل با موفقیت اپلود شد', 'Close', {
-            duration: 7000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top'
-          })
-        }
-      }
-
-      this.uploader.onErrorItem = (item, response, status, headers) => {
-        let message = 'آپلود عکس ناموفق بود. لطفاً دوباره تلاش کنید.';
-
-        try {
-          const errorObj = JSON.parse(response);
-          if (errorObj && errorObj.message) {
-            message = errorObj.message
-          }
-        } catch { }
-
-        this._snackBar.open(message, 'Close', {
-          duration: 7000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top'
-        });
-      }
-    }
-  }
+  // --- Profile Logic ---
 
   getTargetUserProfile(): void {
-    if (isPlatformBrowser(this._platformId)) {
-      const memberUserName: string | null = this._route.snapshot.paramMap.get('memberUserName');
+    const userName = this._route.snapshot.paramMap.get('memberUserName');
+    if (!userName) return;
 
-      if (memberUserName) {
-        this._managerService.getMemberByUserName(memberUserName).subscribe({
-          next: (data) => {
-            this.targetUserProfile = data;
-            this.initTargetControllersValues(data);
-            this.loading = false;
-          },
-          error: (err) => {
-            this.error = 'خطا در بارگذاری پروفایل. لطفاً دوباره تلاش کنید.';
-            this.loading = false;
-          }
+    this._managerService.getMemberByUserName(userName).subscribe({
+      next: (data) => {
+        // نرمال‌سازی دیتا برای کامپوننت فرزند
+        this.targetUserProfile = {
+          ...data,
+          // اگر آدرس عکس نیاز به پیشوند دارد همینجا درستش کن
+          photoUrl: data.memberPhoto?.url_165
+            ? (data.memberPhoto.url_165.startsWith('http') ? data.memberPhoto.url_165 : this.apiPhotoUrl + data.memberPhoto.url_165)
+            : null
+        };
+        this.loading = false;
+      },
+      error: () => {
+        this.error = 'خطا در دریافت پروفایل';
+        this.loading = false;
+      }
+    });
+  }
+
+  // متدی که وقتی فرم ویرایش سابمیت میشه صدا زده میشه
+  onProfileUpdate(updatedData: any) {
+    const userName = this._route.snapshot.paramMap.get('memberUserName');
+    if (!userName) return;
+
+    this.isSavingProfile = true;
+
+    const updateDto: ManagerUpdateMemberDto = {
+      name: updatedData.name,
+      lastName: updatedData.lastName,
+      dateOfBirth: updatedData.dateOfBirth, // فرمت درست از فرزند میاد
+      phoneNum: updatedData.phoneNum, // فرمت درست از فرزند میاد
+      gender: updatedData.gender
+    };
+
+    this._managerService.updateMember(updateDto, userName).subscribe({
+      next: (res) => {
+        this.isSavingProfile = false;
+        this._snackBar.open('پروفایل با موفقیت بروز شد', 'باشه', { duration: 4000, panelClass: 'snack-success' });
+        // آپدیت لوکال پروفایل برای نمایش فوری تغییرات
+        this.targetUserProfile = { ...this.targetUserProfile, ...updateDto };
+        // یا دوباره getTargetUserProfile() رو صدا بزن
+      },
+      error: (err) => {
+        this.isSavingProfile = false;
+        this._snackBar.open('خطا در ویرایش پروفایل', 'باشه', { duration: 4000, panelClass: 'snack-error' });
+      }
+    });
+  }
+
+  // --- Photo Upload Logic ---
+
+  initializeUploader(): void {
+    if (isPlatformBrowser(this._platformId)) {
+      const token = this._accountService.loggedInUserSig()?.token;
+      const userName = this._route.snapshot.paramMap.get('memberUserName');
+
+      if (token && userName) {
+        this.uploader = new FileUploader({
+          url: this.apiUrl + 'manager/add-member-photo/' + userName,
+          authToken: 'Bearer ' + token,
+          isHTML5: true,
+          allowedFileType: ['image'],
+          removeAfterUpload: true,
+          autoUpload: true,
+          maxFileSize: 4_000_000
         });
+
+        this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
+
+        this.uploader.onSuccessItem = (item, response, status, headers) => {
+          if (response) {
+            const photo = JSON.parse(response);
+            // آپدیت عکس پروفایل در صفحه
+            if (this.targetUserProfile) {
+              this.targetUserProfile.photoUrl = this.apiPhotoUrl + photo.url_165;
+              // یک کپی جدید بساز تا انگولار بفهمه تغییر کرده (برای ChangeDetection)
+              this.targetUserProfile = { ...this.targetUserProfile };
+            }
+            this._snackBar.open('عکس آپلود شد', 'باشه');
+          }
+        };
       }
     }
   }
 
-  getTargetUserCourse(): void {
-    const memberUserName: string | null = this._route.snapshot.paramMap.get('memberUserName');
+  fileOverBase(e: any) { this.hasBaseDropZoneOver = e; }
+  triggerFileUpload() {
 
-    if (memberUserName) {
-      this._managerService.getTargetUserCourses(memberUserName).subscribe({
-        next: (data) => {
-          this.courses = data;
-          if (data !== null) {
-            this.shamsiCourses = data.map(course => ({
-              ...course,
-              hours: course.hours ?? (course.totalMinutes ?? 0) / 60,
-              hoursPerClass: course.hoursPerClass ?? (course.classMinutes ?? 0) / 60,
-              shamsiStart: moment(course.start).format('jYYYY/jMM/jDD')
-            }));
-          } else {
-            this.shamsiCourses = [];
-          }
+  }
 
-          this.loading = false;
-        },
-        error: (err) => {
-          this.error = 'خطا در بارگذاری دوره ها لطفا دوباره تلاش کنید.';
-          this.loading = false;
-        }
-      })
+
+  // --- Courses Logic (Existing code kept simple) ---
+
+  getTargetUserCourse() {
+    const userName = this._route.snapshot.paramMap.get('memberUserName');
+    if (userName) {
+      this._managerService.getTargetUserCourses(userName).subscribe(data => {
+        this.courses = data;
+        this.shamsiCourses = data?.map(c => ({
+          ...c,
+          shamsiStart: moment(c.start).format('jYYYY/jMM/jDD')
+        })) || [];
+      });
     }
   }
 
-  getTargetCourseTitles(): void {
-    const memberUserName: string | null = this._route.snapshot.paramMap.get('memberUserName');
-
-    if (memberUserName) {
-      this._managerService.getTargetCourseTitles(memberUserName).subscribe({
-        next: (data) => {
-          this.courseTitles = data;
-          this.loading = false;
-        },
-        error: (err) => {
-          this.error = 'خطا در بارگذاری اسم دوره ها لطفا دوباره تلاش کنید.';
-          this.loading = false;
-        }
-      })
+  getTargetCourseTitles() {
+    const userName = this._route.snapshot.paramMap.get('memberUserName');
+    if (userName) {
+      this._managerService.getTargetCourseTitles(userName).subscribe(data => this.courseTitles = data);
     }
   }
 
-  getProfilePhoto(): string {
-    if (this.targetUserProfile?.memberPhoto && this.targetUserProfile.memberPhoto.url_165.trim() !== '') {
-      let profilePhoto = this.apiPhotoUrl + this.targetUserProfile.memberPhoto.url_165;
-      return profilePhoto;
-    }
-
-    if (this.isMale) {
-      return 'assets/images/menProfilePhoto.png';
-    }
-
-    return 'assets/images/womenProfilePhoto.png';
+  getAllCourses() {
+    this._courseService.getAll(this.courseParams).subscribe(res => {
+      if (res.body) {
+        this.showCourses = res.body;
+        this.pagination = res.pagination;
+      }
+    });
   }
 
-  initTargetControllersValues(targetUserProfile: TargetUserProfile) {
-    this.TargetNameCtrl.setValue(targetUserProfile.name);
-    this.TargetLastNameCtrl.setValue(targetUserProfile.lastName);
-    this.TargetPhoneNumCtrl.setValue(targetUserProfile.phoneNum?.slice(2) ?? '');
-
-    if (targetUserProfile.dateOfBirth) {
-      const dobMoment = moment(targetUserProfile.dateOfBirth, 'YYYY-MM-DD');
-      this.TargetDateOfBirthCtrl.setValue(dobMoment);
-    }
-
-    this.TargetGenderCtrl.setValue(targetUserProfile.gender?.toLowerCase() ?? '');
+  // متد کمکی برای وضعیت دوره
+  getCourseStatus(course: any): string {
+    return course.isStarted ? 'در حال برگزاری' : 'شروع نشده';
   }
 
-  updateTargetMember() {
-    const memberUserName: string | null = this._route.snapshot.paramMap.get('memberUserName');
-
-    const dob = this.TargetDateOfBirthCtrl.value as Moment;
-    if (!dob || !dob.isBetween(this.min, this.max, undefined, '[]')) {
-      this.openSnack(
-        `تاریخ تولد باید بین ${this.min.format('jYYYY/jMM/jDD')} و ${this.max.format('jYYYY/jMM/jDD')} باشد.`,
-        'error'
-      );
-      this.TargetDateOfBirthCtrl.markAsTouched();
-      return;
-    }
-
-    if (memberUserName) {
-      const managerUpdateMember: ManagerUpdateMemberDto = {
-        name: this.TargetNameCtrl.value,
-        lastName: this.TargetLastNameCtrl.value,
-        dateOfBirth: this.toGregorianDateOnly(dob),
-        phoneNum: '98' + this.TargetPhoneNumCtrl.value,
-        gender: this.TargetGenderCtrl.value
-      };
-
-      this._managerService.updateMember(managerUpdateMember, memberUserName)
-        .pipe(take(1)).subscribe({
-          next: data => {
-            this._matSnackBar.open("آپدیت با موفقیت ثبت شد", "Close", {
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-              duration: 10000
-            });
-            this.targetUserProfile = data;
-
-            this.targetProfileEditMode = false;
-            this.targetMemberEditFg.disable();
-            this.initTargetControllersValues(this.targetUserProfile);
-          },
-          error: err => {
-            this._matSnackBar.open("در انجام آپدیت خطا پیش آمده", "Close", {
-              horizontalPosition: 'center',
-              verticalPosition: 'bottom',
-              duration: 10000
-            });
-          }
-        });
-    }
+  handlePageEvent(e: PageEvent) {
+    // لاجیک صفحه بندی...
+    this.courseParams.pageNumber = e.pageIndex + 1;
+    this.courseParams.pageSize = e.pageSize;
+    this.getAllCourses();
   }
 
-  addEnrolledCourse(): void {
-    const memberUserName: string | null = this._route.snapshot.paramMap.get('memberUserName');
+  // --- Enrolled Course Actions ---
 
-    if (memberUserName) {
-      let addEnrolledCourse: AddEnrolledCourse = {
+  addEnrolledCourse() {
+    const userName = this._route.snapshot.paramMap.get('memberUserName');
+    if (userName && this.addEnrolledCourseFg.valid) {
+      const dto: AddEnrolledCourse = {
         title: this.TitleCtrl.value,
         className: this.ClassNameCtrl.value,
         numberOfPayments: this.NumberOfPaymentsCtrl.value,
         paidAmount: this.PaidAmountCtrl.value
-      }
-
-      this._managerService.addEnrolledCourse(memberUserName, addEnrolledCourse).subscribe({
-        next: (response) => {
-          this._matSnackBar.open("اضافه کردن دوره با موفقیت انجام شد", "Close", {
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            duration: 10000
-          });
-
-          this.getTargetUserCourse();
-          this.getTargetCourseTitles();
+      };
+      this._managerService.addEnrolledCourse(userName, dto).subscribe({
+        next: () => {
+          this._snackBar.open('دوره اضافه شد', 'باشه');
+          this.getTargetUserCourse(); // Refresh list
+          this.addEnrolledCourseFg.reset();
         },
-        error: (err) => {
-          this._matSnackBar.open("در اضافه کردن دوره مشکل به وجود آمده", "Close", {
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            duration: 10000
-          });
-        }
-      })
+        error: () => this._snackBar.open('خطا در افزودن دوره', 'باشه')
+      });
     }
   }
 
-  updateEnrolledCourse(): void {
-    const memberUserName: string | null = this._route.snapshot.paramMap.get('memberUserName');
-
-    if (memberUserName) {
-      let updateEnrolledCourse: UpdateEnrolledCourse = {
+  updateEnrolledCourse() {
+    const userName = this._route.snapshot.paramMap.get('memberUserName');
+    if (userName && this.updateEnrolledCourseFg.valid) {
+      const dto: UpdateEnrolledCourse = {
         titleCourse: this.TitleCourseUpdateCtrl.value,
         paidAmount: this.PaidAmountUpdateCtrl.value,
         method: this.MethodCtrl.value
-      }
-
-      this._managerService.updateEnrolledCourse(memberUserName, updateEnrolledCourse).subscribe({
-        next: (response) => {
-          this._matSnackBar.open("پرداخت شهریه با موفقیت ثبت شد", "Close", {
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            duration: 10000
-          });
+      };
+      this._managerService.updateEnrolledCourse(userName, dto).subscribe({
+        next: () => {
+          this._snackBar.open('شهریه ثبت شد', 'باشه');
+          this.updateEnrolledCourseFg.reset();
         },
-        error: (err) => {
-          this._matSnackBar.open("در پرداخت شهریه مشکلی پیش آمده", "Close", {
-            horizontalPosition: 'center',
-            verticalPosition: 'bottom',
-            duration: 10000
-          });
-        }
-      })
-    }
-  }
-
-  getAll(): void {
-    if (this.courseParams)
-      this.subscribed = this._courseService.getAll(this.courseParams).subscribe({
-        next: (response: PaginatedResult<ShowCourse[]>) => {
-          if (response.body && response.pagination) {
-            this.showCourses = response.body;
-            this.pagination = response.pagination;
-          }
-        }
+        error: () => this._snackBar.open('خطا در ثبت شهریه', 'باشه')
       });
-  }
-
-  handlePageEvent(e: PageEvent) {
-    if (this.courseParams) {
-      if (e.pageSize !== this.courseParams.pageSize)
-        e.pageIndex = 0;
-
-      this.pageEvent = e;
-      this.courseParams.pageSize = e.pageSize;
-      this.courseParams.pageNumber = e.pageIndex + 1;
-
-      this.getAll();
     }
   }
 
-  openDatePicker() {
-    const elements = document.querySelectorAll('.div-background-date-picker');
-    const buttonClose = document.querySelectorAll('.close-date');
-    const buttonOpen = document.querySelectorAll('.open-date');
-
-    elements.forEach((element) => {
-      (element as HTMLElement).style.display = "flex";
-    });
-
-    buttonClose.forEach((element) => {
-      (element as HTMLElement).style.display = "flex";
-    });
-
-    buttonOpen.forEach((element) => {
-      (element as HTMLElement).style.display = "none";
-    });
-  }
-
-  closeDatePicker() {
-    const elements = document.querySelectorAll('.div-background-date-picker');
-    const buttonClose = document.querySelectorAll('.close-date');
-    const buttonOpen = document.querySelectorAll('.open-date');
-
-    elements.forEach((element) => {
-      (element as HTMLElement).style.display = "none";
-    });
-
-    buttonClose.forEach((element) => {
-      (element as HTMLElement).style.display = "none";
-    });
-
-    buttonOpen.forEach((element) => {
-      (element as HTMLElement).style.display = "flex";
-    });
-  }
-
-  onDateSelect(event: { shamsi: string; gregorian: string; timestamp: number }): void {
-    this.shamsiDisplayDate = event.shamsi;
-
-    const dobMoment = moment(event.gregorian, 'YYYY-MM-DD');
-    this.TargetDateOfBirthCtrl.setValue(dobMoment);
-
-    this.closeDatePicker();
-  }
-
-  getCourseStatus(course: { isStarted: boolean }): string {
-    if (course.isStarted) {
-      return 'در حال برگزاری';
-    }
-
-    return 'شروع نشده';
-  }
-
-  // Baraye inke bargarde be hamon details ke dasht 
-  onCancelEdit(): void {
-    if (this.targetUserProfile) {
-      this.initTargetControllersValues(this.targetUserProfile);
-      this.targetMemberEditFg.markAsPristine();
-      this.targetMemberEditFg.markAsUntouched();
-    } else {
-      this.targetMemberEditFg.reset();
-    }
-  }
-
-  // Baraye inke kolan input ha khali beshan
-  // onCancelEdit(): void {
-  //   this.targetMemberEditFg.reset();
-  // }
-
-  onCancelAddEnrolledCourse(): void {
-    this.addEnrolledCourseFg.reset();
-
-    this.addEnrolledCourseFg.markAsPristine();
-    this.addEnrolledCourseFg.markAsUntouched();
-  }
-
-  onCancelUpdateEnrolledCourse(): void {
-    this.updateEnrolledCourseFg.reset();
-    this.updateEnrolledCourseFg.markAsPristine();
-    this.updateEnrolledCourseFg.markAsUntouched();
-  }
-
-  enableTargetProfileEdit(): void {
-    this.targetProfileEditMode = true;
-    this.targetMemberEditFg.enable();
-  }
-
-  cancelTargetProfileEdit(): void {
-    this.targetProfileEditMode = false;
-    this.targetMemberEditFg.disable();
-
-    if (this.targetUserProfile) {
-      this.initTargetControllersValues(this.targetUserProfile);
-    }
-  }
-
-  private toGregorianDateOnly(value: Moment | Date | string | null | undefined): string | undefined {
-    if (!value) return undefined;
-
-    if (moment.isMoment(value)) {
-      return value.locale('en').format('YYYY-MM-DD');
-    }
-
-    if (typeof value === 'string') {
-      const m = moment(value);
-      if (m.isValid()) {
-        return m.locale('en').format('YYYY-MM-DD');
-      }
-      const d = new Date(value);
-      return new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString().slice(0, 10);
-    }
-
-    const d = value as Date;
-    return new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString().slice(0, 10);
-  }
-
-  private openSnack(message: string, panel: 'success' | 'error' = 'error'): void {
-    this._matSnackBar.open(
-      message,
-      'باشه',
-      {
-        duration: 4000,
-        horizontalPosition: 'center',
-        verticalPosition: 'top',
-        panelClass: [panel === 'success' ? 'snack-success' : 'snack-error'],
-        direction: 'rtl'
-      }
-    );
-  }
+  // دکمه‌های انصراف
+  onCancelAddEnrolledCourse() { this.addEnrolledCourseFg.reset(); }
+  onCancelUpdateEnrolledCourse() { this.updateEnrolledCourseFg.reset(); }
 }

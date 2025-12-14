@@ -1,3 +1,492 @@
+/* gemini-sol-2 */
+// --- لی‌اوت اصلی ---
+// .container {
+//     width: 100%;
+//     margin-top: 8rem;
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     gap: 1.5rem;
+//     position: relative;
+
+//     .div-profile {
+//         width: 100%;
+//         display: flex;
+//         justify-content: center;
+//         align-items: center;
+//     }
+
+//     .div-tabs {
+//         width: 100%;
+
+//         // نگهدارنده تب‌های پروفایل
+//         .div-edit-profile {
+//             width: 100%;
+//             display: flex;
+//             justify-content: center;
+//             align-items: center;
+//             margin-top: 1rem;
+//         }
+
+//         // ✅ بازگرداندن استایل‌های فرم (مخصوص تب رمز عبور)
+//         // این کلاس برای فرم پسورد که هنوز HTML قدیمی دارد ضروری است
+//         .update-member-form {
+//             width: 100%;
+//             border-radius: 10px;
+//             background-color: #e0e0e0; // همان باکس طوسی رنگ
+//             display: flex;
+//             flex-direction: column;
+//             justify-content: center;
+//             align-items: center;
+//             gap: 2rem;
+//             padding: 2rem 0;
+//             margin-top: 1rem;
+
+//             .div-title {
+//                 margin-top: 10px;
+//                 width: 100%;
+//                 display: flex;
+//                 justify-content: center;
+//                 align-items: center;
+
+//                 .title {
+//                     color: black;
+//                     font-size: 15px;
+//                     font-weight: 800;
+//                 }
+//             }
+
+//             .content {
+//                 width: 80%;
+//                 max-width: 450px; // محدود کردن عرض برای زیبایی
+//                 display: flex;
+//                 flex-direction: column;
+//                 justify-content: center;
+//                 align-items: center;
+//                 gap: 1.5rem;
+
+//                 mat-form-field {
+//                     width: 100%;
+//                     // حذف بوردرهای اضافه
+//                     border: none;
+
+//                     mat-label {
+//                         border: none;
+//                     }
+
+//                     // استایل اینپوت‌ها
+//                     .input {
+//                         padding: 10px;
+//                         height: 54px;
+//                         width: 100%;
+//                         border: none;
+//                         background: #e0e0e0;
+//                         box-shadow: inset 5px 5px 10px #cecece, inset -5px -5px 10px #f2f2f2;
+//                         border-radius: 5px;
+//                     }
+//                 }
+//             }
+
+//             // دکمه‌های فرم رمز عبور
+//             .div-button-submit {
+//                 width: 100%;
+//                 display: flex;
+//                 gap: 1rem;
+//                 justify-content: center;
+//                 align-items: center;
+//                 margin-bottom: 1rem;
+
+//                 .button-edit-profile {
+//                     width: 150px;
+//                     height: 35px;
+//                     border-radius: 10px;
+//                     background: linear-gradient(145deg, #f0f0f0, #cacaca);
+//                     box-shadow: 3px 3px 10px #5a5a5ab0, -5px -5px 10px #ffffff;
+//                     color: black;
+//                     font-size: 13px;
+//                     font-weight: bold;
+//                     padding: 5px;
+
+//                     &:disabled {
+//                         opacity: 0.6;
+//                         cursor: not-allowed;
+//                     }
+//                 }
+
+//                 .button-cancel {
+//                     height: 35px;
+//                     border-radius: 10px;
+//                     padding: 0 1.5rem;
+//                     font-size: 13px;
+//                     border: none;
+//                     color: red;
+//                     background: linear-gradient(145deg, #f0f0f0, #cacaca);
+//                     box-shadow: 3px 3px 10px #5a5a5ab0, -5px -5px 10px #ffffff;
+//                 }
+//             }
+//         }
+
+//         // استایل تب دوره‌ها
+//         .div-courses {
+//             width: 100%;
+//             display: flex;
+//             flex-direction: column;
+//             justify-content: center;
+//             align-items: center;
+//             margin-top: 1rem;
+
+//             .div-title-course {
+//                 margin-top: 10px;
+//                 width: 100%;
+//                 display: flex;
+//                 justify-content: center;
+//                 align-items: center;
+
+//                 .title-course {
+//                     font-size: 15px;
+//                     font-weight: bold;
+//                 }
+//             }
+
+//             .course-container {
+//                 width: 100%;
+//                 display: flex;
+//                 justify-content: center;
+//                 align-items: center;
+
+//                 .course-list {
+//                     width: 100%;
+//                     display: flex;
+//                     flex-direction: column;
+//                     flex-wrap: wrap;
+//                     justify-content: center;
+//                     align-items: center;
+//                     gap: 1rem;
+//                     padding: 1rem;
+
+//                     .course-card {
+//                         width: 70%;
+//                         border-radius: 10px;
+//                         background: linear-gradient(145deg, #f0f0f0, #cacaca);
+//                         box-shadow: 5px 5px 10px #acacac, -5px -5px 10px #ffffff;
+//                         display: flex;
+//                         flex-direction: column;
+//                         justify-content: center;
+//                         align-items: center;
+//                         gap: 10px;
+//                         padding: 10px;
+
+//                         .name-of-course-men {
+//                             font-size: 16px;
+//                             color: #00c4ad;
+//                             font-weight: bold;
+//                         }
+
+//                         .name-of-course-women {
+//                             font-size: 16px;
+//                             color: hsl(345deg 100% 47%);
+//                             font-weight: bold;
+//                         }
+
+//                         .tozihat-course {
+//                             display: flex;
+//                             flex-direction: column;
+//                             justify-content: center;
+//                             align-items: center;
+//                             width: 100%;
+//                             gap: 10px;
+
+//                             .text {
+//                                 font-size: 15px;
+//                                 color: black;
+//                                 direction: rtl;
+//                             }
+
+//                             .red-text {
+//                                 font-size: 15px;
+//                                 color: red;
+//                             }
+
+//                             .green-text {
+//                                 font-size: 15px;
+//                                 color: green;
+//                                 font-weight: bold;
+//                             }
+//                         }
+
+//                         .div-button-show-classmate {
+//                             width: 100%;
+//                             display: flex;
+//                             flex-direction: column;
+//                             justify-content: center;
+//                             align-items: center;
+//                             gap: 15px;
+
+//                             button {
+//                                 height: 35px;
+//                                 width: 70%;
+//                                 font-size: 13px;
+//                                 border-radius: 10px;
+//                                 border: none;
+//                                 background: linear-gradient(145deg, #f0f0f0, #cacaca);
+//                                 box-shadow: 5px 5px 10px #b5b5b5, -5px -5px 10px #ffffff;
+//                                 transition: 0.3s;
+
+//                                 &:hover {
+//                                     cursor: pointer;
+//                                     transform: scale(1.04);
+//                                 }
+//                             }
+//                         }
+//                     }
+//                 }
+
+//                 .no-courses {
+//                     width: 100%;
+//                     display: flex;
+//                     justify-content: center;
+//                     align-items: center;
+
+//                     span {
+//                         font-size: 16px;
+//                         color: red;
+//                         font-weight: bold;
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }
+
+// // --- ریسپانسیو ---
+// @media (min-width: 1100px) {
+//     .container {
+//         flex-direction: row;
+//         align-items: flex-start;
+//         justify-content: center;
+
+//         .div-profile {
+//             width: 30%;
+//             margin-right: 20px;
+//         }
+
+//         .div-tabs {
+//             width: 60%;
+
+//             // تنظیمات ریسپانسیو فرم پسورد
+//             .update-member-form .content {
+//                 width: 60%;
+//                 flex-direction: column; // فیلدها زیر هم باشند
+//             }
+
+//             .div-courses .course-container .course-list {
+//                 flex-direction: row;
+//                 flex-wrap: wrap;
+
+//                 .course-card {
+//                     width: 40%;
+//                 }
+//             }
+//         }
+//     }
+// }
+
+.container {
+    width: 100%;
+    margin-top: 8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    position: relative;
+
+    .div-profile {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        // ❌ اینجا نباید استایل .profile-card باشد
+    }
+
+    .div-tabs {
+        width: 100%;
+
+        .div-edit-profile {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .update-member-form {
+            width: 100%;
+            border-radius: 10px;
+            background-color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem 0;
+            margin-top: 1rem;
+
+            // ... بقیه استایل‌های فرم که خودت داری ...
+            .content {
+                width: 80%;
+                max-width: 450px;
+                display: flex;
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            mat-form-field {
+                width: 100%;
+                border: none;
+
+                .input {
+                    padding: 10px;
+                    height: 54px;
+                    width: 100%;
+                    border: none;
+                    background: #e0e0e0;
+                    box-shadow: inset 5px 5px 10px #cecece, inset -5px -5px 10px #f2f2f2;
+                    border-radius: 5px;
+                }
+            }
+
+            .div-button-submit {
+                width: 100%;
+                display: flex;
+                gap: 1rem;
+                justify-content: center;
+                align-items: center;
+                margin-bottom: 1rem;
+
+                button {
+                    height: 35px;
+                    border-radius: 10px;
+                    min-width: 120px;
+                }
+            }
+        }
+
+        .div-courses {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 1rem;
+
+            .course-container {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+
+                .course-list {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1rem;
+                    padding: 1rem;
+
+                    .course-card {
+                        width: 70%;
+                        border-radius: 10px;
+                        background: linear-gradient(145deg, #f0f0f0, #cacaca);
+                        box-shadow: 5px 5px 10px #acacac, -5px -5px 10px #ffffff;
+                        padding: 10px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 1100px) {
+    .container {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+
+        // در دسکتاپ عرض ستون پروفایل ۳۰ درصد است
+        .div-profile {
+            width: 30%;
+            margin-right: 20px;
+        }
+
+        .div-tabs {
+            width: 60%;
+
+            .update-member-form .content {
+                width: 60%;
+            }
+
+            .div-courses .course-container .course-list {
+                flex-direction: row;
+                flex-wrap: wrap;
+
+                .course-card {
+                    width: 40%;
+                }
+            }
+        }
+    }
+}
+
+// --- تنظیمات گلوبال متریال (بسیار مهم برای نمایش صحیح اینپوت‌ها) ---
+::ng-deep mat-form-field {
+    height: auto !important;
+
+    .mat-mdc-text-field-wrapper {
+        height: 54px;
+        padding: 0px !important;
+    }
+
+    .mat-mdc-form-field-infix {
+        text-align: right;
+        padding: 0px !important;
+        display: flex;
+        align-items: center;
+        height: 54px;
+    }
+}
+
+::ng-deep .mat-mdc-tab-body-wrapper,
+::ng-deep .mat-mdc-tab-body,
+::ng-deep .mat-mdc-tab-body-content {
+    height: auto !important;
+    overflow: visible !important;
+}
+
+
+/* gemini-sol-1 
+.container {
+    width: 100%;
+    margin-top: 8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+
+    @media (min-width: 1100px) {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+
+        .div-profile {
+            width: 30%;
+            margin-right: 20px;
+        }
+
+        .div-tabs {
+            width: 60%;
+        }
+    }
+}
+*/
+
+/* OLD 
 .container {
     width: 100%;
     margin-top: 8rem;
@@ -707,3 +1196,4 @@
     height: auto !important;
     overflow: visible !important;
 }
+    */

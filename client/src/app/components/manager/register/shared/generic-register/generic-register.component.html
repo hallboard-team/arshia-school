@@ -1,0 +1,103 @@
+<form class="register-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="content">
+        <div class="div-title-radio-input">
+            <span class="title">{{ formTitle }}</span>
+            <mat-radio-group class="radio-group" formControlName="gender">
+                <mat-radio-button class="radio-button" value="male">مرد</mat-radio-button>
+                <mat-radio-button class="radio-button" value="female">زن</mat-radio-button>
+            </mat-radio-group>
+        </div>
+
+        <div class="form-item">
+            <mat-form-field appearance="outline">
+                <mat-label>نام</mat-label>
+                <input class="input" type="text" formControlName="name" matInput dir="auto">
+                <mat-hint>نام را وارد کنید</mat-hint>
+                @if (f.name.hasError('required')) { <mat-error>وارد کردن نام الزامیست</mat-error> }
+                @else if (f.name.hasError('minlength')) { <mat-error>حداقل 2 حرف</mat-error> }
+                @else if (f.name.hasError('maxlength')) { <mat-error>حداکثر 30 حرف</mat-error> }
+                @else if (f.name.hasError('pattern')) { <mat-error>فقط حروف فارسی/انگلیسی، فاصله و خط‌تیره مجاز
+                    است</mat-error> }
+            </mat-form-field>
+        </div>
+
+        <div class="form-item">
+            <mat-form-field appearance="outline">
+                <mat-label>نام خانوادگی</mat-label>
+                <input class="input" type="text" formControlName="lastName" matInput dir="auto">
+                <mat-hint>نام خانوادگی را وارد کنید</mat-hint>
+                @if (f.lastName.hasError('required')) { <mat-error>وارد کردن نام خانوادگی الزامیست</mat-error> }
+                @else if (f.lastName.hasError('minlength')) { <mat-error>حداقل 2 حرف</mat-error> }
+                @else if (f.lastName.hasError('maxlength')) { <mat-error>حداکثر 30 حرف</mat-error> }
+                @else if (f.lastName.hasError('pattern')) { <mat-error>فقط حروف فارسی/انگلیسی، فاصله و خط‌تیره مجاز
+                    است</mat-error> }
+            </mat-form-field>
+        </div>
+
+        <div class="form-item">
+            <mat-form-field appearance="outline">
+                <mat-label>ایمیل</mat-label>
+                <input class="input" type="email" formControlName="email" matInput dir="ltr">
+                <mat-hint>ایمیل وارد کنید</mat-hint>
+                @if (f.email.hasError('required')) { <mat-error>وارد کردن ایمیل الزامیست</mat-error> }
+                @else if (f.email.hasError('pattern')) { <mat-error>فرمت ایمیل صحیح نیست</mat-error> }
+                @else if (f.email.hasError('maxlength')) { <mat-error>حداکثر 50 کاراکتر</mat-error> }
+                @else if (f.email.hasError('server')) { <mat-error>{{f.email.getError('server')}}</mat-error> }
+            </mat-form-field>
+        </div>
+
+        <div class="form-item">
+            <mat-form-field appearance="outline" class="phone-field" floatLabel="always">
+                <mat-label>شماره موبایل</mat-label>
+                <span matPrefix dir="ltr" class="phone-label">+98&nbsp;</span>
+                <input class="input" type="tel" maxlength="10" matInput formControlName="phoneNum" dir="ltr">
+                <mat-hint>شماره تلفن را بدون 0 وارد کنید</mat-hint>
+                @if (f.phoneNum.hasError('required')) { <mat-error>وارد کردن شماره تلفن الزامیست</mat-error> }
+                @else if (f.phoneNum.hasError('pattern')) { <mat-error>شماره تلفن 10 رقم بدون صفر</mat-error> }
+            </mat-form-field>
+        </div>
+
+        <div class="form-item">
+            <mat-form-field appearance="outline">
+                <mat-label>رمز عبور</mat-label>
+                <input class="input" [type]="hidePassword ? 'password' : 'text'" formControlName="password" matInput>
+                <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+                    <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                <mat-hint>رمز عبور را وارد کنید</mat-hint>
+                @if (f.password.hasError('required')) { <mat-error>وارد کردن رمز عبور الزامیست</mat-error> }
+                @else if (f.password.hasError('minlength')) { <mat-error>حداقل 7 کاراکتر</mat-error> }
+                @else if (f.password.hasError('maxlength')) { <mat-error>حداکثر 20 کاراکتر</mat-error> }
+                @else if (f.password.hasError('server')) { <mat-error>{{f.password.getError('server')}}</mat-error> }
+            </mat-form-field>
+        </div>
+
+        <div class="form-item">
+            <mat-form-field appearance="outline">
+                <mat-label>تکرار رمز عبور</mat-label>
+                <input class="input" [type]="hideConfirmPassword ? 'password' : 'text'"
+                    formControlName="confirmPassword" matInput>
+                <button mat-icon-button matSuffix type="button" (click)="hideConfirmPassword = !hideConfirmPassword">
+                    <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                <mat-hint>رمز عبور را مجدد وارد کنید</mat-hint>
+                @if (f.confirmPassword.hasError('required')) {
+                <mat-error>وارد کردن مجدد رمز عبور الزامیست</mat-error>
+                }
+                @else if (f.confirmPassword.hasError('minlength')) { <mat-error>حداقل 7 کاراکتر</mat-error> }
+                @else if (f.confirmPassword.hasError('maxlength')) { <mat-error>حداکثر 20 کاراکتر</mat-error> }
+            </mat-form-field>
+        </div>
+
+        <div class="form-item">
+            <app-datepicker [formControl]="f['dateOfBirth']" [maxDate]="max" [minDate]="min" label="تاریخ تولد">
+            </app-datepicker>
+        </div>
+
+        <div class="div-btn-add">
+            <button type="submit" [disabled]="form.invalid || isLoading" mat-raised-button color="primary">
+                {{ isLoading ? 'در حال ثبت...' : 'ثبت نام' }}
+            </button>
+        </div>
+    </div>
+</form>
