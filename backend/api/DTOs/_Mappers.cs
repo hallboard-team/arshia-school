@@ -136,7 +136,7 @@ public static class Mappers
         return new Course
         {
             Title = managerInput.Title.Trim().ToLower(),
-            Description = managerInput.Description.Trim().ToLower(),
+            Description = managerInput.Description.Trim(),
             TotalMinutes = managerInput.TotalMinutes,
             IsActive = managerInput.IsActive
         };
