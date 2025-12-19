@@ -12,19 +12,19 @@
     <div class="background-card">
         <div *ngFor="let course of courses" class="card-items">
             <span class="course-title">{{ course.title }}</span>
-            <span class="text">🕒 مدت دوره: {{ course.hours }} ساعت</span>
+            <!-- <span class="text">🕒 مدت دوره: {{ course.hours }} ساعت</span>
             <span class="text">📅 روزهای دوره: {{ course.days }}</span>
-            <span class="text">⏳ ساعت به ازای هر کلاس: {{ course.hoursPerClass }}</span>
+            <span class="text">⏳ ساعت به ازای هر کلاس: {{ course.hoursPerClass }}</span> -->
             <div class="div-start-day">
                 <span class="title">📅 تاریخ شروع دوره</span>
                 <span class="result">{{ course.shamsiStart }}</span>
             </div>
-            @if (course.isStarted) {
+            <!-- @if (course.isStarted) {
             <span class="text-isStarted-true">در حال اجرا ✅</span>
             }
             @else if (!course.isStarted) {
             <span class="text-isStarted-false">هنوز شروع نشده ❌</span>
-            }
+            } -->
 
             <button class="btn-click-student-show" [routerLink]="['/students-card/' + course.title]">
                 مشاهده دانش‌آموزان 📚

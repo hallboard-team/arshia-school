@@ -181,7 +181,7 @@
                                     <span class="name-of-course-women">{{ course.title }}</span>
                                     }
                                     <div class="tozihat-course">
-                                        <span class="text">
+                                        <!-- <span class="text">
                                             نام کلاس:
                                             {{ course.className }}
                                         </span>
@@ -189,25 +189,25 @@
                                         <span class="text">
                                             شهریه:
                                             {{ course.tuition | currency:'IRR' }}
-                                        </span>
+                                        </span> -->
 
                                         <span class="text">
                                             مدت زمان دوره:
-                                            @if (isMale) {
+                                            <!-- @if (isMale) {
                                             <span class="name-of-course-men">{{ course.hours }}</span>
                                             } @else {
                                             <span class="name-of-course-women">{{ course.hours }}</span>
-                                            }
+                                            } -->
                                             ساعت
                                         </span>
 
                                         <span class="text">
                                             مدت زمان هر جلسه:
-                                            @if (isMale) {
+                                            <!-- @if (isMale) {
                                             <span class="name-of-course-men">{{ course.hoursPerClass }}</span>
                                             } @else {
                                             <span class="name-of-course-women">{{ course.hoursPerClass }}</span>
-                                            }
+                                            } -->
                                             ساعت
                                         </span>
 
@@ -215,7 +215,7 @@
                                             تاریخ شروع: {{ course.shamsiStart }}
                                         </span>
 
-                                        @if (course.professorNames && course.professorNames.length > 0) {
+                                        <!-- @if (course.professorNames && course.professorNames.length > 0) {
                                         <span class="text">
                                             <span>
                                                 {{ course.professorNames.length === 1 ? 'استاد:' : 'اساتید:' }}
@@ -233,15 +233,15 @@
                                                 نامشخص
                                             </span>
                                         </span>
-                                        }
+                                        } -->
 
                                         <span class="text">
                                             وضعیت دوره:
-                                            <span [ngClass]="{
+                                            <!-- <span [ngClass]="{
                                                 'green-text': getCourseStatus(course) === 'در حال برگزاری',
                                                 'red-text': getCourseStatus(course) !== 'در حال برگزاری'}">
                                                 {{ getCourseStatus(course) }}
-                                            </span>
+                                            </span> -->
                                         </span>
                                     </div>
 

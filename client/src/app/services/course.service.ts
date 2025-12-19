@@ -6,7 +6,6 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { PaginationHandler } from '../extensions/paginationHandler';
 import { environment } from '../../environments/environment';
-import { ShowCourseAndClass } from '../models/show-course-class.model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +27,7 @@ export class CourseService {
   }
 
   addCourse(addCourse: AddCourse): Observable<ShowCourse> {
-    return this._http.post<ShowCourse>(this._baseApiUrl + 'add', addCourse)
+    return this._http.post<ShowCourse>(this._baseApiUrl + 'add', addCourse);
   }
 
   update(courseUpdate: Partial<CourseUpdate>, targetTitelCourse: string) {
@@ -37,17 +36,5 @@ export class CourseService {
 
   getByTitle(courseTitle: string): Observable<Course> {
     return this._http.get<Course>(this._baseApiUrl + 'get-targetCourse/' + courseTitle);
-  }
-
-  addProfessorToCourse(targetCourseTitle: string, professorUserName: string): Observable<any> {
-    return this._http.post(this._baseApiUrl + 'add-professor/' + targetCourseTitle + '/' + professorUserName, null);
-  }
-
-  removeProfessorFromCourse(targetCourseTitle: string, professorUserName: string): Observable<any> {
-    return this._http.delete(this._baseApiUrl + 'remove-professor/' + targetCourseTitle + '/' + professorUserName);
-  }
-
-  getCoursesAndClasses(): Observable<ShowCourseAndClass[]> {
-    return this._http.get<ShowCourseAndClass[]>(this._baseApiUrl + 'get-all-class-course');
   }
 }

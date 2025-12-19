@@ -10,16 +10,15 @@
     <form class="update-course-form" [formGroup]="courseFg" (ngSubmit)="courseFg.valid && updateCourse()">
 
         <div class="div-title">
-            <span class="title">ویرایش دوره ها</span>
+            <span class="title">ویرایش دوره</span>
         </div>
 
         <div class="content">
-            <!-- title -->
             <mat-form-field appearance="outline">
                 <mat-label>نام دوره</mat-label>
                 <input class="input" autoFocusDir type="text" formControlName="titleCtrl" matInput dir="auto"
-                    placeholder="بین ۲ تا ۳۰ کاراکتر باشد">
-                <mat-hint>در صورت تغییر، اسم جدید دوره را وارد کنید</mat-hint>
+                    placeholder="بین ۲ تا ۳۰ کاراکتر">
+                <mat-hint>نام جدید دوره</mat-hint>
                 @if (TitleCtrl.hasError('required')) {
                 <mat-error>لطفاً نام دوره را وارد کنید</mat-error>
                 }
@@ -31,94 +30,31 @@
                 }
             </mat-form-field>
 
-            <!-- class name -->
             <mat-form-field appearance="outline">
-                <mat-label>نام کلاس</mat-label>
-                <input class="input" autoFocusDir type="text" formControlName="classNameCtrl" matInput dir="auto"
-                    placeholder="بین ۲ تا ۳۰ کاراکتر باشد">
-                <mat-hint>در صورت تغییر، اسم جدید دوره را وارد کنید</mat-hint>
-                @if(ClassNameCtrl.hasError('required')) {
-                <mat-error>لطفاً نام دوره را وارد کنید</mat-error>
-                }
-                @else if (ClassNameCtrl.errors && ClassNameCtrl.hasError('minlength')) {
-                <mat-error>حداقل ۲ کاراکتر</mat-error>
-                }
-                @else if (ClassNameCtrl.errors && ClassNameCtrl.hasError('maxlength')) {
-                <mat-error>حداکثر ۳۰ کاراکتر</mat-error>
+                <mat-label>مدت دوره (دقیقه)</mat-label>
+                <input class="input" type="number" formControlName="totalMinutesCtrl" matInput min="1"
+                    placeholder="مدت به دقیقه">
+                <mat-hint>زمان کل دوره به دقیقه</mat-hint>
+                @if (TotalMinutesCtrl.hasError('required')) {
+                <mat-error>مدت دوره الزامی است</mat-error>
                 }
             </mat-form-field>
 
-            <!-- tuition -->
-            <mat-form-field appearance="outline" class="tuition-field">
-                <mat-label>شهریه</mat-label>
-                <input class="input" type="text" matInput formControlName="tuitionCtrl" appCurrencyFormatter
-                    inputmode="numeric" dir="ltr" placeholder="از ۱۰.۰۰۰ تومان">
-                <span matSuffix *ngIf="TuitionCtrl.value">تومان</span>
-                <mat-hint>بین ۱۰,۰۰۰ تا ۱۰۰,۰۰۰,۰۰۰</mat-hint>
-                @if (TuitionCtrl.hasError('required')) {
-                <mat-error>لطفاً مبلغ شهریه را مشخص کنید</mat-error>
-                }
-                @else if (TuitionCtrl.errors && TuitionCtrl.hasError('min')) {
-                <mat-error>حداقل شهریه ۱۰.۰۰۰ تومان است</mat-error>
-                }
-                @else if (TuitionCtrl.errors && TuitionCtrl.hasError('max')) {
-                <mat-error>حداکثر شهریه ۱۰۰.۰۰۰.۰۰۰ تومان (صد میلیون تومان)
-                    است</mat-error>
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>توضیحات دوره</mat-label>
+                <textarea matInput cdkTextareaAutosize formControlName="descriptionCtrl" dir="auto"
+                    placeholder="توضیحات دوره..."></textarea>
+                <mat-hint>توضیحات کامل دوره</mat-hint>
+                @if (DescriptionCtrl.hasError('required')) {
+                <mat-error>توضیحات الزامی است</mat-error>
                 }
             </mat-form-field>
-
-            <!-- total hours -->
-            <mat-form-field appearance="outline">
-                <mat-label>ساعت دوره</mat-label>
-                <input class="input" type="text" formControlName="hoursCtrl" matInput min="0.5" max="20000"
-                    appDecimalFormatter inputmode="decimal" step="0.5" dir="ltr" placeholder="مجموع ساعت دوره">
-                <mat-hint>بین ۰۰:۳۰ تا ۲۰.۰۰۰</mat-hint>
-                @if (HoursCtrl.hasError('required')) {
-                <mat-error>لطفاً ساعت کل دوره را وارد کنید</mat-error>
-                }
-                @else if (HoursCtrl.errors && HoursCtrl.hasError('min')) {
-                <mat-error>حداقل ۰,۵ ساعت</mat-error>
-                }
-                @else if (HoursCtrl.errors && HoursCtrl.hasError('max')) {
-                <mat-error>حداکثر ۲۰,۰۰۰ ساعت</mat-error>
-                }
-            </mat-form-field>
-
-            <!-- hours per class -->
-            <mat-form-field appearance="outline">
-                <mat-label>ساعت هرکلاس</mat-label>
-                <input class="input" type="number" formControlName="hoursPerClassCtrl" matInput min="0.5" max="10"
-                    step="0.5" inputmode="decimal" dir="ltr" placeholder="شروع از 0.5 ساعت">
-                <mat-hint>بین ۰۰:۳۰ تا ۱۰</mat-hint>
-                @if (HoursPerClassCtrl.hasError('required')) {
-                <mat-error>لطفا ساعت هر کلاس را مشخص کنید</mat-error>
-                }
-                @else if (HoursPerClassCtrl.errors && HoursPerClassCtrl.hasError('pattern')) {
-                <mat-error>فقط اعداد ۰,۵ تا ۱۰ با گام ۰,۵ مجاز
-                    است</mat-error>
-                }
-                @else if (HoursPerClassCtrl.errors && HoursPerClassCtrl.hasError('min')) {
-                <mat-error>حداقل زمان کلاس: نیم ساعت</mat-error>
-                }
-                @else if (HoursPerClassCtrl.errors && HoursPerClassCtrl.hasError('max')) {
-                <mat-error>حداکثر زمان کلاس: ۱۰ ساعت</mat-error>
-                }
-            </mat-form-field>
-
-            <div class="start-date-field">
-                <app-datepicker [formControl]="StartCtrl" [maxDate]="max" [minDate]="min"></app-datepicker>
-                @if (StartCtrl.hasError('required')) {
-                <mat-error>بدون وارد کردن تاریخ شروع، ثبت دوره ممکن
-                    نیست</mat-error>
-                }
-            </div>
 
             <div class="div-isStarted">
-                <span>دوره شروع شده است؟</span>
-
-                <mat-radio-group class="radio-group" aria-label="Select an option" formControlName="isStartedCtrl">
-                    <mat-radio-button class="radio-button" value="false">خیر</mat-radio-button>
-                    <mat-radio-button class="radio-button" value="true">بله</mat-radio-button>
+                <span>وضعیت دوره:</span>
+                <mat-radio-group class="radio-group" aria-label="وضعیت" formControlName="isActiveCtrl">
+                    <mat-radio-button class="radio-button" [value]="false">غیر فعال</mat-radio-button>
+                    <mat-radio-button class="radio-button" [value]="true">فعال</mat-radio-button>
                 </mat-radio-group>
             </div>
         </div>
@@ -127,60 +63,4 @@
             <button class="button-edit-course" type="submit" [disabled]="courseFg.invalid">ثبت تغییرات</button>
         </div>
     </form>
-
-    <div class="div-get-all-teachers">
-        @if (teachers.length > 0) {
-        <div class="background-teacher-card">
-            <div class="div-title">
-                <span>مشاهده مدرس ها</span>
-            </div>
-
-            @for (teacher of teachers; track $index) {
-            <div class="teacher-card">
-                @if (teacher.photo) {
-                <img class="profile" [src]="photoUrl + teacher.photo.url_165" alt="">
-                }
-                @else {
-                @if (teacher.gender == 'Male') {
-                <img class="profile" src="../assets/images/menProfilePhoto.png" alt="">
-                } @else {
-                <img class="profile" src="../assets/images/womenProfilePhoto.png" alt="">
-                }
-                }
-
-                <div class="info">
-                    <div class="field">
-                        <span class="label">نام:</span>
-                        <span class="value">{{ teacher.name }}</span>
-                    </div>
-
-                    <div class="field">
-                        <span class="label">نام خانوادگی:</span>
-                        <span class="value">{{ teacher.lastName }}</span>
-                    </div>
-                </div>
-
-                <div class="div-add-or-remove-teacher-btn">
-                    @if (professorUserNames.includes(teacher.userName)) {
-                    <button class="button add-professor" (click)="addProfessor(teacher)">
-                        <ng-container>
-                            <mat-icon>person_add</mat-icon>
-                        </ng-container>
-                    </button>
-                    }
-                    @if (professorUserNames.includes(teacher.userName)) {
-                    <button class="button delete-professor" (click)="removeProfessor(teacher)">
-                        <ng-container>
-                            <mat-icon>person_remove</mat-icon>
-                        </ng-container>
-                    </button>
-                    }
-                </div>
-            </div>
-            }
-        </div>
-        }@else {
-        <span>هیچ مدرسی وجود ندارد</span>
-        }
-    </div>
 </div>

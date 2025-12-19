@@ -41,10 +41,10 @@ export class TeacherComponent implements OnInit, OnDestroy {
     this.teacherService.getCourse().subscribe({
       next: (response: Course[]) => {
         if (response) {
-          this.courses = response.map(course => ({
-            ...course,
-            shamsiStart: moment(course.start).format('jYYYY/jMM/jDD')
-          }));
+          // this.courses = response.map(course => ({
+          //   ...course,
+          //   shamsiStart: moment(course.start).format('jYYYY/jMM/jDD')
+          // }));
         }
       },
       error: (err) => {

@@ -266,12 +266,12 @@ export class TargetUserProfileComponent implements OnInit {
         next: (data) => {
           this.courses = data;
           if (data !== null) {
-            this.shamsiCourses = data.map(course => ({
-              ...course,
-              hours: course.hours ?? (course.totalMinutes ?? 0) / 60,
-              hoursPerClass: course.hoursPerClass ?? (course.classMinutes ?? 0) / 60,
-              shamsiStart: moment(course.start).format('jYYYY/jMM/jDD')
-            }));
+            // this.shamsiCourses = data.map(course => ({
+            //   ...course,
+            //   hours: course.hours ?? (course.totalMinutes ?? 0) / 60,
+            //   hoursPerClass: course.hoursPerClass ?? (course.classMinutes ?? 0) / 60,
+            //   shamsiStart: moment(course.start).format('jYYYY/jMM/jDD')
+            // }));
           } else {
             this.shamsiCourses = [];
           }

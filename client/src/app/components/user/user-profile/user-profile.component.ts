@@ -193,10 +193,10 @@ export class UserProfileComponent implements OnInit {
       next: data => {
         if (data !== null) {
           this.courses = data;
-          this.shamsiCourses = data.map(course => ({
-            ...course,
-            shamsiStart: moment(course.start).format('jYYYY/jMM/jDD')
-          }));
+          // this.shamsiCourses = data.map(course => ({
+          //   ...course,
+          //   shamsiStart: moment(course.start).format('jYYYY/jMM/jDD')
+          // }));
         }
         this.loading = false;
       },

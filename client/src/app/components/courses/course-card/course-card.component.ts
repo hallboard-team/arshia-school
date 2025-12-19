@@ -4,15 +4,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
-
-import moment from 'moment-jalaali';
 import { ShowCourse } from '../../../models/course.model';
 import { LoggedInUser } from '../../../models/logged-in-user.model';
 import { AccountService } from '../../../services/account.service';
-moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 
 @Component({
   selector: 'app-course-card',
+  standalone: true,
   imports: [
     CommonModule, RouterModule,
     MatButtonModule, MatCardModule, MatIconModule
@@ -22,8 +20,6 @@ moment.loadPersian({ dialect: 'persian-modern', usePersianDigits: false });
 })
 export class CourseCardComponent implements OnInit {
   @Input('courseInput') courseIn: ShowCourse | undefined;
-
-  shamsiStartDate: string = '';
 
   private _accountService = inject(AccountService);
   loggedInUserSig: Signal<LoggedInUser | null> | undefined;

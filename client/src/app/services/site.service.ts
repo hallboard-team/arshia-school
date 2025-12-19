@@ -23,14 +23,22 @@ export class SiteService {
       params = params.append('pageSize', siteParams.pageSize);
     }
 
-    return this.paginationHandler.getPaginatedResult<ShowSite[]>(this._baseApiUrl + 'get-all-sites', params);
+    return this.paginationHandler.getPaginatedResult<ShowSite[]>(this._baseApiUrl, params);
+  }
+
+  getSiteByName(siteName: string): Observable<ShowSite> {
+    return this._http.get<ShowSite>(this._baseApiUrl + 'get-site/' + siteName);
   }
 
   addSite(addSite: AddSite): Observable<ShowSite> {
     return this._http.post<ShowSite>(this._baseApiUrl + 'create-site', addSite)
   }
 
-  update(siteUpdate: Partial<SiteUpdate>, targetTitelSite: string) {
-    return this._http.put<Site>(this._baseApiUrl + 'update-site/' + targetTitelSite, siteUpdate);
+  update(siteUpdate: Partial<SiteUpdate>, targetSiteName: string) {
+    return this._http.put<Site>(this._baseApiUrl + 'update-site/' + targetSiteName, siteUpdate);
+  }
+
+  delete(siteName: string): Observable<any> {
+    return this._http.delete(this._baseApiUrl + 'delete-site/' + siteName);
   }
 }

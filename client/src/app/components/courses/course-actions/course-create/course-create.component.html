@@ -17,10 +17,9 @@
             <div class="form-item">
                 <mat-form-field appearance="outline">
                     <mat-label>نام دوره</mat-label>
-
                     <input class="input" autoFocusDir type="text" matInput dir="auto" formControlName="titleCtrl"
-                        placeholder="بین ۲ تا ۳۰ کاراکتر باشد">
-                    <mat-hint>اسم دوره جدید را وارد کنید</mat-hint>
+                        placeholder="بین ۲ تا ۳۰ کاراکتر">
+                    <mat-hint>عنوان دوره جدید را وارد کنید</mat-hint>
                     @if (TitleCtrl.hasError('required')) {
                     <mat-error>لطفاً نام دوره را وارد کنید</mat-error>
                     }
@@ -35,44 +34,39 @@
 
             <div class="form-item">
                 <mat-form-field appearance="outline">
-                    <mat-label>توضیحات دوره</mat-label>
+                    <mat-label>مدت دوره (دقیقه)</mat-label>
+                    <input class="input" type="number" matInput formControlName="totalMinutesCtrl" min="1" max="20000"
+                        placeholder="مدت زمان به دقیقه">
+                    <mat-hint>مدت زمان کل دوره به دقیقه</mat-hint>
+                    @if (TotalMinutesCtrl.hasError('required')) {
+                    <mat-error>لطفاً مدت دوره را وارد کنید</mat-error>
+                    }
+                    @else if (TotalMinutesCtrl.errors && TotalMinutesCtrl.hasError('min')) {
+                    <mat-error>حداقل ۱ دقیقه</mat-error>
+                    }
+                </mat-form-field>
+            </div>
 
+            <div class="form-item full-width">
+                <mat-form-field appearance="outline">
+                    <mat-label>توضیحات دوره</mat-label>
                     <textarea matInput cdkTextareaAutosize dir="auto" formControlName="descriptionCtrl"
-                        placeholder="توضیحات دوره را وارد کنید"></textarea>
+                        placeholder="توضیحات کامل دوره..."></textarea>
+                    <mat-hint>توضیحات مربوط به سرفصل‌ها و جزئیات</mat-hint>
                     @if (DescriptionCtrl.hasError('required')) {
                     <mat-error>لطفاً توضیحات دوره را وارد کنید</mat-error>
                     }
                 </mat-form-field>
             </div>
 
-            <div class="form-item">
-                <mat-form-field appearance="outline">
-                    <mat-label>مدت دوره</mat-label>
-                    <input class="input" type="text" matInput formControlName="hoursCtrl" min="0.5" max="20000"
-                        appDecimalFormatter inputmode="decimal" step="0.5" dir="ltr" placeholder="مجموع ساعت دوره">
-                    <mat-hint>بین ۰۰:۳۰ تا ۲۰.۰۰۰</mat-hint>
-                    @if (HoursCtrl.hasError('required')) {
-                    <mat-error>لطفاً ساعت کل دوره را وارد کنید</mat-error>
-                    }
-                    @else if (HoursCtrl.errors && HoursCtrl.hasError('min')) {
-                    <mat-error>حداقل ۰,۵ ساعت</mat-error>
-                    }
-                    @else if (HoursCtrl.errors && HoursCtrl.hasError('max')) {
-                    <mat-error>حداکثر ۲۰,۰۰۰ ساعت</mat-error>
-                    }
-                </mat-form-field>
-            </div>
-
             <div class="radio-section">
-                <mat-radio-group aria-label="Select an option" formControlName="isStartedCtrl"
-                    class="custom-radio-group">
+                <mat-radio-group aria-label="وضعیت دوره" formControlName="isActiveCtrl" class="custom-radio-group">
                     <mat-radio-button [value]="false">غیر فعال</mat-radio-button>
                     <mat-radio-button [value]="true">فعال</mat-radio-button>
                 </mat-radio-group>
             </div>
 
             <div class="action-buttons">
-
                 <button type="button" class="neumorphic-btn cancel-btn" (click)="onCancel()">
                     انصراف
                 </button>
@@ -80,7 +74,6 @@
                 <button type="submit" [disabled]="courseFg.invalid" class="neumorphic-btn submit-btn">
                     ثبت دوره جدید
                 </button>
-
             </div>
         </div>
     </form>

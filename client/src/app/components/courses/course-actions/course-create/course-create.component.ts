@@ -10,19 +10,19 @@ import { HttpClient } from '@angular/common/http';
 import { NavbarComponent } from '../../../navbar/navbar.component';
 import { AddCourse } from '../../../../models/course.model';
 import { CourseService } from '../../../../services/course.service';
-import { DecimalFormatterDirective } from '../../../../directives/decimal-formatter.directive';
 import { BackForwardButtonComponent } from "../../../back-forward-button/back-forward-button.component";
 import { MatRadioModule } from '@angular/material/radio';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-course',
+  standalone: true,
   imports: [
     CommonModule, FormsModule,
     ReactiveFormsModule, MatFormFieldModule, MatInputModule,
     MatButtonModule, MatSnackBarModule,
     MatIconModule, NavbarComponent,
-    DecimalFormatterDirective, MatRadioModule,
+    MatRadioModule,
     BackForwardButtonComponent
   ],
   templateUrl: './course-create.component.html',
@@ -39,9 +39,9 @@ export class CourseCreateComponent {
 
   courseFg = this.fb.group({
     titleCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-    descriptionCtrl: ['', [Validators.required]],
-    hoursCtrl: ['', [Validators.required, Validators.pattern(/^(0(\.\d+)?|[1-9]\d*(\.\d+)?)$/), Validators.min(0.5), Validators.max(20000)]],
-    isStartedCtrl: ['', [Validators.required]]
+    descriptionCtrl: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(1000)]],
+    totalMinutesCtrl: ['', [Validators.required, Validators.min(1), Validators.max(20000)]],
+    isActiveCtrl: [true, [Validators.required]] 
   });
 
   get TitleCtrl(): FormControl {
@@ -50,42 +50,38 @@ export class CourseCreateComponent {
   get DescriptionCtrl(): FormControl {
     return this.courseFg.get('descriptionCtrl') as FormControl;
   }
-  get HoursCtrl(): FormControl {
-    return this.courseFg.get('hoursCtrl') as FormControl;
+  get TotalMinutesCtrl(): FormControl {
+    return this.courseFg.get('totalMinutesCtrl') as FormControl;
   }
-  get IsStartedCtrl(): FormControl {
-    return this.courseFg.get('isStartedCtrl') as FormControl;
-  }
-
-  private openSnack(message: string, panel: 'success' | 'error' = 'error'): void {
-    this.snackBar.open(message, 'باشه', { duration: 4000, horizontalPosition: 'center', verticalPosition: 'top', panelClass: [panel === 'success' ? 'snack-success' : 'snack-error'], direction: 'rtl' });
-  }
-
-  showErr(value: FormControl | null | undefined): boolean {
-    return !!value && value.invalid && (value.dirty || value.touched);
+  get IsActiveCtrl(): FormControl {
+    return this.courseFg.get('isActiveCtrl') as FormControl;
   }
 
   createCourse(): void {
+    if (this.courseFg.invalid) return;
+
     let addCourse: AddCourse = {
       title: this.TitleCtrl.value,
       description: this.DescriptionCtrl.value,
-      hours: this.HoursCtrl.value,
-      isStarted: this.IsStartedCtrl.value
+      totalMinutes: this.TotalMinutesCtrl.value, 
+      isActive: this.IsActiveCtrl.value
     }
 
     this._courseService.addCourse(addCourse).subscribe({
       next: (response) => {
-        this._matSnackBar.open("دوره اضافه شد", "Close", {
+        this._matSnackBar.open("دوره با موفقیت اضافه شد", "بستن", {
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
-          duration: 10000
+          duration: 5000,
+          panelClass: ['snack-success']
         });
       },
       error: (err) => {
-        this._matSnackBar.open("در اضافه شدن دوره خطایی به وجود آمده", "Close", {
+        this._matSnackBar.open("در اضافه شدن دوره خطایی به وجود آمده", "بستن", {
           horizontalPosition: 'center',
           verticalPosition: 'bottom',
-          duration: 10000
+          duration: 5000,
+          panelClass: ['snack-error']
         });
       }
     })

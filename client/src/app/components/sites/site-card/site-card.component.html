@@ -1,9 +1,9 @@
 @if (siteIn) {
 @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
-<div class="card-items" [routerLink]="['/' + 'dashboard/' + 'update-site/' + siteIn.siteName]" routerLinkActive
+<div class="card-items" [routerLink]="['/dashboard/update-site', siteIn.name]" routerLinkActive
     #rla="routerLinkActive">
-    <span class="site-title">{{ siteIn.siteName }}</span>
-    <span class="text">نام دپارتمان: {{ siteIn.departmanName }}</span>
+    <span class="site-title">{{ siteIn.name }}</span>
+    <span class="text">نام دپارتمان: {{ siteIn.department }}</span>
     <span class="text">طبقه: {{ siteIn.floor }}</span>
     <span class="text">ظرفیت سایت: {{ siteIn.capacity }}</span>
 

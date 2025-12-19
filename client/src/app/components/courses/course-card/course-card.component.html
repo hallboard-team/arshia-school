@@ -1,19 +1,20 @@
 @if (courseIn) {
-@if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
-<div class="card-items" [routerLink]="['/' + 'dashboard/' + 'update-course/' + courseIn.title]" routerLinkActive
-    #rla="routerLinkActive">
-    <span class="course-title">{{ courseIn.title }}</span>
-    <span class="text">توضیحات دوره: {{ courseIn.description }}</span>
-    <span class="text">🕒 مدت دوره: {{ courseIn.hours }} ساعت</span>
-    <span class="text">⏳ ساعت به ازای هر کلاس: {{ courseIn.hoursPerClass }}</span>
-
-    @if (courseIn.isStarted) {
-    <span class="text-isStarted-true">در حال اجرا ✅</span>
-    }@else {
-    <span class="text-isStarted-false">هنوز شروع نشده ⏳</span>
+    @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
+    <div class="card-items" [routerLink]="['/dashboard/update-course', courseIn.title]" routerLinkActive
+        #rla="routerLinkActive">
+        
+        <span class="course-title">{{ courseIn.title }}</span>
+        
+        <span class="text">توضیحات: {{ courseIn.description }}</span>
+        
+        <span class="text">⏱️ مدت دوره: {{ courseIn.totalMinutes }} دقیقه</span>
+        @if (courseIn.isActive) {
+        <span class="text-isStarted-true">فعال ✅</span>
+        }@else {
+        <span class="text-isStarted-false">غیرفعال ❌</span>
+        }
+    
+        <button class="btn-edit-course" mat-stroked-button>ویرایش دوره</button>
+    </div>
     }
-
-    <button class="btn-edit-course" mat-stroked-button>ویرایش دوره</button>
-</div>
-}
 }

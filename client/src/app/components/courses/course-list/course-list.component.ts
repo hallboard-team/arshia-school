@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, HostListener, inject, OnDestroy, OnInit, Signal } from '@angular/core';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { Observable, Subscription } from 'rxjs';
-
 import { RouterModule } from '@angular/router';
 import { Course, ShowCourse } from '../../../models/course.model';
 import { CourseParams } from '../../../models/helpers/application-params';
@@ -17,6 +16,7 @@ import { BackForwardButtonComponent } from "../../back-forward-button/back-forwa
 
 @Component({
   selector: 'app-course-list',
+  standalone: true,
   imports: [
     CommonModule, MatPaginatorModule, CourseCardComponent,
     NavbarComponent, RouterModule,
@@ -27,14 +27,13 @@ import { BackForwardButtonComponent } from "../../back-forward-button/back-forwa
 })
 export class CoursesListComponent implements OnInit, OnDestroy {
   private _accountService = inject(AccountService);
-  courseService = inject(CourseService);
-  courses$: Observable<Course[] | null> | undefined;
-
+  private courseService = inject(CourseService);
+  
   isSticky: boolean = false;
-
   subscribed: Subscription | undefined;
+  
   pagination: Pagination | undefined;
-  showCourses: ShowCourse[] | undefined;
+  showCourses: ShowCourse[] = []; 
   courseParams: CourseParams | undefined;
   pageSizeOptions = [5, 10, 25];
   pageEvent: PageEvent | undefined;
@@ -55,35 +54,33 @@ export class CoursesListComponent implements OnInit, OnDestroy {
   @HostListener('window:scroll', [])
   onWindowScroll(): void {
     const scrollOffset = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
-
-    if (scrollOffset > 280) {
-      this.isSticky = true;
-    } else {
-      this.isSticky = false;
-    }
+    this.isSticky = scrollOffset > 280;
   }
 
   getAll(): void {
-    if (this.courseParams)
+    if (this.courseParams) {
       this.subscribed = this.courseService.getAll(this.courseParams).subscribe({
         next: (response: PaginatedResult<ShowCourse[]>) => {
           if (response.body && response.pagination) {
             this.showCourses = response.body;
             this.pagination = response.pagination;
           }
-        }
+        },
+        error: (err) => console.error(err)
       });
+    }
   }
 
   handlePageEvent(e: PageEvent) {
     if (this.courseParams) {
       if (e.pageSize !== this.courseParams.pageSize)
-        e.pageIndex = 0;
+        this.courseParams.pageNumber = 1; 
+      else 
+        this.courseParams.pageNumber = e.pageIndex + 1;
 
       this.pageEvent = e;
       this.courseParams.pageSize = e.pageSize;
-      this.courseParams.pageNumber = e.pageIndex + 1;
-
+      
       this.getAll();
     }
   }
