@@ -2,9 +2,8 @@ namespace api.DTOs;
 
 public static class Mappers
 {
-    public static AppUser ConvertRegisterDtoToAppUser(RegisterDto adminInput)
-    {
-        return new AppUser
+    public static AppUser ConvertRegisterDtoToAppUser(RegisterDto adminInput) =>
+        new()
         {
             Email = adminInput.Email, // required by AspNet Identity
             UserName = Utils.GenerateComplexUsername(),
@@ -14,35 +13,31 @@ public static class Mappers
             PhoneNum = adminInput.PhoneNum,
             Gender = adminInput.Gender,
         };
-    }
 
-    public static LoggedInDto ConvertAppUserToLoggedInDto(AppUser appUser, string tokenValue)
-    {
-        return new LoggedInDto
-        {
-            Token = tokenValue,
-            UserName = appUser.NormalizedUserName,
-            Email = appUser.NormalizedEmail,
-            Name = appUser.Name,
-            LastName = appUser.LastName,
-            PhoneNum = appUser.PhoneNum,
-            Gender = appUser.Gender
-        };
-    }
+    public static LoggedInDto ConvertAppUserToLoggedInDto(AppUser appUser, string tokenValue) =>
+         new()
+         {
+             Token = tokenValue,
+             UserName = appUser.NormalizedUserName,
+             Email = appUser.NormalizedEmail,
+             Name = appUser.Name,
+             LastName = appUser.LastName,
+             PhoneNum = appUser.PhoneNum,
+             Gender = appUser.Gender
+         };
 
-    public static RegisteredUserDto ConvertAppUserToRegisteredDto(AppUser appUser)
-    {
-        return new RegisteredUserDto
-        {
-            UserName = appUser.UserName,
-            Email = appUser.Email,
-            Name = appUser.Name,
-            LastName = appUser.LastName,
-            PhoneNum = appUser.PhoneNum,
-            Gender = appUser.Gender,
-            DateOfBirth = appUser.DateOfBirth
-        };
-    }
+    public static RegisteredUserDto ConvertAppUserToRegisteredDto(AppUser appUser) =>
+         new()
+         {
+             UserName = appUser.UserName,
+             Email = appUser.Email,
+             Name = appUser.Name,
+             LastName = appUser.LastName,
+             PhoneNum = appUser.PhoneNum,
+             Gender = appUser.Gender,
+             DateOfBirth = appUser.DateOfBirth
+         };
+
 
     public static MemberDto ConvertAppUserToMemberDto(AppUser appUser, bool isAbsent, Dictionary<ObjectId, string> roleIdToName)
     {
@@ -63,9 +58,8 @@ public static class Mappers
         );
     }
 
-    public static TargetMemberDto ConvertAppUserToTargetMemberDto(AppUser appUser)
-    {
-        return new TargetMemberDto(
+    public static TargetMemberDto ConvertAppUserToTargetMemberDto(AppUser appUser) =>
+         new(
             Email: appUser.Email ?? string.Empty,
             UserName: appUser.NormalizedUserName ?? string.Empty,
             Name: appUser.Name ?? string.Empty,
@@ -77,11 +71,9 @@ public static class Mappers
             EnrolledCourses: appUser.EnrolledClasses,
             MemberPhoto: appUser.Photo
         );
-    }
 
-    public static TeacherDto ConvertAppUserToTeacherDto(AppUser appUser)
-    {
-        return new TeacherDto(
+    public static TeacherDto ConvertAppUserToTeacherDto(AppUser appUser) =>
+         new(
             UserName: appUser.NormalizedUserName!,
             Name: appUser.Name,
             LastName: appUser.LastName,
@@ -89,11 +81,9 @@ public static class Mappers
             Gender: appUser.Gender,
             Photo: appUser.Photo
         );
-    }
 
-    public static ProfileDto ConvertAppUserToProfileDto(AppUser appUser)
-    {
-        return new ProfileDto(
+    public static ProfileDto ConvertAppUserToProfileDto(AppUser appUser) =>
+         new(
             Email: appUser.Email ?? string.Empty,
             UserName: appUser.NormalizedUserName ?? string.Empty,
             Name: appUser.Name ?? string.Empty,
@@ -103,121 +93,76 @@ public static class Mappers
             Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth),
             Photo: appUser.Photo
         );
-    }
-
-    public static UserWithRoleDto ConvertAppUserToUserWithRoleDto(AppUser appUser)
-    {
-        return new UserWithRoleDto(
+    public static UserWithRoleDto ConvertAppUserToUserWithRoleDto(AppUser appUser) =>
+         new(
             UserName: appUser.NormalizedUserName!,
             Roles: appUser.AppRoles
         );
-    }
-
-    public static Attendance ConvertAddStudentStatusDtoToAttendence(AddStudentStatusDto teacherInput, ObjectId studentId, ObjectId courseId, DateOnly currentDate)
-    {
-        return new Attendance(
+    public static Attendance ConvertAddStudentStatusDtoToAttendence(AddStudentStatusDto teacherInput, ObjectId studentId, ObjectId courseId, DateOnly currentDate) =>
+         new(
             StudentId: studentId,
             ClassId: courseId,
             Date: currentDate
         );
-    }
 
-    public static ShowStudentStatusDto ConvertAttendenceToShowStudentStatusDto(Attendance attendence)
-    {
-        return new ShowStudentStatusDto
-        {
-            Date = attendence.Date,
-            CourseId = attendence.ClassId.ToString()
-        };
-    }
+    public static ShowStudentStatusDto ConvertAttendenceToShowStudentStatusDto(Attendance attendence) =>
+         new()
+         {
+             Date = attendence.Date,
+             CourseId = attendence.ClassId.ToString()
+         };
+    public static Course ConvertAddCourseDtoToCourse(CreateCourseDto managerInput) =>
+         new()
+         {
+             Title = managerInput.Title.Trim().ToLower(),
+             Description = managerInput.Description.Trim().ToLower(),
+             TotalMinutes = managerInput.TotalMinutes,
+             IsActive = managerInput.IsActive
+         };
 
-    public static Course ConvertAddCourseDtoToCourse(CreateCourseDto managerInput)
-    {
-        return new Course
-        {
-            Title = managerInput.Title.Trim().ToLower(),
-            Description = managerInput.Description.Trim(),
-            TotalMinutes = managerInput.TotalMinutes,
-            IsActive = managerInput.IsActive
-        };
-
-        // Title: managerInput.Title.ToUpper(),
-        // ClassName: managerInput.ClassName.ToUpper(),
-        // ProfessorsIds: [],
-        // // ProfessorsNames: [],
-        // Tuition: managerInput.Tuition,
-        // TotalMinutes: (int)Math.Round(managerInput.Hours * 60d),
-        // ClassMinutes: (int)Math.Round(managerInput.HoursPerClass * 60d),
-        // Days: daysCalc,
-        // Start: managerInput.Start,
-        // IsStarted: false
-    }
-
-    public static ShowCourseDto ConvertCourseToShowCourseDto(Course course)
-    {
-        return new ShowCourseDto(
+    public static ShowCourseDto ConvertCourseToShowCourseDto(Course course) =>
+         new(
             Title: course.Title,
             Description: course.Description,
             TotalMinutes: course.TotalMinutes,
             IsActive: course.IsActive
         );
 
-        // Id = course.Id.ToString(),
-        // Title = course.Title,
-        // ClassName = course.ClassName,
-        // Tuition = course.Tuition,
-        // // ProfessorNames = course.ProfessorsNames,
-        // Hours = course.TotalMinutes / 60d,
-        // HoursPerClass = course.ClassMinutes / 60d,
-        // Days = course.Days,
-        // Start = course.Start,
-        // IsStarted = course.IsStarted,
-        // ProfessorUserNames = new List<string>(),
-        // ProfessorNames = new List<string>()
-    }
+    public static Site ConvertCreateSiteDtoToSite(CreateSiteDto request) =>
+         new()
+         {
+             Name = request.Name.ToLower().Trim(),
+             Department = request.Department,
+             Floor = request.Floor,
+             Capacity = request.Capacity
+         };
 
-    public static Site ConvertCreateSiteDtoToSite(CreateSiteDto request)
-    {
-        return new Site
-        {
-            Name = request.Name.ToLower().Trim(),
-            Department = request.Department,
-            Floor = request.Floor,
-            Capacity = request.Capacity
-        };
-    }
-
-    public static ShowSiteDto ConvertSiteToShowSiteDto(Site site)
-    {
-        return new ShowSiteDto(
+    public static ShowSiteDto ConvertSiteToShowSiteDto(Site site) =>
+        new(
             Name: site.Name,
             Department: site.Department,
             Floor: site.Floor,
             Capacity: site.Capacity
         );
-    }
 
-    public static Class ConvertCreateClassDtoToClass(CreateClassDto request, ObjectId? courseId, ObjectId siteId, int daysCalc)
-    {
-        return new Class
-        {
-            ClassName = request.ClassName.Trim().ToLower(),
-            CourseId = courseId,
-            SiteId = siteId,
-            ProfessorsIds = [],
-            Tuition = request.Tuition,
-            ClassMinutes = (int)Math.Round(request.ClassMinutes * 60d),
-            Days = daysCalc,
-            StartDate = request.StartDate,
-            EndedDate = request.EndedDate,
-            IsStarted = request.IsStarted,
-            IsActive = request.IsActive
-        };
-    }
+    public static Class ConvertCreateClassDtoToClass(CreateClassDto request, ObjectId? courseId, ObjectId siteId, int daysCalc) =>
+         new()
+         {
+             ClassName = request.ClassName.Trim().ToLower(),
+             CourseId = courseId,
+             SiteId = siteId,
+             ProfessorsIds = [],
+             Tuition = request.Tuition,
+             ClassMinutes = (int)Math.Round(request.ClassMinutes * 60d),
+             Days = daysCalc,
+             StartDate = request.StartDate,
+             EndedDate = request.EndedDate,
+             IsStarted = request.IsStarted,
+             IsActive = request.IsActive
+         };
 
-    public static ShowClassDto ConvertClassToShowClassDto(Class model, ShowCourseDto course, ShowSiteDto site, List<string> userNames, List<string> names)
-    {
-        return new ShowClassDto(
+    public static ShowClassDto ConvertClassToShowClassDto(Class model, ShowCourseDto course, ShowSiteDto site, List<string> userNames, List<string> names) =>
+         new(
             ClassName: model.ClassName,
             Course: course,
             Site: site,
@@ -232,33 +177,13 @@ public static class Mappers
             IsEnded: model.IsEnded,
             IsActive: model.IsActive
         );
-    }
-
-    // public static ShowCourseDto ConvertCourseToCourseRes(Course course, List<string> userNames, List<string> names)
-    // {
-    //     return new CourseResponse
-    //     {
-    //         Id = course.Id.ToString(),
-    //         Title = course.Title,
-    //         ClassName = course.ClassName,
-    //         ProfessorUserNames = userNames,
-    //         ProfessorNames = names,
-    //         Tuition = course.Tuition,
-    //         TotalMinutes = course.TotalMinutes,
-    //         ClassMinutes = course.ClassMinutes,
-    //         Days = course.Days,
-    //         Start = course.Start,
-    //         IsStarted = course.IsStarted
-    //     };
-    // }
 
     public static EnrolledClass ConvertAddEnrolledCourseDtoToEnrolledCourse
         (AddEnrolledCourseDto managerInput, Class model,
             int paymentPerMonthCalc, int lastPaymentPerMonthCalc,
             int tuitionReminderCalc
-        )
-    {
-        return new EnrolledClass(
+        ) =>
+         new(
             // Id: Guid.NewGuid(),
             ClassId: model.Id,
             NumberOfPayments: managerInput.NumberOfPayments,
@@ -270,26 +195,21 @@ public static class Mappers
             LastPaymentPerMonth: lastPaymentPerMonthCalc,
             Payments: []
         );
-    }
 
-    public static Photo ConvertPhotoUrlsToPhoto(string[] photoUrls, bool isMain)
-    {
-        return new Photo(
+    public static Photo ConvertPhotoUrlsToPhoto(string[] photoUrls, bool isMain) =>
+         new(
             Url_165: photoUrls[0],
             Url_256: photoUrls[1],
             Url_enlarged: photoUrls[2],
             IsMain: isMain
         );
-    }
 
-    public static MemberPhoto ConvertPhotoUrlsToMemberPhoto(string[] photoUrls)
-    {
-        return new MemberPhoto(
+    public static MemberPhoto ConvertPhotoUrlsToMemberPhoto(string[] photoUrls) =>
+         new(
             Url_165: photoUrls[0],
             Url_256: photoUrls[1],
             Url_enlarged: photoUrls[2]
         );
-    }
 
     public static class Utils
     {
