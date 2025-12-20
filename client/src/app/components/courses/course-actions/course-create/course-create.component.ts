@@ -13,6 +13,7 @@ import { CourseService } from '../../../../services/course.service';
 import { DecimalFormatterDirective } from '../../../../directives/decimal-formatter.directive';
 import { BackForwardButtonComponent } from "../../../back-forward-button/back-forward-button.component";
 import { MatRadioModule } from '@angular/material/radio';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-course',
@@ -32,6 +33,7 @@ export class CourseCreateComponent {
   private snackBar = inject(MatSnackBar);
   private _courseService = inject(CourseService);
   private _matSnackBar = inject(MatSnackBar);
+  private router = inject(Router);
 
   constructor(private http: HttpClient) { }
 
@@ -91,5 +93,7 @@ export class CourseCreateComponent {
 
   onCancel(): void {
     this.courseFg.reset();
+    
+    this.router.navigate(['/dashboard/courses'])
   }
 }
