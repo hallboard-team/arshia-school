@@ -8,7 +8,7 @@ public class MemberRepository : IMemberRepository
     #region Constructor
     IMongoCollection<AppUser> _collectionAppUser;
     IMongoCollection<Attendance> _collectionAttendence;
-    IMongoCollection<Class> _collectionClass;
+    IMongoCollection<ClassRoom> _collectionClass;
     private readonly ITokenService _tokenService;
     private readonly UserManager<AppUser> _userManager;
 
@@ -17,7 +17,7 @@ public class MemberRepository : IMemberRepository
         var database = client.GetDatabase(dbSettings.DatabaseName);
         _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.CollectionUsers);
         _collectionAttendence = database.GetCollection<Attendance>(AppVariablesExtensions.CollectionAttendences);
-        _collectionClass = database.GetCollection<Class>(AppVariablesExtensions.CollectionCourses);
+        _collectionClass = database.GetCollection<ClassRoom>(AppVariablesExtensions.CollectionCourses);
 
         _tokenService = tokenService;
         _userManager = userManager;
@@ -36,7 +36,7 @@ public class MemberRepository : IMemberRepository
         }
 
         ObjectId? targetClassId = await _collectionClass.AsQueryable()
-            .Where(doc => doc.ClassName == targetClassTitle.ToUpper())
+            .Where(doc => doc.ClassRoomName == targetClassTitle.ToUpper())
             .Select(doc => doc.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -167,11 +167,11 @@ public class MemberRepository : IMemberRepository
             : Mappers.ConvertAppUserToProfileDto(appUser);
     }
 
-    public async Task<List<Class>> GetClassesAsync(string hashedUserId, CancellationToken cancellationToken)
+    public async Task<List<ClassRoom>> GetClassesAsync(string hashedUserId, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
-        if (userId is null) return new List<Class>();
+        if (userId is null) return new List<ClassRoom>();
 
         string? loggedInUserName = await _collectionAppUser.AsQueryable()
             .Where(doc => doc.Id == userId)
@@ -179,24 +179,24 @@ public class MemberRepository : IMemberRepository
             .FirstOrDefaultAsync(cancellationToken);
 
         if (loggedInUserName is null)
-            return new List<Class>();
+            return new List<ClassRoom>();
 
         List<ObjectId>? enrolledCourseIds = await _collectionAppUser.AsQueryable<AppUser>()
             .Where(appUser => appUser.NormalizedUserName == loggedInUserName.ToUpper())
             .SelectMany(appUser => appUser.EnrolledClasses)
-            .Select(doc => doc.ClassId)
+            .Select(doc => doc.ClassRoomId)
             .ToListAsync(cancellationToken);
 
         if (enrolledCourseIds is null || enrolledCourseIds.Count == 0)
             return [];
 
-        List<Class>? courses = await _collectionClass.Find<Class>(doc =>
+        List<ClassRoom>? courses = await _collectionClass.Find<ClassRoom>(doc =>
             enrolledCourseIds.Contains(doc.Id)).ToListAsync(cancellationToken);
 
-        return courses ?? new List<Class>();
+        return courses ?? new List<ClassRoom>();
     }
 
-    public async Task<EnrolledClass?> GetEnrolledCourseAsync(string hashedUserId, string classTitle, CancellationToken cancellationToken)
+    public async Task<EnrolledClassRoom?> GetEnrolledCourseAsync(string hashedUserId, string classTitle, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
@@ -209,10 +209,10 @@ public class MemberRepository : IMemberRepository
         if (appUser is null)
             return null;
 
-        Class? targetClass = await _collectionClass.Find(doc => doc.ClassName.ToUpper() == classTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        ClassRoom? targetClass = await _collectionClass.Find(doc => doc.ClassRoomName.ToUpper() == classTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
-        EnrolledClass? enrolledClass = appUser.EnrolledClasses
-            .FirstOrDefault(ec => ec.ClassId == targetClass.Id);
+        EnrolledClassRoom? enrolledClass = appUser.EnrolledClasses
+            .FirstOrDefault(ec => ec.ClassRoomId == targetClass.Id);
         if (enrolledClass is null)
             return null;
 

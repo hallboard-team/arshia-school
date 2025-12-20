@@ -9,6 +9,6 @@ public record TargetMemberDto(
     GenderType Gender,
     int Age,
     DateOnly DateOfBirth,
-    List<EnrolledClass> EnrolledCourses,
+    List<EnrolledClassRoom> EnrolledCourses,
     MemberPhoto? MemberPhoto
 );

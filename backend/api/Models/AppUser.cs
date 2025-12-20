@@ -14,7 +14,7 @@ public class AppUser : MongoIdentityUser<ObjectId>
 
     [BsonSerializer(typeof(SafeGenderSerializer))]
     public GenderType Gender { get; init; } = GenderType.Unknown;
-    public List<EnrolledClass> EnrolledClasses { get; init; } = [];
+    public List<EnrolledClassRoom> EnrolledClasses { get; init; } = [];
     public List<string> AppRoles { get; init; } = [];
     public MemberPhoto? Photo { get; set; } = null;
 }
