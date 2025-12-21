@@ -352,14 +352,14 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
     }
 
     [HttpGet("get-target-member-course/{targetUserName}")]
-    public async Task<ActionResult<List<ShowClassDto>>> GetTargetMemberCourse(string targetUserName, CancellationToken cancellationToken)
+    public async Task<ActionResult<List<ShowClassRoomDto>>> GetTargetMemberCourse(string targetUserName, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(targetUserName))
         {
             return BadRequest("userName is required.");
         }
 
-        OperationResult<List<ShowClassDto>> opResult = await _managerRepository.GetTargetMemberClassesAsync(targetUserName, cancellationToken);
+        List<ShowClassRoomDto>? classRes = await _managerRepository.GetTargetMemberClassesAsync(targetUserName, cancellationToken);
 
         return opResult.IsSuccess
         ? opResult.Result
@@ -372,14 +372,14 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
     }
 
     [HttpGet("get-target-member-enrolled-course/{targetUserName}/{courseTitle}")]
-    public async Task<ActionResult<EnrolledClass>> GetTargetMemberEnrolledCourse(string targetUserName, string courseTitle, CancellationToken cancellationToken)
+    public async Task<ActionResult<EnrolledClassRoom>> GetTargetMemberEnrolledCourse(string targetUserName, string courseTitle, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(targetUserName))
         {
             return BadRequest("نام کاربری باید وارد بشود");
         }
 
-        OperationResult<EnrolledClass> opResult = await _managerRepository.GetTargetMemberEnrolledClassAsync(targetUserName, courseTitle, cancellationToken);
+        EnrolledClassRoom? enrolledCourse = await _managerRepository.GetTargetMemberEnrolledClassAsync(targetUserName, courseTitle, cancellationToken);
 
         return opResult.IsSuccess
                ? opResult.Result

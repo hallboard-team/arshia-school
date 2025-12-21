@@ -5,15 +5,16 @@ using ZstdSharp.Unsafe;
 
 namespace api.Repositories;
 
-public class ClassRepository : IClassRepository
+public class ClassRoomRepository : IClassRoomRepository
 {
+    #region dependency injection
     private readonly IMongoClient _client;
-    private readonly IMongoCollection<Class> _collectionClass;
+    private readonly IMongoCollection<ClassRoom> _collectionClassRoom;
     private readonly IMongoCollection<Course> _collectionCourse;
     private readonly IMongoCollection<Site> _collectionSite;
     private readonly IMongoCollection<AppUser> _collectionAppUser;
 
-    public ClassRepository(
+    public ClassRoomRepository(
         IMongoClient client,
         IMyMongoDbSettings dbSettings
     )
@@ -21,17 +22,18 @@ public class ClassRepository : IClassRepository
         _client = client;
         IMongoDatabase database = client.GetDatabase(dbSettings.DatabaseName);
 
-        _collectionClass = database.GetCollection<Class>(AppVariablesExtensions.CollectionClasses);
+        _collectionClassRoom = database.GetCollection<ClassRoom>(AppVariablesExtensions.CollectionClasses);
         _collectionCourse = database.GetCollection<Course>(AppVariablesExtensions.CollectionCourses);
         _collectionSite = database.GetCollection<Site>(AppVariablesExtensions.CollectionSites);
         _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.CollectionUsers);
     }
+    #endregion
 
-    public async Task<OperationResult<ShowClassDto>> CreateClassAsync(CreateClassDto request, CancellationToken cancellationToken)
+    public async Task<OperationResult<ShowClassRoomDto>> CreateClassRoomAsync(CreateClassRoomDto request, CancellationToken cancellationToken)
     {
-        Class? targetClass = await _collectionClass.Find(doc => doc.ClassName.ToUpper() == request.ClassName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        ClassRoom? targetClassRoom = await _collectionClassRoom.Find(doc => doc.ClassRoomName.ToUpper() == request.ClassRoomName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
-        if (targetClass is not null)
+        if (targetClassRoom is not null)
         {
             return new(
                 false,
@@ -69,40 +71,34 @@ public class ClassRepository : IClassRepository
         }
 
         int totalMinutes = (int)Math.Round(course.TotalMinutes * 60d);
-        int classMinutes = (int)Math.Round(request.ClassMinutes * 60d);
+        int classMinutes = (int)Math.Round(request.ClassRoomMinutes * 60d);
 
         int calcDays = (int)Math.Ceiling((double)totalMinutes / classMinutes);
 
-        Class model = Mappers.ConvertCreateClassDtoToClass(request, course.Id, site.Id, calcDays);
+        ClassRoom model = Mappers.ConvertCreateClassRoomDtoToClassRoom(request, course.Id, site.Id, calcDays);
 
-        await _collectionClass.InsertOneAsync(model, null, cancellationToken);
+        await _collectionClassRoom.InsertOneAsync(model, null, cancellationToken);
 
         ShowCourseDto courseDto = Mappers.ConvertCourseToShowCourseDto(course);
         ShowSiteDto siteDto = Mappers.ConvertSiteToShowSiteDto(site);
 
         return new(
             true,
-            Mappers.ConvertClassToShowClassDto(model, courseDto, siteDto, [], []),
+            Mappers.ConvertClassRoomToShowClassRoomDto(model, courseDto, siteDto, [], []),
             null
         );
     }
 
-    public async Task<OperationResult<PagedList<Class>>> GetAllClassesAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
+    public async Task<PagedList<ClassRoom>> GetAllClassRoomsAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
     {
-        IQueryable<Class> query = _collectionClass.AsQueryable();
+        IQueryable<ClassRoom> query = _collectionClassRoom.AsQueryable();
 
-        PagedList<Class> pagedClasses = await PagedList<Class>.CreatePagedListAsync(query, paginationParams.PageNumber, paginationParams.PageSize, cancellationToken);
-
-        return new(
-            true,
-            pagedClasses,
-            null
-        );
+        return await PagedList<ClassRoom>.CreatePagedListAsync(query, paginationParams.PageNumber, paginationParams.PageSize, cancellationToken);
     }
 
-    public async Task<OperationResult<ShowClassDto>> GetClassByNameAsync(string className, CancellationToken cancellationToken)
+    public async Task<OperationResult<ShowClassRoomDto>> GetClassRoomByNameAsync(string classRoomName, CancellationToken cancellationToken)
     {
-        Class model = await _collectionClass.Find(doc => doc.ClassName.ToUpper() == className.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        ClassRoom model = await _collectionClassRoom.Find(doc => doc.ClassRoomName.ToUpper() == classRoomName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
         if (model is null)
         {
@@ -126,7 +122,7 @@ public class ClassRepository : IClassRepository
 
         return new(
             true,
-            Mappers.ConvertClassToShowClassDto(model, courseDto, siteDto, userNamesOpResut.Result, namesOpResult.Result),
+            Mappers.ConvertClassRoomToShowClassRoomDto(model, courseDto, siteDto, userNames, names),
             null
         );
     }
@@ -175,11 +171,11 @@ public class ClassRepository : IClassRepository
         );
     }
 
-    public async Task<OperationResult<ShowClassDto>> UpdateClassAsync(string className, UpdateClassDto request, CancellationToken cancellationToken)
+    public async Task<OperationResult<ShowClassRoomDto>> UpdateClassRoomAsync(string classRoomName, UpdateClassRoomDto request, CancellationToken cancellationToken)
     {
-        Class? targetClass = await _collectionClass.Find(doc => doc.ClassName.ToUpper() == className.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        ClassRoom? targetClassRoom = await _collectionClassRoom.Find(doc => doc.ClassRoomName.ToUpper() == classRoomName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
-        if (targetClass is null)
+        if (targetClassRoom is null)
         {
             return new(
                 false,
@@ -190,18 +186,18 @@ public class ClassRepository : IClassRepository
             );
         }
 
-        Course? course = await _collectionCourse.Find(doc => doc.Id == targetClass.CourseId).FirstOrDefaultAsync(cancellationToken);
-        Site? site = await _collectionSite.Find(doc => doc.Id == targetClass.SiteId).FirstOrDefaultAsync(cancellationToken);
+        Course? course = await _collectionCourse.Find(doc => doc.Id == targetClassRoom.CourseId).FirstOrDefaultAsync(cancellationToken);
+        Site? site = await _collectionSite.Find(doc => doc.Id == targetClassRoom.SiteId).FirstOrDefaultAsync(cancellationToken);
 
         int totalMinutes = (int)Math.Round(course.TotalMinutes * 60d);
-        int classMinutes = (int)Math.Round(request.ClassMinutes * 60d);
+        int classMinutes = (int)Math.Round(request.ClassRoomMinutes * 60d);
 
         int calcDays = (int)Math.Ceiling((double)totalMinutes / classMinutes);
 
-        UpdateDefinition<Class> updateDef = Builders<Class>.Update
-            .Set(doc => doc.ClassName, request.ClassName.ToLower().Trim())
+        UpdateDefinition<ClassRoom> updateDef = Builders<ClassRoom>.Update
+            .Set(doc => doc.ClassRoomName, request.ClassRoomName.ToLower().Trim())
             .Set(doc => doc.Tuition, request.Tuition)
-            .Set(doc => doc.ClassMinutes, request.ClassMinutes)
+            .Set(doc => doc.ClassRoomMinutes, request.ClassRoomMinutes)
             .Set(doc => doc.Days, calcDays)
             .Set(doc => doc.StartDate, request.StartDate)
             .Set(doc => doc.EndedDate, request.EndedDate)
@@ -209,9 +205,9 @@ public class ClassRepository : IClassRepository
             .Set(doc => doc.IsEnded, request.IsEnded)
             .Set(doc => doc.IsActive, request.IsActive);
 
-        await _collectionClass.UpdateOneAsync(doc => doc.Id == targetClass.Id, updateDef, null, cancellationToken);
+        await _collectionClassRoom.UpdateOneAsync(doc => doc.Id == targetClassRoom.Id, updateDef, null, cancellationToken);
 
-        Class? model = await _collectionClass.Find(doc => doc.Id == targetClass.Id).FirstOrDefaultAsync(cancellationToken);
+        ClassRoom? model = await _collectionClassRoom.Find(doc => doc.Id == targetClassRoom.Id).FirstOrDefaultAsync(cancellationToken);
 
         OperationResult<IEnumerable<string>> userNamesOpResut = await GetProfessorUserNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
         OperationResult<IEnumerable<string>> namesOpResult = await GetProfessorNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
@@ -221,16 +217,16 @@ public class ClassRepository : IClassRepository
 
         return new(
             true,
-            Mappers.ConvertClassToShowClassDto(model, courseDto, siteDto, userNamesOpResut.Result, namesOpResult.Result),
+            Mappers.ConvertClassRoomToShowClassRoomDto(model, courseDto, siteDto, userNames, names),
             null
         );
     }
 
-    public async Task<OperationResult> AddProfessorToClassAsync(string targetClassTitle, string professorUserName, CancellationToken cancellationToken)
+    public async Task<OperationResult> AddProfessorToClassRoomAsync(string targetClassRoomTitle, string professorUserName, CancellationToken cancellationToken)
     {
-        Class targetClass = await _collectionClass.Find(doc => doc.ClassName.ToUpper() == targetClassTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        ClassRoom targetClassRoom = await _collectionClassRoom.Find(doc => doc.ClassRoomName.ToUpper() == targetClassRoomTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
-        if (targetClass is null)
+        if (targetClassRoom is null)
         {
             return new(
                 false,
@@ -257,10 +253,10 @@ public class ClassRepository : IClassRepository
             );
         }
 
-        UpdateDefinition<Class> updateCourse = Builders<Class>.Update
+        UpdateDefinition<ClassRoom> updateCourse = Builders<ClassRoom>.Update
             .AddToSet(doc => doc.ProfessorsIds, professorId.Value);
 
-        await _collectionClass.UpdateOneAsync(doc => doc.Id == targetClass.Id, updateCourse, null, cancellationToken);
+        await _collectionClassRoom.UpdateOneAsync(doc => doc.Id == targetClassRoom.Id, updateCourse, null, cancellationToken);
 
         return new(
             true,
@@ -268,11 +264,11 @@ public class ClassRepository : IClassRepository
         );
     }
 
-    public async Task<OperationResult> RemoveProfessorFromClassAsync(string targetClassTitle, string professorUserName, CancellationToken cancellationToken)
+    public async Task<OperationResult> RemoveProfessorFromClassRoomAsync(string targetClassRoomTitle, string professorUserName, CancellationToken cancellationToken)
     {
-        Class targetClass = await _collectionClass.Find(doc => doc.ClassName.ToUpper() == targetClassTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        ClassRoom targetClassRoom = await _collectionClassRoom.Find(doc => doc.ClassRoomName.ToUpper() == targetClassRoomTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
-        if (targetClass is null)
+        if (targetClassRoom is null)
         {
             return new(
                 false,
@@ -299,10 +295,10 @@ public class ClassRepository : IClassRepository
             );
         }
 
-        UpdateDefinition<Class> updateDef = Builders<Class>.Update
+        UpdateDefinition<ClassRoom> updateDef = Builders<ClassRoom>.Update
         .Pull(doc => doc.ProfessorsIds, professorId.Value);
 
-        await _collectionClass.UpdateOneAsync(doc => doc.Id == targetClass.Id, updateDef, null, cancellationToken);
+        await _collectionClassRoom.UpdateOneAsync(doc => doc.Id == targetClassRoom.Id, updateDef, null, cancellationToken);
 
         return new(
             true,
@@ -310,11 +306,11 @@ public class ClassRepository : IClassRepository
         );
     }
 
-    public async Task<OperationResult<ObjectId>> GetClassIdByName(string className, CancellationToken cancellationToken)
+    public async Task<ObjectId?> GetClassRoomIdByName(string classRoomName, CancellationToken cancellationToken)
     {
-        ObjectId? classId = await _collectionClass
-            .Find(doc => doc.ClassName.ToUpper() == className.ToUpper())
-            .Project(doc => doc.Id)
+        ObjectId? classId = await _collectionClassRoom.AsQueryable()
+            .Where(doc => doc.ClassRoomName.ToUpper() == classRoomName.ToUpper())
+            .Select(doc => doc.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (classId is null)
