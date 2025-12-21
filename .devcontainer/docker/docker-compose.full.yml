@@ -23,8 +23,8 @@ services:
       ConnectionStrings__Default: "mongodb://${DB_USER:-backend_mongo_user}:${DB_PASSWORD:-backend_mongo_password}@mongo:27017/${DB_NAME:-backend_mongo_db}?authSource=admin&retryWrites=true"
 
     ports:
-      - "${API_PORT:-5002}:5002"      # .NET API
-      - "${FRONTEND_PORT:-4202}:4202" # Angular dev server
+      - "${API_PORT:-5002}:5000"      # .NET API
+      - "${FRONTEND_PORT:-4202}:4200" # Angular dev server (force IPv4)
 
     depends_on:
       mongo:
