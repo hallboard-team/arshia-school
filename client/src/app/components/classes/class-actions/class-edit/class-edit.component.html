@@ -1,1 +1,156 @@
-<p>class-edit works!</p>
+<header>
+    <nav>
+        <app-navbar />
+    </nav>
+</header>
+
+<div class="div-edit-class">
+    <app-back-forward-button class="bf-btns"></app-back-forward-button>
+
+    <form class="update-class-form" [formGroup]="classFg" (ngSubmit)="classFg.valid && updateClass()">
+
+        <div class="div-title">
+            <h2 class="title">ویرایش کلاس</h2>
+        </div>
+
+        <div class="content">
+
+            <div class="form-row">
+                <div class="form-item">
+                    <mat-form-field appearance="outline">
+                        <mat-label>نام کلاس</mat-label>
+                        <input class="input" autoFocusDir type="text" formControlName="classRoomNameCtrl" matInput dir="auto"
+                            placeholder="نام کلاس را وارد کنید">
+                        @if (ClassRoomNameCtrl.hasError('required')) {
+                        <mat-error>لطفاً نام کلاس را وارد کنید</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+
+                <div class="form-item">
+                    <mat-form-field appearance="outline" class="tuition-field">
+                        <mat-label>شهریه (تومان)</mat-label>
+                        <input class="input" type="number" matInput formControlName="tuitionCtrl" inputmode="numeric"
+                            placeholder="0">
+                        <span matSuffix>تومان</span>
+                        @if (TuitionCtrl.hasError('required')) {
+                        <mat-error>لطفاً مبلغ شهریه را مشخص کنید</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-item">
+                    <mat-form-field appearance="outline">
+                        <mat-label>مدت هر جلسه (دقیقه)</mat-label>
+                        <input class="input" type="number" formControlName="classMinutesCtrl" matInput placeholder="مثلا: 90">
+                        @if (ClassMinutesCtrl.hasError('required')) {
+                        <mat-error>لطفا مدت زمان کلاس را مشخص کنید</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+                <div class="form-item empty-item"></div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-item">
+                    <app-datepicker [formControl]="StartDateCtrl" [label]="'تاریخ شروع'"></app-datepicker>
+                    @if (StartDateCtrl.hasError('required') && StartDateCtrl.touched) {
+                    <mat-error class="date-error">تاریخ شروع الزامی است</mat-error>
+                    }
+                </div>
+
+                <div class="form-item">
+                    <app-datepicker [formControl]="EndedDateCtrl" [label]="'تاریخ پایان'"></app-datepicker>
+                    @if (EndedDateCtrl.hasError('required') && EndedDateCtrl.touched) {
+                    <mat-error class="date-error">تاریخ پایان الزامی است</mat-error>
+                    }
+                </div>
+            </div>
+
+            <div class="radio-wrapper">
+                <div class="div-radio-section">
+                    <span class="radio-label">وضعیت برگزاری:</span>
+                    <mat-radio-group class="radio-group" formControlName="isStartedCtrl">
+                        <mat-radio-button [value]="false">شروع نشده</mat-radio-button>
+                        <mat-radio-button [value]="true">در حال برگزاری</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <div class="div-radio-section">
+                    <span class="radio-label">وضعیت کلاس:</span>
+                    <mat-radio-group class="radio-group" formControlName="isActiveCtrl">
+                        <mat-radio-button [value]="true">فعال</mat-radio-button>
+                        <mat-radio-button [value]="false">غیرفعال</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
+            
+            <div class="div-button-submit">
+                @if (!isEditMode) {
+                    <button type="button" class="neumorphic-btn cancel-btn" [routerLink]="['/dashboard/classes']">
+                        بازگشت
+                    </button>
+                    <button type="button" class="neumorphic-btn edit-btn" (click)="enableEditMode()">
+                         ایجاد تغییرات
+                    </button>
+                } @else {
+                    <button type="button" class="neumorphic-btn cancel-btn" (click)="cancelEditMode()">
+                        انصراف
+                    </button>
+                    <button class="neumorphic-btn submit-btn" type="submit" [disabled]="classFg.invalid">
+                        ثبت تغییرات
+                    </button>
+                }
+            </div>
+        </div>
+    </form>
+
+    <div class="div-get-all-teachers">
+        @if (teachers.length > 0) {
+        <div class="background-teacher-card">
+            <div class="div-title-teachers">
+                <span>مدیریت اساتید کلاس</span>
+            </div>
+
+            <div class="teachers-grid">
+                @for (teacher of teachers; track $index) {
+                <div class="teacher-card" [class.assigned]="isTeacherInClass(teacher)">
+                    @if (teacher.photo) {
+                    <img class="profile" [src]="photoUrl + teacher.photo.url_165" alt="">
+                    }
+                    @else {
+                    @if (teacher.gender == 'Male') {
+                    <img class="profile" src="assets/images/menProfilePhoto.png" alt=""> } @else {
+                    <img class="profile" src="assets/images/womenProfilePhoto.png" alt="">
+                    }
+                    }
+
+                    <div class="info">
+                        <span class="name">{{ teacher.name }} {{ teacher.lastName }}</span>
+                        <span class="username">({{ teacher.userName }})</span>
+                    </div>
+
+                    <div class="div-add-or-remove-teacher-btn">
+                        @if (!isTeacherInClass(teacher)) {
+                        <button class="button add-professor" (click)="addProfessor(teacher)" matTooltip="افزودن استاد">
+                            <mat-icon>add_circle</mat-icon>
+                        </button>
+                        } @else {
+                        <button class="button delete-professor" (click)="removeProfessor(teacher)" matTooltip="حذف استاد">
+                            <mat-icon>remove_circle</mat-icon>
+                        </button>
+                        }
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+        }@else {
+        <div class="no-teacher">
+            <span>هیچ مدرسی در سیستم یافت نشد</span>
+        </div>
+        }
+    </div>
+</div>
