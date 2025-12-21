@@ -38,7 +38,6 @@ public static class Mappers
              DateOfBirth = appUser.DateOfBirth
          };
 
-
     public static MemberDto ConvertAppUserToMemberDto(AppUser appUser, bool isAbsent, Dictionary<ObjectId, string> roleIdToName)
     {
         List<string> roles = [.. appUser.Roles.Select(rId => roleIdToName.ContainsKey(rId) ? roleIdToName[rId] : string.Empty).Where(r => !string.IsNullOrEmpty(r))];
@@ -93,11 +92,13 @@ public static class Mappers
             Age: CustomDateTimeExtensions.CalculateAge(appUser.DateOfBirth),
             Photo: appUser.Photo
         );
+
     public static UserWithRoleDto ConvertAppUserToUserWithRoleDto(AppUser appUser) =>
          new(
             UserName: appUser.NormalizedUserName!,
             Roles: appUser.AppRoles
         );
+
     public static Attendance ConvertAddStudentStatusDtoToAttendence(AddStudentStatusDto teacherInput, ObjectId studentId, ObjectId courseId, DateOnly currentDate) =>
          new(
             StudentId: studentId,
@@ -111,6 +112,7 @@ public static class Mappers
              Date = attendence.Date,
              CourseId = attendence.ClassId.ToString()
          };
+
     public static Course ConvertAddCourseDtoToCourse(CreateCourseDto managerInput) =>
          new()
          {
@@ -145,15 +147,15 @@ public static class Mappers
             Capacity: site.Capacity
         );
 
-    public static Class ConvertCreateClassDtoToClass(CreateClassDto request, ObjectId? courseId, ObjectId siteId, int daysCalc) =>
+    public static ClassRoom ConvertCreateClassRoomDtoToClassRoom(CreateClassRoomDto request, ObjectId? courseId, ObjectId siteId, int daysCalc) =>
          new()
          {
-             ClassName = request.ClassName.Trim().ToLower(),
+             ClassRoomName = request.ClassRoomName.Trim().ToLower(),
              CourseId = courseId,
              SiteId = siteId,
              ProfessorsIds = [],
              Tuition = request.Tuition,
-             ClassMinutes = (int)Math.Round(request.ClassMinutes * 60d),
+             ClassRoomMinutes = (int)Math.Round(request.ClassRoomMinutes * 60d),
              Days = daysCalc,
              StartDate = request.StartDate,
              EndedDate = request.EndedDate,
@@ -161,15 +163,15 @@ public static class Mappers
              IsActive = request.IsActive
          };
 
-    public static ShowClassDto ConvertClassToShowClassDto(Class model, ShowCourseDto course, ShowSiteDto site, List<string> userNames, List<string> names) =>
+    public static ShowClassRoomDto ConvertClassRoomToShowClassRoomDto(ClassRoom model, ShowCourseDto course, ShowSiteDto site, List<string> userNames, List<string> names) =>
          new(
-            ClassName: model.ClassName,
+            ClassRoomName: model.ClassRoomName,
             Course: course,
             Site: site,
             ProfessorUserNames: userNames,
             ProfessorNames: names,
             Tuition: model.Tuition,
-            ClassMinutes: model.ClassMinutes,
+            ClassRoomMinutes: model.ClassRoomMinutes,
             Days: model.Days,
             StartDate: model.StartDate,
             EndedDate: model.EndedDate,
@@ -178,14 +180,14 @@ public static class Mappers
             IsActive: model.IsActive
         );
 
-    public static EnrolledClass ConvertAddEnrolledCourseDtoToEnrolledCourse
-        (AddEnrolledCourseDto managerInput, Class model,
+    public static EnrolledClassRoom ConvertAddEnrolledCourseDtoToEnrolledCourse
+        (AddEnrolledCourseDto managerInput, ClassRoom model,
             int paymentPerMonthCalc, int lastPaymentPerMonthCalc,
             int tuitionReminderCalc
         ) =>
          new(
             // Id: Guid.NewGuid(),
-            ClassId: model.Id,
+            ClassRoomId: model.Id,
             NumberOfPayments: managerInput.NumberOfPayments,
             PaidNumber: 0,
             NumberOfPaymentsLeft: managerInput.NumberOfPayments,

@@ -83,25 +83,25 @@ public class MemberController
     }
 
     [HttpGet("get-course")]
-    public async Task<ActionResult<List<Class>>> GetCourse(CancellationToken cancellationToken)
+    public async Task<ActionResult<List<ClassRoom>>> GetCourse(CancellationToken cancellationToken)
     {
         string? hashedUserId = User.GetHashedUserId();
         if (string.IsNullOrEmpty(hashedUserId))
             return BadRequest("No user was found with this userId.");
 
         var courses = await _memberRepository.GetClassesAsync(hashedUserId, cancellationToken);
-        return courses.Count == 0 ? Ok(new List<Class>()) : Ok(courses);
+        return courses.Count == 0 ? Ok(new List<ClassRoom>()) : Ok(courses);
     }
 
     [HttpGet("get-enrolled-course/{courseTitle}")]
-    public async Task<ActionResult<EnrolledClass>> GetEnrolledCourse(string courseTitle, CancellationToken cancellationToken)
+    public async Task<ActionResult<EnrolledClassRoom>> GetEnrolledCourse(string courseTitle, CancellationToken cancellationToken)
     {
         string? hashedUserId = User.GetHashedUserId();
 
         if (string.IsNullOrEmpty(hashedUserId))
             return BadRequest("No user was found with this userId.");
 
-        EnrolledClass? enrolledCourse = await _memberRepository.GetEnrolledCourseAsync(hashedUserId, courseTitle, cancellationToken);
+        EnrolledClassRoom? enrolledCourse = await _memberRepository.GetEnrolledCourseAsync(hashedUserId, courseTitle, cancellationToken);
 
         return enrolledCourse is null ? NotFound("دوره مورد نظر یافت نشد") : Ok(enrolledCourse);
     }

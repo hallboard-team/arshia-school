@@ -5,7 +5,7 @@ public class TeacherRepository : ITeacherRepository
     #region Vars and Constructor
     private readonly IMongoCollection<AppUser> _collectionAppUser;
     private readonly IMongoCollection<Course> _collectionCourse;
-    private readonly IMongoCollection<Class> _collectionClass;
+    private readonly IMongoCollection<ClassRoom> _collectionClass;
     private readonly UserManager<AppUser> _userManager;
     private readonly ITokenService _tokenService;
     private readonly IMongoCollection<Attendance> _collectionAttendence;
@@ -16,7 +16,7 @@ public class TeacherRepository : ITeacherRepository
         _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.CollectionUsers);
         _collectionAttendence = database.GetCollection<Attendance>(AppVariablesExtensions.CollectionAttendences);
         _collectionCourse = database.GetCollection<Course>(AppVariablesExtensions.CollectionCourses);
-        _collectionClass = database.GetCollection<Class>(AppVariablesExtensions.CollectionClasses);
+        _collectionClass = database.GetCollection<ClassRoom>(AppVariablesExtensions.CollectionClasses);
 
         _userManager = userManager;
         _tokenService = tokenService;
@@ -33,14 +33,14 @@ public class TeacherRepository : ITeacherRepository
         return ValidationsExtensions.ValidateObjectId(studentId);
     }
 
-    public async Task<List<Class>> GetClassesAsync(string hashedUserId, CancellationToken cancellationToken)
+    public async Task<List<ClassRoom>> GetClassesAsync(string hashedUserId, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
         if (userId is null)
             return [];
 
-        List<Class>? classes = await _collectionClass.Find<Class>(doc =>
+        List<ClassRoom>? classes = await _collectionClass.Find<ClassRoom>(doc =>
             doc.ProfessorsIds.Contains(userId.Value)).ToListAsync(cancellationToken);
 
         return classes ?? [];
@@ -125,12 +125,12 @@ public class TeacherRepository : ITeacherRepository
         }
 
         ObjectId? classId = await _collectionClass.AsQueryable()
-            .Where(doc => doc.ClassName.ToUpper() == targetTitle.ToUpper())
+            .Where(doc => doc.ClassRoomName.ToUpper() == targetTitle.ToUpper())
             .Select(doc => doc.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
         IQueryable<AppUser> query = _collectionAppUser.AsQueryable()
-            .Where(user => user.EnrolledClasses.Any(course => course.ClassId == classId && user.Id != userId));
+            .Where(user => user.EnrolledClasses.Any(course => course.ClassRoomId == classId && user.Id != userId));
 
         return await PagedList<AppUser>.CreatePagedListAsync(query, paginationParams.PageNumber, paginationParams.PageSize, cancellationToken);
     }

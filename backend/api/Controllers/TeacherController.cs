@@ -3,7 +3,7 @@ namespace api.Controllers;
 [Authorize(Policy = "RequiredTeacherRole")]
 public class TeacherController(ITeacherRepository _teacherRepository,
  ITokenService _tokenService, IManagerRepository _managerRepository,
- IClassRepository _classRepository
+ IClassRoomRepository _classRepository
 ) : BaseApiController
 {
     // [HttpGet("get-course")]
@@ -29,7 +29,7 @@ public class TeacherController(ITeacherRepository _teacherRepository,
     // }
 
     [HttpGet("get-course")]
-    public async Task<ActionResult<List<Class>>> GetCourse(CancellationToken cancellationToken)
+    public async Task<ActionResult<List<ClassRoom>>> GetCourse(CancellationToken cancellationToken)
     {
         if (!HttpContext.Request.Headers.TryGetValue("Authorization", out var authHeader))
             return Unauthorized("Token is expired or invalid. Login again.");
@@ -148,7 +148,7 @@ public class TeacherController(ITeacherRepository _teacherRepository,
 
         var studentIds = pagedAppUsers.Select(u => u.Id).ToList();
 
-        ObjectId? classId = await _classRepository.GetClassIdByName(targetTitle, cancellationToken);
+        ObjectId? classId = await _classRepository.GetClassRoomIdByName(targetTitle, cancellationToken);
 
         if (classId is null)
             return BadRequest("Class not found");
