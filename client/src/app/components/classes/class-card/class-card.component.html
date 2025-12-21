@@ -1,1 +1,37 @@
-<p>class-card works!</p>
+@if (classIn) {
+    <div class="card-items" 
+         [routerLink]="['/dashboard/update-class', classIn.classRoomName]" 
+         routerLinkActive="active-link"
+         #rla="routerLinkActive">
+        
+        <span class="class-title">{{ classIn.classRoomName }}</span>
+        
+        <span class="text">📘 دوره: {{ classIn.course.title }}</span>
+
+        <span class="text">🏢 نام سایت: {{ classIn.site.siteName }}</span>
+        
+        @if(classIn.professorNames && classIn.professorNames.length > 0) {
+            <span class="text">👨‍🏫 اساتید: {{ classIn.professorNames.join('، ') }}</span>
+        }
+
+        <div class="info-row">
+            <span class="text">💰 شهریه: {{ classIn.tuition | number }} تومان</span>
+            <span class="text">⏳ مدت جلسه: {{ classIn.classRoomMinutes }} دقیقه</span>
+        </div>
+
+        <div class="date-row">
+            <span class="text">📅 شروع: {{ classIn.startDate }}</span>
+            <span class="text">📅 پایان: {{ classIn.endedDate }}</span>
+        </div>
+
+        @if (classIn.isStarted) {
+            <span class="text-isStarted-true">در حال برگزاری ✅</span>
+        } @else {
+            <span class="text-isStarted-false">شروع نشده ⏳</span>
+        }
+
+        @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
+            <button class="btn-edit-class" mat-stroked-button>ویرایش کلاس</button>
+        }
+    </div>
+}
