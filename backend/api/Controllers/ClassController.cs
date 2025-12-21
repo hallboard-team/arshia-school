@@ -26,31 +26,31 @@ public class ClassController(IClassRepository _classRepository, ICourseRepositor
     [HttpGet("get-all-classes")]
     public async Task<ActionResult<IEnumerable<ShowClassDto>>> GetAll([FromQuery] PaginationParams paginationParams, CancellationToken cancellationToken)
     {
-        PagedList<Class> pagedClasses = await _classRepository.GetAllClassesAsync(paginationParams, cancellationToken);
+        OperationResult<PagedList<Class>> opResult = await _classRepository.GetAllClassesAsync(paginationParams, cancellationToken);
 
-        if (pagedClasses.Count == 0)
+        if (opResult.Result.Count == 0)
             return NoContent();
 
         PaginationHeader paginationHeader = new(
-            CurrentPage: pagedClasses.CurrentPage,
-            ItemsPerPage: pagedClasses.PageSize,
-            TotalItems: pagedClasses.TotalItemsCount,
-            TotalPages: pagedClasses.TotalPages
+            CurrentPage: opResult.Result.CurrentPage,
+            ItemsPerPage: opResult.Result.PageSize,
+            TotalItems: opResult.Result.TotalItemsCount,
+            TotalPages: opResult.Result.TotalPages
         );
 
         Response.AddPaginationHeader(paginationHeader);
 
         List<ShowClassDto> classDtos = [];
 
-        foreach (Class model in pagedClasses)
+        foreach (Class model in opResult.Result)
         {
             OperationResult<ShowCourseDto> courseDto = await _courseRepository.GetCourseByIdAsync(model.CourseId!.Value, cancellationToken);
             OperationResult<ShowSiteDto> siteDto = await _siteRepository.GetSiteByIdAsync(model.SiteId!.Value, cancellationToken);
 
-            List<string> userNames = await _classRepository.GetProfessorUserNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
-            List<string> names = await _classRepository.GetProfessorNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
+            OperationResult<IEnumerable<string>> userNamesOpResult = await _classRepository.GetProfessorUserNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
+            OperationResult<IEnumerable<string>> namesOpResult = await _classRepository.GetProfessorNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
 
-            classDtos.Add(Mappers.ConvertClassToShowClassDto(model, courseDto.Result, siteDto.Result, userNames, names));
+            classDtos.Add(Mappers.ConvertClassToShowClassDto(model, courseDto.Result, siteDto.Result, userNamesOpResult.Result, namesOpResult.Result));
         }
 
         return classDtos;
