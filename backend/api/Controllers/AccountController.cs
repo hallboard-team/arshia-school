@@ -10,13 +10,16 @@ public class AccountController(IAccountRepository _accountRepository, ITokenServ
     [HttpPost("login")]
     public async Task<ActionResult<LoggedInDto>> Login(LoginDto userInput, CancellationToken cancellationToken)
     {
-        LoggedInDto? loggedInDto = await _accountRepository.LoginAsync(userInput, cancellationToken);
+        OperationResult<LoggedInDto>? opResult = await _accountRepository.LoginAsync(userInput, cancellationToken);
 
-        return !string.IsNullOrEmpty(loggedInDto.Token)
-            ? Ok(loggedInDto)
-            : loggedInDto.IsWrongCreds //inja shart BadRequest ro minevisim
-            ? Unauthorized("Wrong email or password")
-            : BadRequest("Registration has failed try again.");
+        return opResult.IsSuccess
+            ? opResult.Result
+            : opResult.Error?.Code switch
+            {
+                ErrorCode.IsWrongCreds => BadRequest(opResult.Error.Message),
+                ErrorCode.IsTokenGenerationFailed => throw new Exception("Internal error in token issuance"),
+                _ => BadRequest("Operation failed! Try again or contact support.")
+            };
     }
 
     [HttpGet]
@@ -37,10 +40,18 @@ public class AccountController(IAccountRepository _accountRepository, ITokenServ
         string? hashedUserId = User.GetHashedUserId();
         if (string.IsNullOrEmpty(hashedUserId))
             return BadRequest("No user was found with this user Id.");
-        // get loggedInDto
-        LoggedInDto? loggedInDto = await _accountRepository.ReloadLoggedInUserAsync(hashedUserId, token, cancellationToken);
 
-        return loggedInDto is null ? Unauthorized("User is logged out or unauthorized. Login again.") : loggedInDto;
+        // get loggedInDto
+        OperationResult<LoggedInDto> opResult = await _accountRepository.ReloadLoggedInUserAsync(hashedUserId, token, cancellationToken);
+
+        return opResult.IsSuccess
+        ? opResult.Result
+        : opResult.Error?.Code switch
+        {
+            ErrorCode.IsInvalidUserReference => Unauthorized(opResult.Error.Message),
+            ErrorCode.IsUserNotFound => Unauthorized(opResult.Error.Message),
+            _ => BadRequest("Opersstion failed! Try again or contact support.")  
+        };
     }
 
     [HttpPut("update-password")]
