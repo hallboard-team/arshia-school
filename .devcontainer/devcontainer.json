@@ -1,0 +1,35 @@
+{
+  "name": "dev-${localWorkspaceFolderBasename}-full",
+  "dockerComposeFile": "./docker/docker-compose.full.yml",
+  "service": "dev-full",
+  "workspaceFolder": "/workspaces/app",
+  "shutdownAction": "stopCompose",
+  "updateRemoteUserUID": false,
+  "remoteEnv": {
+    "VSCODE_SERVER_DIR": "/vscode/vscode-server"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csdevkit",
+        "ms-dotnettools.csharp",
+        "nurlybekovnt.csharpextensions",
+        "adrianwilczynski.user-secrets",
+        "patcx.vscode-nuget-gallery",
+        
+        "formulahendry.auto-close-tag",
+        "formulahendry.auto-rename-tag",
+        "Angular.ng-template",
+        "johnpapa.Angular2",
+        "solnurkarim.html-to-css-autocompletion",
+        
+        "openai.chatgpt",
+        "maptz.regionfolder",
+        "github.vscode-pull-request-github",
+        "PKief.material-icon-theme",
+        "johnpapa.vscode-peacock",
+        "Gruntfuggly.todo-tree"
+      ]
+    }
+  }
+}

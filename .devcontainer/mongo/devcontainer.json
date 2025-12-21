@@ -1,0 +1,12 @@
+{
+  "name": "mongo-tools-${localWorkspaceFolderBasename}",
+  "dockerComposeFile": "../docker/docker-compose.full.yml",
+  "service": "mongo-tools",
+  "runServices": ["mongo", "mongo-tools"],
+  "workspaceFolder": "/workspaces/app",
+  "shutdownAction": "stopCompose",
+  "updateRemoteUserUID": false,
+  "remoteEnv": {
+    "VSCODE_SERVER_DIR": "/home/vscode/.vscode-server-shared"
+  }
+}
