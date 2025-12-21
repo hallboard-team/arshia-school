@@ -161,7 +161,7 @@ public class TeacherRepository : ITeacherRepository
             return new(
                 false,
                 Error: new(
-                    ErrorCode.IsInvalidUserReference, 
+                    ErrorCode.IsInvalidUserReference,
                     "No id founded for this user"
                 )
             );
@@ -184,7 +184,7 @@ public class TeacherRepository : ITeacherRepository
         );
     }
 
-    public async Task<Dictionary<ObjectId, bool>> CheckIsAbsentAsync(List<ObjectId> studentIds, ObjectId courseId, CancellationToken cancellationToken)
+    public async Task<OperationResult<Dictionary<ObjectId, bool>>> CheckIsAbsentAsync(List<ObjectId> studentIds, ObjectId courseId, CancellationToken cancellationToken)
     {
         DateOnly currentDate = DateOnly.FromDateTime(DateTime.UtcNow);
 
@@ -192,9 +192,13 @@ public class TeacherRepository : ITeacherRepository
             .Find(a => studentIds.Contains(a.StudentId) && a.ClassId == courseId && a.Date == currentDate)
             .ToListAsync(cancellationToken);
 
-        return studentIds.ToDictionary(
+        return new(
+            true,
+        studentIds.ToDictionary(
             studentId => studentId,
             studentId => attendances.Any(a => a.StudentId == studentId)
+        ),
+        null
         );
     }
 }
