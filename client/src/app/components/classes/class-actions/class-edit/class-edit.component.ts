@@ -51,7 +51,6 @@ export class ClassEditComponent implements OnInit {
   
   currentClassRoomName: string = '';
   
-  // متغیر وضعیت ویرایش
   isEditMode: boolean = false;
 
   classFg: FormGroup = this._fb.group({
@@ -103,7 +102,6 @@ export class ClassEditComponent implements OnInit {
   }
 
   initFormValues(data: ShowClass): void {
-    // پر کردن فرم با مقادیر دریافتی از سرور
     this.ClassRoomNameCtrl.setValue(data.classRoomName);
     this.TuitionCtrl.setValue(data.tuition);
     this.ClassMinutesCtrl.setValue(data.classRoomMinutes);
@@ -117,18 +115,15 @@ export class ClassEditComponent implements OnInit {
         this.EndedDateCtrl.setValue(moment(data.endedDate));
     }
 
-    // مهم: فرم را غیرفعال می‌کنیم تا فقط قابل خواندن باشد
     this.classFg.disable();
     this.isEditMode = false;
   }
 
-  // متد برای فعال کردن ویرایش
   enableEditMode(): void {
     this.isEditMode = true;
-    this.classFg.enable(); // حالا کاربر می‌تواند تایپ کند
+    this.classFg.enable(); 
   }
 
-  // متد انصراف: فرم قفل می‌شود و مقادیر به حالت اول برمی‌گردند
   cancelEditMode(): void {
     this.isEditMode = false;
     this.classFg.disable();
@@ -168,7 +163,6 @@ export class ClassEditComponent implements OnInit {
           this.classItem = res;
           this.currentClassRoomName = res.classRoomName; 
           
-          // بعد از موفقیت، فرم دوباره قفل می‌شود
           this.initFormValues(res);
           this.openSnack('کلاس با موفقیت ویرایش شد.', 'success');
         },
