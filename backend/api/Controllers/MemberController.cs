@@ -43,7 +43,7 @@ public class MemberController
             return opResult.Error?.Code switch
             {
                 ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
-                ErrorCode.IsClassNotFound => BadRequest(opResult.Error.Message),
+                ErrorCode.IsClasssNotFound => BadRequest(opResult.Error.Message),
                 _ => BadRequest("Operation failed. Try again or contact support.")
             };
         }
@@ -62,7 +62,7 @@ public class MemberController
 
         List<ShowStudentStatusDto> showStudentStatusDtos = [];
 
-        foreach (Attendance attendance in opResult.Result)
+        foreach (Attendance attendence in opResult.Result)
         {
             showStudentStatusDtos.Add(Mappers.ConvertAttendanceToShowStudentStatusDto(attendance));
         }
@@ -123,7 +123,7 @@ public class MemberController
         {
             ErrorCode.IsInvalidUserReference => BadRequest(opResult.Error.Message),
             ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
-            ErrorCode.IsClassNotFound => BadRequest(opResult.Error.Message),
+            ErrorCode.IsClasssNotFound => BadRequest(opResult.Error.Message),
             _ => BadRequest("Operation failed. Try again or contact support.")
         };
     }
