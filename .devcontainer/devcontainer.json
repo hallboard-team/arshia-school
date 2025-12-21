@@ -3,8 +3,7 @@
   "dockerComposeFile": "./docker/docker-compose.full.yml",
   "service": "dev-full",
   "runServices": [
-    "dev-full",
-    "mongo"
+    "dev-full"
   ],
   "workspaceFolder": "/workspaces/app",
   "shutdownAction": "stopCompose",
