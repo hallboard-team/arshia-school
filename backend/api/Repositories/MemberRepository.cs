@@ -24,15 +24,19 @@ public class MemberRepository : IMemberRepository
     }
     #endregion Constructor
 
-    public async Task<PagedList<Attendance>> GetAllAttendenceAsync(AttendenceParams attendenceParams, ObjectId? userId, string targetClassTitle, CancellationToken cancellationToken)
+    public async Task<OperationResult<PagedList<Attendance>>> GetAllAttendenceAsync(AttendenceParams attendenceParams, ObjectId? userId, string targetClassTitle, CancellationToken cancellationToken)
     {
         AppUser? appUser = await _collectionAppUser.Find<AppUser>(
             doc => doc.Id == userId).FirstOrDefaultAsync(cancellationToken);
         if (appUser is null)
         {
-            var emptyQuery = _collectionAttendence.AsQueryable().Where(_ => false);
-            return await PagedList<Attendance>.CreatePagedListAsync(
-                emptyQuery, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsUserNotFound,
+                    "User not found"
+                )
+            );
         }
 
         ObjectId? targetClassId = await _collectionClass.AsQueryable()
@@ -42,15 +46,25 @@ public class MemberRepository : IMemberRepository
 
         if (targetClassId == default)
         {
-            var emptyQuery = _collectionAttendence.AsQueryable().Where(_ => false);
-            return await PagedList<Attendance>.CreatePagedListAsync(
-                emptyQuery, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsClasssNotFound,
+                    "Class not found"
+                )
+            );
         }
 
         IQueryable<Attendance>? query = _collectionAttendence.AsQueryable<Attendance>()
             .Where(doc => doc.StudentId == appUser.Id && doc.ClassId == targetClassId);
 
-        return await PagedList<Attendance>.CreatePagedListAsync(query, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
+        PagedList<Attendance> attendances = await PagedList<Attendance>.CreatePagedListAsync(query, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
+
+        return new(
+            true,
+            attendances,
+            null
+        );
     }
 
     public async Task<OperationResult<TargetMemberDto>> UpdateMemberAsync(MemberUpdateDto memberUpdateDto, ObjectId userId, CancellationToken cancellationToken)
@@ -145,77 +159,120 @@ public class MemberRepository : IMemberRepository
         );
     }
 
-    public async Task<ProfileDto?> GetProfileAsync(string hashedUserId, CancellationToken cancellationToken)
+    public async Task<OperationResult<ProfileDto>> GetProfileAsync(string hashedUserId, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
-        if (userId is null) return null;
-
-        string? loggedInUserName = await _collectionAppUser.AsQueryable()
-            .Where(doc => doc.Id == userId)
-            .Select(doc => doc.NormalizedUserName)
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (loggedInUserName is null)
-            return null;
-
-        AppUser appUser = await _collectionAppUser.Find<AppUser>(appUser => appUser.NormalizedUserName == loggedInUserName).
+        AppUser appUser = await _collectionAppUser.Find<AppUser>(appUser => appUser.Id == userId).
             FirstOrDefaultAsync(cancellationToken);
 
-        return appUser is null
-            ? null
-            : Mappers.ConvertAppUserToProfileDto(appUser);
+        if (appUser is null)
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsUserNotFound,
+                    "User not found"
+                )
+            );
+        }
+
+        return new(
+            true,
+            Mappers.ConvertAppUserToProfileDto(appUser),
+            null
+        );
     }
 
-    public async Task<List<Class>> GetClassesAsync(string hashedUserId, CancellationToken cancellationToken)
+    public async Task<OperationResult<List<Class>>> GetClassesAsync(string hashedUserId, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
-        if (userId is null) return new List<Class>();
+        if (userId is null)
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsUserNotFound,
+                    "No user found with this Id"
+                )
+            );
+        }
 
-        string? loggedInUserName = await _collectionAppUser.AsQueryable()
-            .Where(doc => doc.Id == userId)
-            .Select(doc => doc.NormalizedUserName)
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (loggedInUserName is null)
-            return new List<Class>();
-
-        List<ObjectId>? enrolledCourseIds = await _collectionAppUser.AsQueryable<AppUser>()
-            .Where(appUser => appUser.NormalizedUserName == loggedInUserName.ToUpper())
+        List<ObjectId>? enrolledClassIds = await _collectionAppUser.AsQueryable<AppUser>()
+            .Where(appUser => appUser.Id == userId)
             .SelectMany(appUser => appUser.EnrolledClasses)
             .Select(doc => doc.ClassId)
             .ToListAsync(cancellationToken);
 
-        if (enrolledCourseIds is null || enrolledCourseIds.Count == 0)
-            return [];
+        if (enrolledClassIds is null || enrolledClassIds.Count == 0)
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsClasssNotFound,
+                    "No classes found for this user"
+                )
+            );
 
-        List<Class>? courses = await _collectionClass.Find<Class>(doc =>
-            enrolledCourseIds.Contains(doc.Id)).ToListAsync(cancellationToken);
+        List<Class>? classes = await _collectionClass.Find<Class>(doc =>
+            enrolledClassIds.Contains(doc.Id)).ToListAsync(cancellationToken);
 
-        return courses ?? new List<Class>();
+        return new(
+            true,
+            classes,
+            null
+        );
     }
 
-    public async Task<EnrolledClass?> GetEnrolledCourseAsync(string hashedUserId, string classTitle, CancellationToken cancellationToken)
+    public async Task<OperationResult<EnrolledClass>> GetEnrolledCourseAsync(string hashedUserId, string classTitle, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
-        if (userId is null) return null;
+        if (userId is null)
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsInvalidUserReference,
+                    "No id found for this user"
+                )
+            );
+        }
 
         AppUser? appUser = await _collectionAppUser.Find<AppUser>(
             doc => doc.Id == userId
         ).FirstOrDefaultAsync(cancellationToken);
 
         if (appUser is null)
-            return null;
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsUserNotFound,
+                    "User not found"
+                )
+            );
+        }
 
         Class? targetClass = await _collectionClass.Find(doc => doc.ClassName.ToUpper() == classTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
         EnrolledClass? enrolledClass = appUser.EnrolledClasses
             .FirstOrDefault(ec => ec.ClassId == targetClass.Id);
         if (enrolledClass is null)
-            return null;
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsClasssNotFound,
+                    "No class found for this user"
+                )
+            );
+        }
 
-        return enrolledClass;
+        return new(
+            true,
+            enrolledClass,
+            null
+        );
     }
 }
