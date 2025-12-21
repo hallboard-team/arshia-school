@@ -12,7 +12,7 @@ import { PaginatedResult } from '../models/helpers/paginatedResult';
 })
 export class SiteService {
   private _http = inject(HttpClient);
-  private readonly _baseApiUrl = environment.apiUrl + 'site/';
+  private readonly _baseApiUrl = environment.apiUrl + 'Site/';
   private paginationHandler = new PaginationHandler();
 
   getAll(siteParams: SiteParams): Observable<PaginatedResult<ShowSite[]>> {

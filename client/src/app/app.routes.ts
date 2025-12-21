@@ -37,6 +37,8 @@ import { ClassListComponent } from './components/classes/class-list/class-list.c
 import { ClassCardComponent } from './components/classes/class-card/class-card.component';
 import { SiteCreateComponent } from './components/sites/site-actions/site-create/site-create.component';
 import { SiteEditComponent } from './components/sites/site-actions/site-edit/site-edit.component';
+import { ClassCreateComponent } from './components/classes/class-actions/class-create/class-create.component';
+import { ClassEditComponent } from './components/classes/class-actions/class-edit/class-edit.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -88,6 +90,9 @@ export const routes: Routes = [
                     { path: 'add-site', component: SiteCreateComponent, canActivate: [managerGuard] },
                     { path: 'update-course/:courseTitle', component: CourseEditComponent, canActivate: [managerGuard] },
                     { path: 'update-site/:siteTitle', component: SiteEditComponent, canActivate: [managerGuard] },
+                    { path: 'add-class', component: ClassCreateComponent, canActivate: [managerGuard] },
+                    { path: 'update-course/:courseTitle', component: CourseEditComponent, canActivate: [managerGuard] },
+                    { path: 'update-class/:classTitle', component: ClassEditComponent, canActivate: [managerGuard] },
                     { path: 'target-member-enrolled-course/:memberUserName/:courseTitle', component: TargetMemberEnrolledCourseComponent, canActivate: [managerGuard] },
                     { path: 'target-payment/:targetPaymentId', component: UploadPhotoComponent, canActivate: [managerGuard] },
                 ],
