@@ -83,11 +83,11 @@ public class TeacherRepository : ITeacherRepository
             .Select(doc => doc.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
-        Attendance existingAttendance = await _collectionAttendance
+        Attendance existingAttendence = await _collectionAttendence
             .Find(doc => doc.StudentId == targetAppUser.Id && doc.Date == currentDate && doc.ClassId == targetCourseId)
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (existingAttendance != null)
+        if (existingAttendence != null)
         {
             return new(
                 false,
@@ -98,13 +98,13 @@ public class TeacherRepository : ITeacherRepository
             );
         }
 
-        Attendance? attendance = Mappers.ConvertAddStudentStatusDtoToAttendance(teacherInput, targetAppUser.Id, targetCourseId, currentDate);
+        Attendance? attendence = Mappers.ConvertAddStudentStatusDtoToAttendence(teacherInput, targetAppUser.Id, targetCourseId, currentDate);
 
-        await _collectionAttendance.InsertOneAsync(attendance, null, cancellationToken);
+        await _collectionAttendence.InsertOneAsync(attendence, null, cancellationToken);
 
         return new(
             true,
-            Mappers.ConvertAttendanceToShowStudentStatusDto(attendance),
+            Mappers.ConvertAttendenceToShowStudentStatusDto(attendence),
             null
         );
     }
@@ -161,7 +161,7 @@ public class TeacherRepository : ITeacherRepository
             return new(
                 false,
                 Error: new(
-                    ErrorCode.IsInvalidUserReference,
+                    ErrorCode.IsInvalidUserReference, 
                     "No id founded for this user"
                 )
             );
