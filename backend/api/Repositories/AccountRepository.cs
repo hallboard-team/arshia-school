@@ -19,50 +19,89 @@ public class AccountRepository : IAccountRepository
   }
   #endregion Vars and Constructor
 
-  public async Task<LoggedInDto> LoginAsync(LoginDto userInput, CancellationToken cancellationToken)
+  public async Task<OperationResult<LoggedInDto>> LoginAsync(LoginDto userInput, CancellationToken cancellationToken)
   {
-    LoggedInDto loggedInDto = new();
-
     AppUser? appUser;
 
     appUser = await _userManager.FindByEmailAsync(userInput.Email);
 
     if (appUser is null)
     {
-      loggedInDto.IsWrongCreds = true;
-      return loggedInDto;
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsWrongCreds,
+          "Wrong Credentials"
+        )
+      );
     }
 
     bool isPassCorrect = await _userManager.CheckPasswordAsync(appUser, userInput.Password);
 
     if (!isPassCorrect)
     {
-      loggedInDto.IsWrongCreds = true;
-      return loggedInDto;
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsWrongCreds,
+          "Wrong Credentials"
+        )
+      );
     }
 
     string? token = await _tokenService.CreateToken(appUser, cancellationToken);
 
     if (!string.IsNullOrEmpty(token))
     {
-      return Mappers.ConvertAppUserToLoggedInDto(appUser, token);
+      return new(
+        true,
+        Mappers.ConvertAppUserToLoggedInDto(appUser, token),
+        null
+      );
     }
 
-    return loggedInDto;
+    return new(
+      false,
+      Error: new(
+        ErrorCode.IsTokenGenerationFailed,
+        "System encountered an issue generating your access token"
+      )
+    );
   }
 
-  public async Task<LoggedInDto?> ReloadLoggedInUserAsync(string hashedUserId, string token, CancellationToken cancellationToken)
+  public async Task<OperationResult<LoggedInDto>> ReloadLoggedInUserAsync(string hashedUserId, string token, CancellationToken cancellationToken)
   {
     ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
     if (userId is null)
-      return null;
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsInvalidUserReference,
+          "The user identifier is corrupted or invalid."
+        )
+      );
+    }
 
     AppUser appUser = await _collectionAppUser.Find<AppUser>(appUser => appUser.Id == userId).FirstOrDefaultAsync(cancellationToken);
 
-    return appUser is null
-        ? null
-        : Mappers.ConvertAppUserToLoggedInDto(appUser, token);
+    if (appUser is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsUserNotFound,
+          "User not found"
+        )
+      );
+    }
+
+    return new(
+      true,
+      Mappers.ConvertAppUserToLoggedInDto(appUser, token),
+      null
+    );
   }
 
   public async Task<OperationResult> UpdatePasswordAsync(PasswordDto request, ObjectId userId, CancellationToken cancellationToken)
