@@ -71,7 +71,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
             ErrorCode.IsDuplicatePhone => BadRequest(opResult.Error.Message),
             ErrorCode.IsIdentityFailed => BadRequest(opResult.Error.Message),
             ErrorCode.IsRoleIdentityFailed => BadRequest(opResult.Error.Message),
-            _ => BadRequest("Operation failed! Try again or contact support.")
+            _ => BadRequest("Opertion failed! Try again or contact support.")
         };
     }
 
@@ -154,7 +154,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         {
             ErrorCode.IsNumberOfPaymentsUnderZero => BadRequest(opResult.Error.Message),
             ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
-            ErrorCode.IsClassNotFound => BadRequest(opResult.Error.Message),
+            ErrorCode.IsClasssNotFound => BadRequest(opResult.Error.Message),
             ErrorCode.IsAlreadyEnrolled => BadRequest(opResult.Error.Message),
             ErrorCode.IsAnyUpdateMake => BadRequest(opResult.Error.Message),
             _ => BadRequest("Operation failed! Try again or contact support.")
@@ -199,7 +199,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         : opResult.Error?.Code switch
         {
             ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
-            ErrorCode.IsClassNotFound => BadRequest(opResult.Error.Message),
+            ErrorCode.IsClasssNotFound => BadRequest(opResult.Error.Message),
             ErrorCode.IsNotEnrolled => BadRequest(opResult.Error.Message),
             ErrorCode.IsAnyUpdateMake => BadRequest(opResult.Error.Message),
             _ => BadRequest("Operation failed! Try again or contact support")
@@ -319,7 +319,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         : opResult.Error?.Code switch
         {
             ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
-            ErrorCode.IsClassNotFound => BadRequest(opResult.Error.Message),
+            ErrorCode.IsClasssNotFound => BadRequest(opResult.Error.Message),
             ErrorCode.IsPaymentNotFound => BadRequest(opResult.Error.Message),
             ErrorCode.IsAnyUpdateMake => BadRequest(opResult.Error.Message),
             _ => BadRequest("Something unexpected went wrong. Try again or contact support")
@@ -344,7 +344,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         : opResult.Error?.Code switch
         {
             ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
-            ErrorCode.IsClassNotFound => BadRequest(opResult.Error.Message),
+            ErrorCode.IsClasssNotFound => BadRequest(opResult.Error.Message),
             ErrorCode.IsPaymentNotFound => BadRequest(opResult.Error.Message),
             ErrorCode.IsAnyUpdateMake => BadRequest(opResult.Error.Message),
             _ => BadRequest("Something unexpected went wrong. Try again or contact support")
@@ -365,7 +365,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         ? opResult.Result
         : opResult.Error?.Code switch
         {
-            ErrorCode.IsClassNotFound => BadRequest(opResult.Error.Message),
+            ErrorCode.IsClasssNotFound => BadRequest(opResult.Error.Message),
             _ => BadRequest("Something unexpected went wrong. Try again or contact support")
 
         };
@@ -386,7 +386,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
                : opResult.Error?.Code switch
                {
                    ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
-                   ErrorCode.IsClassNotFound => BadRequest(opResult.Error.Message),
+                   ErrorCode.IsClasssNotFound => BadRequest(opResult.Error.Message),
                    ErrorCode.IsNotEnrolled => BadRequest(opResult.Error.Message),
                    _ => BadRequest("Something unexpected went wrong. Try again or contact support")
                };
@@ -404,7 +404,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         : opResult.Error?.Code switch
         {
             ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
-            ErrorCode.IsClassNotFound => BadRequest(opResult.Error.Message),
+            ErrorCode.IsClasssNotFound => BadRequest(opResult.Error.Message),
             ErrorCode.IsPaymentNotFound => BadRequest(opResult.Error.Message),
             _ => BadRequest("Something unexpected went wrong. Try again or contact support")
         };
@@ -443,7 +443,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
             return opResult.Error?.Code switch
             {
                 ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
-                ErrorCode.IsClassNotFound => BadRequest(opResult.Error.Message),
+                ErrorCode.IsClasssNotFound => BadRequest(opResult.Error.Message),
                 _ => BadRequest("Something unexpected went wrong. Try again or contact support")
             };
         }
@@ -462,7 +462,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
 
         List<ShowStudentStatusDto> showStudentStatusDtos = [];
 
-        foreach (Attendance attendance in opResult.Result)
+        foreach (Attendance attendence in opResult.Result)
         {
             showStudentStatusDtos.Add(Mappers.ConvertAttendanceToShowStudentStatusDto(attendance));
         }
