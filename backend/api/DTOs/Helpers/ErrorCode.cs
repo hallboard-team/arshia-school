@@ -15,4 +15,6 @@ public enum ErrorCode
     IsDuplicateSite,
     IsDuplicateCourse,
     IsDuplicateClass,
+    IsTokenGenerationFailed,
+    IsInvalidUserReference
 }
