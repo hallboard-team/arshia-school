@@ -15,11 +15,15 @@ public class MemberController
         if (string.IsNullOrEmpty(HashedUserId))
             return BadRequest("No user was found with this userId.");
 
-        ProfileDto? profileDto = await _memberRepository.GetProfileAsync(HashedUserId, cancellationToken);
+        OperationResult<ProfileDto> opResult = await _memberRepository.GetProfileAsync(HashedUserId, cancellationToken);
 
-        return profileDto is null
-            ? Unauthorized("User is logged out or unauthorized. Login again.")
-            : profileDto;
+        return opResult.IsSuccess
+        ? opResult.Result
+        : opResult.Error?.Code switch
+        {
+            ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
+            _ => BadRequest("Operation failed. Try again or contact support.")
+        };
     }
 
     [HttpGet("get-attendences/{targetCourseTitle}")]
@@ -32,23 +36,33 @@ public class MemberController
 
         attendenceParams.UserId = userId;
 
-        PagedList<Attendance> pagedAttendences = await _memberRepository.GetAllAttendenceAsync(attendenceParams, userId, targetCourseTitle, cancellationToken);
+        OperationResult<PagedList<Attendance>> opResult = await _memberRepository.GetAllAttendenceAsync(attendenceParams, userId, targetCourseTitle, cancellationToken);
 
-        if (pagedAttendences.Count == 0)
+        if (!opResult.IsSuccess)
+        {
+            return opResult.Error?.Code switch
+            {
+                ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
+                ErrorCode.IsClasssNotFound => BadRequest(opResult.Error.Message),
+                _ => BadRequest("Operation failed. Try again or contact support.")
+            };
+        }
+
+        if (opResult.Result.Count == 0)
             return NoContent();
 
         PaginationHeader paginationHeader = new(
-            CurrentPage: pagedAttendences.CurrentPage,
-            ItemsPerPage: pagedAttendences.PageSize,
-            TotalItems: pagedAttendences.TotalItemsCount,
-            TotalPages: pagedAttendences.TotalPages
+            CurrentPage: opResult.Result.CurrentPage,
+            ItemsPerPage: opResult.Result.PageSize,
+            TotalItems: opResult.Result.TotalItemsCount,
+            TotalPages: opResult.Result.TotalPages
         );
 
         Response.AddPaginationHeader(paginationHeader);
 
         List<ShowStudentStatusDto> showStudentStatusDtos = [];
 
-        foreach (Attendance attendence in pagedAttendences)
+        foreach (Attendance attendence in opResult.Result)
         {
             showStudentStatusDtos.Add(Mappers.ConvertAttendenceToShowStudentStatusDto(attendence));
         }
@@ -82,15 +96,23 @@ public class MemberController
             };
     }
 
-    [HttpGet("get-course")]
-    public async Task<ActionResult<List<Class>>> GetCourse(CancellationToken cancellationToken)
+    [HttpGet("get-classes")]
+    public async Task<ActionResult<List<Class>>> GetAllClasses(CancellationToken cancellationToken)
     {
         string? hashedUserId = User.GetHashedUserId();
         if (string.IsNullOrEmpty(hashedUserId))
             return BadRequest("No user was found with this userId.");
 
-        var courses = await _memberRepository.GetClassesAsync(hashedUserId, cancellationToken);
-        return courses.Count == 0 ? Ok(new List<Class>()) : Ok(courses);
+        OperationResult<List<Class>> opResult = await _memberRepository.GetClassesAsync(hashedUserId, cancellationToken);
+
+        return opResult.IsSuccess
+        ? opResult.Result
+        : opResult.Error?.Code switch
+        {
+            ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
+            ErrorCode.IsClasssNotFound => BadRequest(opResult.Error.Message),
+            _ => BadRequest("Operation failed. Try again or contact support.")
+        };
     }
 
     [HttpGet("get-enrolled-course/{courseTitle}")]
@@ -101,8 +123,16 @@ public class MemberController
         if (string.IsNullOrEmpty(hashedUserId))
             return BadRequest("No user was found with this userId.");
 
-        EnrolledClass? enrolledCourse = await _memberRepository.GetEnrolledCourseAsync(hashedUserId, courseTitle, cancellationToken);
+        OperationResult<EnrolledClass> opResult = await _memberRepository.GetEnrolledCourseAsync(hashedUserId, courseTitle, cancellationToken);
 
-        return enrolledCourse is null ? NotFound("دوره مورد نظر یافت نشد") : Ok(enrolledCourse);
+        return opResult.IsSuccess
+        ? opResult.Result
+        : opResult.Error?.Code switch
+        {
+            ErrorCode.IsInvalidUserReference => BadRequest(opResult.Error.Message),
+            ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
+            ErrorCode.IsClasssNotFound => BadRequest(opResult.Error.Message),
+            _ => BadRequest("Operation failed. Try again or contact support.")
+        };
     }
 }
