@@ -1,1 +1,9 @@
-{}
+{
+  "remoteUser": "root",
+  "editor.formatOnSave": true,
+  "files.exclude": {
+    "**/bin": true,
+    "**/obj": true
+  },
+  "remote.extensionKind": { "openai.chatgpt": ["workspace"] }
+}
