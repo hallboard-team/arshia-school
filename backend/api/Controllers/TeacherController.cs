@@ -124,47 +124,47 @@ public class TeacherController(ITeacherRepository _teacherRepository,
 
     //     return memberDtos;
     // }
-    [AllowAnonymous]
-    [HttpGet("get-student/{targetTitle}")]
-    public async Task<ActionResult<IEnumerable<MemberDto>>> GetAll([FromQuery] PaginationParams paginationParams, string targetTitle, CancellationToken cancellationToken)
-    {
-        string? userIdHashed = User.GetHashedUserId();
-        if (string.IsNullOrEmpty(userIdHashed))
-            return Unauthorized("You are unauthorized. Login again.");
+    // [AllowAnonymous]
+    // [HttpGet("get-student/{targetTitle}")]
+    // public async Task<ActionResult<IEnumerable<MemberDto>>> GetAll([FromQuery] PaginationParams paginationParams, string targetTitle, CancellationToken cancellationToken)
+    // {
+    //     string? userIdHashed = User.GetHashedUserId();
+    //     if (string.IsNullOrEmpty(userIdHashed))
+    //         return Unauthorized("You are unauthorized. Login again.");
 
-        ObjectId? userId = await _tokenService.GetActualUserIdAsync(userIdHashed, cancellationToken);
-        if (userId is null)
-            return Unauthorized("You are unauthorized. Login again.");
+    //     ObjectId? userId = await _tokenService.GetActualUserIdAsync(userIdHashed, cancellationToken);
+    //     if (userId is null)
+    //         return Unauthorized("You are unauthorized. Login again.");
 
-        var pagedAppUsers = await _teacherRepository.GetAllAsync(paginationParams, targetTitle, userIdHashed, cancellationToken);
-        if (pagedAppUsers.Count == 0) return NoContent();
+    //     var pagedAppUsers = await _teacherRepository.GetAllAsync(paginationParams, targetTitle, userIdHashed, cancellationToken);
+    //     if (pagedAppUsers.Count == 0) return NoContent();
 
-        Response.AddPaginationHeader(new PaginationHeader(
-            CurrentPage: pagedAppUsers.CurrentPage,
-            ItemsPerPage: pagedAppUsers.PageSize,
-            TotalItems: pagedAppUsers.TotalItemsCount,
-            TotalPages: pagedAppUsers.TotalPages
-        ));
+    //     Response.AddPaginationHeader(new PaginationHeader(
+    //         CurrentPage: pagedAppUsers.CurrentPage,
+    //         ItemsPerPage: pagedAppUsers.PageSize,
+    //         TotalItems: pagedAppUsers.TotalItemsCount,
+    //         TotalPages: pagedAppUsers.TotalPages
+    //     ));
 
-        var studentIds = pagedAppUsers.Select(u => u.Id).ToList();
+    //     var studentIds = pagedAppUsers.Select(u => u.Id).ToList();
 
-        ObjectId? classId = await _classRepository.GetClassIdByName(targetTitle, cancellationToken);
+    //     ObjectId? classId = await _classRepository.GetClassIdByName(targetTitle, cancellationToken);
 
-        if (classId is null)
-            return BadRequest("Class not found");
+    //     if (classId is null)
+    //         return BadRequest("Class not found");
 
-        var absences = await _teacherRepository.CheckIsAbsentAsync(studentIds, classId.Value, cancellationToken);
+    //     var absences = await _teacherRepository.CheckIsAbsentAsync(studentIds, classId.Value, cancellationToken);
 
-        List<AppRole> appRoles = await _managerRepository.GetAllRoleAsync(cancellationToken);
-        Dictionary<ObjectId, string?> roleIdsToName = appRoles.ToDictionary(r => r.Id, r => r.Name);
+    //     List<AppRole> appRoles = await _managerRepository.GetAllRoleAsync(cancellationToken);
+    //     Dictionary<ObjectId, string?> roleIdsToName = appRoles.ToDictionary(r => r.Id, r => r.Name);
 
-        var memberDtos = new List<MemberDto>();
-        foreach (var appUser in pagedAppUsers)
-        {
-            bool isAbsent = absences.TryGetValue(appUser.Id, out var val) && val;
-            memberDtos.Add(Mappers.ConvertAppUserToMemberDto(appUser, isAbsent, roleIdsToName!));
-        }
+    //     var memberDtos = new List<MemberDto>();
+    //     foreach (var appUser in pagedAppUsers)
+    //     {
+    //         bool isAbsent = absences.TryGetValue(appUser.Id, out var val) && val;
+    //         memberDtos.Add(Mappers.ConvertAppUserToMemberDto(appUser, isAbsent, roleIdsToName!));
+    //     }
 
-        return Ok(memberDtos);
-    }
+    //     return Ok(memberDtos);
+    // }
 }
