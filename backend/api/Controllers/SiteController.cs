@@ -24,23 +24,23 @@ public class SiteController(ISiteRepository _siteRepository) : BaseApiController
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ShowSiteDto>>> GetAll([FromQuery] PaginationParams paginationParams, CancellationToken cancellationToken)
     {
-        PagedList<Site> pagedSites = await _siteRepository.GetAllSitesAsync(paginationParams, cancellationToken);
+        OperationResult<PagedList<Site>> opResult = await _siteRepository.GetAllSitesAsync(paginationParams, cancellationToken);
 
-        if (!pagedSites.Any())
+        if (!opResult.Result.Any())
             return NoContent();
 
         PaginationHeader paginationHeader = new(
-            CurrentPage: pagedSites.CurrentPage,
-            ItemsPerPage: pagedSites.PageSize,
-            TotalItems: pagedSites.TotalItemsCount,
-            TotalPages: pagedSites.TotalPages
+            CurrentPage: opResult.Result.CurrentPage,
+            ItemsPerPage: opResult.Result.PageSize,
+            TotalItems: opResult.Result.TotalItemsCount,
+            TotalPages: opResult.Result.TotalPages
         );
 
         Response.AddPaginationHeader(paginationHeader);
 
         List<ShowSiteDto> sites = [];
 
-        foreach(Site site in pagedSites)
+        foreach (Site site in opResult.Result)
         {
             sites.Add(Mappers.ConvertSiteToShowSiteDto(site));
         }
@@ -86,7 +86,7 @@ public class SiteController(ISiteRepository _siteRepository) : BaseApiController
         : opResult.Error?.Code switch
         {
             ErrorCode.IsNotFound => BadRequest(opResult.Error.Message),
-            _ => BadRequest("Operation failed! Try again or contact support")  
+            _ => BadRequest("Operation failed! Try again or contact support")
         };
     }
 }
