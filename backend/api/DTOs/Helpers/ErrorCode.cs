@@ -11,10 +11,12 @@ public enum ErrorCode
     IsInvalidType,
     IsPasswordInvalid,
     IsIdentityFailed,
+    IsRoleIdentityFailed,
     ArePasswordsNotMatch,
     IsDuplicateSite,
     IsDuplicateCourse,
     IsDuplicateClass,
     IsTokenGenerationFailed,
-    IsInvalidUserReference
+    IsInvalidUserReference,
+    IsDuplicateUser
 }
