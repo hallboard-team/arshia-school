@@ -8,7 +8,7 @@ public enum ErrorCode
     IsCourseNotFound,
     IsUserNotFound,
     IsSiteNotFound,
-    IsClassNotFound,
+    IsClasssNotFound,
     IsOperationFailed,
     IsInvalidType,
     IsPasswordInvalid,
@@ -21,5 +21,14 @@ public enum ErrorCode
     IsDuplicateClass,
     IsTokenGenerationFailed,
     IsInvalidUserReference,
-    IsDuplicateUser
+    IsDuplicateUser,
+    IsDuplicateEmail,
+    IsDuplicatePhone,
+    IsNumberOfPaymentsUnderZero,
+    IsAlreadyEnrolled,
+    IsNotEnrolled,
+    IsAnyUpdateMake,
+    IsAnyDeleteMake,
+    IsGenderValid,
+    IsPaymentNotFound
 }
