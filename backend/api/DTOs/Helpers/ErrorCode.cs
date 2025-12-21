@@ -20,15 +20,5 @@ public enum ErrorCode
     IsDeleteNotAllowed,
     IsDuplicateClass,
     IsTokenGenerationFailed,
-    IsInvalidUserReference,
-    IsDuplicateUser,
-    IsDuplicateEmail,
-    IsDuplicatePhone,
-    IsNumberOfPaymentsUnderZero,
-    IsAlreadyEnrolled,
-    IsNotEnrolled,
-    IsAnyUpdateMake,
-    IsAnyDeleteMake,
-    IsGenderValid,
-    IsPaymentNotFound
+    IsInvalidUserReference
 }
