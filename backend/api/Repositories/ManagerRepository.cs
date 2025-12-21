@@ -382,6 +382,7 @@ public class ManagerRepository : IManagerRepository
     if (userId == default) return null;
 
     FilterDefinition<AppUser>? filter = Builders<AppUser>.Filter.Eq(u => u.Id, userId);
+
     return await _collectionAppUser.DeleteOneAsync(filter, cancellationToken);
   }
 

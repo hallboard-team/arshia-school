@@ -80,12 +80,24 @@ public class CourseRepository : ICourseRepository
             doc => doc.Id == targetCourse.Id, updatedDef, null, cancellationToken
         );
 
-        Course? updatedCourse = await _collectionCourse.Find(doc => doc.Title.ToUpper() == updateCourseDto.Title.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        if (updateResult.ModifiedCount == 1)
+        {
+            Course? updatedCourse = await _collectionCourse.Find(doc => doc.Title.ToUpper() == updateCourseDto.Title.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+
+            return new(
+                true,
+                Mappers.ConvertCourseToShowCourseDto(updatedCourse),
+                null
+            );
+        }
 
         return new(
-            true,
-            Mappers.ConvertCourseToShowCourseDto(updatedCourse),
-            null
+            false,
+            null,
+            new(
+                ErrorCode.IsOperationFailed,
+                "Course update failed! Try again"
+            )
         );
     }
 
@@ -128,11 +140,19 @@ public class CourseRepository : ICourseRepository
             );
         }
 
-        await _collectionCourse.DeleteOneAsync(doc => doc.Id == course.Id, cancellationToken);
+        DeleteResult deleteResult = await _collectionCourse.DeleteOneAsync(doc => doc.Id == course.Id, cancellationToken);
 
-        return new(
+        return deleteResult.DeletedCount == 1
+        ? new(
             true,
             null
+        )
+        : new(
+            false,
+            new(
+                ErrorCode.IsOperationFailed,
+                "Course deletion failed! Try again"
+            )
         );
     }
 

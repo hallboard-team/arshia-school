@@ -7,6 +7,7 @@ namespace api.Repositories;
 
 public class ClassRepository : IClassRepository
 {
+    #region dependensy injection
     private readonly IMongoClient _client;
     private readonly IMongoCollection<Class> _collectionClass;
     private readonly IMongoCollection<Course> _collectionCourse;
@@ -26,6 +27,7 @@ public class ClassRepository : IClassRepository
         _collectionSite = database.GetCollection<Site>(AppVariablesExtensions.CollectionSites);
         _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.CollectionUsers);
     }
+    #endregion
 
     public async Task<OperationResult<ShowClassDto>> CreateClassAsync(CreateClassDto request, CancellationToken cancellationToken)
     {
@@ -187,20 +189,32 @@ public class ClassRepository : IClassRepository
             .Set(doc => doc.IsEnded, request.IsEnded)
             .Set(doc => doc.IsActive, request.IsActive);
 
-        await _collectionClass.UpdateOneAsync(doc => doc.Id == targetClass.Id, updateDef, null, cancellationToken);
+        UpdateResult updateResult = await _collectionClass.UpdateOneAsync(doc => doc.Id == targetClass.Id, updateDef, null, cancellationToken);
 
-        Class? model = await _collectionClass.Find(doc => doc.Id == targetClass.Id).FirstOrDefaultAsync(cancellationToken);
+        if (updateResult.ModifiedCount == 1)
+        {
+            Class? model = await _collectionClass.Find(doc => doc.Id == targetClass.Id).FirstOrDefaultAsync(cancellationToken);
 
-        List<string> userNames = await GetProfessorUserNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
-        List<string> names = await GetProfessorNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
+            List<string> userNames = await GetProfessorUserNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
+            List<string> names = await GetProfessorNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
 
-        ShowCourseDto courseDto = Mappers.ConvertCourseToShowCourseDto(course);
-        ShowSiteDto siteDto = Mappers.ConvertSiteToShowSiteDto(site);
+            ShowCourseDto courseDto = Mappers.ConvertCourseToShowCourseDto(course);
+            ShowSiteDto siteDto = Mappers.ConvertSiteToShowSiteDto(site);
+
+            return new(
+                true,
+                Mappers.ConvertClassToShowClassDto(model, courseDto, siteDto, userNames, names),
+                null
+            );
+        }
 
         return new(
-            true,
-            Mappers.ConvertClassToShowClassDto(model, courseDto, siteDto, userNames, names),
-            null
+            false,
+            null,
+            new(
+                ErrorCode.IsOperationFailed,
+                "Class update failed! Try again"
+            )
         );
     }
 
@@ -238,12 +252,20 @@ public class ClassRepository : IClassRepository
         UpdateDefinition<Class> updateCourse = Builders<Class>.Update
             .AddToSet(doc => doc.ProfessorsIds, professorId.Value);
 
-        await _collectionClass.UpdateOneAsync(doc => doc.Id == targetClass.Id, updateCourse, null, cancellationToken);
+        UpdateResult updateResult = await _collectionClass.UpdateOneAsync(doc => doc.Id == targetClass.Id, updateCourse, null, cancellationToken);
 
-        return new(
-            true,
-            null
-        );
+        return updateResult.ModifiedCount == 1
+                ? new(
+                    true,
+                    null
+                )
+                : new(
+                    false,
+                    new(
+                        ErrorCode.IsOperationFailed,
+                        "Add professor failed (or professor already exists in this class)"
+                    )
+                );
     }
 
     public async Task<OperationResult> RemoveProfessorFromClassAsync(string targetClassTitle, string professorUserName, CancellationToken cancellationToken)
@@ -280,11 +302,19 @@ public class ClassRepository : IClassRepository
         UpdateDefinition<Class> updateDef = Builders<Class>.Update
         .Pull(doc => doc.ProfessorsIds, professorId.Value);
 
-        await _collectionClass.UpdateOneAsync(doc => doc.Id == targetClass.Id, updateDef, null, cancellationToken);
+        UpdateResult updateResult = await _collectionClass.UpdateOneAsync(doc => doc.Id == targetClass.Id, updateDef, null, cancellationToken);
 
-        return new(
+        return updateResult.ModifiedCount == 1
+        ? new(
             true,
             null
+        )
+        : new(
+            false,
+            new(
+                ErrorCode.IsOperationFailed,
+                "Remove professor failed! Try again"
+            )
         );
     }
 

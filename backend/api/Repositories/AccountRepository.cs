@@ -102,6 +102,7 @@ public class AccountRepository : IAccountRepository
     }
 
     IdentityResult? result = await _userManager.ChangePasswordAsync(appUser, request.CurrentPassword, request.NewPassword);
+
     if (!result.Succeeded)
     {
       string Message = string.Join(" | ", result.Errors.Select(e => e.Description));
