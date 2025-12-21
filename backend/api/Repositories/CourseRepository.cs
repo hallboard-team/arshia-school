@@ -46,11 +46,18 @@ public class CourseRepository : ICourseRepository
         );
     }
 
-    public async Task<PagedList<Course>> GetAllAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
+    public async Task<OperationResult<PagedList<Course>>> GetAllAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
     {
         IQueryable<Course> query = _collectionCourse.AsQueryable();
-        return await PagedList<Course>.CreatePagedListAsync(query, paginationParams.PageNumber,
+
+        PagedList<Course> pagedCourses = await PagedList<Course>.CreatePagedListAsync(query, paginationParams.PageNumber,
             paginationParams.PageSize, cancellationToken);
+
+        return new(
+            true,
+            pagedCourses,
+            null
+        );
     }
 
     public async Task<OperationResult<ShowCourseDto>> UpdateCourseAsync(
