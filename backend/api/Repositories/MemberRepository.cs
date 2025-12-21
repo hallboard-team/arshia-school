@@ -24,7 +24,7 @@ public class MemberRepository : IMemberRepository
     }
     #endregion Constructor
 
-    public async Task<OperationResult<PagedList<Attendance>>> GetAllAttendenceAsync(AttendenceParams attendanceParams, ObjectId? userId, string targetClassTitle, CancellationToken cancellationToken)
+    public async Task<OperationResult<PagedList<Attendance>>> GetAllAttendenceAsync(AttendenceParams attendenceParams, ObjectId? userId, string targetClassTitle, CancellationToken cancellationToken)
     {
         AppUser? appUser = await _collectionAppUser.Find<AppUser>(
             doc => doc.Id == userId).FirstOrDefaultAsync(cancellationToken);
@@ -49,7 +49,7 @@ public class MemberRepository : IMemberRepository
             return new(
                 false,
                 Error: new(
-                    ErrorCode.IsClassNotFound,
+                    ErrorCode.IsClasssNotFound,
                     "Class not found"
                 )
             );
@@ -58,7 +58,7 @@ public class MemberRepository : IMemberRepository
         IQueryable<Attendance>? query = _collectionAttendence.AsQueryable<Attendance>()
             .Where(doc => doc.StudentId == appUser.Id && doc.ClassId == targetClassId);
 
-        PagedList<Attendance> attendances = await PagedList<Attendance>.CreatePagedListAsync(query, attendanceParams.PageNumber, attendanceParams.PageSize, cancellationToken);
+        PagedList<Attendance> attendances = await PagedList<Attendance>.CreatePagedListAsync(query, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
 
         return new(
             true,
@@ -208,7 +208,7 @@ public class MemberRepository : IMemberRepository
             return new(
                 false,
                 Error: new(
-                    ErrorCode.IsClassNotFound,
+                    ErrorCode.IsClasssNotFound,
                     "No classes found for this user"
                 )
             );
@@ -258,7 +258,7 @@ public class MemberRepository : IMemberRepository
             return new(
                 false,
                 Error: new(
-                    ErrorCode.IsClassNotFound,
+                    ErrorCode.IsClasssNotFound,
                     "No class found for this user"
                 )
             );
