@@ -2,16 +2,16 @@ namespace api.DTOs;
 
 public static class Mappers
 {
-    public static AppUser ConvertRegisterDtoToAppUser(RegisterDto adminInput) =>
+    public static AppUser ConvertRegisterDtoToAppUser(RegisterDto userInput) =>
         new()
         {
-            Email = adminInput.Email, // required by AspNet Identity
+            Email = userInput.Email, // required by AspNet Identity
             UserName = Utils.GenerateComplexUsername(),
-            DateOfBirth = adminInput.DateOfBirth,
-            Name = adminInput.Name.Trim(),
-            LastName = adminInput.LastName.Trim(),
-            PhoneNum = adminInput.PhoneNum,
-            Gender = adminInput.Gender,
+            DateOfBirth = userInput.DateOfBirth,
+            Name = userInput.Name.Trim(),
+            LastName = userInput.LastName.Trim(),
+            PhoneNum = userInput.PhoneNum,
+            Gender = userInput.Gender,
         };
 
     public static LoggedInDto ConvertAppUserToLoggedInDto(AppUser appUser, string tokenValue) =>
@@ -116,7 +116,7 @@ public static class Mappers
          {
              Title = managerInput.Title.Trim().ToLower(),
              Description = managerInput.Description.Trim().ToLower(),
-             TotalMinutes = managerInput.TotalMinutes,
+             TotalMinutes = managerInput.TotalHours,
              IsActive = managerInput.IsActive
          };
 
@@ -161,13 +161,13 @@ public static class Mappers
              IsActive = request.IsActive
          };
 
-    public static ShowClassDto ConvertClassToShowClassDto(Class model, ShowCourseDto course, ShowSiteDto site, List<string> userNames, List<string> names) =>
+    public static ShowClassDto ConvertClassToShowClassDto(Class model, ShowCourseDto course, ShowSiteDto site, IEnumerable<string> userNames, IEnumerable<string> names) =>
          new(
             ClassName: model.ClassName,
             Course: course,
             Site: site,
-            ProfessorUserNames: userNames,
-            ProfessorNames: names,
+            ProfessorUserNames: [.. userNames],
+            ProfessorNames: [.. names],
             Tuition: model.Tuition,
             ClassMinutes: model.ClassMinutes,
             Days: model.Days,
