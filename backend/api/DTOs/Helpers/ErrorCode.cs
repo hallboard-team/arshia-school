@@ -20,5 +20,6 @@ public enum ErrorCode
     IsDeleteNotAllowed,
     IsDuplicateClass,
     IsTokenGenerationFailed,
-    IsInvalidUserReference
+    IsInvalidUserReference,
+    IsDuplicateUser
 }
