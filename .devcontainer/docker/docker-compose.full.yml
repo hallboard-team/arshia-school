@@ -5,7 +5,7 @@ x-mongo-image: &mongo_image "${MONGO_IMAGE:-ghcr.io/hallboard-team/tools:mongo-$
 services:
   dev-full:
     image: ghcr.io/hallboard-team/fullstack-dev:dotnet${DOTNET_VERSION:-10.0}-node${NODE_VERSION:-24}-ng${ANGULAR_VERSION:-21}
-    container_name: ${COMPOSE_PROJECT_NAME:-template}_dev-full
+    container_name: ${CONTAINER_NAME:-template}_dev-full
 
     user: "0:0"
     working_dir: /workspaces/app
@@ -19,12 +19,14 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       VSCODE_SERVER_DIR: /home/vscode/.vscode-server-shared
       CODEX_HOME: /root/.codex
+      FRONTEND_HOST: ${FRONTEND_HOST:-0.0.0.0}
+      FRONTEND_PORT: ${FRONTEND_PORT_CONTAINER:-4200}
 
       ConnectionStrings__Default: "mongodb://${DB_USER:-backend_mongo_user}:${DB_PASSWORD:-backend_mongo_password}@mongo:27017/${DB_NAME:-backend_mongo_db}?authSource=admin&retryWrites=true"
 
     ports:
       - "${API_PORT:-5002}:5000"      # .NET API
-      - "${FRONTEND_PORT:-4202}:4200" # Angular dev server
+      - "${FRONTEND_PORT_HOST:-4300}:${FRONTEND_PORT_CONTAINER:-4200}" # Angular dev server
 
     depends_on:
       mongo:
@@ -40,7 +42,7 @@ services:
 
   mongo:
     image: *mongo_image
-    container_name: ${COMPOSE_PROJECT_NAME:-template}_db_MONGO-v${MONGO_VERSION:-7.0}
+    container_name: ${CONTAINER_NAME:-template}_db_MONGO-v${MONGO_VERSION:-7.0}
     working_dir: /workspaces/app
     user: "0:0"
     command:
@@ -53,30 +55,6 @@ services:
           fi
           chmod 600 /data/db/mongo-keyfile
           chown 999:999 /data/db/mongo-keyfile
-          if [ ! -f /data/db/.rs-initialized ]; then
-            mongod --replSet rs0 --bind_ip_all &
-            init_pid=$$!
-
-            # Wait for mongod to accept connections.
-            until mongosh --quiet --eval "db.runCommand({ ping: 1 }).ok" | grep 1 >/dev/null; do
-              sleep 1
-            done
-
-            # Initialize replica set if needed.
-            if ! mongosh --quiet --eval "rs.status().ok" | grep 1 >/dev/null; then
-              mongosh --quiet --eval "rs.initiate({_id:'rs0',members:[{_id:0,host:'127.0.0.1:27017'}]})"
-            fi
-
-            # Create admin user if missing (for healthcheck auth).
-            if ! mongosh --quiet --eval "db.getSiblingDB('admin').getUser('${DB_USER:-backend_mongo_user}') ? 1 : 0" | grep 1 >/dev/null; then
-              mongosh --quiet --eval "db.getSiblingDB('admin').createUser({user:'${DB_USER:-backend_mongo_user}',pwd:'${DB_PASSWORD:-backend_mongo_password}',roles:[{role:'root',db:'admin'}]})"
-            fi
-
-            touch /data/db/.rs-initialized
-            mongosh --quiet --eval "db.getSiblingDB('admin').shutdownServer({force:true})" || true
-            wait "$$init_pid" || true
-          fi
-
           exec mongod --replSet rs0 --bind_ip_all --keyFile /data/db/mongo-keyfile
 
     environment:
@@ -105,7 +83,7 @@ services:
 
   mongo-tools:
     image: *mongo_image
-    container_name: ${COMPOSE_PROJECT_NAME:-template}_tools_MONGO-v${MONGO_VERSION:-7.0}
+    container_name: ${CONTAINER_NAME:-template}_tools_MONGO-v${MONGO_VERSION:-7.0}
     depends_on:
       mongo:
         condition: service_healthy
@@ -114,6 +92,7 @@ services:
       - ../../:/workspaces/app:Z
       - ${HOME}/.cache/vscode-server-shared:/home/vscode/.vscode-server-shared:Z
       - ${HOME}/.cache/codex:/root/.codex:Z
+      - ./.bashrc:/root/.bashrc:Z
     environment:
       VSCODE_SERVER_DIR: /home/vscode/.vscode-server-shared
       CODEX_HOME: /root/.codex
