@@ -163,7 +163,16 @@ public class ManagerRepository : IManagerRepository
 
     AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == targetUserName.ToUpper()).
       FirstOrDefaultAsync(cancellationToken);
-    if (appUser is null) return null;
+    if (appUser is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsUserNotFound,
+          "User not found"
+        )
+      );
+    }
 
     ClassRoom? targetClass = await _collectionClass.Find(doc => doc.ClassRoomName.ToUpper() == addEnrolledCourseDto.ClassName.ToUpper()).
       FirstOrDefaultAsync(cancellationToken);
@@ -172,7 +181,7 @@ public class ManagerRepository : IManagerRepository
       return new(
         false,
         Error: new(
-          ErrorCode.IsClassNotFound,
+          ErrorCode.IsClasssNotFound,
           "Class not found"
         )
       );
@@ -335,7 +344,23 @@ public class ManagerRepository : IManagerRepository
 
     FilterDefinition<AppUser>? filter = Builders<AppUser>.Filter.Eq(u => u.Id, userId);
 
-    return await _collectionAppUser.DeleteOneAsync(filter, cancellationToken);
+    DeleteResult deleteResult = await _collectionAppUser.DeleteOneAsync(filter, cancellationToken);
+
+    if (deleteResult.DeletedCount > 0)
+    {
+      return new(
+        true,
+        null
+      );
+    }
+
+    return new(
+      false,
+      Error: new(
+        ErrorCode.IsAnyDeleteMake,
+        "No deletion has made"
+      )
+    );
   }
 
   public async Task<OperationResult<List<AppUser>>> GetAllTeachersAsync(CancellationToken cancellationToken)
@@ -528,7 +553,16 @@ public class ManagerRepository : IManagerRepository
       Find(u => u.EnrolledClasses.Any(ec => ec.Payments.Any(p => p.Id == targetPaymentId))).
       FirstOrDefaultAsync(cancellationToken);
 
-    if (appUser is null) return null;
+    if (appUser is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsUserNotFound,
+          "User not found"
+        )
+      );
+    }
 
     EnrolledClassRoom? enrolledCourse =
       appUser.EnrolledClasses.FirstOrDefault(ec => ec.Payments.Any(p => p.Id == targetPaymentId));
@@ -538,7 +572,7 @@ public class ManagerRepository : IManagerRepository
       return new(
         false,
         Error: new(
-          ErrorCode.IsClassNotFound,
+          ErrorCode.IsClasssNotFound,
           "target class not found"
         )
       );
@@ -621,7 +655,7 @@ public class ManagerRepository : IManagerRepository
       return new(
         false,
         Error: new(
-          ErrorCode.IsClassNotFound,
+          ErrorCode.IsClasssNotFound,
           "Target class not found"
         )
       );
@@ -670,7 +704,21 @@ public class ManagerRepository : IManagerRepository
       filter, update, new UpdateOptions { ArrayFilters = arrayFilters }, cancellationToken
     );
 
-    return result.ModifiedCount > 0;
+    if (result.ModifiedCount > 0)
+    {
+      return new(
+        true,
+        null
+      );
+    }
+
+    return new(
+      false,
+      Error: new(
+        ErrorCode.IsAnyUpdateMake,
+        "No updates have made"
+      )
+    );
   }
 
   public async Task<List<ShowClassRoomDto>> GetTargetMemberClassesAsync(
@@ -715,7 +763,16 @@ public class ManagerRepository : IManagerRepository
     AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == targetUserName.ToUpper()).
       FirstOrDefaultAsync(cancellationToken);
 
-    if (appUser is null) return null;
+    if (appUser is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsUserNotFound,
+          "User not found"
+        )
+      );
+    }
 
     ClassRoom? targetClass = await _collectionClass.Find(doc => doc.ClassRoomName.ToUpper() == classTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
@@ -745,7 +802,7 @@ public class ManagerRepository : IManagerRepository
       return new(
         false,
         Error: new(
-          ErrorCode.IsClassNotFound,
+          ErrorCode.IsClasssNotFound,
           "Target class not found"
         )
       );
@@ -818,7 +875,7 @@ public class ManagerRepository : IManagerRepository
       return new(
         false,
         Error: new(
-          ErrorCode.IsClassNotFound,
+          ErrorCode.IsClasssNotFound,
           "Class not found"
         )
       );
