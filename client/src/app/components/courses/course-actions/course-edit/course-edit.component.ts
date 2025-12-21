@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { take } from 'rxjs';
+import { EMPTY, switchMap, take } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -56,21 +56,22 @@ export class CourseEditComponent implements OnInit {
 
   getCourse(): void {
     if (isPlatformBrowser(this._platformId)) {
-      const courseTitle: string | null = this._route.snapshot.paramMap.get('courseTitle');
-
-      if (courseTitle) {
-        this._courseService.getByTitle(courseTitle)?.pipe(take(1)).subscribe({
-            next: (course) => {
-                if (course) {
-                    this.course = course;
-                    this.initControllersValues(course);
-                }
-            },
-            error: (err) => {
-                this.snackBar.open("خطا در دریافت اطلاعات دوره", "بستن", { duration: 4000 });
-            }
-        });
-      }
+      this._route.paramMap.pipe(
+        switchMap(params => {
+          const courseTitle = params.get('courseTitle');
+          return courseTitle ? this._courseService.getByTitle(courseTitle) : [];
+        })
+      ).subscribe({
+        next: (course) => {
+          if (course) {
+            this.course = course;
+            this.initControllersValues(course);
+          }
+        },
+        error: (err) => {
+          this.snackBar.open("خطا در دریافت اطلاعات دوره", "بستن", { duration: 4000 });
+        }
+      });
     }
   }
 
@@ -82,33 +83,41 @@ export class CourseEditComponent implements OnInit {
   }
 
   updateCourse(): void {
-    const courseTitle: string | null = this._route.snapshot.paramMap.get('courseTitle');
-
-    if (this.course && courseTitle && this.courseFg.valid) {
-      
-      const updatedCourse: CourseUpdate = {
-        title: this.TitleCtrl.value,
-        description: this.DescriptionCtrl.value,
-        totalMinutes: +this.TotalMinutesCtrl.value,
-        isActive: this.IsActiveCtrl.value,
-      };
-
-      this._courseService.update(updatedCourse, courseTitle)
-        .pipe(take(1))
-        .subscribe({
-          next: (course: ShowCourse) => { 
-              this.snackBar.open('دوره با موفقیت آپدیت شد.', 'بستن', {
-                  duration: 5000,
-                  panelClass: ['snack-success']
-              });
-          },
-          error: (err) => {
-              this.snackBar.open('خطا در ویرایش دوره', 'بستن', {
-                  duration: 5000,
-                  panelClass: ['snack-error']
-              });
-          }
-        });
+    if (!this.course || !this.courseFg.valid) {
+      this.courseFg.markAllAsTouched(); 
+      return;
     }
+
+    this._route.paramMap.pipe(
+      take(1), 
+      
+      switchMap(params => {
+        const courseTitle = params.get('courseTitle');
+
+        if (!courseTitle) return EMPTY;
+
+        const updatedCourse: CourseUpdate = {
+          title: this.TitleCtrl.value,
+          description: this.DescriptionCtrl.value,
+          totalMinutes: +this.TotalMinutesCtrl.value,
+          isActive: this.IsActiveCtrl.value,
+        };
+
+        return this._courseService.update(updatedCourse, courseTitle);
+      })
+    ).subscribe({
+      next: (course: ShowCourse) => {
+        this.snackBar.open('دوره با موفقیت آپدیت شد.', 'بستن', {
+          duration: 5000,
+          panelClass: ['snack-success']
+        });
+      },
+      error: (err) => {
+        this.snackBar.open('خطا در ویرایش دوره', 'بستن', {
+          duration: 5000,
+          panelClass: ['snack-error']
+        });
+      }
+    });
   }
 }

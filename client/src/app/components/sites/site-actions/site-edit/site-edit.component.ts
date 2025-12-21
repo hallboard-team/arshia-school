@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { take } from 'rxjs';
+import { EMPTY, switchMap, take } from 'rxjs';
 import { ShowSite, SiteUpdate } from '../../../../models/site.model';
 import { SiteService } from '../../../../services/site.service';
 import { BackForwardButtonComponent } from '../../../back-forward-button/back-forward-button.component';
@@ -57,24 +57,29 @@ export class SiteEditComponent implements OnInit {
 
   getSite(): void {
     if (isPlatformBrowser(this._platformId)) {
-      this.siteNameFromRoute = this._route.snapshot.paramMap.get('siteName');
+      
+      this._route.paramMap.pipe(
+        switchMap(params => {
+          this.siteNameFromRoute = params.get('siteName');
 
-      if (this.siteNameFromRoute) {
-        this._siteService.getSiteByName(this.siteNameFromRoute)
-          .pipe(take(1))
-          .subscribe({
-            next: (site) => {
-              if (site) {
-                this.site = site;
-                this.initFormValues(site);
-              }
-            },
-            error: (err) => {
-              console.error(err);
-              this.openSnack('خطا در دریافت اطلاعات سایت', 'error');
-            }
-          });
-      }
+          if (this.siteNameFromRoute) {
+            return this._siteService.getSiteByName(this.siteNameFromRoute);
+          } else {
+            return EMPTY; 
+          }
+        })
+      ).subscribe({
+        next: (site) => {
+          if (site) {
+            this.site = site;
+            this.initFormValues(site);
+          }
+        },
+        error: (err) => {
+          console.error(err);
+          this.openSnack('خطا در دریافت اطلاعات سایت', 'error');
+        }
+      });
     }
   }
 
