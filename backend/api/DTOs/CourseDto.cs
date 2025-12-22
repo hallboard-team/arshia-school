@@ -6,7 +6,7 @@ public record CreateCourseDto(
     string Title,
     [Length(1, 1000, ErrorMessage = "توضیحات باید بین ۱ تا ۱۰۰۰ حرف باشد")]
     string Description,
-    [Required, Range(0.5, 200, ErrorMessage = "ساعت دوره باید بین ۰٫۵ ساعت تا ۲۰۰ ساعت باشد")]
+    [Required, Range(0.5, 2000, ErrorMessage = "ساعت دوره باید بین ۰٫۵ ساعت تا ۲۰۰ ساعت باشد")]
     int TotalHours,
     bool IsActive
 );
