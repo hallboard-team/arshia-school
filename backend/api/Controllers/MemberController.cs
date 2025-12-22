@@ -62,9 +62,9 @@ public class MemberController
 
         List<ShowStudentStatusDto> showStudentStatusDtos = [];
 
-        foreach (Attendance attendence in opResult.Result)
+        foreach (Attendance attendance in opResult.Result)
         {
-            showStudentStatusDtos.Add(Mappers.ConvertAttendanceToShowStudentStatusDto(attendence));
+            showStudentStatusDtos.Add(Mappers.ConvertAttendanceToShowStudentStatusDto(attendance));
         }
 
         return showStudentStatusDtos;
