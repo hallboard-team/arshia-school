@@ -10,7 +10,7 @@ public interface IManagerRepository
     Task<RegisteredUserDto?> CreateTeacherAsync(RegisterDto managerInput, CancellationToken cancellationToken);
     Task<PagedList<AppUser>> GetAllAsync(MemberParams memberParams, CancellationToken cancellationToken);
     Task<IEnumerable<UserWithRoleDto>> GetUsersWithRolesAsync();
-    Task<EnrolledClass?> AddEnrolledClassAsync(AddEnrolledCourseDto managerInput, string targetUserName, CancellationToken cancellationToken);
+    Task<EnrolledClassRoom?> AddEnrolledClassAsync(AddEnrolledCourseDto managerInput, string targetUserName, CancellationToken cancellationToken);
     Task<UpdateResult?> UpdateEnrolledClassAsync(UpdateEnrolledDto updateEnrolledDto, string targetUserName, CancellationToken cancellationToken);
     Task<DeleteResult?> DeleteAsync(string targetMemberUserName, CancellationToken cancellationToken);
     Task<List<AppUser>> GetAllTeachersAsync(CancellationToken cancellationToken);
@@ -20,8 +20,8 @@ public interface IManagerRepository
     public Task<OperationResult<MemberPhoto>> UploadMemberPhotoAsync(IFormFile file, string userName, CancellationToken cancellationToken);
     Task<Photo?> AddPhotoAsync(IFormFile file, ObjectId targetPaymentId, CancellationToken cancellationToken);
     Task<bool> DeletePhotoAsync(ObjectId targetPaymentId, CancellationToken cancellationToken);
-    Task<List<ShowClassDto>> GetTargetMemberClassesAsync(string targetUserName, CancellationToken cancellationToken);
-    Task<EnrolledClass?> GetTargetMemberEnrolledClassAsync(string targetUserName, string classTitle, CancellationToken cancellationToken);
+    Task<List<ShowClassRoomDto>> GetTargetMemberClassesAsync(string targetUserName, CancellationToken cancellationToken);
+    Task<EnrolledClassRoom?> GetTargetMemberEnrolledClassAsync(string targetUserName, string classTitle, CancellationToken cancellationToken);
     Task<Payment?> GetTargetPaymentByIdAsync(ObjectId targetPaymentId, CancellationToken cancellationToken);
     Task<List<string>> GetTargetClassTitlesAsync(string targetUserName, CancellationToken cancellationToken);
     Task<PagedList<Attendance>> GetAllAttendanceAsync(AttendenceParams attendenceParams, string targetMemberUserName, string targetClassTitle, CancellationToken cancellationToken);
