@@ -171,7 +171,7 @@ public class ClassRoomRepository : IClassRoomRepository
         );
     }
 
-    public async Task<OperationResult<ShowClassRoomDto>> UpdateClassRoomAsync(string classRoomName, UpdateClassRoomDto request, CancellationToken cancellationToken)
+    public async Task<OperationResult<ShowClassRoomDto?>> UpdateClassRoomAsync(string classRoomName, UpdateClassRoomDto request, CancellationToken cancellationToken)
     {
         ClassRoom? targetClassRoom = await _collectionClassRoom.Find(doc => doc.ClassRoomName.ToUpper() == classRoomName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
@@ -205,20 +205,32 @@ public class ClassRoomRepository : IClassRoomRepository
             .Set(doc => doc.IsEnded, request.IsEnded)
             .Set(doc => doc.IsActive, request.IsActive);
 
-        await _collectionClassRoom.UpdateOneAsync(doc => doc.Id == targetClassRoom.Id, updateDef, null, cancellationToken);
+        UpdateResult updateResult = await _collectionClassRoom.UpdateOneAsync(doc => doc.Id == targetClassRoom.Id, updateDef, null, cancellationToken);
 
-        ClassRoom? model = await _collectionClassRoom.Find(doc => doc.Id == targetClassRoom.Id).FirstOrDefaultAsync(cancellationToken);
+        if (updateResult.ModifiedCount == 1)
+        {
+            ClassRoom? model = await _collectionClassRoom.Find(doc => doc.Id == targetClassRoom.Id).FirstOrDefaultAsync(cancellationToken);
 
-        OperationResult<IEnumerable<string>> userNamesOpResut = await GetProfessorUserNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
-        OperationResult<IEnumerable<string>> namesOpResult = await GetProfessorNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
+            List<string> userNames = await GetProfessorUserNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
+            List<string> names = await GetProfessorNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
 
-        ShowCourseDto courseDto = Mappers.ConvertCourseToShowCourseDto(course);
-        ShowSiteDto siteDto = Mappers.ConvertSiteToShowSiteDto(site);
+            ShowCourseDto courseDto = Mappers.ConvertCourseToShowCourseDto(course);
+            ShowSiteDto siteDto = Mappers.ConvertSiteToShowSiteDto(site);
+
+            return new(
+                true,
+                Mappers.ConvertClassRoomToShowClassRoomDto(model, courseDto, siteDto, userNames, names),
+                null
+            );
+        }
 
         return new(
-            true,
-            Mappers.ConvertClassRoomToShowClassRoomDto(model, courseDto, siteDto, userNames, names),
-            null
+            false,
+            null,
+            new(
+                ErrorCode.IsOperationFailed,
+                "Class update failed! Try again"
+            )
         );
     }
 
@@ -256,12 +268,20 @@ public class ClassRoomRepository : IClassRoomRepository
         UpdateDefinition<ClassRoom> updateCourse = Builders<ClassRoom>.Update
             .AddToSet(doc => doc.ProfessorsIds, professorId.Value);
 
-        await _collectionClassRoom.UpdateOneAsync(doc => doc.Id == targetClassRoom.Id, updateCourse, null, cancellationToken);
+        UpdateResult updateResult = await _collectionClassRoom.UpdateOneAsync(doc => doc.Id == targetClassRoom.Id, updateCourse, null, cancellationToken);
 
-        return new(
-            true,
-            null
-        );
+        return updateResult.ModifiedCount == 1
+                ? new(
+                    true,
+                    null
+                )
+                : new(
+                    false,
+                    new(
+                        ErrorCode.IsOperationFailed,
+                        "Add professor failed (or professor already exists in this class)"
+                    )
+                );
     }
 
     public async Task<OperationResult> RemoveProfessorFromClassRoomAsync(string targetClassRoomTitle, string professorUserName, CancellationToken cancellationToken)
@@ -284,7 +304,7 @@ public class ClassRoomRepository : IClassRoomRepository
             .Select(doc => doc.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (professorId.Equals(null))
+        if (professorId is null)
         {
             return new(
                 false,
@@ -295,14 +315,30 @@ public class ClassRoomRepository : IClassRoomRepository
             );
         }
 
+        if (!targetClassRoom.ProfessorsIds.Contains(professorId.Value))
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsNotFound,
+                    "This professor is not assigned to this class."
+                )
+            );
+        }
+
         UpdateDefinition<ClassRoom> updateDef = Builders<ClassRoom>.Update
         .Pull(doc => doc.ProfessorsIds, professorId.Value);
 
-        await _collectionClassRoom.UpdateOneAsync(doc => doc.Id == targetClassRoom.Id, updateDef, null, cancellationToken);
+        UpdateResult updateResult = await _collectionClassRoom.UpdateOneAsync(doc => doc.Id == targetClassRoom.Id, updateDef, null, cancellationToken);
 
-        return new(
-            true,
-            null
+        return updateResult.ModifiedCount == 1
+        ? new(true, null)
+        : new(
+            false,
+            new(
+                ErrorCode.IsOperationFailed,
+                "Database error: Could not remove professor."
+            )
         );
     }
 

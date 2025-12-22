@@ -161,11 +161,19 @@ public class SiteRepository : ISiteRepository
             );
         }
 
-        await _collectionSite.DeleteOneAsync(doc => doc.Id == targetSite.Id);
-
-        return new(
-            true,
-            null
-        );
+        DeleteResult deleteResult = await _collectionSite.DeleteOneAsync(doc => doc.Id == targetSite.Id);
+        
+        return deleteResult.DeletedCount == 1
+                ? new(
+                    true,
+                    null
+                )
+                : new(
+                    false,
+                    new(
+                        ErrorCode.IsOperationFailed,
+                        "Site deletion failed! Try again"
+                    )
+                );
     }
 }

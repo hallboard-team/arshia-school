@@ -335,23 +335,7 @@ public class ManagerRepository : IManagerRepository
 
     FilterDefinition<AppUser>? filter = Builders<AppUser>.Filter.Eq(u => u.Id, userId);
 
-    DeleteResult deleteResult = await _collectionAppUser.DeleteOneAsync(filter, cancellationToken);
-
-    if (deleteResult.DeletedCount > 0)
-    {
-      return new(
-        true,
-        null
-      );
-    }
-
-    return new(
-      false,
-      Error: new(
-        ErrorCode.IsAnyDeleteMake,
-        "No deletion has made"
-      )
-    );
+    return await _collectionAppUser.DeleteOneAsync(filter, cancellationToken);
   }
 
   public async Task<OperationResult<List<AppUser>>> GetAllTeachersAsync(CancellationToken cancellationToken)
