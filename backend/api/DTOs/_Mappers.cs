@@ -98,14 +98,14 @@ public static class Mappers
             UserName: appUser.NormalizedUserName!,
             Roles: appUser.AppRoles
         );
-    public static Attendance ConvertAddStudentStatusDtoToAttendence(AddStudentStatusDto teacherInput, ObjectId studentId, ObjectId courseId, DateOnly currentDate) =>
+    public static Attendance ConvertAddStudentStatusDtoToAttendance(AddStudentStatusDto teacherInput, ObjectId studentId, ObjectId courseId, DateOnly currentDate) =>
          new(
             StudentId: studentId,
             ClassId: courseId,
             Date: currentDate
         );
 
-    public static ShowStudentStatusDto ConvertAttendenceToShowStudentStatusDto(Attendance attendence) =>
+    public static ShowStudentStatusDto ConvertAttendanceToShowStudentStatusDto(Attendance attendence) =>
          new()
          {
              Date = attendence.Date,
