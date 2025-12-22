@@ -21,7 +21,7 @@ public class UserRepository : IUserRepository
         _photoService = photoService;
     }
 
-    public async Task<OperationResult<MemberPhoto>> AddProflePhotoAsync(IFormFile file, ObjectId? userId, CancellationToken cancellationToken)
+    public async Task<OperationResult<MemberPhoto?>> AddProflePhotoAsync(IFormFile file, ObjectId? userId, CancellationToken cancellationToken)
     {
         AppUser? appUser = await _collectionAppUser.Find(doc => doc.Id == userId).SingleOrDefaultAsync(cancellationToken);
 
@@ -46,12 +46,21 @@ public class UserRepository : IUserRepository
             UpdateDefinition<AppUser> updatedUser = Builders<AppUser>.Update
                 .Set(doc => doc.Photo, photo);
 
-            await _collectionAppUser.UpdateOneAsync(doc => doc.Id == appUser.Id, updatedUser, null, cancellationToken);
+            UpdateResult updateResult = await _collectionAppUser.UpdateOneAsync(doc => doc.Id == appUser.Id, updatedUser, null, cancellationToken);
 
-            return new(
+            return updateResult.ModifiedCount == 1
+            ? new(
                 true,
                 photo,
                 null
+            )
+            : new(
+                false,
+                null,
+                new(
+                    ErrorCode.IsOperationFailed,
+                    "Database update failed after photo upload."
+                )
             );
         }
 
