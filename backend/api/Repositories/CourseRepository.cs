@@ -53,7 +53,7 @@ public class CourseRepository : ICourseRepository
             paginationParams.PageSize, cancellationToken);
     }
 
-    public async Task<OperationResult<ShowCourseDto>> UpdateCourseAsync(
+    public async Task<OperationResult<ShowCourseDto?>> UpdateCourseAsync(
         UpdateCourseDto updateCourseDto, string targetCourseTitle,
         CancellationToken cancellationToken)
     {
@@ -82,7 +82,7 @@ public class CourseRepository : ICourseRepository
 
         if (updateResult.ModifiedCount == 1)
         {
-            Course? updatedCourse = await _collectionCourse.Find(doc => doc.Title.ToUpper() == updateCourseDto.Title.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+            Course? updatedCourse = await _collectionCourse.Find(doc => doc.Id == targetCourse.Id).FirstOrDefaultAsync(cancellationToken);
 
             return new(
                 true,
