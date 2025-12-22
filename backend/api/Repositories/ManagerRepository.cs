@@ -181,7 +181,7 @@ public class ManagerRepository : IManagerRepository
       return new(
         false,
         Error: new(
-          ErrorCode.IsClasssNotFound,
+          ErrorCode.IsClassNotFound,
           "Class not found"
         )
       );
@@ -572,7 +572,7 @@ public class ManagerRepository : IManagerRepository
       return new(
         false,
         Error: new(
-          ErrorCode.IsClasssNotFound,
+          ErrorCode.IsClassNotFound,
           "target class not found"
         )
       );
@@ -655,7 +655,7 @@ public class ManagerRepository : IManagerRepository
       return new(
         false,
         Error: new(
-          ErrorCode.IsClasssNotFound,
+          ErrorCode.IsClassNotFound,
           "Target class not found"
         )
       );
@@ -802,7 +802,7 @@ public class ManagerRepository : IManagerRepository
       return new(
         false,
         Error: new(
-          ErrorCode.IsClasssNotFound,
+          ErrorCode.IsClassNotFound,
           "Target class not found"
         )
       );
@@ -875,7 +875,7 @@ public class ManagerRepository : IManagerRepository
       return new(
         false,
         Error: new(
-          ErrorCode.IsClasssNotFound,
+          ErrorCode.IsClassNotFound,
           "Class not found"
         )
       );

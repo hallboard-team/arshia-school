@@ -49,7 +49,7 @@ public class MemberRepository : IMemberRepository
             return new(
                 false,
                 Error: new(
-                    ErrorCode.IsClasssNotFound,
+                    ErrorCode.IsClassNotFound,
                     "Class not found"
                 )
             );
@@ -208,7 +208,7 @@ public class MemberRepository : IMemberRepository
             return new(
                 false,
                 Error: new(
-                    ErrorCode.IsClasssNotFound,
+                    ErrorCode.IsClassNotFound,
                     "No classes found for this user"
                 )
             );
@@ -258,7 +258,7 @@ public class MemberRepository : IMemberRepository
             return new(
                 false,
                 Error: new(
-                    ErrorCode.IsClasssNotFound,
+                    ErrorCode.IsClassNotFound,
                     "No class found for this user"
                 )
             );
