@@ -71,7 +71,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
             ErrorCode.IsDuplicatePhone => BadRequest(opResult.Error.Message),
             ErrorCode.IsIdentityFailed => BadRequest(opResult.Error.Message),
             ErrorCode.IsRoleIdentityFailed => BadRequest(opResult.Error.Message),
-            _ => BadRequest("Opertion failed! Try again or contact support.")
+            _ => BadRequest("Operation failed! Try again or contact support.")
         };
     }
 
