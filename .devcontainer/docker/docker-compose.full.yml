@@ -5,7 +5,7 @@ x-mongo-image: &mongo_image "${MONGO_IMAGE:-ghcr.io/hallboard-team/tools:mongo-$
 services:
   dev-full:
     image: ghcr.io/hallboard-team/fullstack-dev:dotnet${DOTNET_VERSION:-10.0}-node${NODE_VERSION:-24}-ng${ANGULAR_VERSION:-21}
-    container_name: ${CONTAINER_NAME:-template}_dev-full
+    container_name: ${COMPOSE_PROJECT_NAME:-template}_dev-full
 
     user: "0:0"
     working_dir: /workspaces/app
@@ -40,7 +40,7 @@ services:
 
   mongo:
     image: *mongo_image
-    container_name: ${CONTAINER_NAME:-template}_db_MONGO-v${MONGO_VERSION:-7.0}
+    container_name: ${COMPOSE_PROJECT_NAME:-template}_db_MONGO-v${MONGO_VERSION:-7.0}
     working_dir: /workspaces/app
     user: "0:0"
     command:
@@ -105,7 +105,7 @@ services:
 
   mongo-tools:
     image: *mongo_image
-    container_name: ${CONTAINER_NAME:-template}_tools_MONGO-v${MONGO_VERSION:-7.0}
+    container_name: ${COMPOSE_PROJECT_NAME:-template}_tools_MONGO-v${MONGO_VERSION:-7.0}
     depends_on:
       mongo:
         condition: service_healthy
