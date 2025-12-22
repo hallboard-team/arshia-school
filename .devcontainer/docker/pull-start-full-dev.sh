@@ -3,10 +3,10 @@
 # Pull & Start FULL Dev Stack (Backend + Frontend + MongoDB)
 #
 # Usage:
-#   ./pull-start-full-dev.sh [api_port] [frontend_port] [dotnet_version] [node_version] [angular_version] [mongo_version]
+#   ./pull-start-full-dev.sh [api_port] [frontend_port] [dotnet_version] [node_version] [angular_version] [mongo_version] [project_name]
 #
 # Example:
-#   ./pull-start-full-dev.sh 5002 4202 10.0 24 21 7.0
+#   ./pull-start-full-dev.sh 5002 4202 10.0 24 21 7.0 myproject
 #
 # Starts:
 #   - dev-full (dotnet + node + angular)
@@ -22,9 +22,10 @@ DOTNET_VERSION="${3:-10.0}"
 NODE_VERSION="${4:-24}"
 ANGULAR_VERSION="${5:-21}"
 MONGO_VERSION="${6:-7.0}"
+COMPOSE_PROJECT_NAME="${7:-${COMPOSE_PROJECT_NAME:-template}}"
 
 IMAGE="ghcr.io/hallboard-team/fullstack-dev:dotnet${DOTNET_VERSION}-node${NODE_VERSION}-ng${ANGULAR_VERSION}"
-CONTAINER_NAME="template_dev-full_d${DOTNET_VERSION}_n${NODE_VERSION}_a${ANGULAR_VERSION}_mg${MONGO_VERSION}_p${API_PORT}-${FRONTEND_PORT}_dev"
+CONTAINER_NAME="${COMPOSE_PROJECT_NAME}_dev-full"
 
 COMPOSE_FILE="docker-compose.full.yml"
 
@@ -37,6 +38,7 @@ echo " DOTNET VERSION:    $DOTNET_VERSION"
 echo " NODE VERSION:      $NODE_VERSION"
 echo " ANGULAR VERSION:   $ANGULAR_VERSION"
 echo " MONGO VERSION:     $MONGO_VERSION"
+echo " PROJECT NAME:      $COMPOSE_PROJECT_NAME"
 echo " IMAGE:             $IMAGE"
 echo "=========================================="
 
@@ -65,7 +67,7 @@ echo "🚀 Starting FULL dev stack container '$CONTAINER_NAME'..."
 # ---------------------------------------------------------
 # Start full stack via compose
 # ---------------------------------------------------------
-if CONTAINER_NAME="$CONTAINER_NAME" \
+if COMPOSE_PROJECT_NAME="$COMPOSE_PROJECT_NAME" \
    DOTNET_VERSION="$DOTNET_VERSION" \
    NODE_VERSION="$NODE_VERSION" \
    ANGULAR_VERSION="$ANGULAR_VERSION" \
