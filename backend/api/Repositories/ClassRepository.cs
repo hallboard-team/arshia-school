@@ -155,7 +155,7 @@ public class ClassRepository : IClassRepository
         return [.. names.Where(u => !string.IsNullOrWhiteSpace(u)).Select(u => u.Trim())];
     }
 
-    public async Task<OperationResult<ShowClassDto>> UpdateClassAsync(string className, UpdateClassDto request, CancellationToken cancellationToken)
+    public async Task<OperationResult<ShowClassDto?>> UpdateClassAsync(string className, UpdateClassDto request, CancellationToken cancellationToken)
     {
         Class? targetClass = await _collectionClass.Find(doc => doc.ClassName.ToUpper() == className.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
@@ -288,7 +288,7 @@ public class ClassRepository : IClassRepository
             .Select(doc => doc.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (professorId.Equals(null))
+        if (professorId is null)
         {
             return new(
                 false,
@@ -299,21 +299,29 @@ public class ClassRepository : IClassRepository
             );
         }
 
+        if (!targetClass.ProfessorsIds.Contains(professorId.Value))
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsNotFound,
+                    "This professor is not assigned to this class."
+                )
+            );
+        }
+
         UpdateDefinition<Class> updateDef = Builders<Class>.Update
         .Pull(doc => doc.ProfessorsIds, professorId.Value);
 
         UpdateResult updateResult = await _collectionClass.UpdateOneAsync(doc => doc.Id == targetClass.Id, updateDef, null, cancellationToken);
 
         return updateResult.ModifiedCount == 1
-        ? new(
-            true,
-            null
-        )
+        ? new(true, null)
         : new(
             false,
             new(
                 ErrorCode.IsOperationFailed,
-                "Remove professor failed! Try again"
+                "Database error: Could not remove professor."
             )
         );
     }
