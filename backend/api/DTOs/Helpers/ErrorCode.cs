@@ -7,7 +7,7 @@ public enum ErrorCode
     IsCourseNotFound,
     IsUserNotFound,
     IsSiteNotFound,
-    IsClasssNotFound,
+    IsClassNotFound,
     IsOperationFailed,
     IsInvalidType,
     IsPasswordInvalid,
