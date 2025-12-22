@@ -83,11 +83,11 @@ public class TeacherRepository : ITeacherRepository
             .Select(doc => doc.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
-        Attendance existingAttendence = await _collectionAttendence
+        Attendance existingAttendance = await _collectionAttendance
             .Find(doc => doc.StudentId == targetAppUser.Id && doc.Date == currentDate && doc.ClassId == targetCourseId)
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (existingAttendence != null)
+        if (existingAttendance != null)
         {
             return new(
                 false,
@@ -98,13 +98,13 @@ public class TeacherRepository : ITeacherRepository
             );
         }
 
-        Attendance? attendence = Mappers.ConvertAddStudentStatusDtoToAttendence(teacherInput, targetAppUser.Id, targetCourseId, currentDate);
+        Attendance? attendance = Mappers.ConvertAddStudentStatusDtoToAttendance(teacherInput, targetAppUser.Id, targetCourseId, currentDate);
 
-        await _collectionAttendence.InsertOneAsync(attendence, null, cancellationToken);
+        await _collectionAttendance.InsertOneAsync(attendance, null, cancellationToken);
 
         return new(
             true,
-            Mappers.ConvertAttendenceToShowStudentStatusDto(attendence),
+            Mappers.ConvertAttendanceToShowStudentStatusDto(attendance),
             null
         );
     }
