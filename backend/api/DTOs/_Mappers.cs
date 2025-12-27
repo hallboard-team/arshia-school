@@ -134,7 +134,7 @@ public static class Mappers
          new()
          {
              Name = request.Name.ToLower().Trim(),
-             Department = request.Department,
+             Department = request.Department.Trim(),
              Floor = request.Floor,
              Capacity = request.Capacity
          };

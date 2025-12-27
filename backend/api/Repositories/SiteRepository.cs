@@ -115,7 +115,7 @@ public class SiteRepository : ISiteRepository
             updateDefinitions.Add(builder.Set(doc => doc.Name, request.Name));
 
         if (!string.Equals(targetSite.Department, request.Department, StringComparison.Ordinal))
-            updateDefinitions.Add(builder.Set(doc => doc.Department, request.Department));
+            updateDefinitions.Add(builder.Set(doc => doc.Department, request.Department.Trim()));
 
         if (!int.Equals(targetSite.Floor, request.Floor))
             updateDefinitions.Add(builder.Set(doc => doc.Floor, request.Floor));
