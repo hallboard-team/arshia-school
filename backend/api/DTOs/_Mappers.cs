@@ -163,7 +163,7 @@ public static class Mappers
              IsActive = request.IsActive
          };
 
-    public static ShowClassRoomDto ConvertClassRoomToShowClassRoomDto(ClassRoom model, ShowCourseDto course, ShowSiteDto site, List<string> userNames, List<string> names) =>
+    public static ShowClassRoomDto ConvertClassRoomToShowClassRoomDto(ClassRoom model, ShowCourseDto course, ShowSiteDto site, IEnumerable<string> userNames, IEnumerable<string> names) =>
          new(
             ClassRoomName: model.ClassRoomName,
             Course: course,
