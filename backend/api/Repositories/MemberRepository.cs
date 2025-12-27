@@ -49,7 +49,7 @@ public class MemberRepository : IMemberRepository
             return new(
                 false,
                 Error: new(
-                    ErrorCode.IsClassNotFound,
+                    ErrorCode.IsClassRoomNotFound,
                     "Class not found"
                 )
             );
