@@ -729,7 +729,7 @@ public class ManagerRepository : IManagerRepository
       Where(u => u.NormalizedUserName == targetUserName.ToUpper()).SelectMany(u => u.EnrolledClasses).
       Select(ec => ec.ClassRoomId.ToString()).ToListAsync(cancellationToken);
 
-    if (enrolledClassIds is null || enrolledClassIds.Count == 0) return new List<ShowClassDto>();
+    if (enrolledClassIds is null || enrolledClassIds.Count == 0) return new List<ShowClassRoomDto>();
 
     List<ClassRoom> classes = await _collectionClass.Find(doc => enrolledClassIds.Contains(doc.Id.ToString())).
       ToListAsync(cancellationToken);
