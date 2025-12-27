@@ -36,7 +36,7 @@ public class TeacherRepository : ITeacherRepository
         return ValidationsExtensions.ValidateObjectId(studentId);
     }
 
-    public async Task<List<ClassRoom>> GetClassesAsync(string hashedUserId, CancellationToken cancellationToken)
+    public async Task<OperationResult<List<ClassRoom>>> GetClassesAsync(string hashedUserId, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
@@ -98,7 +98,7 @@ public class TeacherRepository : ITeacherRepository
             );
         }
 
-        Attendance? attendance = Mappers.ConvertAddStudentStatusDtoToAttendance(teacherInput, targetAppUser.Id, targetCourseId, currentDate);
+        Attendance? attendance = Mappers.ConvertAddStudentStatusDtoToAttendence(teacherInput, targetAppUser.Id, targetCourseId, currentDate);
 
         await _collectionAttendance.InsertOneAsync(attendance, null, cancellationToken);
 
