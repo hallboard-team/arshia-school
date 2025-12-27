@@ -184,11 +184,20 @@ public class MemberRepository : IMemberRepository
         );
     }
 
-    public async Task<List<ClassRoom>> GetClassesAsync(string hashedUserId, CancellationToken cancellationToken)
+    public async Task<OperationResult<List<ClassRoom>>> GetClassesAsync(string hashedUserId, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
-        if (userId is null) return new List<ClassRoom>();
+        if (userId is null)
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsInvalidUserReference,
+                    "User id not found in token"
+                )
+            );
+        }
 
         string? loggedInUserName = await _collectionAppUser.AsQueryable()
             .Where(doc => doc.Id == userId)
@@ -196,9 +205,17 @@ public class MemberRepository : IMemberRepository
             .FirstOrDefaultAsync(cancellationToken);
 
         if (loggedInUserName is null)
-            return new List<ClassRoom>();
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsNotFound,
+                    "Logged in user, user name not found"
+                )
+            );
+        }
 
-        List<ObjectId>? enrolledCourseIds = await _collectionAppUser.AsQueryable<AppUser>()
+        List<ObjectId>? enrolledClassIds = await _collectionAppUser.AsQueryable<AppUser>()
             .Where(appUser => appUser.NormalizedUserName == loggedInUserName.ToUpper())
             .SelectMany(appUser => appUser.EnrolledClasses)
             .Select(doc => doc.ClassRoomId)
@@ -208,18 +225,22 @@ public class MemberRepository : IMemberRepository
             return new(
                 false,
                 Error: new(
-                    ErrorCode.IsClassNotFound,
+                    ErrorCode.IsClassRoomNotFound,
                     "No classes found for this user"
                 )
             );
 
         List<ClassRoom>? courses = await _collectionClass.Find<ClassRoom>(doc =>
-            enrolledCourseIds.Contains(doc.Id)).ToListAsync(cancellationToken);
+            enrolledClassIds.Contains(doc.Id)).ToListAsync(cancellationToken);
 
-        return courses ?? new List<ClassRoom>();
+        return new(
+            true,
+            courses,
+            null
+        );
     }
 
-    public async Task<EnrolledClassRoom?> GetEnrolledCourseAsync(string hashedUserId, string classTitle, CancellationToken cancellationToken)
+    public async Task<OperationResult<EnrolledClassRoom>> GetEnrolledCourseAsync(string hashedUserId, string classTitle, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
@@ -258,7 +279,7 @@ public class MemberRepository : IMemberRepository
             return new(
                 false,
                 Error: new(
-                    ErrorCode.IsClassNotFound,
+                    ErrorCode.IsClassRoomNotFound,
                     "No class found for this user"
                 )
             );
