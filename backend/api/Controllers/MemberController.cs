@@ -43,7 +43,7 @@ public class MemberController
             return opResult.Error?.Code switch
             {
                 ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
-                ErrorCode.IsClassNotFound => BadRequest(opResult.Error.Message),
+                ErrorCode.IsClassRoomNotFound => BadRequest(opResult.Error.Message),
                 _ => BadRequest("Operation failed. Try again or contact support.")
             };
         }
