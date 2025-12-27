@@ -113,4 +113,19 @@ public class ClassRoomController(IClassRoomRepository _classRoomRepository, ICou
             _ => BadRequest("Operation failed! Try again or contact support")
         };
     }
+
+    [HttpDelete("delete-classroom/{classRoomId}")]
+    public async Task<ActionResult<Response>> DeleteClassRoom(ObjectId classRoomId, CancellationToken cancellationToken)
+    {
+        OperationResult opResult = await _classRoomRepository.DeleteClassRoomAsync(classRoomId, cancellationToken);
+
+        return opResult.IsSuccess
+        ? Ok(new Response(Message: "ClassRoom deleted successfully"))
+        : opResult.Error?.Code switch
+        {
+            ErrorCode.IsClassRoomNotFound => BadRequest(opResult.Error.Message),
+            ErrorCode.IsDeleteNotAllowed => BadRequest(opResult.Error.Message),
+            _ => BadRequest("Operation failed! Try again or contact support.")  
+        };
+    }
 }
