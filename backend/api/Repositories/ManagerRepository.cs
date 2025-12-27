@@ -144,7 +144,7 @@ public class ManagerRepository : IManagerRepository
     );
   }
 
-  public async Task<EnrolledClassRoom?> AddEnrolledClassAsync(
+  public async Task<OperationResult<EnrolledClassRoom>> AddEnrolledClassAsync(
     AddEnrolledCourseDto addEnrolledCourseDto,
     string targetUserName,
     CancellationToken cancellationToken
@@ -648,7 +648,7 @@ public class ManagerRepository : IManagerRepository
       );
     }
 
-    EnrolledClassRoom? enrolledCourse =
+    EnrolledClassRoom? enrolledClass =
       appUser.EnrolledClasses.FirstOrDefault(ec => ec.Payments.Any(p => p.Id == targetPaymentId));
     if (enrolledClass is null)
     {
@@ -695,7 +695,7 @@ public class ManagerRepository : IManagerRepository
     var arrayFilters = new List<ArrayFilterDefinition>
     {
       new BsonDocumentArrayFilterDefinition<BsonDocument>(
-        new BsonDocument("ec.ClassId", enrolledCourse.ClassRoomId)
+        new BsonDocument("ec.ClassId", enrolledClass.ClassRoomId)
       ),
       new BsonDocumentArrayFilterDefinition<BsonDocument>(new BsonDocument("p._id", payment.Id))
     };
@@ -721,7 +721,7 @@ public class ManagerRepository : IManagerRepository
     );
   }
 
-  public async Task<List<ShowClassRoomDto>> GetTargetMemberClassesAsync(
+  public async Task<OperationResult<List<ShowClassRoomDto>>> GetTargetMemberClassesAsync(
     string targetUserName, CancellationToken cancellationToken
   )
   {
@@ -729,7 +729,16 @@ public class ManagerRepository : IManagerRepository
       Where(u => u.NormalizedUserName == targetUserName.ToUpper()).SelectMany(u => u.EnrolledClasses).
       Select(ec => ec.ClassRoomId.ToString()).ToListAsync(cancellationToken);
 
-    if (enrolledClassIds is null || enrolledClassIds.Count == 0) return new List<ShowClassRoomDto>();
+    if (enrolledClassIds is null || enrolledClassIds.Count == 0)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsClassRoomNotFound,
+          "ClassRoom not found"
+        )
+      );
+    }
 
     List<ClassRoom> classes = await _collectionClass.Find(doc => enrolledClassIds.Contains(doc.Id.ToString())).
       ToListAsync(cancellationToken);
@@ -756,7 +765,7 @@ public class ManagerRepository : IManagerRepository
     );
   }
 
-  public async Task<EnrolledClassRoom?> GetTargetMemberEnrolledClassAsync(
+  public async Task<OperationResult<EnrolledClassRoom>> GetTargetMemberEnrolledClassAsync(
     string targetUserName, string classTitle, CancellationToken cancellationToken
   )
   {
@@ -776,7 +785,24 @@ public class ManagerRepository : IManagerRepository
 
     ClassRoom? targetClass = await _collectionClass.Find(doc => doc.ClassRoomName.ToUpper() == classTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
-    return appUser.EnrolledClasses.FirstOrDefault(ec => ec.ClassRoomId == targetClass.Id);
+    EnrolledClassRoom? enrolledClassRoom = appUser.EnrolledClasses.FirstOrDefault(ec => ec.ClassRoomId == targetClass.Id);
+
+    if (enrolledClassRoom is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsNotEnrolled,
+          "User is not in any classroom"
+        )
+      );
+    }
+
+    return new(
+     true,
+     enrolledClassRoom,
+     null
+    );
   }
 
   public async Task<OperationResult<Payment>> GetTargetPaymentByIdAsync(ObjectId targetPaymentId, CancellationToken cancellationToken)
@@ -795,7 +821,7 @@ public class ManagerRepository : IManagerRepository
       );
     }
 
-    EnrolledClassRoom? enrolledCourse =
+    EnrolledClassRoom? enrolledClass =
       appUser.EnrolledClasses.FirstOrDefault(ec => ec.Payments.Any(p => p.Id == targetPaymentId));
     if (enrolledClass is null)
     {
@@ -866,10 +892,10 @@ public class ManagerRepository : IManagerRepository
       );
     }
 
-    ObjectId targetCourseId = await _collectionClass.AsQueryable().
+    ObjectId targetClassId = await _collectionClass.AsQueryable().
       Where(doc => doc.ClassRoomName == targetClassTitle.ToUpper()).Select(doc => doc.Id).
       FirstOrDefaultAsync(cancellationToken);
-    if (targetClassId is null)
+    if (targetClassId.Equals(null))
     {
       var emptyQuery = _collectionAttendance.AsQueryable().Where(_ => false);
       return new(
