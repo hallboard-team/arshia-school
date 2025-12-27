@@ -4,6 +4,7 @@ public enum ErrorCode
 {
     IsWrongCreds,
     IsNotFound,
+    IsClassRoomNotFound,
     IsCourseNotFound,
     IsUserNotFound,
     IsSiteNotFound,
@@ -16,6 +17,7 @@ public enum ErrorCode
     ArePasswordsNotMatch,
     IsDuplicateSite,
     IsDuplicateCourse,
+    IsDeleteNotAllowed,
     IsDuplicateClass,
     IsTokenGenerationFailed,
     IsInvalidUserReference,
