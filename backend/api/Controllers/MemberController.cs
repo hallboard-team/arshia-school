@@ -103,8 +103,17 @@ public class MemberController
         if (string.IsNullOrEmpty(hashedUserId))
             return BadRequest("No user was found with this userId.");
 
-        var courses = await _memberRepository.GetClassesAsync(hashedUserId, cancellationToken);
-        return courses.Count == 0 ? Ok(new List<ClassRoom>()) : Ok(courses);
+        OperationResult<List<ClassRoom>> opResult = await _memberRepository.GetClassesAsync(hashedUserId, cancellationToken);
+
+        return opResult.IsSuccess
+        ? opResult.Result
+        : opResult.Error?.Code switch
+        {
+            ErrorCode.IsInvalidUserReference => BadRequest(opResult.Error.Message),
+            ErrorCode.IsNotFound => BadRequest(opResult.Error.Message),
+            ErrorCode.IsClassRoomNotFound => BadRequest(opResult.Error.Message),
+            _ => BadRequest("Operation failed! Try again or contact support.")  
+        };
     }
 
     [HttpGet("get-enrolled-course/{courseTitle}")]
@@ -115,7 +124,7 @@ public class MemberController
         if (string.IsNullOrEmpty(hashedUserId))
             return BadRequest("No user was found with this userId.");
 
-        EnrolledClassRoom? enrolledCourse = await _memberRepository.GetEnrolledCourseAsync(hashedUserId, courseTitle, cancellationToken);
+        OperationResult<EnrolledClassRoom> opResult = await _memberRepository.GetEnrolledCourseAsync(hashedUserId, courseTitle, cancellationToken);
 
         return opResult.IsSuccess
         ? opResult.Result
@@ -123,7 +132,7 @@ public class MemberController
         {
             ErrorCode.IsInvalidUserReference => BadRequest(opResult.Error.Message),
             ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
-            ErrorCode.IsClassNotFound => BadRequest(opResult.Error.Message),
+            ErrorCode.IsClassRoomNotFound => BadRequest(opResult.Error.Message),
             _ => BadRequest("Operation failed. Try again or contact support.")
         };
     }
