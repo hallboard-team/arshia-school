@@ -142,11 +142,11 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
     }
 
     [HttpPost("add-enrolledCourse/{targetUserName}")]
-    public async Task<ActionResult<EnrolledClass>> AddEnrolledCourse(
+    public async Task<ActionResult<EnrolledClassRoom>> AddEnrolledCourse(
         AddEnrolledCourseDto managerInput, string targetUserName,
         CancellationToken cancellationToken)
     {
-        OperationResult<EnrolledClass> opResult = await _managerRepository.AddEnrolledClassAsync(managerInput, targetUserName, cancellationToken);
+        OperationResult<EnrolledClassRoom> opResult = await _managerRepository.AddEnrolledClassAsync(managerInput, targetUserName, cancellationToken);
 
         return opResult.IsSuccess
         ? opResult.Result
@@ -359,7 +359,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
             return BadRequest("userName is required.");
         }
 
-        List<ShowClassRoomDto>? classRes = await _managerRepository.GetTargetMemberClassesAsync(targetUserName, cancellationToken);
+        OperationResult<List<ShowClassRoomDto>> opResult = await _managerRepository.GetTargetMemberClassesAsync(targetUserName, cancellationToken);
 
         return opResult.IsSuccess
         ? opResult.Result
@@ -379,7 +379,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
             return BadRequest("نام کاربری باید وارد بشود");
         }
 
-        EnrolledClassRoom? enrolledCourse = await _managerRepository.GetTargetMemberEnrolledClassAsync(targetUserName, courseTitle, cancellationToken);
+        OperationResult<EnrolledClassRoom> opResult = await _managerRepository.GetTargetMemberEnrolledClassAsync(targetUserName, courseTitle, cancellationToken);
 
         return opResult.IsSuccess
                ? opResult.Result
