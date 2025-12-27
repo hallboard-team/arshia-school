@@ -5,8 +5,7 @@ namespace api.Controllers;
 
 [Authorize(Policy = "RequiredTeacherRole")]
 public class TeacherController(ITeacherRepository _teacherRepository,
- ITokenService _tokenService, IManagerRepository _managerRepository,
- IClassRoomRepository _classRepository
+ ITokenService _tokenService
 ) : BaseApiController
 {
 
@@ -20,7 +19,7 @@ public class TeacherController(ITeacherRepository _teacherRepository,
         if (string.IsNullOrEmpty(hashedUserId))
             return BadRequest("No user was found with this user Id.");
 
-        OperationResult<List<Class>> opResult = await _teacherRepository.GetClassesAsync(hashedUserId, cancellationToken);
+        OperationResult<List<ClassRoom>> opResult = await _teacherRepository.GetClassesAsync(hashedUserId, cancellationToken);
 
         return opResult.IsSuccess
         ? opResult.Result
