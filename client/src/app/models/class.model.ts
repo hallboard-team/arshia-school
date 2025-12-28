@@ -21,14 +21,9 @@ export interface ShowClass extends ClassBase {
   professorNames: string[];
 }
 
-export interface AddClass {
-  classRoomName: string;
+export interface AddClass extends Omit<ClassBase, 'days' | 'isEnded'> {
   courseName: string;
   siteName: string;
-  classRoomMinutes: number;
-  tuition: number;
-  startDate: string;
-  endedDate: string;
 }
 
 export interface ClassUpdate extends ClassBase {}
