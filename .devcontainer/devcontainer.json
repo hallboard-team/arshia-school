@@ -2,6 +2,10 @@
   "name": "dev-${localWorkspaceFolderBasename}-full",
   "dockerComposeFile": "./docker/docker-compose.full.yml",
   "service": "dev-full",
+  "runServices": [
+    "dev-full",
+    "mongo"
+  ],
   "workspaceFolder": "/workspaces/app",
   "shutdownAction": "stopCompose",
   "updateRemoteUserUID": false,
