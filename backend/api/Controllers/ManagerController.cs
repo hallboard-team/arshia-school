@@ -424,7 +424,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
     }
 
     [HttpGet("get-target-member-attendences/{targetMemberUserName}/{targetCourseTitle}")]
-    public async Task<ActionResult<IEnumerable<ShowStudentStatusDto>>> GetAllAttendence([FromQuery] AttendenceParams attendenceParams, string targetMemberUserName, string targetCourseTitle, CancellationToken cancellationToken)
+    public async Task<ActionResult<IEnumerable<ShowStudentStatusDto>>> GetAllAttendence([FromQuery] AttendanceParams attendenceParams, string targetMemberUserName, string targetCourseTitle, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(targetMemberUserName))
         {

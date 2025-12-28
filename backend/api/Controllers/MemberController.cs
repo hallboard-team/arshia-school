@@ -27,7 +27,7 @@ public class MemberController
     }
 
     [HttpGet("get-attendences/{targetCourseTitle}")]
-    public async Task<ActionResult<IEnumerable<ShowStudentStatusDto>>> GetAllAttendence([FromQuery] AttendenceParams attendenceParams, string targetCourseTitle, CancellationToken cancellationToken)
+    public async Task<ActionResult<IEnumerable<ShowStudentStatusDto>>> GetAllAttendence([FromQuery] AttendanceParams attendenceParams, string targetCourseTitle, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(User.GetHashedUserId(), cancellationToken);
 
@@ -112,7 +112,7 @@ public class MemberController
             ErrorCode.IsInvalidUserReference => BadRequest(opResult.Error.Message),
             ErrorCode.IsNotFound => BadRequest(opResult.Error.Message),
             ErrorCode.IsClassRoomNotFound => BadRequest(opResult.Error.Message),
-            _ => BadRequest("Operation failed! Try again or contact support.")  
+            _ => BadRequest("Operation failed! Try again or contact support.")
         };
     }
 

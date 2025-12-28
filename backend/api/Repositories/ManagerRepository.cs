@@ -873,7 +873,7 @@ public class ManagerRepository : IManagerRepository
   }
 
   public async Task<OperationResult<PagedList<Attendance>>> GetAllAttendanceAsync(
-    AttendenceParams attendanceParams,
+    AttendanceParams attendanceParams,
     string targetMemberUserName,
     string targetClassTitle,
     CancellationToken cancellationToken
