@@ -27,7 +27,8 @@ export class SiteService {
   }
 
   getSiteByName(siteName: string): Observable<ShowSite> {
-    return this._http.get<ShowSite>(this._baseApiUrl + 'get-site/' + siteName);
+    const encodedName = encodeURIComponent(siteName);
+    return this._http.get<ShowSite>(this._baseApiUrl + 'get-site/' + encodedName);
   }
 
   addSite(addSite: AddSite): Observable<ShowSite> {
@@ -35,10 +36,12 @@ export class SiteService {
   }
 
   update(siteUpdate: Partial<SiteUpdate>, targetSiteName: string) {
-    return this._http.put<Site>(this._baseApiUrl + 'update-site/' + targetSiteName, siteUpdate);
+    const encodedName = encodeURIComponent(targetSiteName);
+    return this._http.put<Site>(this._baseApiUrl + 'update-site/' + encodedName, siteUpdate);
   }
 
   delete(siteName: string): Observable<any> {
-    return this._http.delete(this._baseApiUrl + 'delete-site/' + siteName);
+    const encodedName = encodeURIComponent(siteName);
+    return this._http.delete(this._baseApiUrl + 'delete-site/' + encodedName);
   }
 }
