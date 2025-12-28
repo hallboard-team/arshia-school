@@ -99,7 +99,7 @@ public static class Mappers
             Roles: appUser.AppRoles
         );
 
-    public static Attendance ConvertAddStudentStatusDtoToAttendence(AddStudentStatusDto teacherInput, ObjectId studentId, ObjectId courseId, DateOnly currentDate) =>
+    public static Attendance ConvertAddStudentStatusDtoToAttendance(AddStudentStatusDto teacherInput, ObjectId studentId, ObjectId courseId, DateOnly currentDate) =>
          new(
             StudentId: studentId,
             ClassId: courseId,

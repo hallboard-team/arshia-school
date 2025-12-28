@@ -98,7 +98,7 @@ public class TeacherRepository : ITeacherRepository
             );
         }
 
-        Attendance? attendance = Mappers.ConvertAddStudentStatusDtoToAttendence(teacherInput, targetAppUser.Id, targetCourseId, currentDate);
+        Attendance? attendance = Mappers.ConvertAddStudentStatusDtoToAttendance(teacherInput, targetAppUser.Id, targetCourseId, currentDate);
 
         await _collectionAttendance.InsertOneAsync(attendance, null, cancellationToken);
 
@@ -161,7 +161,7 @@ public class TeacherRepository : ITeacherRepository
             return new(
                 false,
                 Error: new(
-                    ErrorCode.IsInvalidUserReference, 
+                    ErrorCode.IsInvalidUserReference,
                     "No id founded for this user"
                 )
             );
