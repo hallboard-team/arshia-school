@@ -48,7 +48,7 @@
                         <mat-label>سایت / شعبه</mat-label>
                         <mat-select formControlName="siteNameCtrl">
                             @for (site of siteList; track $index) {
-                            <mat-option [value]="site.siteName">{{ site.siteName }}</mat-option>
+                            <mat-option [value]="site.name">{{ site.name }}</mat-option>
                             }
                         </mat-select>
                         @if (SiteNameCtrl.hasError('required')) {
