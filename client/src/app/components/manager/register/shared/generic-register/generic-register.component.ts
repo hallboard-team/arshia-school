@@ -24,10 +24,9 @@ import { RegisterUser } from '../../../../../models/register-user.model';
 export class GenericRegisterFormComponent {
   private fb = inject(FormBuilder);
 
-  @Input({ required: true }) formTitle: string = ''; // عنوان فرم (ثبت منشی، دانشجو و...)
-  @Input() isLoading: boolean = false; // برای غیرفعال کردن دکمه هنگام ارسال
+  @Input({ required: true }) formTitle: string = '';
+  @Input() isLoading: boolean = false; 
 
-  // خروجی (دیتای نهایی فرم)
   @Output() formSubmit = new EventEmitter<RegisterUser>();
 
   @ViewChild(FormGroupDirective) formDir!: FormGroupDirective;
@@ -35,14 +34,12 @@ export class GenericRegisterFormComponent {
   hidePassword = true;
   hideConfirmPassword = true;
 
-  // تنظیمات تاریخ و Regex
   readonly minAge = 11;
   readonly maxAge = 90;
   min = moment().subtract(this.maxAge, 'jYear').startOf('day');
   max = moment().subtract(this.minAge, 'jYear').endOf('day');
   private readonly NAME_REGEX = /^[\u0600-\u06FFa-zA-Z\s\u200c-]+$/;
 
-  // ساخت فرم با نام‌های عمومی (Generic)
   form = this.fb.group({
     email: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^([\w.\-]+)@([\w\-]+)((\.(\w){2,5})+)$/)]],
     password: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(20)]],
@@ -54,23 +51,18 @@ export class GenericRegisterFormComponent {
     gender: ['', [Validators.required]]
   });
 
-  // Getters برای دسترسی آسان در HTML
   get f() { return this.form.controls; }
 
-  // متد Submit
   onSubmit(): void {
     if (this.form.invalid) return;
 
     if (this.f.password.value !== this.f.confirmPassword.value) {
-      // اینجا می‌توانیم ارور ست کنیم یا فقط ریترن کنیم (هندل کردن ارور در کامپوننت والد یا اسنک‌بار مشترک)
       this.f.confirmPassword.setErrors({ mismatch: true });
       return;
     }
 
     const dob = this.f.dateOfBirth.value as any;
-    // چک کردن اعتبار تاریخ (اختیاری، چون دیت‌پیکر معمولا هندل میکند)
     
-    // آماده‌سازی Payload
     const payload: RegisterUser = {
       email: this.f.email.value!,
       password: this.f.password.value!,
@@ -85,16 +77,13 @@ export class GenericRegisterFormComponent {
     this.formSubmit.emit(payload);
   }
 
-  // متد کمکی برای ریست کردن فرم بعد از موفقیت (توسط والد صدا زده می‌شود)
   resetForm(): void {
     this.formDir?.resetForm();
     this.form.reset();
   }
 
-  // متد کمکی برای نمایش ارورهای سرور روی فیلدها (توسط والد صدا زده می‌شود)
   setServerErrors(messages: string[]): void {
     const markKeys = ['email', 'password', 'confirmPassword'];
-    // @ts-ignore
     markKeys.forEach(k => this.form.get(k)?.markAsTouched());
 
     const passMsgs = messages.filter(m => /password/i.test(m));
@@ -111,7 +100,6 @@ export class GenericRegisterFormComponent {
   }
 
   private toGregorianDateOnly(value: Moment | Date | string | null | undefined): string | undefined {
-     // همان لاجیک خودت کپی شد
      if (!value) return undefined;
      if (moment.isMoment(value)) return value.locale('en').format('YYYY-MM-DD');
      if (typeof value === 'string') {

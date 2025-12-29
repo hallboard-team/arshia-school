@@ -60,12 +60,10 @@ export class ProfileEditFormComponent implements OnChanges {
     this.editMode = false;
     this.form.disable();
     
-    // تبدیل دیتای ورودی به فرمت مناسب فرم
     let dobMoment = null;
     if (this.user.dateOfBirth) {
         dobMoment = moment(this.user.dateOfBirth);
     } else if (this.user.age) {
-        // تخمین سال تولد اگر تاریخ دقیق نباشد
         const approxYear = new Date().getFullYear() - this.user.age;
         dobMoment = moment(`${approxYear}-01-01`, 'YYYY-MM-DD');
     }
@@ -87,7 +85,6 @@ export class ProfileEditFormComponent implements OnChanges {
   onSubmit() {
     if (this.form.invalid) return;
 
-    // تبدیل تاریخ و آماده سازی برای ارسال
     const dobValue = this.f['dateOfBirth'].value;
     const dobGregorian = this.toGregorianDateOnly(dobValue);
 
@@ -100,8 +97,6 @@ export class ProfileEditFormComponent implements OnChanges {
     };
 
     this.formSubmit.emit(payload);
-    // بعد از سابمیت موفق، مود ادیت باید توسط والد هندل بشه یا همینجا:
-    // فعلا همینجا غیرفعال میکنیم تا نتیجه بیاد
     this.editMode = false;
     this.form.disable();
   }

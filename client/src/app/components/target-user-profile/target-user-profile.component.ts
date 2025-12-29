@@ -21,16 +21,13 @@ import { ProfileInfoCardComponent } from '../shared/profile-info-card/profile-in
 import { ProfileEditFormComponent } from '../shared/profile-edit-form/profile-edit-form.component';
 import { CurrencyFormatterDirective } from '../../directives/currency-formatter.directive';
 
-import { TargetUserProfile } from '../../models/target-user-profile.model';
 import { Course, ShowCourse } from '../../models/course.model';
 import { AddEnrolledCourse } from '../../models/add-enrolled-course.model';
 import { UpdateEnrolledCourse } from '../../models/update-enrolled-course.model';
 import { ManagerUpdateMemberDto } from '../../models/manager-update-member.model';
-import { CourseParams } from '../../models/helpers/course-params';
-import { PaginatedResult } from '../../models/helpers/paginatedResult';
 import { Pagination } from '../../models/helpers/pagination';
-import { Photo } from '../../models/helpers/enrolled-course.model';
 import { environment } from '../../../environments/environment.development';
+import { CourseParams } from '../../models/helpers/application-params';
 
 @Component({
   selector: 'app-target-user-profile',
@@ -41,7 +38,6 @@ import { environment } from '../../../environments/environment.development';
     MatSelectModule, MatRadioModule, MatPaginatorModule, MatSnackBarModule,
     FileUploadModule,
     NavbarComponent, CurrencyFormatterDirective,
-    // 👇 ایمپورت کامپوننت‌های اشتراکی
     ProfileInfoCardComponent, ProfileEditFormComponent
   ],
   templateUrl: './target-user-profile.component.html',
@@ -59,11 +55,10 @@ export class TargetUserProfileComponent implements OnInit {
   apiUrl = environment.apiUrl;
   apiPhotoUrl = environment.apiPhotoUrl;
 
-  // متغیرهای مربوط به آپلود عکس (چون لاجیکش خاصه همینجا نگه میداریم)
   uploader: FileUploader | undefined;
   hasBaseDropZoneOver = false;
 
-  targetUserProfile: any = null; // میتونی تایپ دقیق بدی
+  targetUserProfile: any = null; 
   courses: Course[] | null = [];
   shamsiCourses: any[] = [];
   courseTitles: string[] | null = [];
@@ -71,7 +66,7 @@ export class TargetUserProfileComponent implements OnInit {
 
   loading = true;
   error: string | null = null;
-  isSavingProfile = false; // برای لودینگ دکمه فرم ویرایش
+  isSavingProfile = false;
 
   // Pagination & Filters
   courseParams = new CourseParams();
@@ -118,10 +113,8 @@ export class TargetUserProfileComponent implements OnInit {
 
     this._managerService.getMemberByUserName(userName).subscribe({
       next: (data) => {
-        // نرمال‌سازی دیتا برای کامپوننت فرزند
         this.targetUserProfile = {
           ...data,
-          // اگر آدرس عکس نیاز به پیشوند دارد همینجا درستش کن
           photoUrl: data.memberPhoto?.url_165
             ? (data.memberPhoto.url_165.startsWith('http') ? data.memberPhoto.url_165 : this.apiPhotoUrl + data.memberPhoto.url_165)
             : null
@@ -135,7 +128,6 @@ export class TargetUserProfileComponent implements OnInit {
     });
   }
 
-  // متدی که وقتی فرم ویرایش سابمیت میشه صدا زده میشه
   onProfileUpdate(updatedData: any) {
     const userName = this._route.snapshot.paramMap.get('memberUserName');
     if (!userName) return;
@@ -145,8 +137,8 @@ export class TargetUserProfileComponent implements OnInit {
     const updateDto: ManagerUpdateMemberDto = {
       name: updatedData.name,
       lastName: updatedData.lastName,
-      dateOfBirth: updatedData.dateOfBirth, // فرمت درست از فرزند میاد
-      phoneNum: updatedData.phoneNum, // فرمت درست از فرزند میاد
+      dateOfBirth: updatedData.dateOfBirth, 
+      phoneNum: updatedData.phoneNum,
       gender: updatedData.gender
     };
 
@@ -154,9 +146,7 @@ export class TargetUserProfileComponent implements OnInit {
       next: (res) => {
         this.isSavingProfile = false;
         this._snackBar.open('پروفایل با موفقیت بروز شد', 'باشه', { duration: 4000, panelClass: 'snack-success' });
-        // آپدیت لوکال پروفایل برای نمایش فوری تغییرات
         this.targetUserProfile = { ...this.targetUserProfile, ...updateDto };
-        // یا دوباره getTargetUserProfile() رو صدا بزن
       },
       error: (err) => {
         this.isSavingProfile = false;
@@ -188,10 +178,8 @@ export class TargetUserProfileComponent implements OnInit {
         this.uploader.onSuccessItem = (item, response, status, headers) => {
           if (response) {
             const photo = JSON.parse(response);
-            // آپدیت عکس پروفایل در صفحه
             if (this.targetUserProfile) {
               this.targetUserProfile.photoUrl = this.apiPhotoUrl + photo.url_165;
-              // یک کپی جدید بساز تا انگولار بفهمه تغییر کرده (برای ChangeDetection)
               this.targetUserProfile = { ...this.targetUserProfile };
             }
             this._snackBar.open('عکس آپلود شد', 'باشه');
@@ -238,13 +226,11 @@ export class TargetUserProfileComponent implements OnInit {
     });
   }
 
-  // متد کمکی برای وضعیت دوره
   getCourseStatus(course: any): string {
     return course.isStarted ? 'در حال برگزاری' : 'شروع نشده';
   }
 
   handlePageEvent(e: PageEvent) {
-    // لاجیک صفحه بندی...
     this.courseParams.pageNumber = e.pageIndex + 1;
     this.courseParams.pageSize = e.pageSize;
     this.getAllCourses();
@@ -264,7 +250,7 @@ export class TargetUserProfileComponent implements OnInit {
       this._managerService.addEnrolledCourse(userName, dto).subscribe({
         next: () => {
           this._snackBar.open('دوره اضافه شد', 'باشه');
-          this.getTargetUserCourse(); // Refresh list
+          this.getTargetUserCourse(); 
           this.addEnrolledCourseFg.reset();
         },
         error: () => this._snackBar.open('خطا در افزودن دوره', 'باشه')
@@ -290,7 +276,6 @@ export class TargetUserProfileComponent implements OnInit {
     }
   }
 
-  // دکمه‌های انصراف
   onCancelAddEnrolledCourse() { this.addEnrolledCourseFg.reset(); }
   onCancelUpdateEnrolledCourse() { this.updateEnrolledCourseFg.reset(); }
 }

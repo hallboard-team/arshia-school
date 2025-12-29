@@ -8,7 +8,6 @@ import { GenericRegisterFormComponent } from '../shared/generic-register/generic
 @Component({
   selector: 'app-register-student',
   standalone: true,
-  // لیست ایمپورت‌ها خیلی تمیز و کوتاه شد:
   imports: [CommonModule, GenericRegisterFormComponent],
   templateUrl: './register-student.component.html',
   styleUrl: './register-student.component.scss'
@@ -24,7 +23,6 @@ export class RegisterStudentComponent {
   onFormSubmit(userData: RegisterUser): void {
     this.isLoading = true;
 
-    // فرض کردم اسم متد در سرویس createStudent است. اگر فرق دارد اصلاحش کن.
     this.managerService.createStudent(userData).subscribe({
       next: () => {
         this.isLoading = false;

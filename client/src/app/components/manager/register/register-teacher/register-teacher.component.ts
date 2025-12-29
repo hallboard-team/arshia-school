@@ -23,7 +23,6 @@ export class RegisterTeacherComponent {
   onFormSubmit(userData: RegisterUser): void {
     this.isLoading = true;
 
-    // فرض کردم اسم متد createTeacher است
     this.managerService.createTeacher(userData).subscribe({
       next: () => {
         this.isLoading = false;

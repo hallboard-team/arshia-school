@@ -16,7 +16,6 @@ export class RegisterSecretaryComponent {
   private snackBar = inject(MatSnackBar);
   private managerService = inject(ManagerService);
 
-  // دسترسی به کامپوننت فرزند برای ریست کردن یا ست کردن ارور
   @ViewChild(GenericRegisterFormComponent) registerForm!: GenericRegisterFormComponent;
 
   isLoading = false;
@@ -29,7 +28,6 @@ export class RegisterSecretaryComponent {
         this.isLoading = false;
         this.snackBar.open('منشی با موفقیت ثبت شد.', 'باشه', { panelClass: 'snack-success', duration: 4000 });
         
-        // ریست کردن فرم فرزند
         this.registerForm.resetForm();
       },
       error: (err) => {
@@ -37,7 +35,6 @@ export class RegisterSecretaryComponent {
         const msgs: string[] = Array.isArray(err?.error) ? err.error : (Array.isArray(err?.error?.errors) ? err.error.errors : []);
         
         if (msgs.length) {
-          // ارسال ارورها به فرم فرزند برای نمایش زیر فیلدها
           this.registerForm.setServerErrors(msgs);
           this.snackBar.open(msgs.join('\n'), 'باشه', { panelClass: 'snack-error', duration: 4000 });
         } else {
