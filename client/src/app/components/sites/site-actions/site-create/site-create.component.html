@@ -1,1 +1,91 @@
-<p>site-create works!</p>
+<header>
+    <nav>
+        <app-navbar />
+    </nav>
+</header>
+
+<div class="background">
+    <app-back-forward-button class="bf-btns"></app-back-forward-button>
+
+    <div class="div-title-radio-input">
+        <span class="title">افزودن سایت جدید</span>
+    </div>
+
+    <form class="site-form" [formGroup]="siteFg" (ngSubmit)="siteFg.valid && createSite()">
+        <div class="content">
+
+            <div class="form-item">
+                <mat-form-field appearance="outline">
+                    <mat-label>نام سایت (اتاق)</mat-label>
+                    <input class="input" autoFocusDir type="text" matInput dir="auto" formControlName="nameCtrl"
+                        placeholder="بین ۲ تا ۳۰ کاراکتر">
+                    <mat-hint>نام سایت را وارد کنید</mat-hint>
+                    @if (NameCtrl.hasError('required')) {
+                    <mat-error>لطفاً نام سایت را وارد کنید</mat-error>
+                    }
+                    @else if (NameCtrl.errors && NameCtrl.hasError('minlength')) {
+                    <mat-error>حداقل ۲ کاراکتر</mat-error>
+                    }
+                    @else if (NameCtrl.errors && NameCtrl.hasError('maxlength')) {
+                    <mat-error>حداکثر ۳۰ کاراکتر</mat-error>
+                    }
+                </mat-form-field>
+            </div>
+
+            <div class="form-item">
+                <mat-form-field appearance="outline">
+                    <mat-label>نام دپارتمان</mat-label>
+                    <input class="input" type="text" matInput dir="auto" formControlName="departmentCtrl"
+                        placeholder="بین ۲ تا ۳۰ کاراکتر">
+                    <mat-hint>نام دپارتمان مربوطه را وارد کنید</mat-hint>
+                    @if (DepartmentCtrl.hasError('required')) {
+                    <mat-error>لطفاً نام دپارتمان را وارد کنید</mat-error>
+                    }
+                    @else if (DepartmentCtrl.errors && DepartmentCtrl.hasError('minlength')) {
+                    <mat-error>حداقل ۲ کاراکتر</mat-error>
+                    }
+                    @else if (DepartmentCtrl.errors && DepartmentCtrl.hasError('maxlength')) {
+                    <mat-error>حداکثر ۳۰ کاراکتر</mat-error>
+                    }
+                </mat-form-field>
+            </div>
+
+            <div class="form-item">
+                <mat-form-field appearance="outline">
+                    <mat-label>طبقه</mat-label>
+                    <input class="input" type="number" matInput formControlName="floorCtrl" placeholder="شماره طبقه">
+                    <mat-hint>شماره طبقه را وارد کنید</mat-hint>
+                    @if (FloorCtrl.hasError('required')) {
+                    <mat-error>لطفاً طبقه را مشخص کنید</mat-error>
+                    }
+                </mat-form-field>
+            </div>
+
+            <div class="form-item">
+                <mat-form-field appearance="outline">
+                    <mat-label>ظرفیت</mat-label>
+                    <input class="input" type="number" matInput formControlName="capacityCtrl" min="1"
+                        placeholder="ظرفیت اتاق">
+                    <mat-hint>تعداد نفرات ظرفیت سایت</mat-hint>
+                    @if (CapacityCtrl.hasError('required')) {
+                    <mat-error>لطفاً ظرفیت را وارد کنید</mat-error>
+                    }
+                    @else if (CapacityCtrl.hasError('min')) {
+                    <mat-error>ظرفیت باید حداقل ۱ نفر باشد</mat-error>
+                    }
+                </mat-form-field>
+            </div>
+
+            <div class="action-buttons">
+                <button type="button" class="neumorphic-btn cancel-btn" (click)="onCancel()">
+                    انصراف
+                </button>
+
+                <button type="submit" [disabled]="siteFg.invalid" class="neumorphic-btn submit-btn">
+                    ثبت سایت جدید
+                </button>
+            </div>
+
+        </div>
+    </form>
+</div>

@@ -1,40 +1,16 @@
-export interface Course {
-    title: string,
-    className: string,
-    professorUserNames: string[],
-    professorNames: string[],
-    tuition: number,
-    hours?: number,
-    hoursPerClass?: number,
-    totalMinutes?: number;
-    classMinutes?: number;
-    days: number,
-    start: string | undefined,
-    isStarted: boolean
+export interface CourseBase {
+    title: string;
+    description: string;
+    totalTime: number;
+    isActive: boolean;
 }
 
-export interface ShowCourse {
-    title: string,
-    description: string,
-    hours: number,
-    hoursPerClass: number,
-    days: number,
-    isStarted: boolean
-}
+export interface ShowCourse extends CourseBase {}
 
-export interface CourseUpdate {
-    title: string,
-    className: string,
-    tuition: number,
-    hours: number,
-    hoursPerClass: number,
-    start: string | undefined,
-    isStarted: boolean
-}
+export interface AddCourse extends CourseBase {}
 
-export interface AddCourse {
-    title: string,
-    description: string,
-    hours: number,
-    isStarted: boolean
+export interface CourseUpdate extends CourseBase {}
+
+export interface Course extends CourseBase {
+    id?: string; 
 }

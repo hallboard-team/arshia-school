@@ -35,6 +35,8 @@ import { SiteCardComponent } from './components/sites/site-card/site-card.compon
 import { SiteListComponent } from './components/sites/site-list/site-list.component';
 import { ClassListComponent } from './components/classes/class-list/class-list.component';
 import { ClassCardComponent } from './components/classes/class-card/class-card.component';
+import { SiteCreateComponent } from './components/sites/site-actions/site-create/site-create.component';
+import { SiteEditComponent } from './components/sites/site-actions/site-edit/site-edit.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -83,7 +85,9 @@ export const routes: Routes = [
                     { path: 'staffs', component: StaffListComponent, canActivate: [managerGuard] },
                     { path: 'manager-panel', component: ManagerPanelComponent, canActivate: [managerGuard] },
                     { path: 'add-course', component: CourseCreateComponent, canActivate: [managerGuard] },
+                    { path: 'add-site', component: SiteCreateComponent, canActivate: [managerGuard] },
                     { path: 'update-course/:courseTitle', component: CourseEditComponent, canActivate: [managerGuard] },
+                    { path: 'update-site/:siteTitle', component: SiteEditComponent, canActivate: [managerGuard] },
                     { path: 'target-member-enrolled-course/:memberUserName/:courseTitle', component: TargetMemberEnrolledCourseComponent, canActivate: [managerGuard] },
                     { path: 'target-payment/:targetPaymentId', component: UploadPhotoComponent, canActivate: [managerGuard] },
                 ],

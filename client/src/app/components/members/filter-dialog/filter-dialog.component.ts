@@ -68,17 +68,17 @@ export class FilterDialogComponent implements OnInit {
   ngOnInit(): void {
     this.memberParams = new MemberParams();
 
-    this.getCoursesAndClasses();
+    // this.getCoursesAndClasses();
   }
 
-  getCoursesAndClasses(): void {
-    this._courseService.getCoursesAndClasses().subscribe({
-      next: (res) => {
-        this.classes = res.map(item => item.className);
-        this.titles = res.map(item => item.title);
-      }
-    })
-  }
+  // getCoursesAndClasses(): void {
+  //   this._courseService.getCoursesAndClasses().subscribe({
+  //     next: (res) => {
+  //       this.classes = res.map(item => item.className);
+  //       this.titles = res.map(item => item.title);
+  //     }
+  //   })
+  // }
 
   updateMemberParams(): void {
     if (this.memberParams) {

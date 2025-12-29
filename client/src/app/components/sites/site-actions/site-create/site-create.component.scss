@@ -1,0 +1,200 @@
+$bg-color: #e0e0e0;
+$shadow-light: #ffffff;
+$shadow-dark: #bebebe;
+$text-color: #333;
+
+.background {
+    width: 100%;
+    margin-top: 8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .bf-btns {
+        display: none;
+    }
+
+    .div-title-radio-input {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 0.5rem;
+        gap: 1rem;
+
+        .title {
+            font-size: 25px;
+            color: #000;
+            font-weight: 800;
+        }
+    }
+
+    .site-form {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 2rem 0;
+
+        .content {
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+            padding: 2rem 1rem;
+            border-radius: 20px;
+            background: linear-gradient(145deg, #f0f0f0, #cacaca);
+            box-shadow: 5px 5px 10px #5a5a5a, -5px -5px 10px #ffffff;
+
+            .form-item {
+                width: 100%;
+
+                mat-form-field {
+                    display: block;
+                    width: 100%;
+
+                    .input {
+                        padding: 10px;
+                        height: 54px;
+                        width: 100%;
+                        border: none;
+                        border-radius: 10px;
+                        background: transparent;
+                        box-shadow: none;
+                    }
+                }
+            }
+
+            .action-buttons {
+                width: 100%;
+                max-width: 500px;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                gap: 1.5rem;
+                margin-top: 1rem;
+
+                .neumorphic-btn {
+                    flex: 1;
+                    height: 50px;
+                    border: none;
+                    border-radius: 15px;
+                    background: #e0e0e0;
+                    color: #333;
+                    font-family: inherit;
+                    font-weight: 800;
+                    font-size: 16px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    box-shadow: 6px 6px 12px $shadow-dark, -6px -6px 12px $shadow-light;
+
+                    &:hover:not(:disabled) {
+                        transform: translateY(-2px);
+                        box-shadow: 8px 8px 16px $shadow-dark, -8px -8px 16px $shadow-light;
+                    }
+
+                    &:active:not(:disabled) {
+                        transform: translateY(0);
+                        box-shadow: inset 4px 4px 8px $shadow-dark, inset -4px -4px 8px $shadow-light;
+                    }
+
+                    &:disabled {
+                        color: #999;
+                        opacity: 0.7;
+                        box-shadow: none;
+                        background: #dcdcdc;
+                        cursor: not-allowed;
+                    }
+                }
+
+                .cancel-btn:hover {
+                    color: #d32f2f;
+                }
+            }
+        }
+    }
+}
+
+// --- Responsive Styles ---
+
+@media (min-width: 768px) {
+    .background {
+        .bf-btns {
+            display: flex;
+            width: 90%;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .site-form .content {
+            width: 90%;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 2rem;
+
+            // در تبلت و دسکتاپ، آیتم‌ها نصف صفحه را می‌گیرند (دو ستونه)
+            .form-item {
+                flex: 0 0 calc(50% - 1rem);
+                max-width: calc(50% - 1rem);
+            }
+
+            // دکمه‌ها تمام عرض را می‌گیرند تا وسط چین بمانند
+            .action-buttons {
+                flex: 0 0 100%;
+                width: 100%;
+            }
+        }
+    }
+}
+
+@media (min-width: 1200px) {
+    .background {
+        .bf-btns {
+            width: 75%;
+        }
+
+        .site-form .content {
+            width: 75%;
+        }
+    }
+}
+
+// --- Material Overrides ---
+::ng-deep mat-form-field {
+    height: auto !important;
+    margin-bottom: 10px;
+}
+
+::ng-deep .mat-mdc-text-field-wrapper {
+    border-radius: 12px;
+    background: #e0e0e0;
+    box-shadow: inset 5px 5px 10px #cecece, inset -5px -5px 10px #f2f2f2;
+    padding: 0;
+    overflow: visible;
+}
+
+::ng-deep .mat-mdc-form-field-appearance-outline .mdc-notched-outline {
+    display: none;
+}
+
+::ng-deep .mat-mdc-form-field-infix {
+    text-align: right;
+    direction: rtl;
+    padding: 12px 14px !important;
+    min-height: 54px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    position: relative;
+    bottom: 0;
+    margin-top: 6px;
+    padding: 0 12px;
+    height: auto;
+}
