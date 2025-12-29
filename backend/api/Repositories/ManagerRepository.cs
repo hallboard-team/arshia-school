@@ -94,167 +94,39 @@ public class ManagerRepository : IManagerRepository
     );
   }
 
-  public async Task<RegisteredUserDto?> CreateSecretaryAsync(
+  public async Task<OperationResult<RegisteredUserDto>> CreateSecretaryAsync(
     RegisterDto registerDto, CancellationToken cancellationToken
   )
   {
-    var dto = new RegisteredUserDto();
-
-    AppUser? existingByEmail = await _userManager.FindByEmailAsync(registerDto.Email);
-    if (existingByEmail is not null)
-    {
-      dto.Errors.Add("این ایمیل قبلاً ثبت شده است.");
-      return dto;
-    }
-
-    bool doesPhoneNumExist = await _collectionAppUser.Find(doc => doc.PhoneNum == registerDto.PhoneNum).
-      AnyAsync(cancellationToken);
-
-    if (doesPhoneNumExist)
-    {
-      dto.Errors.Add("شماره تلفن وارد شده قبلاً ثبت شده است.");
-      return dto;
-    }
-
-    string uniqueUsername = await GenerateUniqueUsernameAsync(cancellationToken);
-
-    var appUser = new AppUser
-    {
-      Email = registerDto.Email,
-      UserName = uniqueUsername,
-      DateOfBirth = registerDto.DateOfBirth,
-      Name = registerDto.Name?.Trim() ?? string.Empty,
-      LastName = registerDto.LastName?.Trim() ?? string.Empty,
-      PhoneNum = registerDto.PhoneNum,
-      Gender = registerDto.Gender
-    };
-
-    IdentityResult createRes = await _userManager.CreateAsync(appUser, registerDto.Password);
-    if (!createRes.Succeeded)
-    {
-      foreach (IdentityError e in createRes.Errors) dto.Errors.Add(e.Description);
-      return dto;
-    }
-
-    IdentityResult roleRes = await _userManager.AddToRoleAsync(appUser, "secretary");
-    if (!roleRes.Succeeded)
-    {
-      foreach (IdentityError e in roleRes.Errors) dto.Errors.Add(e.Description);
-      return dto;
-    }
-
-    return ConvertAppUserToRegisteredDto(appUser);
+    return await ImplementCreateUserAsync(registerDto, "secretary", cancellationToken);
   }
 
-  public async Task<RegisteredUserDto?> CreateStudentAsync(RegisterDto registerDto, CancellationToken cancellationToken)
+  public async Task<OperationResult<RegisteredUserDto>> CreateStudentAsync(RegisterDto registerDto, CancellationToken cancellationToken)
   {
-    var dto = new RegisteredUserDto();
-
-    AppUser? existingByEmail = await _userManager.FindByEmailAsync(registerDto.Email);
-    if (existingByEmail is not null)
-    {
-      dto.Errors.Add("این ایمیل قبلاً ثبت شده است.");
-      return dto;
-    }
-
-    bool doesPhoneNumExist = await _collectionAppUser.Find(doc => doc.PhoneNum == registerDto.PhoneNum).
-      AnyAsync(cancellationToken);
-
-    if (doesPhoneNumExist)
-    {
-      dto.Errors.Add("شماره تلفن وارد شده قبلاً ثبت شده است.");
-      return dto;
-    }
-
-    string uniqueUsername = await GenerateUniqueUsernameAsync(cancellationToken);
-
-    var appUser = new AppUser
-    {
-      Email = registerDto.Email,
-      UserName = uniqueUsername,
-      DateOfBirth = registerDto.DateOfBirth,
-      Name = registerDto.Name?.Trim() ?? string.Empty,
-      LastName = registerDto.LastName?.Trim() ?? string.Empty,
-      PhoneNum = registerDto.PhoneNum,
-      Gender = registerDto.Gender
-    };
-
-    IdentityResult createRes = await _userManager.CreateAsync(appUser, registerDto.Password);
-    if (!createRes.Succeeded)
-    {
-      foreach (IdentityError e in createRes.Errors) dto.Errors.Add(e.Description);
-      return dto;
-    }
-
-    IdentityResult roleRes = await _userManager.AddToRoleAsync(appUser, "student");
-    if (!roleRes.Succeeded)
-    {
-      foreach (IdentityError e in roleRes.Errors) dto.Errors.Add(e.Description);
-      return dto;
-    }
-
-    return ConvertAppUserToRegisteredDto(appUser);
+    return await ImplementCreateUserAsync(registerDto, "student", cancellationToken);
   }
 
-  public async Task<RegisteredUserDto?> CreateTeacherAsync(RegisterDto registerDto, CancellationToken cancellationToken)
+  public async Task<OperationResult<RegisteredUserDto>> CreateTeacherAsync(RegisterDto managerInput, CancellationToken cancellationToken)
   {
-    var dto = new RegisteredUserDto();
-
-    AppUser? existingByEmail = await _userManager.FindByEmailAsync(registerDto.Email);
-    if (existingByEmail is not null)
-    {
-      dto.Errors.Add("این ایمیل قبلاً ثبت شده است.");
-      return dto;
-    }
-
-    bool doesPhoneNumExist = await _collectionAppUser.Find(doc => doc.PhoneNum == registerDto.PhoneNum).
-      AnyAsync(cancellationToken);
-
-    if (doesPhoneNumExist)
-    {
-      dto.Errors.Add("شماره تلفن وارد شده قبلاً ثبت شده است.");
-      return dto;
-    }
-
-    string uniqueUsername = await GenerateUniqueUsernameAsync(cancellationToken);
-
-    var appUser = new AppUser
-    {
-      Email = registerDto.Email,
-      UserName = uniqueUsername,
-      DateOfBirth = registerDto.DateOfBirth,
-      Name = registerDto.Name?.Trim() ?? string.Empty,
-      LastName = registerDto.LastName?.Trim() ?? string.Empty,
-      PhoneNum = registerDto.PhoneNum,
-      Gender = registerDto.Gender
-    };
-
-    IdentityResult createRes = await _userManager.CreateAsync(appUser, registerDto.Password);
-    if (!createRes.Succeeded)
-    {
-      foreach (IdentityError e in createRes.Errors) dto.Errors.Add(e.Description);
-      return dto;
-    }
-
-    IdentityResult roleRes = await _userManager.AddToRoleAsync(appUser, "teacher");
-    if (!roleRes.Succeeded)
-    {
-      foreach (IdentityError e in roleRes.Errors) dto.Errors.Add(e.Description);
-      return dto;
-    }
-
-    return ConvertAppUserToRegisteredDto(appUser);
+    return await ImplementCreateUserAsync(managerInput, "teacher", cancellationToken);
   }
 
-  public async Task<PagedList<AppUser>> GetAllAsync(MemberParams memberParams, CancellationToken cancellationToken)
+  public async Task<OperationResult<PagedList<AppUser>>> GetAllAsync(MemberParams memberParams, CancellationToken cancellationToken)
   {
     IQueryable<AppUser> query = CreateQuery(memberParams);
-    return await PagedList<AppUser>.CreatePagedListAsync(
+
+    PagedList<AppUser> pagedAppUser = await PagedList<AppUser>.CreatePagedListAsync(
       query, memberParams.PageNumber, memberParams.PageSize, cancellationToken
+    );
+
+    return new(
+      true,
+      pagedAppUser,
+      null
     );
   }
 
-  public async Task<IEnumerable<UserWithRoleDto>> GetUsersWithRolesAsync()
+  public async Task<OperationResult<IEnumerable<UserWithRoleDto>>> GetUsersWithRolesAsync()
   {
     var usersWithRoles = new List<UserWithRoleDto>();
     IEnumerable<AppUser> appUsers = _userManager.Users;
@@ -265,27 +137,67 @@ public class ManagerRepository : IManagerRepository
       usersWithRoles.Add(new UserWithRoleDto(appUser.UserName!, roles));
     }
 
-    return usersWithRoles;
+    return new(
+      true,
+      usersWithRoles,
+      null
+    );
   }
 
-  public async Task<EnrolledClassRoom?> AddEnrolledClassAsync(
+  public async Task<OperationResult<EnrolledClassRoom>> AddEnrolledClassAsync(
     AddEnrolledCourseDto addEnrolledCourseDto,
     string targetUserName,
     CancellationToken cancellationToken
   )
   {
-    if (addEnrolledCourseDto.NumberOfPayments <= 0) return null;
+    if (addEnrolledCourseDto.NumberOfPayments <= 0)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsNumberOfPaymentsUnderZero,
+          "Number of payments cannot be 0 or under 0"
+        )
+      );
+    }
 
     AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == targetUserName.ToUpper()).
       FirstOrDefaultAsync(cancellationToken);
-    if (appUser is null) return null;
+    if (appUser is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsUserNotFound,
+          "User not found"
+        )
+      );
+    }
 
     ClassRoom? targetClass = await _collectionClass.Find(doc => doc.ClassRoomName.ToUpper() == addEnrolledCourseDto.ClassName.ToUpper()).
       FirstOrDefaultAsync(cancellationToken);
-    if (targetClass is null) return null;
+    if (targetClass is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsClassRoomNotFound,
+          "Class not found"
+        )
+      );
+    }
 
     bool alreadyEnrolledAdded = appUser.EnrolledClasses.Any(doc => doc.ClassRoomId == targetClass.Id);
-    if (alreadyEnrolledAdded) return null;
+    if (alreadyEnrolledAdded)
+    {
+      return new(
+        true,
+        Error: new(
+          ErrorCode.IsAlreadyEnrolled,
+          "User is already enrolled"
+        )
+      );
+    }
 
     int tuition = targetClass.Tuition;                       // شهریه کل (int)
     int paidAmount = addEnrolledCourseDto.PaidAmount;   // پیش‌پرداخت (int)
@@ -323,10 +235,25 @@ public class ManagerRepository : IManagerRepository
       filter, update, cancellationToken: cancellationToken
     );
 
-    return result.ModifiedCount > 0 ? enrolledCourse : null;
+    if (result.ModifiedCount > 0)
+    {
+      return new(
+        true,
+        enrolledCourse,
+        null
+      );
+    }
+
+    return new(
+      false,
+      Error: new(
+        ErrorCode.IsAnyUpdateMake,
+        "No updates have made"
+      )
+    );
   }
 
-  public async Task<UpdateResult?> UpdateEnrolledClassAsync(
+  public async Task<OperationResult> UpdateEnrolledClassAsync(
     UpdateEnrolledDto updateEnrolledDto,
     string targetUserName,
     CancellationToken cancellationToken
@@ -335,13 +262,31 @@ public class ManagerRepository : IManagerRepository
     AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == targetUserName.ToUpper()).
       FirstOrDefaultAsync(cancellationToken);
 
-    if (appUser is null) return null;
+    if (appUser is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsUserNotFound,
+          "User not found"
+        )
+      );
+    }
 
     ClassRoom targetClass = await _collectionClass.Find(doc => doc.ClassRoomName.ToUpper() == updateEnrolledDto.ClassName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
     EnrolledClassRoom? enrolledClass = appUser.EnrolledClasses.FirstOrDefault(ec => ec.ClassRoomId == targetClass.Id);
 
-    if (enrolledClass is null) return null;
+    if (enrolledClass is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsNotEnrolled,
+          "User is not in the target class"
+        )
+      );
+    }
 
     int newTotalPaidAmount = enrolledClass.PaidAmount + updateEnrolledDto.PaidAmount;
     int tuitionReminder = targetClass.Tuition - newTotalPaidAmount;
@@ -371,57 +316,128 @@ public class ManagerRepository : IManagerRepository
       Set("EnrolledCourses.$.NumberOfPaymentsLeft", numberOfPaymentsLeft).
       Push("EnrolledCourses.$.Payments", newPayment);
 
-    return await _collectionAppUser.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
+    UpdateResult updateResult = await _collectionAppUser.UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
+
+    if (updateResult.ModifiedCount > 0)
+    {
+      return new(
+        true,
+        null
+      );
+    }
+
+    return new(
+      false,
+      Error: new(
+        ErrorCode.IsAnyUpdateMake,
+        "No updates have made"
+      )
+    );
   }
 
-  public async Task<DeleteResult?> DeleteAsync(string targetMemberUserName, CancellationToken cancellationToken)
+  public async Task<OperationResult> DeleteAsync(string targetMemberUserName, CancellationToken cancellationToken)
   {
-    ObjectId userId = await _collectionAppUser.AsQueryable().Where(u => u.UserName == targetMemberUserName).
-      Select(u => u.Id).FirstOrDefaultAsync(cancellationToken);
+    ObjectId? userId = await _collectionAppUser.Find(u => u.UserName == targetMemberUserName).
+      Project(u => u.Id).FirstOrDefaultAsync(cancellationToken);
 
-    if (userId == default) return null;
+    if (userId is null)
+    {
+      return new(
+        false,
+        Error: new(
+         ErrorCode.IsUserNotFound,
+         "User not found"
+        )
+      );
+    }
 
     FilterDefinition<AppUser>? filter = Builders<AppUser>.Filter.Eq(u => u.Id, userId);
 
-    return await _collectionAppUser.DeleteOneAsync(filter, cancellationToken);
+    DeleteResult deleteResult = await _collectionAppUser.DeleteOneAsync(filter, cancellationToken);
+
+    if (deleteResult.DeletedCount > 0)
+    {
+      return new(
+        true,
+        null
+      );
+    }
+
+    return new(
+      false,
+      Error: new(
+        ErrorCode.IsAnyDeleteMake,
+        "No deletion has made"
+      )
+    );
   }
 
-  public async Task<List<AppUser>> GetAllTeachersAsync(CancellationToken cancellationToken)
+  public async Task<OperationResult<List<AppUser>>> GetAllTeachersAsync(CancellationToken cancellationToken)
   {
-    IList<AppUser> teachers = await _userManager.GetUsersInRoleAsync("teacher");
-    var pureTeachers = new List<AppUser>();
+    IEnumerable<AppUser> teachers = await _userManager.GetUsersInRoleAsync("teacher");
+    List<AppUser> pureTeachers = [];
 
     foreach (AppUser user in teachers)
       if (!await _userManager.IsInRoleAsync(user, "admin"))
         pureTeachers.Add(user);
 
-    return pureTeachers;
+    return new(
+      true,
+      pureTeachers,
+      null
+    );
   }
 
-  public async Task<MemberDto?> GetMemberByEmailAsync(string targetMemberEmail, CancellationToken cancellationToken)
+  public async Task<OperationResult<MemberDto>> GetMemberByEmailAsync(string targetMemberEmail, CancellationToken cancellationToken)
   {
     AppUser? appUser = await _userManager.FindByEmailAsync(targetMemberEmail);
-    if (appUser is null) return null;
+    if (appUser is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsUserNotFound,
+          "User not found"
+        )
+      );
+    }
 
-    List<AppRole> appRoles = await GetAllRoleAsync(cancellationToken);
-    Dictionary<ObjectId, string?> roleIdsToName = appRoles.ToDictionary(r => r.Id, r => r.Name);
+    OperationResult<List<AppRole>> appRoles = await GetAllRoleAsync(cancellationToken);
+    Dictionary<ObjectId, string?> roleIdsToName = appRoles.Result.ToDictionary(r => r.Id, r => r.Name);
 
-    return ConvertAppUserToMemberDto(appUser, isAbsent: false, roleIdsToName!);
+    return new(
+      true,
+      ConvertAppUserToMemberDto(appUser, isAbsent: false, roleIdsToName!),
+      null
+    );
   }
 
-  public async Task<TargetMemberDto?> GetMemberByUserNameAsync(
+  public async Task<OperationResult<TargetMemberDto>> GetMemberByUserNameAsync(
     string targetUserName, CancellationToken cancellationToken
   )
   {
     AppUser? appUser = await _collectionAppUser.Find(u => u.NormalizedUserName == targetUserName.ToUpper()).
       FirstOrDefaultAsync(cancellationToken);
 
-    if (appUser is null) return null;
+    if (appUser is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsUserNotFound,
+          "User not found"
+        )
+      );
+    }
 
-    return ConvertAppUserToTargetMemberDto(appUser);
+    return new(
+      true,
+      ConvertAppUserToTargetMemberDto(appUser),
+      null
+    );
   }
 
-  public async Task<TargetMemberDto?> UpdateMemberAsync(
+  public async Task<OperationResult<TargetMemberDto>> UpdateMemberAsync(
        string memberUserName,
        ManagerUpdateMemberDto updatedMember,
        CancellationToken cancellationToken
@@ -431,7 +447,16 @@ public class ManagerRepository : IManagerRepository
         .Find(u => u.NormalizedUserName == memberUserName.ToUpper())
         .FirstOrDefaultAsync(cancellationToken);
 
-    if (targetAppUser is null) return null;
+    if (targetAppUser is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsUserNotFound,
+          "User not found"
+        )
+      );
+    }
 
     var builder = Builders<AppUser>.Update;
     var updateDefinitions = new List<UpdateDefinition<AppUser>>();
@@ -456,7 +481,13 @@ public class ManagerRepository : IManagerRepository
       }
       else
       {
-        return null;
+        return new(
+          false,
+          Error: new(
+            ErrorCode.IsGenderValid,
+            "Enter valid gender"
+          )
+        );
       }
     }
 
@@ -472,9 +503,12 @@ public class ManagerRepository : IManagerRepository
         .Find(u => u.NormalizedUserName == memberUserName.ToUpper())
         .FirstOrDefaultAsync(cancellationToken);
 
-    return updatedAppUser is null ? null : Mappers.ConvertAppUserToTargetMemberDto(updatedAppUser);
+    return new(
+      true,
+      Mappers.ConvertAppUserToTargetMemberDto(updatedAppUser),
+      null
+    );
   }
-
 
   public async Task<OperationResult<MemberPhoto>> UploadMemberPhotoAsync(IFormFile file, string userName, CancellationToken cancellationToken)
   {
@@ -522,20 +556,48 @@ public class ManagerRepository : IManagerRepository
     );
   }
 
-  public async Task<Photo?> AddPhotoAsync(IFormFile file, ObjectId targetPaymentId, CancellationToken cancellationToken)
+  public async Task<OperationResult<Photo>> AddPhotoAsync(IFormFile file, ObjectId targetPaymentId, CancellationToken cancellationToken)
   {
     AppUser? appUser = await _collectionAppUser.
       Find(u => u.EnrolledClasses.Any(ec => ec.Payments.Any(p => p.Id == targetPaymentId))).
       FirstOrDefaultAsync(cancellationToken);
 
-    if (appUser is null) return null;
+    if (appUser is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsUserNotFound,
+          "User not found"
+        )
+      );
+    }
 
     EnrolledClassRoom? enrolledCourse =
       appUser.EnrolledClasses.FirstOrDefault(ec => ec.Payments.Any(p => p.Id == targetPaymentId));
-    if (enrolledCourse is null) return null;
+
+    if (enrolledCourse is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsClassRoomNotFound,
+          "target class not found"
+        )
+      );
+    }
 
     Payment? payment = enrolledCourse.Payments.FirstOrDefault(p => p.Id == targetPaymentId);
-    if (payment is null) return null;
+    if (payment is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsPaymentNotFound,
+          "Target payment not found"
+        )
+      );
+    }
 
     string[]? imageUrls = await _photoService.AddPhotoToDiskAsync(file, payment.Id);
     if (imageUrls is null) throw new ArgumentNullException("Saving photo has failed. Error from PhotoService.");
@@ -561,25 +623,76 @@ public class ManagerRepository : IManagerRepository
       filter, update, new UpdateOptions { ArrayFilters = arrayFilters }, cancellationToken
     );
 
-    return result.ModifiedCount > 0 ? photo : null;
+    if (result.ModifiedCount > 0)
+    {
+      return new(
+        true,
+        photo,
+        null
+      );
+    }
+
+    return new(
+      false,
+      Error: new(
+        ErrorCode.IsAnyUpdateMake,
+        "No updates have made"
+      )
+    );
   }
 
-  public async Task<bool> DeletePhotoAsync(ObjectId targetPaymentId, CancellationToken cancellationToken)
+  public async Task<OperationResult> DeletePhotoAsync(ObjectId targetPaymentId, CancellationToken cancellationToken)
   {
     AppUser? appUser = await _collectionAppUser.
       Find(u => u.EnrolledClasses.Any(ec => ec.Payments.Any(p => p.Id == targetPaymentId))).
       FirstOrDefaultAsync(cancellationToken);
-    if (appUser is null) return false;
+    if (appUser is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsUserNotFound,
+          "User not found"
+        )
+      );
+    }
 
-    EnrolledClassRoom? enrolledCourse =
+    EnrolledClassRoom? enrolledClass =
       appUser.EnrolledClasses.FirstOrDefault(ec => ec.Payments.Any(p => p.Id == targetPaymentId));
-    if (enrolledCourse is null) return false;
+    if (enrolledClass is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsClassRoomNotFound,
+          "Target class not found"
+        )
+      );
+    }
 
-    Payment? payment = enrolledCourse.Payments.FirstOrDefault(p => p.Id == targetPaymentId);
-    if (payment is null || payment.Photo is null) return false;
+    Payment? payment = enrolledClass.Payments.FirstOrDefault(p => p.Id == targetPaymentId);
+    if (payment is null || payment.Photo is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsPaymentNotFound,
+          "Payment not found"
+        )
+      );
+    }
 
     bool isDeleteSuccess = await _photoService.DeletePhotoFromDisk(payment.Photo);
-    if (!isDeleteSuccess) return false;
+    if (!isDeleteSuccess)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsOperationFailed,
+          "Photo deletion failed!"
+        )
+      );
+    }
 
     Payment updatedPayment = payment with { Photo = null };
 
@@ -591,7 +704,7 @@ public class ManagerRepository : IManagerRepository
     var arrayFilters = new List<ArrayFilterDefinition>
     {
       new BsonDocumentArrayFilterDefinition<BsonDocument>(
-        new BsonDocument("ec.ClassId", enrolledCourse.ClassRoomId)
+        new BsonDocument("ec.ClassId", enrolledClass.ClassRoomId)
       ),
       new BsonDocumentArrayFilterDefinition<BsonDocument>(new BsonDocument("p._id", payment.Id))
     };
@@ -600,10 +713,24 @@ public class ManagerRepository : IManagerRepository
       filter, update, new UpdateOptions { ArrayFilters = arrayFilters }, cancellationToken
     );
 
-    return result.ModifiedCount > 0;
+    if (result.ModifiedCount > 0)
+    {
+      return new(
+        true,
+        null
+      );
+    }
+
+    return new(
+      false,
+      Error: new(
+        ErrorCode.IsAnyUpdateMake,
+        "No updates have made"
+      )
+    );
   }
 
-  public async Task<List<ShowClassRoomDto>> GetTargetMemberClassesAsync(
+  public async Task<OperationResult<List<ShowClassRoomDto>>> GetTargetMemberClassesAsync(
     string targetUserName, CancellationToken cancellationToken
   )
   {
@@ -611,7 +738,16 @@ public class ManagerRepository : IManagerRepository
       Where(u => u.NormalizedUserName == targetUserName.ToUpper()).SelectMany(u => u.EnrolledClasses).
       Select(ec => ec.ClassRoomId.ToString()).ToListAsync(cancellationToken);
 
-    if (enrolledClassIds is null || enrolledClassIds.Count == 0) return new List<ShowClassRoomDto>();
+    if (enrolledClassIds is null || enrolledClassIds.Count == 0)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsClassRoomNotFound,
+          "ClassRoom not found"
+        )
+      );
+    }
 
     List<ClassRoom> classes = await _collectionClass.Find(doc => enrolledClassIds.Contains(doc.Id.ToString())).
       ToListAsync(cancellationToken);
@@ -622,8 +758,8 @@ public class ManagerRepository : IManagerRepository
 
     foreach (var model in classes)
     {
-      userNames = await _classRepository.GetProfessorUserNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
-      names = await _classRepository.GetProfessorNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
+      OperationResult<IEnumerable<string>> userNamesOpResult = await _classRepository.GetProfessorUserNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
+      OperationResult<IEnumerable<string>> namesOpResult = await _classRepository.GetProfessorNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
 
       OperationResult<ShowCourseDto> courseDto = await _courseRepository.GetCourseByIdAsync(model.CourseId!.Value, cancellationToken);
       OperationResult<ShowSiteDto> siteDto = await _siteRepository.GetSiteByIdAsync(model.SiteId!.Value, cancellationToken);
@@ -631,38 +767,103 @@ public class ManagerRepository : IManagerRepository
       classRes.Add(Mappers.ConvertClassRoomToShowClassRoomDto(model, courseDto.Result, siteDto.Result, userNames, names));
     }
 
-    return classRes ?? [];
+    return new(
+      true,
+      classRes,
+      null
+    );
   }
 
-  public async Task<EnrolledClassRoom?> GetTargetMemberEnrolledClassAsync(
+  public async Task<OperationResult<EnrolledClassRoom>> GetTargetMemberEnrolledClassAsync(
     string targetUserName, string classTitle, CancellationToken cancellationToken
   )
   {
     AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == targetUserName.ToUpper()).
       FirstOrDefaultAsync(cancellationToken);
 
-    if (appUser is null) return null;
+    if (appUser is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsUserNotFound,
+          "User not found"
+        )
+      );
+    }
 
     ClassRoom? targetClass = await _collectionClass.Find(doc => doc.ClassRoomName.ToUpper() == classTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
-    return appUser.EnrolledClasses.FirstOrDefault(ec => ec.ClassRoomId == targetClass.Id);
+    EnrolledClassRoom? enrolledClassRoom = appUser.EnrolledClasses.FirstOrDefault(ec => ec.ClassRoomId == targetClass.Id);
+
+    if (enrolledClassRoom is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsNotEnrolled,
+          "User is not in any classroom"
+        )
+      );
+    }
+
+    return new(
+     true,
+     enrolledClassRoom,
+     null
+    );
   }
 
-  public async Task<Payment?> GetTargetPaymentByIdAsync(ObjectId targetPaymentId, CancellationToken cancellationToken)
+  public async Task<OperationResult<Payment>> GetTargetPaymentByIdAsync(ObjectId targetPaymentId, CancellationToken cancellationToken)
   {
     AppUser? appUser = await _collectionAppUser.
       Find(doc => doc.EnrolledClasses.Any(ec => ec.Payments.Any(p => p.Id == targetPaymentId))).
       FirstOrDefaultAsync(cancellationToken);
-    if (appUser is null) return null;
+    if (appUser is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsUserNotFound,
+          "User not found"
+        )
+      );
+    }
 
-    EnrolledClassRoom? enrolledCourse =
+    EnrolledClassRoom? enrolledClass =
       appUser.EnrolledClasses.FirstOrDefault(ec => ec.Payments.Any(p => p.Id == targetPaymentId));
-    if (enrolledCourse is null) return null;
+    if (enrolledClass is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsClassRoomNotFound,
+          "Target class not found"
+        )
+      );
+    }
 
-    return enrolledCourse.Payments.FirstOrDefault(p => p.Id == targetPaymentId);
+    Payment? payment = enrolledClass.Payments.FirstOrDefault(p => p.Id == targetPaymentId);
+
+    if (payment is null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsPaymentNotFound,
+          "Payment not found"
+        )
+      );
+    }
+
+    return new(
+      true,
+      payment,
+      null
+    );
   }
 
-  public async Task<List<string>> GetTargetClassTitlesAsync(string targetUserName, CancellationToken cancellationToken)
+  public async Task<OperationResult<List<string>>> GetTargetClassTitlesAsync(string targetUserName, CancellationToken cancellationToken)
   {
     List<ObjectId>? classIds = await _collectionAppUser.AsQueryable().
       Where(u => u.NormalizedUserName == targetUserName.ToUpper()).SelectMany(u => u.EnrolledClasses).
@@ -673,11 +874,15 @@ public class ManagerRepository : IManagerRepository
       .Project(c => c.ClassRoomName ?? string.Empty)
       .ToListAsync(cancellationToken);
 
-    return classNames ?? new List<string>();
+    return new(
+      true,
+      classNames,
+      null
+    );
   }
 
-  public async Task<PagedList<Attendance>> GetAllAttendanceAsync(
-    AttendenceParams attendanceParams,
+  public async Task<OperationResult<PagedList<Attendance>>> GetAllAttendanceAsync(
+    AttendanceParams attendanceParams,
     string targetMemberUserName,
     string targetClassTitle,
     CancellationToken cancellationToken
@@ -687,26 +892,41 @@ public class ManagerRepository : IManagerRepository
       FirstOrDefaultAsync(cancellationToken);
     if (appUser is null)
     {
-      var emptyQuery = _collectionAttendance.AsQueryable().Where(_ => false);
-      return await PagedList<Attendance>.CreatePagedListAsync(
-          emptyQuery, attendanceParams.PageNumber, attendanceParams.PageSize, cancellationToken);
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsUserNotFound,
+          "User not found"
+        )
+      );
     }
 
-    ObjectId targetCourseId = await _collectionClass.AsQueryable().
+    ObjectId targetClassId = await _collectionClass.AsQueryable().
       Where(doc => doc.ClassRoomName == targetClassTitle.ToUpper()).Select(doc => doc.Id).
       FirstOrDefaultAsync(cancellationToken);
-    if (targetCourseId == default)
+    if (targetClassId.Equals(null))
     {
       var emptyQuery = _collectionAttendance.AsQueryable().Where(_ => false);
-      return await PagedList<Attendance>.CreatePagedListAsync(
-          emptyQuery, attendanceParams.PageNumber, attendanceParams.PageSize, cancellationToken);
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsClassRoomNotFound,
+          "Class not found"
+        )
+      );
     }
 
     IQueryable<Attendance>? query = _collectionAttendance.AsQueryable().
-      Where(doc => doc.StudentId == appUser.Id && doc.ClassId == targetCourseId);
+      Where(doc => doc.StudentId == appUser.Id && doc.ClassId == targetClassId);
 
-    return await PagedList<Attendance>.CreatePagedListAsync(
+    PagedList<Attendance> pagedAttendances = await PagedList<Attendance>.CreatePagedListAsync(
       query, attendanceParams.PageNumber, attendanceParams.PageSize, cancellationToken
+    );
+
+    return new(
+      true,
+      pagedAttendances,
+      null
     );
   }
 
@@ -814,9 +1034,73 @@ public class ManagerRepository : IManagerRepository
     return ValidationsExtensions.ValidateObjectId(userId);
   }
 
-  public async Task<List<AppRole>> GetAllRoleAsync(CancellationToken cancellationToken)
+  public async Task<OperationResult<List<AppRole>>> GetAllRoleAsync(CancellationToken cancellationToken)
   {
-    return await _collectionRole.Find(_ => true).ToListAsync();
+    return new(
+      true,
+      await _collectionRole.Find(_ => true).ToListAsync(),
+      null
+    );
+  }
+
+  private async Task<OperationResult<RegisteredUserDto>> ImplementCreateUserAsync(RegisterDto registerDto, string role, CancellationToken cancellationToken)
+  {
+    AppUser? existingByEmail = await _userManager.FindByEmailAsync(registerDto.Email);
+    if (existingByEmail is not null)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsDuplicateEmail,
+          "Email already registered"
+        )
+      );
+    }
+
+    bool doesPhoneNumExist = await _collectionAppUser.Find(doc => doc.PhoneNum == registerDto.PhoneNum).AnyAsync(cancellationToken);
+    if (doesPhoneNumExist)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsDuplicatePhone,
+          "Phone number is already registered"
+        )
+      );
+    }
+
+    AppUser appUser = Mappers.ConvertRegisterDtoToAppUser(registerDto);
+
+    IdentityResult createRes = await _userManager.CreateAsync(appUser, registerDto.Password);
+    if (!createRes.Succeeded)
+    {
+      string? errorMessages = string.Join(",", createRes.Errors.Select(e => e.Description));
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsIdentityFailed,
+          errorMessages
+        )
+      );
+    }
+
+    IdentityResult roleRes = await _userManager.AddToRoleAsync(appUser, role);
+    if (!roleRes.Succeeded)
+    {
+      return new(
+        false,
+        Error: new(
+          ErrorCode.IsRoleIdentityFailed,
+          "Assigning role failed."
+        )
+      );
+    }
+
+    return new(
+      true,
+      Mappers.ConvertAppUserToRegisteredDto(appUser),
+      null
+    );
   }
 
   #region Vars and Constructor

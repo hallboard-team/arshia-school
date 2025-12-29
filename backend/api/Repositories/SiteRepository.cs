@@ -42,11 +42,17 @@ public class SiteRepository : ISiteRepository
         );
     }
 
-    public async Task<PagedList<Site>> GetAllSitesAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
+    public async Task<OperationResult<PagedList<Site>>> GetAllSitesAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
     {
         IQueryable<Site> query = _collectionSite.AsQueryable();
 
-        return await PagedList<Site>.CreatePagedListAsync(query, paginationParams.PageNumber, paginationParams.PageSize, cancellationToken);
+        PagedList<Site> pagedSites = await PagedList<Site>.CreatePagedListAsync(query, paginationParams.PageNumber, paginationParams.PageSize, cancellationToken);
+
+        return new(
+            true,
+            pagedSites,
+            null
+        );
     }
 
     public async Task<OperationResult<ShowSiteDto>> GetSiteByNameAsync(string siteName, CancellationToken cancellationToken)

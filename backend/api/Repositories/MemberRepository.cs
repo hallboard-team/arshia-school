@@ -24,15 +24,19 @@ public class MemberRepository : IMemberRepository
     }
     #endregion Constructor
 
-    public async Task<PagedList<Attendance>> GetAllAttendenceAsync(AttendenceParams attendenceParams, ObjectId? userId, string targetClassTitle, CancellationToken cancellationToken)
+    public async Task<OperationResult<PagedList<Attendance>>> GetAllAttendenceAsync(AttendanceParams attendanceParams, ObjectId? userId, string targetClassTitle, CancellationToken cancellationToken)
     {
         AppUser? appUser = await _collectionAppUser.Find<AppUser>(
             doc => doc.Id == userId).FirstOrDefaultAsync(cancellationToken);
         if (appUser is null)
         {
-            var emptyQuery = _collectionAttendence.AsQueryable().Where(_ => false);
-            return await PagedList<Attendance>.CreatePagedListAsync(
-                emptyQuery, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsUserNotFound,
+                    "User not found"
+                )
+            );
         }
 
         ObjectId? targetClassId = await _collectionClass.AsQueryable()
@@ -42,15 +46,25 @@ public class MemberRepository : IMemberRepository
 
         if (targetClassId == default)
         {
-            var emptyQuery = _collectionAttendence.AsQueryable().Where(_ => false);
-            return await PagedList<Attendance>.CreatePagedListAsync(
-                emptyQuery, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsClassRoomNotFound,
+                    "Class not found"
+                )
+            );
         }
 
         IQueryable<Attendance>? query = _collectionAttendence.AsQueryable<Attendance>()
             .Where(doc => doc.StudentId == appUser.Id && doc.ClassId == targetClassId);
 
-        return await PagedList<Attendance>.CreatePagedListAsync(query, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
+        PagedList<Attendance> attendances = await PagedList<Attendance>.CreatePagedListAsync(query, attendanceParams.PageNumber, attendanceParams.PageSize, cancellationToken);
+
+        return new(
+            true,
+            attendances,
+            null
+        );
     }
 
     public async Task<OperationResult<TargetMemberDto>> UpdateMemberAsync(MemberUpdateDto memberUpdateDto, ObjectId userId, CancellationToken cancellationToken)
@@ -145,33 +159,45 @@ public class MemberRepository : IMemberRepository
         );
     }
 
-    public async Task<ProfileDto?> GetProfileAsync(string hashedUserId, CancellationToken cancellationToken)
+    public async Task<OperationResult<ProfileDto>> GetProfileAsync(string hashedUserId, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
-        if (userId is null) return null;
-
-        string? loggedInUserName = await _collectionAppUser.AsQueryable()
-            .Where(doc => doc.Id == userId)
-            .Select(doc => doc.NormalizedUserName)
-            .FirstOrDefaultAsync(cancellationToken);
-
-        if (loggedInUserName is null)
-            return null;
-
-        AppUser appUser = await _collectionAppUser.Find<AppUser>(appUser => appUser.NormalizedUserName == loggedInUserName).
+        AppUser appUser = await _collectionAppUser.Find<AppUser>(appUser => appUser.Id == userId).
             FirstOrDefaultAsync(cancellationToken);
 
-        return appUser is null
-            ? null
-            : Mappers.ConvertAppUserToProfileDto(appUser);
+        if (appUser is null)
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsUserNotFound,
+                    "User not found"
+                )
+            );
+        }
+
+        return new(
+            true,
+            Mappers.ConvertAppUserToProfileDto(appUser),
+            null
+        );
     }
 
-    public async Task<List<ClassRoom>> GetClassesAsync(string hashedUserId, CancellationToken cancellationToken)
+    public async Task<OperationResult<List<ClassRoom>>> GetClassesAsync(string hashedUserId, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
-        if (userId is null) return new List<ClassRoom>();
+        if (userId is null)
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsInvalidUserReference,
+                    "User id not found in token"
+                )
+            );
+        }
 
         string? loggedInUserName = await _collectionAppUser.AsQueryable()
             .Where(doc => doc.Id == userId)
@@ -179,43 +205,90 @@ public class MemberRepository : IMemberRepository
             .FirstOrDefaultAsync(cancellationToken);
 
         if (loggedInUserName is null)
-            return new List<ClassRoom>();
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsNotFound,
+                    "Logged in user, user name not found"
+                )
+            );
+        }
 
-        List<ObjectId>? enrolledCourseIds = await _collectionAppUser.AsQueryable<AppUser>()
+        List<ObjectId>? enrolledClassIds = await _collectionAppUser.AsQueryable<AppUser>()
             .Where(appUser => appUser.NormalizedUserName == loggedInUserName.ToUpper())
             .SelectMany(appUser => appUser.EnrolledClasses)
             .Select(doc => doc.ClassRoomId)
             .ToListAsync(cancellationToken);
 
-        if (enrolledCourseIds is null || enrolledCourseIds.Count == 0)
-            return [];
+        if (enrolledClassIds is null || enrolledClassIds.Count == 0)
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsClassRoomNotFound,
+                    "No classes found for this user"
+                )
+            );
 
         List<ClassRoom>? courses = await _collectionClass.Find<ClassRoom>(doc =>
-            enrolledCourseIds.Contains(doc.Id)).ToListAsync(cancellationToken);
+            enrolledClassIds.Contains(doc.Id)).ToListAsync(cancellationToken);
 
-        return courses ?? new List<ClassRoom>();
+        return new(
+            true,
+            courses,
+            null
+        );
     }
 
-    public async Task<EnrolledClassRoom?> GetEnrolledCourseAsync(string hashedUserId, string classTitle, CancellationToken cancellationToken)
+    public async Task<OperationResult<EnrolledClassRoom>> GetEnrolledCourseAsync(string hashedUserId, string classTitle, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
-        if (userId is null) return null;
+        if (userId is null)
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsInvalidUserReference,
+                    "No id found for this user"
+                )
+            );
+        }
 
         AppUser? appUser = await _collectionAppUser.Find<AppUser>(
             doc => doc.Id == userId
         ).FirstOrDefaultAsync(cancellationToken);
 
         if (appUser is null)
-            return null;
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsUserNotFound,
+                    "User not found"
+                )
+            );
+        }
 
         ClassRoom? targetClass = await _collectionClass.Find(doc => doc.ClassRoomName.ToUpper() == classTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
         EnrolledClassRoom? enrolledClass = appUser.EnrolledClasses
             .FirstOrDefault(ec => ec.ClassRoomId == targetClass.Id);
         if (enrolledClass is null)
-            return null;
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsClassRoomNotFound,
+                    "No class found for this user"
+                )
+            );
+        }
 
-        return enrolledClass;
+        return new(
+            true,
+            enrolledClass,
+            null
+        );
     }
 }

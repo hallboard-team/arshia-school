@@ -24,23 +24,23 @@ public class CourseController(ICourseRepository _courseRepository) : BaseApiCont
     [HttpGet("get-all-courses")]
     public async Task<ActionResult<IEnumerable<ShowCourseDto>>> GetAll([FromQuery] PaginationParams paginationParams, CancellationToken cancellationToken)
     {
-        PagedList<Course> pagedCourses = await _courseRepository.GetAllAsync(paginationParams, cancellationToken);
+        OperationResult<PagedList<Course>> opResult = await _courseRepository.GetAllAsync(paginationParams, cancellationToken);
 
-        if (pagedCourses.Count == 0)
+        if (opResult.Result.Count == 0)
             return NoContent();
 
         PaginationHeader paginationHeader = new(
-            CurrentPage: pagedCourses.CurrentPage,
-            ItemsPerPage: pagedCourses.PageSize,
-            TotalItems: pagedCourses.TotalItemsCount,
-            TotalPages: pagedCourses.TotalPages
+            CurrentPage: opResult.Result.CurrentPage,
+            ItemsPerPage: opResult.Result.PageSize,
+            TotalItems: opResult.Result.TotalItemsCount,
+            TotalPages: opResult.Result.TotalPages
         );
 
         Response.AddPaginationHeader(paginationHeader);
 
         List<ShowCourseDto> showCourseDtos = [];
 
-        foreach (Course course in pagedCourses)
+        foreach (Course course in opResult.Result)
         {
             showCourseDtos.Add(Mappers.ConvertCourseToShowCourseDto(course));
         }

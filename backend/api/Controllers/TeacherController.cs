@@ -1,32 +1,13 @@
+using api.DTOs.Account;
+using api.DTOs.Helpers;
+
 namespace api.Controllers;
 
 [Authorize(Policy = "RequiredTeacherRole")]
 public class TeacherController(ITeacherRepository _teacherRepository,
- ITokenService _tokenService, IManagerRepository _managerRepository,
- IClassRoomRepository _classRepository
+ ITokenService _tokenService
 ) : BaseApiController
 {
-    // [HttpGet("get-course")]
-    // public async Task<ActionResult<List<Course>>> GetCourse(CancellationToken cancellationToken)
-    // {
-    //     string? token = null;
-
-    //     bool isTokenValid = HttpContext.Request.Headers.TryGetValue("Authorization", out var authHeader);
-
-    //     if (isTokenValid)
-    //         token = authHeader.ToString().Split(' ').Last();
-
-    //     if (string.IsNullOrEmpty(token))
-    //         return Unauthorized("Token is expired or invalid. Login again.");
-
-    //     string? hashedUserId = User.GetHashedUserId();
-    //     if (string.IsNullOrEmpty(hashedUserId))
-    //         return BadRequest("No user was found with this user Id.");
-
-    //     List<Course>? course = await _teacherRepository.GetCourseAsync(hashedUserId, cancellationToken);
-
-    //     return course is null ? Unauthorized("User is logged out or unauthorized. Login again.") : course;
-    // }
 
     [HttpGet("get-course")]
     public async Task<ActionResult<List<ClassRoom>>> GetCourse(CancellationToken cancellationToken)
@@ -38,8 +19,15 @@ public class TeacherController(ITeacherRepository _teacherRepository,
         if (string.IsNullOrEmpty(hashedUserId))
             return BadRequest("No user was found with this user Id.");
 
-        var courses = await _teacherRepository.GetClassesAsync(hashedUserId, cancellationToken);
-        return courses.Count == 0 ? NoContent() : Ok(courses);
+        OperationResult<List<ClassRoom>> opResult = await _teacherRepository.GetClassesAsync(hashedUserId, cancellationToken);
+
+        return opResult.IsSuccess
+        ? opResult.Result
+        : opResult.Error?.Code switch
+        {
+            ErrorCode.IsInvalidUserReference => BadRequest(opResult.Error.Message),
+            _ => BadRequest("Operation failed. Try again or contact support.")
+        };
     }
 
     [HttpPost("add-attendence/{targetCourseTitle}")]
@@ -49,12 +37,16 @@ public class TeacherController(ITeacherRepository _teacherRepository,
 
             return BadRequest("یوزرنیم خالی است.");
 
-        ShowStudentStatusDto? showStudentStatusDto = await _teacherRepository.AddAsync(teacherInput, targetCourseTitle, cancellationToken);
+        OperationResult<ShowStudentStatusDto> opResult = await _teacherRepository.AddAsync(teacherInput, targetCourseTitle, cancellationToken);
 
-        if (showStudentStatusDto is null)
-            return BadRequest("ثبت حضور و غیاب انجام نشد. دانش‌آموز یافت نشد یا قبلاً ثبت شده است.");
-
-        return Ok(showStudentStatusDto);
+        return opResult.IsSuccess
+        ? opResult.Result
+        : opResult.Error?.Code switch
+        {
+            ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
+            ErrorCode.IsAlreadyEnrolled => BadRequest(opResult.Error.Message),
+            _ => BadRequest("Operation failed. Try again or contact support.")
+        };
     }
 
     [HttpDelete("remove-attendence/{targetUserName}/{targetCourseTitle}")]
@@ -67,11 +59,16 @@ public class TeacherController(ITeacherRepository _teacherRepository,
 
         DateOnly currentDate = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        bool isDeleted = await _teacherRepository.DeleteAsync(userId.Value, targetUserName, targetCourseTitle, currentDate, cancellationToken);
+        OperationResult opResult = await _teacherRepository.DeleteAsync(userId.Value, targetUserName, targetCourseTitle, currentDate, cancellationToken);
 
-        return isDeleted
-            ? Ok(new Response(Message: $"Attendence record for {targetUserName} removed successfully"))
-            : NotFound($"Attendence record for {targetUserName} not found");
+        return opResult.IsSuccess
+        ? Ok(new Response(Message: "Delete operaton was successfully"))
+        : opResult.Error?.Code switch
+        {
+            ErrorCode.IsUserNotFound =>  BadRequest(opResult.Error.Message),
+            ErrorCode.IsAnyDeleteMake => BadRequest(opResult.Error.Message),
+            _ => BadRequest("Operation failed. Try again or contact support.")
+        };
     }
 
     // [AllowAnonymous]
@@ -104,7 +101,7 @@ public class TeacherController(ITeacherRepository _teacherRepository,
 
     //     List<ObjectId> studentIds = pagedAppUsers.Select(user => user.Id).ToList();
 
-    //     ObjectId? courseId = pagedAppUsers.FirstOrDefault()?.EnrolledCourses
+    //     ObjectId? courseId = pagedAppUsers.FirstOrDefault()?.EnrolledClasses
     //         .FirstOrDefault(course => course.CourseTitle == targetTitle.ToUpper())?.CourseId;
 
     //     if (courseId == null)
@@ -124,47 +121,48 @@ public class TeacherController(ITeacherRepository _teacherRepository,
 
     //     return memberDtos;
     // }
-    [AllowAnonymous]
-    [HttpGet("get-student/{targetTitle}")]
-    public async Task<ActionResult<IEnumerable<MemberDto>>> GetAll([FromQuery] PaginationParams paginationParams, string targetTitle, CancellationToken cancellationToken)
-    {
-        string? userIdHashed = User.GetHashedUserId();
-        if (string.IsNullOrEmpty(userIdHashed))
-            return Unauthorized("You are unauthorized. Login again.");
 
-        ObjectId? userId = await _tokenService.GetActualUserIdAsync(userIdHashed, cancellationToken);
-        if (userId is null)
-            return Unauthorized("You are unauthorized. Login again.");
+    // [AllowAnonymous]
+    // [HttpGet("get-student/{targetTitle}")]
+    // public async Task<ActionResult<IEnumerable<MemberDto>>> GetAll([FromQuery] PaginationParams paginationParams, string targetTitle, CancellationToken cancellationToken)
+    // {
+    //     string? userIdHashed = User.GetHashedUserId();
+    //     if (string.IsNullOrEmpty(userIdHashed))
+    //         return Unauthorized("You are unauthorized. Login again.");
 
-        var pagedAppUsers = await _teacherRepository.GetAllAsync(paginationParams, targetTitle, userIdHashed, cancellationToken);
-        if (pagedAppUsers.Count == 0) return NoContent();
+    //     ObjectId? userId = await _tokenService.GetActualUserIdAsync(userIdHashed, cancellationToken);
+    //     if (userId is null)
+    //         return Unauthorized("You are unauthorized. Login again.");
 
-        Response.AddPaginationHeader(new PaginationHeader(
-            CurrentPage: pagedAppUsers.CurrentPage,
-            ItemsPerPage: pagedAppUsers.PageSize,
-            TotalItems: pagedAppUsers.TotalItemsCount,
-            TotalPages: pagedAppUsers.TotalPages
-        ));
+    //     var pagedAppUsers = await _teacherRepository.GetAllAsync(paginationParams, targetTitle, userIdHashed, cancellationToken);
+    //     if (pagedAppUsers.Count == 0) return NoContent();
 
-        var studentIds = pagedAppUsers.Select(u => u.Id).ToList();
+    //     Response.AddPaginationHeader(new PaginationHeader(
+    //         CurrentPage: pagedAppUsers.CurrentPage,
+    //         ItemsPerPage: pagedAppUsers.PageSize,
+    //         TotalItems: pagedAppUsers.TotalItemsCount,
+    //         TotalPages: pagedAppUsers.TotalPages
+    //     ));
 
-        ObjectId? classId = await _classRepository.GetClassRoomIdByName(targetTitle, cancellationToken);
+    //     var studentIds = pagedAppUsers.Select(u => u.Id).ToList();
 
-        if (classId is null)
-            return BadRequest("Class not found");
+    //     ObjectId? classId = await _classRepository.GetClassIdByName(targetTitle, cancellationToken);
 
-        var absences = await _teacherRepository.CheckIsAbsentAsync(studentIds, classId.Value, cancellationToken);
+    //     if (classId is null)
+    //         return BadRequest("Class not found");
 
-        List<AppRole> appRoles = await _managerRepository.GetAllRoleAsync(cancellationToken);
-        Dictionary<ObjectId, string?> roleIdsToName = appRoles.ToDictionary(r => r.Id, r => r.Name);
+    //     var absences = await _teacherRepository.CheckIsAbsentAsync(studentIds, classId.Value, cancellationToken);
 
-        var memberDtos = new List<MemberDto>();
-        foreach (var appUser in pagedAppUsers)
-        {
-            bool isAbsent = absences.TryGetValue(appUser.Id, out var val) && val;
-            memberDtos.Add(Mappers.ConvertAppUserToMemberDto(appUser, isAbsent, roleIdsToName!));
-        }
+    //     List<AppRole> appRoles = await _managerRepository.GetAllRoleAsync(cancellationToken);
+    //     Dictionary<ObjectId, string?> roleIdsToName = appRoles.ToDictionary(r => r.Id, r => r.Name);
 
-        return Ok(memberDtos);
-    }
+    //     var memberDtos = new List<MemberDto>();
+    //     foreach (var appUser in pagedAppUsers)
+    //     {
+    //         bool isAbsent = absences.TryGetValue(appUser.Id, out var val) && val;
+    //         memberDtos.Add(Mappers.ConvertAppUserToMemberDto(appUser, isAbsent, roleIdsToName!));
+    //     }
+
+    //     return Ok(memberDtos);
+    // }
 }

@@ -1,3 +1,6 @@
+using api.DTOs.Account;
+using api.DTOs.Helpers;
+
 namespace api.Controllers;
 
 [Authorize(Policy = "RequiredAdminRole")]
@@ -9,14 +12,17 @@ public class AdminController(IAdminRepository _adminRepository) : BaseApiControl
         if (adminInput.Password != adminInput.ConfirmPassword)
             return BadRequest("رمز عبور و تکرار آن یکسان نیست.");
 
-        LoggedInDto? loggedInDto = await _adminRepository.CreateAsync(adminInput, cancellationToken);
+        OperationResult<LoggedInDto> opResult = await _adminRepository.CreateAsync(adminInput, cancellationToken);
 
-        return loggedInDto switch
+        return opResult.IsSuccess
+        ? opResult.Result
+        : opResult.Error?.Code switch
         {
-            null => BadRequest("ثبت‌نام انجام نشد. لطفاً دوباره تلاش کنید یا با پشتیبانی تماس بگیرید."),
-            { Token: not null and not "" } => Ok(loggedInDto),
-            { Errors.Count: > 0 } => BadRequest(loggedInDto.Errors),
-            _ => BadRequest("ثبت‌نام انجام نشد. لطفاً دوباره تلاش کنید یا با پشتیبانی تماس بگیرید.")
+            ErrorCode.IsDuplicateUser => BadRequest(opResult.Error.Message),
+            ErrorCode.IsIdentityFailed => BadRequest(opResult.Error.Message),
+            ErrorCode.IsRoleIdentityFailed => BadRequest(opResult.Error.Message),
+            ErrorCode.IsTokenGenerationFailed => throw new Exception("Internal error in token issuance"),
+            _ => BadRequest("Operation failed! Try again or contact support.")
         };
     }
 }

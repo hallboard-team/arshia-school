@@ -1,3 +1,6 @@
+using api.DTOs.Account;
+using api.DTOs.Helpers;
+
 namespace api.Repositories;
 
 public class AdminRepository : IAdminRepository
@@ -17,41 +20,66 @@ public class AdminRepository : IAdminRepository
     }
     #endregion Vars and Constructor
 
-    public async Task<LoggedInDto?> CreateAsync(RegisterDto registerDto, CancellationToken cancellationToken)
+    public async Task<OperationResult<LoggedInDto>> CreateAsync(RegisterDto registerDto, CancellationToken cancellationToken)
     {
-        LoggedInDto loggedInDto = new();
-
         bool doaseNameExist = await _collectionAppUser.Find<AppUser>(doc =>
-            doc.Name == registerDto.Name).AnyAsync(cancellationToken);
+            doc.NormalizedEmail == registerDto.Email).AnyAsync(cancellationToken);
 
-        if (doaseNameExist) return null;
+        if (doaseNameExist)
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsDuplicateUser,
+                    "User already exist"
+                )
+            );
+        }
 
         AppUser appUser = Mappers.ConvertRegisterDtoToAppUser(registerDto);
 
         IdentityResult? userCreatedResult = await _userManager.CreateAsync(appUser, registerDto.Password);
 
-        if (userCreatedResult.Succeeded)
+        if (!userCreatedResult.Succeeded)
         {
-            IdentityResult? roleResult = await _userManager.AddToRoleAsync(appUser, "manager");
-
-            if (!roleResult.Succeeded)
-                return loggedInDto;
-
-            string? token = await _tokenService.CreateToken(appUser, cancellationToken);
-
-            if (!string.IsNullOrEmpty(token))
-            {
-                return Mappers.ConvertAppUserToLoggedInDto(appUser, token);
-            }
-        }
-        else
-        {
-            foreach (IdentityError error in userCreatedResult.Errors)
-            {
-                loggedInDto.Errors.Add(error.Description);
-            }
+            string? errorMessages = string.Join(",", userCreatedResult.Errors.Select(e => e.Description));
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsIdentityFailed,
+                    errorMessages
+                )
+            );
         }
 
-        return loggedInDto;
+        IdentityResult? roleResult = await _userManager.AddToRoleAsync(appUser, "manager");
+        if (!roleResult.Succeeded)
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsRoleIdentityFailed,
+                    "Assigning role failed."
+                )
+            );
+        }
+
+        string? token = await _tokenService.CreateToken(appUser, cancellationToken);
+        if (string.IsNullOrEmpty(token))
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsTokenGenerationFailed,
+                    "User created but token generation failed."
+                )
+            );
+        }
+
+        return new(
+            true,
+            Mappers.ConvertAppUserToLoggedInDto(appUser, token),
+            null
+        );
     }
 }

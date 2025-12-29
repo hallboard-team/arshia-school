@@ -89,11 +89,17 @@ public class ClassRoomRepository : IClassRoomRepository
         );
     }
 
-    public async Task<PagedList<ClassRoom>> GetAllClassRoomsAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
+    public async Task<OperationResult<PagedList<ClassRoom>>> GetAllClassRoomsAsync(PaginationParams paginationParams, CancellationToken cancellationToken)
     {
         IQueryable<ClassRoom> query = _collectionClassRoom.AsQueryable();
 
-        return await PagedList<ClassRoom>.CreatePagedListAsync(query, paginationParams.PageNumber, paginationParams.PageSize, cancellationToken);
+        PagedList<ClassRoom> pagedClassRooms = await PagedList<ClassRoom>.CreatePagedListAsync(query, paginationParams.PageNumber, paginationParams.PageSize, cancellationToken);
+
+        return new(
+            true,
+            pagedClassRooms,
+            null
+        );
     }
 
     public async Task<OperationResult<ShowClassRoomDto>> GetClassRoomByNameAsync(string classRoomName, CancellationToken cancellationToken)
@@ -114,48 +120,64 @@ public class ClassRoomRepository : IClassRoomRepository
         Course? course = await _collectionCourse.Find(doc => doc.Id == model.CourseId).FirstOrDefaultAsync(cancellationToken);
         Site? site = await _collectionSite.Find(doc => doc.Id == model.SiteId).FirstOrDefaultAsync(cancellationToken);
 
-        List<string> userNames = await GetProfessorUserNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
-        List<string> names = await GetProfessorNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
+        OperationResult<IEnumerable<string>> userNamesOpResut = await GetProfessorUserNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
+        OperationResult<IEnumerable<string>> namesOpResult = await GetProfessorNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
 
         ShowCourseDto courseDto = Mappers.ConvertCourseToShowCourseDto(course);
         ShowSiteDto siteDto = Mappers.ConvertSiteToShowSiteDto(site);
 
         return new(
             true,
-            Mappers.ConvertClassRoomToShowClassRoomDto(model, courseDto, siteDto, userNames, names),
+            Mappers.ConvertClassRoomToShowClassRoomDto(model, courseDto, siteDto, userNamesOpResut.Result, namesOpResult.Result),
             null
         );
     }
 
-    public async Task<List<string>> GetProfessorNamesByIdsAsync(List<ObjectId> professorIds, CancellationToken cancellationToken)
+    public async Task<OperationResult<IEnumerable<string>>> GetProfessorNamesByIdsAsync(List<ObjectId> professorIds, CancellationToken cancellationToken)
     {
         if (professorIds is null || professorIds.Count == 0)
-            return [];
-
-        List<string> userNames = await _collectionAppUser
-            .Find(p => professorIds.Contains(p.Id))
-            .Project(p => p.NormalizedUserName ?? string.Empty)
-            .ToListAsync(cancellationToken);
-
-        return [.. userNames
-            .Where(u => !string.IsNullOrWhiteSpace(u))
-            .Select(u => u.Trim())];
-    }
-
-    public async Task<List<string>> GetProfessorUserNamesByIdsAsync(List<ObjectId> professorIds, CancellationToken cancellationToken)
-    {
-        if (professorIds is null || professorIds.Count == 0)
-            return [];
+            return new(
+                false,
+                [],
+                null
+            );
 
         List<string> names = await _collectionAppUser
-            .Find(p => professorIds.Contains(p.Id))
-            .Project(p => p.Name ?? string.Empty)
+            .Find(p => professorIds.Contains(p.Id) && p.Name != null && p.Name != "")
+            .Project(p => p.Name.Trim())
             .ToListAsync(cancellationToken);
 
-        return [.. names.Where(u => !string.IsNullOrWhiteSpace(u)).Select(u => u.Trim())];
+        return new(
+            true,
+            names,
+            null
+        );
     }
 
-    public async Task<OperationResult<ShowClassRoomDto?>> UpdateClassRoomAsync(string classRoomName, UpdateClassRoomDto request, CancellationToken cancellationToken)
+    public async Task<OperationResult<IEnumerable<string>>> GetProfessorUserNamesByIdsAsync(List<ObjectId> professorIds, CancellationToken cancellationToken)
+    {
+        if (professorIds is null || professorIds.Count == 0)
+        {
+            return new(
+                false,
+                [],
+                null
+            );
+        }
+
+        List<string> userNames = await _collectionAppUser
+         .Find(p => professorIds.Contains(p.Id) && p.Name != null && p.Name != "")
+         .Project(p => p.UserName!.Trim())
+         .ToListAsync(cancellationToken);
+
+        return new(
+            true,
+            userNames,
+            null
+        );
+    }
+
+    public async Task<OperationResult<ShowClassRoomDto>> UpdateClassRoomAsync(string classRoomName, UpdateClassRoomDto request, CancellationToken cancellationToken)
     {
         ClassRoom? targetClassRoom = await _collectionClassRoom.Find(doc => doc.ClassRoomName.ToUpper() == classRoomName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
 
@@ -195,23 +217,22 @@ public class ClassRoomRepository : IClassRoomRepository
         {
             ClassRoom? model = await _collectionClassRoom.Find(doc => doc.Id == targetClassRoom.Id).FirstOrDefaultAsync(cancellationToken);
 
-            List<string> userNames = await GetProfessorUserNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
-            List<string> names = await GetProfessorNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
+            OperationResult<IEnumerable<string>> opResultUserNames = await GetProfessorUserNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
+            OperationResult<IEnumerable<string>> opResultNames = await GetProfessorNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
 
             ShowCourseDto courseDto = Mappers.ConvertCourseToShowCourseDto(course);
             ShowSiteDto siteDto = Mappers.ConvertSiteToShowSiteDto(site);
 
             return new(
                 true,
-                Mappers.ConvertClassRoomToShowClassRoomDto(model, courseDto, siteDto, userNames, names),
+                Mappers.ConvertClassRoomToShowClassRoomDto(model, courseDto, siteDto, opResultUserNames.Result, opResultNames.Result),
                 null
             );
         }
 
         return new(
             false,
-            null,
-            new(
+            Error: new(
                 ErrorCode.IsOperationFailed,
                 "Class update failed! Try again"
             )
@@ -326,7 +347,7 @@ public class ClassRoomRepository : IClassRoomRepository
         );
     }
 
-    public async Task<ObjectId?> GetClassRoomIdByName(string classRoomName, CancellationToken cancellationToken)
+    public async Task<OperationResult<ObjectId>> GetClassRoomIdByName(string classRoomName, CancellationToken cancellationToken)
     {
         ObjectId? classId = await _collectionClassRoom.AsQueryable()
             .Where(doc => doc.ClassRoomName.ToUpper() == classRoomName.ToUpper())
@@ -334,9 +355,21 @@ public class ClassRoomRepository : IClassRoomRepository
             .FirstOrDefaultAsync(cancellationToken);
 
         if (classId is null)
-            return null;
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsSiteNotFound,
+                    "Site not found"
+                )
+            );
+        }
 
-        return classId;
+        return new(
+            true,
+            classId.Value,
+            null
+        );
     }
 
     public async Task<OperationResult> DeleteClassRoomAsync(ObjectId classRoomId, CancellationToken cancellationToken)

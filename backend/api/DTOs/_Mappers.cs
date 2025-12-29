@@ -2,16 +2,16 @@ namespace api.DTOs;
 
 public static class Mappers
 {
-    public static AppUser ConvertRegisterDtoToAppUser(RegisterDto adminInput) =>
+    public static AppUser ConvertRegisterDtoToAppUser(RegisterDto userInput) =>
         new()
         {
-            Email = adminInput.Email, // required by AspNet Identity
+            Email = userInput.Email, // required by AspNet Identity
             UserName = Utils.GenerateComplexUsername(),
-            DateOfBirth = adminInput.DateOfBirth,
-            Name = adminInput.Name.Trim(),
-            LastName = adminInput.LastName.Trim(),
-            PhoneNum = adminInput.PhoneNum,
-            Gender = adminInput.Gender,
+            DateOfBirth = userInput.DateOfBirth,
+            Name = userInput.Name.Trim(),
+            LastName = userInput.LastName.Trim(),
+            PhoneNum = userInput.PhoneNum,
+            Gender = userInput.Gender,
         };
 
     public static LoggedInDto ConvertAppUserToLoggedInDto(AppUser appUser, string tokenValue) =>
@@ -99,14 +99,14 @@ public static class Mappers
             Roles: appUser.AppRoles
         );
 
-    public static Attendance ConvertAddStudentStatusDtoToAttendence(AddStudentStatusDto teacherInput, ObjectId studentId, ObjectId courseId, DateOnly currentDate) =>
+    public static Attendance ConvertAddStudentStatusDtoToAttendance(AddStudentStatusDto teacherInput, ObjectId studentId, ObjectId courseId, DateOnly currentDate) =>
          new(
             StudentId: studentId,
             ClassId: courseId,
             Date: currentDate
         );
 
-    public static ShowStudentStatusDto ConvertAttendenceToShowStudentStatusDto(Attendance attendence) =>
+    public static ShowStudentStatusDto ConvertAttendanceToShowStudentStatusDto(Attendance attendence) =>
          new()
          {
              Date = attendence.Date,
@@ -118,7 +118,7 @@ public static class Mappers
          {
              Title = managerInput.Title.Trim().ToLower(),
              Description = managerInput.Description.Trim().ToLower(),
-             TotalMinutes = managerInput.TotalMinutes,
+             TotalMinutes = managerInput.TotalHours,
              IsActive = managerInput.IsActive
          };
 
@@ -163,13 +163,13 @@ public static class Mappers
              IsActive = request.IsActive
          };
 
-    public static ShowClassRoomDto ConvertClassRoomToShowClassRoomDto(ClassRoom model, ShowCourseDto course, ShowSiteDto site, List<string> userNames, List<string> names) =>
+    public static ShowClassRoomDto ConvertClassRoomToShowClassRoomDto(ClassRoom model, ShowCourseDto course, ShowSiteDto site, IEnumerable<string> userNames, IEnumerable<string> names) =>
          new(
             ClassRoomName: model.ClassRoomName,
             Course: course,
             Site: site,
-            ProfessorUserNames: userNames,
-            ProfessorNames: names,
+            ProfessorUserNames: [.. userNames],
+            ProfessorNames: [.. names],
             Tuition: model.Tuition,
             ClassRoomMinutes: model.ClassRoomMinutes,
             Days: model.Days,

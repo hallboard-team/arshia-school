@@ -1,3 +1,6 @@
+using api.DTOs.Account;
+using api.DTOs.Helpers;
+
 namespace api.Repositories;
 
 public class TeacherRepository : ITeacherRepository
@@ -8,13 +11,13 @@ public class TeacherRepository : ITeacherRepository
     private readonly IMongoCollection<ClassRoom> _collectionClass;
     private readonly UserManager<AppUser> _userManager;
     private readonly ITokenService _tokenService;
-    private readonly IMongoCollection<Attendance> _collectionAttendence;
+    private readonly IMongoCollection<Attendance> _collectionAttendance;
 
     public TeacherRepository(IMongoClient client, ITokenService tokenService, IMyMongoDbSettings dbSettings, UserManager<AppUser> userManager)
     {
         var database = client.GetDatabase(dbSettings.DatabaseName);
         _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.CollectionUsers);
-        _collectionAttendence = database.GetCollection<Attendance>(AppVariablesExtensions.CollectionAttendences);
+        _collectionAttendance = database.GetCollection<Attendance>(AppVariablesExtensions.CollectionAttendences);
         _collectionCourse = database.GetCollection<Course>(AppVariablesExtensions.CollectionCourses);
         _collectionClass = database.GetCollection<ClassRoom>(AppVariablesExtensions.CollectionClasses);
 
@@ -33,30 +36,45 @@ public class TeacherRepository : ITeacherRepository
         return ValidationsExtensions.ValidateObjectId(studentId);
     }
 
-    public async Task<List<ClassRoom>> GetClassesAsync(string hashedUserId, CancellationToken cancellationToken)
+    public async Task<OperationResult<List<ClassRoom>>> GetClassesAsync(string hashedUserId, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
         if (userId is null)
-            return [];
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsInvalidUserReference,
+                    "No id founded for this user"
+                )
+            );
 
         List<ClassRoom>? classes = await _collectionClass.Find<ClassRoom>(doc =>
             doc.ProfessorsIds.Contains(userId.Value)).ToListAsync(cancellationToken);
 
-        return classes ?? [];
+        return new(
+            true,
+            classes,
+            null
+        );
     }
 
-    public async Task<ShowStudentStatusDto?> AddAsync(AddStudentStatusDto teacherInput, string courseTitle, CancellationToken cancellationToken)
+    public async Task<OperationResult<ShowStudentStatusDto>> AddAsync(AddStudentStatusDto teacherInput, string courseTitle, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(teacherInput.UserName))
-            return null;
-
         AppUser? targetAppUser = await _collectionAppUser
             .Find(s => s.NormalizedUserName == teacherInput.UserName.ToUpper())
             .FirstOrDefaultAsync(cancellationToken);
 
         if (targetAppUser is null)
-            return null;
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsUserNotFound,
+                    "User not found"
+                )
+            );
+        }
 
         DateOnly currentDate = DateOnly.FromDateTime(DateTime.UtcNow);
 
@@ -65,34 +83,33 @@ public class TeacherRepository : ITeacherRepository
             .Select(doc => doc.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (teacherInput.IsAbsent == false)
-            return null;
-
-        Attendance existingAttendence = await _collectionAttendence
+        Attendance existingAttendance = await _collectionAttendance
             .Find(doc => doc.StudentId == targetAppUser.Id && doc.Date == currentDate && doc.ClassId == targetCourseId)
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (existingAttendence != null)
-            return null;
-
-        Attendance? attendence = Mappers.ConvertAddStudentStatusDtoToAttendence(teacherInput, targetAppUser.Id, targetCourseId, currentDate);
-
-        if (_collectionAttendence is not null)
+        if (existingAttendance != null)
         {
-            await _collectionAttendence.InsertOneAsync(attendence, null, cancellationToken);
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsAlreadyEnrolled,
+                    "User is already a attendace"
+                )
+            );
         }
 
-        if (ObjectId.Equals != null)
-        {
-            ShowStudentStatusDto showStudentStatusDto = Mappers.ConvertAttendenceToShowStudentStatusDto(attendence);
+        Attendance? attendance = Mappers.ConvertAddStudentStatusDtoToAttendance(teacherInput, targetAppUser.Id, targetCourseId, currentDate);
 
-            return showStudentStatusDto;
-        }
+        await _collectionAttendance.InsertOneAsync(attendance, null, cancellationToken);
 
-        return null;
+        return new(
+            true,
+            Mappers.ConvertAttendanceToShowStudentStatusDto(attendance),
+            null
+        );
     }
 
-    public async Task<bool> DeleteAsync(ObjectId userId, string targetUserName, string targetCourseTitle, DateOnly currentDate, CancellationToken cancellationToken)
+    public async Task<OperationResult> DeleteAsync(ObjectId userId, string targetUserName, string targetCourseTitle, DateOnly currentDate, CancellationToken cancellationToken)
     {
         ObjectId? targetUserId = await _collectionAppUser.AsQueryable()
             .Where(doc => doc.NormalizedUserName == targetUserName.ToUpper())
@@ -100,28 +117,54 @@ public class TeacherRepository : ITeacherRepository
             .FirstOrDefaultAsync(cancellationToken);
 
         if (targetUserId is null)
-            return false;
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsUserNotFound,
+                    "User not found"
+                )
+            );
+        }
 
         ObjectId targetCourseId = await _collectionCourse.AsQueryable()
             .Where(doc => doc.Title == targetCourseTitle.ToUpper())
             .Select(doc => doc.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
-        DeleteResult deleteResult = await _collectionAttendence.DeleteOneAsync(
+        DeleteResult deleteResult = await _collectionAttendance.DeleteOneAsync(
             doc => doc.StudentId == targetUserId && doc.Date == currentDate && doc.ClassId == targetCourseId,
             cancellationToken);
 
-        return deleteResult.DeletedCount > 0;
+        if (deleteResult.DeletedCount > 0)
+        {
+            return new(
+                true,
+                null
+            );
+        }
+
+        return new(
+            false,
+            Error: new(
+                ErrorCode.IsAnyDeleteMake,
+                "No deletion has made"
+            )
+        );
     }
 
-    public async Task<PagedList<AppUser>> GetAllAsync(PaginationParams paginationParams, string targetTitle, string hashedUserId, CancellationToken cancellationToken)
+    public async Task<OperationResult<PagedList<AppUser>>> GetAllAsync(PaginationParams paginationParams, string targetTitle, string hashedUserId, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
         if (userId is null)
         {
-            var empty = _collectionAppUser.AsQueryable().Where(_ => false);
-            return await PagedList<AppUser>.CreatePagedListAsync(
-                empty, paginationParams.PageNumber, paginationParams.PageSize, cancellationToken);
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsInvalidUserReference,
+                    "No id founded for this user"
+                )
+            );
         }
 
         ObjectId? classId = await _collectionClass.AsQueryable()
@@ -132,20 +175,30 @@ public class TeacherRepository : ITeacherRepository
         IQueryable<AppUser> query = _collectionAppUser.AsQueryable()
             .Where(user => user.EnrolledClasses.Any(course => course.ClassRoomId == classId && user.Id != userId));
 
-        return await PagedList<AppUser>.CreatePagedListAsync(query, paginationParams.PageNumber, paginationParams.PageSize, cancellationToken);
+        PagedList<AppUser> pagedAppUsers = await PagedList<AppUser>.CreatePagedListAsync(query, paginationParams.PageNumber, paginationParams.PageSize, cancellationToken);
+
+        return new(
+            true,
+            pagedAppUsers,
+            null
+        );
     }
 
-    public async Task<Dictionary<ObjectId, bool>> CheckIsAbsentAsync(List<ObjectId> studentIds, ObjectId courseId, CancellationToken cancellationToken)
+    public async Task<OperationResult<Dictionary<ObjectId, bool>>> CheckIsAbsentAsync(List<ObjectId> studentIds, ObjectId courseId, CancellationToken cancellationToken)
     {
         DateOnly currentDate = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        var attendances = await _collectionAttendence
+        var attendances = await _collectionAttendance
             .Find(a => studentIds.Contains(a.StudentId) && a.ClassId == courseId && a.Date == currentDate)
             .ToListAsync(cancellationToken);
 
-        return studentIds.ToDictionary(
+        return new(
+            true,
+        studentIds.ToDictionary(
             studentId => studentId,
             studentId => attendances.Any(a => a.StudentId == studentId)
+        ),
+        null
         );
     }
 }

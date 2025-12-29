@@ -26,31 +26,31 @@ public class ClassRoomController(IClassRoomRepository _classRoomRepository, ICou
     [HttpGet("get-all-class-rooms")]
     public async Task<ActionResult<IEnumerable<ShowClassRoomDto>>> GetAll([FromQuery] PaginationParams paginationParams, CancellationToken cancellationToken)
     {
-        PagedList<ClassRoom> pagedClasses = await _classRoomRepository.GetAllClassRoomsAsync(paginationParams, cancellationToken);
+        OperationResult<PagedList<ClassRoom>> opResult = await _classRoomRepository.GetAllClassRoomsAsync(paginationParams, cancellationToken);
 
-        if (pagedClasses.Count == 0)
+        if (opResult.Result.Count == 0)
             return NoContent();
 
         PaginationHeader paginationHeader = new(
-            CurrentPage: pagedClasses.CurrentPage,
-            ItemsPerPage: pagedClasses.PageSize,
-            TotalItems: pagedClasses.TotalItemsCount,
-            TotalPages: pagedClasses.TotalPages
+            CurrentPage: opResult.Result.CurrentPage,
+            ItemsPerPage: opResult.Result.PageSize,
+            TotalItems: opResult.Result.TotalItemsCount,
+            TotalPages: opResult.Result.TotalPages
         );
 
         Response.AddPaginationHeader(paginationHeader);
 
         List<ShowClassRoomDto> classRoomDtos = [];
 
-        foreach (ClassRoom model in pagedClasses)
+        foreach (ClassRoom model in opResult.Result)
         {
             OperationResult<ShowCourseDto> courseDto = await _courseRepository.GetCourseByIdAsync(model.CourseId!.Value, cancellationToken);
             OperationResult<ShowSiteDto> siteDto = await _siteRepository.GetSiteByIdAsync(model.SiteId!.Value, cancellationToken);
 
-            List<string> userNames = await _classRoomRepository.GetProfessorUserNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
-            List<string> names = await _classRoomRepository.GetProfessorNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
+            OperationResult<IEnumerable<string>> userNamesOpResult = await _classRoomRepository.GetProfessorUserNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
+            OperationResult<IEnumerable<string>> namesOpResult = await _classRoomRepository.GetProfessorNamesByIdsAsync(model.ProfessorsIds, cancellationToken);
 
-            classRoomDtos.Add(Mappers.ConvertClassRoomToShowClassRoomDto(model, courseDto.Result, siteDto.Result, userNames, names));
+            classRoomDtos.Add(Mappers.ConvertClassRoomToShowClassRoomDto(model, courseDto.Result, siteDto.Result, userNamesOpResult.Result, namesOpResult.Result));
         }
 
         return classRoomDtos;

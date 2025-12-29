@@ -1,10 +1,12 @@
+using api.DTOs.Helpers;
+
 namespace api.Interfaces;
 
 public interface ITeacherRepository
 {
-    Task<List<ClassRoom>> GetClassesAsync(string hashedUserId, CancellationToken cancellationToken);
-    Task<ShowStudentStatusDto?> AddAsync(AddStudentStatusDto teacherInput, string targetCourseTitle, CancellationToken cancellationToken);
-    Task<bool> DeleteAsync(ObjectId userId, string targetUserName, string targetCourseTitle, DateOnly currentDate, CancellationToken cancellationToken);
-    Task<PagedList<AppUser>> GetAllAsync(PaginationParams paginationParams, string targetTitle, string hashedUserId, CancellationToken cancellationToken);
-    Task<Dictionary<ObjectId, bool>> CheckIsAbsentAsync(List<ObjectId> studentIds, ObjectId courseId, CancellationToken cancellationToken);
+    Task<OperationResult<List<ClassRoom>>> GetClassesAsync(string hashedUserId, CancellationToken cancellationToken);
+    Task<OperationResult<ShowStudentStatusDto>> AddAsync(AddStudentStatusDto teacherInput, string targetCourseTitle, CancellationToken cancellationToken);
+    Task<OperationResult> DeleteAsync(ObjectId userId, string targetUserName, string targetCourseTitle, DateOnly currentDate, CancellationToken cancellationToken);
+    Task<OperationResult<PagedList<AppUser>>> GetAllAsync(PaginationParams paginationParams, string targetTitle, string hashedUserId, CancellationToken cancellationToken);
+    Task<OperationResult<Dictionary<ObjectId, bool>>> CheckIsAbsentAsync(List<ObjectId> studentIds, ObjectId courseId, CancellationToken cancellationToken);
 }
