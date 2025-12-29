@@ -51,7 +51,7 @@ export class CourseEditComponent implements OnInit {
 
   get TitleCtrl(): FormControl { return this.courseFg.get('titleCtrl') as FormControl; }
   get DescriptionCtrl(): FormControl { return this.courseFg.get('descriptionCtrl') as FormControl; }
-  get TotalMinutesCtrl(): FormControl { return this.courseFg.get('totalMinutesCtrl') as FormControl; }
+  get TotalTimeCtrl(): FormControl { return this.courseFg.get('totalTimeCtrl') as FormControl; }
   get IsActiveCtrl(): FormControl { return this.courseFg.get('isActiveCtrl') as FormControl; }
 
   getCourse(): void {
@@ -78,7 +78,7 @@ export class CourseEditComponent implements OnInit {
   initControllersValues(course: Course) {
     this.TitleCtrl.setValue(course.title);
     this.DescriptionCtrl.setValue(course.description);
-    this.TotalMinutesCtrl.setValue(course.totalMinutes);
+    this.TotalTimeCtrl.setValue(course.totalTime);
     this.IsActiveCtrl.setValue(course.isActive);
   }
 
@@ -99,7 +99,7 @@ export class CourseEditComponent implements OnInit {
         const updatedCourse: CourseUpdate = {
           title: this.TitleCtrl.value,
           description: this.DescriptionCtrl.value,
-          totalMinutes: +this.TotalMinutesCtrl.value,
+          totalTime: +this.TotalTimeCtrl.value,
           isActive: this.IsActiveCtrl.value,
         };
 

@@ -34,14 +34,14 @@
 
             <div class="form-item">
                 <mat-form-field appearance="outline">
-                    <mat-label>مدت دوره (دقیقه)</mat-label>
-                    <input class="input" type="number" matInput formControlName="totalMinutesCtrl" min="1" max="20000"
-                        placeholder="مدت زمان به دقیقه">
-                    <mat-hint>مدت زمان کل دوره به دقیقه</mat-hint>
-                    @if (TotalMinutesCtrl.hasError('required')) {
+                    <mat-label>مدت دوره (ساعت)</mat-label>
+                    <input class="input" type="number" matInput formControlName="totalTimeCtrl" min="1" max="20000"
+                        placeholder="مدت زمان به ساعت">
+                    <mat-hint>مدت زمان کل دوره به ساعت</mat-hint>
+                    @if (TotalTimeCtrl.hasError('required')) {
                     <mat-error>لطفاً مدت دوره را وارد کنید</mat-error>
                     }
-                    @else if (TotalMinutesCtrl.errors && TotalMinutesCtrl.hasError('min')) {
+                    @else if (TotalTimeCtrl.errors && TotalTimeCtrl.hasError('min')) {
                     <mat-error>حداقل ۱ دقیقه</mat-error>
                     }
                 </mat-form-field>

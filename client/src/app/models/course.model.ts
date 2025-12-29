@@ -1,7 +1,7 @@
 export interface CourseBase {
     title: string;
     description: string;
-    totalMinutes: number;
+    totalTime: number;
     isActive: boolean;
 }
 

@@ -31,11 +31,11 @@
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-                <mat-label>مدت دوره (دقیقه)</mat-label>
-                <input class="input" type="number" formControlName="totalMinutesCtrl" matInput min="1"
-                    placeholder="مدت به دقیقه">
+                <mat-label>مدت دوره (ساعت)</mat-label>
+                <input class="input" type="number" formControlName="totalTimeCtrl" matInput min="1"
+                    placeholder="مدت به ساعت">
                 <mat-hint>زمان کل دوره به دقیقه</mat-hint>
-                @if (TotalMinutesCtrl.hasError('required')) {
+                @if (TotalTimeCtrl.hasError('required')) {
                 <mat-error>مدت دوره الزامی است</mat-error>
                 }
             </mat-form-field>

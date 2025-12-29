@@ -40,7 +40,7 @@ export class CourseCreateComponent {
   courseFg = this.fb.group({
     titleCtrl: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
     descriptionCtrl: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(1000)]],
-    totalMinutesCtrl: ['', [Validators.required, Validators.min(1), Validators.max(20000)]],
+    totalTimeCtrl: ['', [Validators.required, Validators.min(1), Validators.max(20000)]],
     isActiveCtrl: [true, [Validators.required]] 
   });
 
@@ -50,8 +50,8 @@ export class CourseCreateComponent {
   get DescriptionCtrl(): FormControl {
     return this.courseFg.get('descriptionCtrl') as FormControl;
   }
-  get TotalMinutesCtrl(): FormControl {
-    return this.courseFg.get('totalMinutesCtrl') as FormControl;
+  get TotalTimeCtrl(): FormControl {
+    return this.courseFg.get('totalTimeCtrl') as FormControl;
   }
   get IsActiveCtrl(): FormControl {
     return this.courseFg.get('isActiveCtrl') as FormControl;
@@ -63,7 +63,7 @@ export class CourseCreateComponent {
     let addCourse: AddCourse = {
       title: this.TitleCtrl.value,
       description: this.DescriptionCtrl.value,
-      totalMinutes: this.TotalMinutesCtrl.value, 
+      totalTime: this.TotalTimeCtrl.value, 
       isActive: this.IsActiveCtrl.value
     }
 
