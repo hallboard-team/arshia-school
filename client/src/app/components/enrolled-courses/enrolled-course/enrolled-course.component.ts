@@ -5,7 +5,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { NavbarComponent } from '../../navbar/navbar.component';
 import { Observable, Subscription } from 'rxjs';
 import { Course, ShowCourse } from '../../../models/course.model';
-import { CourseParams } from '../../../models/helpers/course-params';
+import { CourseParams } from '../../../models/helpers/application-params';
 import { PaginatedResult } from '../../../models/helpers/paginatedResult';
 import { Pagination } from '../../../models/helpers/pagination';
 import { LoggedInUser } from '../../../models/logged-in-user.model';

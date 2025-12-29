@@ -5,6 +5,8 @@ public static class AppVariablesExtensions
     public const string TokenKey = "TokenKey";
     public const string CollectionUsers = "users";
     public const string CollectionCourses = "courses";
+    public const string CollectionClasses = "classes";
+    public const string CollectionSites = "sites";
     public const string CollectionAttendences = "attendences";
     public const string CollectionAttendencesDemo = "attendences";
     public const string CollectionFollows = "follows";

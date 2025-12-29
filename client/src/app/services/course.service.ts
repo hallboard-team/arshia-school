@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { CourseParams } from '../models/helpers/course-params';
+import { CourseParams } from '../models/helpers/application-params';
 import { AddCourse, Course, CourseUpdate, ShowCourse } from '../models/course.model';
 import { PaginatedResult } from '../models/helpers/paginatedResult';
 import { Observable } from 'rxjs';

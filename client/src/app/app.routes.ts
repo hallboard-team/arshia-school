@@ -31,6 +31,10 @@ import { CourseEditComponent } from './components/courses/course-actions/course-
 import { CoursesListComponent } from './components/courses/course-list/course-list.component';
 import { MainDashboardComponent } from './components/dashboard/main-dashboard/main-dashboard.component';
 import { StaffListComponent } from './components/members/staff-list/staff-list.component';
+import { SiteCardComponent } from './components/sites/site-card/site-card.component';
+import { SiteListComponent } from './components/sites/site-list/site-list.component';
+import { ClassListComponent } from './components/classes/class-list/class-list.component';
+import { ClassCardComponent } from './components/classes/class-card/class-card.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -46,6 +50,8 @@ export const routes: Routes = [
             { path: 'about', component: AboutUsComponent },
             { path: 'contact-us', component: ContactUsComponent },
             { path: 'courses', component: CoursesListComponent },
+            { path: 'sites', component: SiteListComponent },
+            { path: 'classes', component: ClassListComponent },
 
             {
                 path: '',
@@ -53,6 +59,8 @@ export const routes: Routes = [
                 children: [
                     { path: 'profile', component: UserProfileComponent },
                     { path: 'course-card', component: CourseCardComponent },
+                    { path: 'site-card', component: SiteCardComponent },
+                    { path: 'class-card', component: ClassCardComponent },
                     { path: 'attendences', component: AttendenceCardComponent },
                     { path: 'member-card', component: MemberCardComponent },
                     { path: 'students-card/:courseTitle', component: StudentListComponent },
@@ -72,7 +80,7 @@ export const routes: Routes = [
                     // manager-only
                     { path: 'target-user-profile/:memberUserName', component: TargetUserProfileComponent, canActivate: [managerGuard] },
                     { path: 'students', component: MemberListComponent, canActivate: [managerGuard] },
-                    { path: 'staffs', component: StaffListComponent, canActivate: [managerGuard]},
+                    { path: 'staffs', component: StaffListComponent, canActivate: [managerGuard] },
                     { path: 'manager-panel', component: ManagerPanelComponent, canActivate: [managerGuard] },
                     { path: 'add-course', component: CourseCreateComponent, canActivate: [managerGuard] },
                     { path: 'update-course/:courseTitle', component: CourseEditComponent, canActivate: [managerGuard] },
@@ -84,48 +92,6 @@ export const routes: Routes = [
             { path: 'not-found', component: NotFoundComponent },
         ],
     },
-
-    // {
-    //     path: '',
-    //     runGuardsAndResolvers: 'always',
-    //     canActivate: [authGuard],
-    //     children: [
-    //         { path: 'profile', component: UserProfileComponent },
-
-    //         // Manager-only
-    //         { path: 'target-user-profile/:memberUserName', component: TargetUserProfileComponent, canActivate: [managerGuard] },
-    //         { path: 'members', component: MemberListComponent, canActivate: [managerGuard] },
-    //         { path: 'manager-panel', component: ManagerPanelComponent, canActivate: [managerGuard] },
-    //         { path: 'add-course', component: CourseCreateComponent, canActivate: [managerGuard] },
-    //         { path: 'update-course/:courseTitle', component: CourseEditComponent, canActivate: [managerGuard] },
-    //         { path: 'target-member-enrolled-course/:memberUserName/:courseTitle', component: TargetMemberEnrolledCourseComponent, canActivate: [managerGuard] },
-    //         { path: 'target-payment/:targetPaymentId', component: UploadPhotoComponent, canActivate: [managerGuard] },
-
-    //         // Teacher-only
-    //         { path: 'teacher-panel', component: TeacherComponent, canActivate: [teacherGuard] },
-
-
-    //         // Secretary-only
-    //         { path: 'secretary-panel', component: SecretaryComponent, canActivate: [secretaryGuard] },
-
-    //         // Student-only
-    //         { path: 'enrolled-course/:memberUserName', component: EnrolledCourseComponent, canActivate: [studentGuard] },
-
-    //         // Shared (any authenticated user)
-    //         { path: 'course-card', component: CourseCardComponent },
-    //         { path: 'attendences', component: AttendenceCardComponent },
-    //         { path: 'member-card', component: MemberCardComponent },
-    //         { path: 'students-card/:courseTitle', component: StudentListComponent },
-    //         { path: 'attendences-card/:courseTitle', component: AttendenceListComponent },
-    //         { path: 'attendences-card/:memberUserName/:courseTitle', component: AttendenceListComponent, canActivate: [managerGuard] },
-    //         // { path: 'edit-member/:memberEmail', component: EditMemberComponent },
-    //         { path: 'member-enrolled-course/:courseTitle', component: MemberEnrolledCourseComponent },
-
-    //         { path: 'dashboard', component: MainDashboardComponent },
-
-    //         { path: 'not-found', component: NotFoundComponent }
-    //     ]
-    // },
 
     {
         path: '',

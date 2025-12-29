@@ -11,7 +11,7 @@
         <span>دوره های آموزشگاه</span>
     </div>
     @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
-    <div class="div-btn-add-course">
+    <div class="div-btn-add-course" [class.fixed-mode]="isSticky">
         <button class="add-btn" [routerLink]="['/dashboard/add-course']">
             <span class="icon-wrap" aria-hidden="true">
                 <svg class="icon" viewBox="0 0 24 24" role="img" focusable="false">
@@ -19,7 +19,7 @@
                     <path d="M12 8v8M8 12h8" fill="none" stroke="#ff2f72" stroke-width="2" stroke-linecap="round" />
                 </svg>
             </span>
-            <span class="label">اضافه کردن دوره جدید</span>
+            <span class="label">افزودن دوره جدید</span>
         </button>
     </div>
     }

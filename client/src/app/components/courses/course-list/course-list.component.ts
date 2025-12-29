@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit, Signal } from '@angular/core';
+import { Component, HostListener, inject, OnDestroy, OnInit, Signal } from '@angular/core';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { Observable, Subscription } from 'rxjs';
 
 import { RouterModule } from '@angular/router';
 import { Course, ShowCourse } from '../../../models/course.model';
-import { CourseParams } from '../../../models/helpers/course-params';
+import { CourseParams } from '../../../models/helpers/application-params';
 import { PaginatedResult } from '../../../models/helpers/paginatedResult';
 import { Pagination } from '../../../models/helpers/pagination';
 import { LoggedInUser } from '../../../models/logged-in-user.model';
@@ -30,6 +30,8 @@ export class CoursesListComponent implements OnInit, OnDestroy {
   courseService = inject(CourseService);
   courses$: Observable<Course[] | null> | undefined;
 
+  isSticky: boolean = false;
+
   subscribed: Subscription | undefined;
   pagination: Pagination | undefined;
   showCourses: ShowCourse[] | undefined;
@@ -48,6 +50,17 @@ export class CoursesListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscribed?.unsubscribe();
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll(): void {
+    const scrollOffset = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+
+    if (scrollOffset > 280) {
+      this.isSticky = true;
+    } else {
+      this.isSticky = false;
+    }
   }
 
   getAll(): void {

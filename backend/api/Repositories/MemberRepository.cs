@@ -7,8 +7,8 @@ public class MemberRepository : IMemberRepository
 {
     #region Constructor
     IMongoCollection<AppUser> _collectionAppUser;
-    IMongoCollection<Attendence> _collectionAttendence;
-    IMongoCollection<Course> _collectionCourse;
+    IMongoCollection<Attendance> _collectionAttendence;
+    IMongoCollection<ClassRoom> _collectionClass;
     private readonly ITokenService _tokenService;
     private readonly UserManager<AppUser> _userManager;
 
@@ -16,41 +16,41 @@ public class MemberRepository : IMemberRepository
     {
         var database = client.GetDatabase(dbSettings.DatabaseName);
         _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.CollectionUsers);
-        _collectionAttendence = database.GetCollection<Attendence>(AppVariablesExtensions.CollectionAttendences);
-        _collectionCourse = database.GetCollection<Course>(AppVariablesExtensions.CollectionCourses);
+        _collectionAttendence = database.GetCollection<Attendance>(AppVariablesExtensions.CollectionAttendences);
+        _collectionClass = database.GetCollection<ClassRoom>(AppVariablesExtensions.CollectionCourses);
 
         _tokenService = tokenService;
         _userManager = userManager;
     }
     #endregion Constructor
 
-    public async Task<PagedList<Attendence>> GetAllAttendenceAsync(AttendenceParams attendenceParams, ObjectId? userId, string targetCourseTitle, CancellationToken cancellationToken)
+    public async Task<PagedList<Attendance>> GetAllAttendenceAsync(AttendenceParams attendenceParams, ObjectId? userId, string targetClassTitle, CancellationToken cancellationToken)
     {
         AppUser? appUser = await _collectionAppUser.Find<AppUser>(
             doc => doc.Id == userId).FirstOrDefaultAsync(cancellationToken);
         if (appUser is null)
         {
             var emptyQuery = _collectionAttendence.AsQueryable().Where(_ => false);
-            return await PagedList<Attendence>.CreatePagedListAsync(
+            return await PagedList<Attendance>.CreatePagedListAsync(
                 emptyQuery, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
         }
 
-        ObjectId targetCourseId = await _collectionCourse.AsQueryable()
-            .Where(doc => doc.Title == targetCourseTitle.ToUpper())
+        ObjectId? targetClassId = await _collectionClass.AsQueryable()
+            .Where(doc => doc.ClassRoomName == targetClassTitle.ToUpper())
             .Select(doc => doc.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (targetCourseId == default)
+        if (targetClassId == default)
         {
             var emptyQuery = _collectionAttendence.AsQueryable().Where(_ => false);
-            return await PagedList<Attendence>.CreatePagedListAsync(
+            return await PagedList<Attendance>.CreatePagedListAsync(
                 emptyQuery, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
         }
 
-        IQueryable<Attendence>? query = _collectionAttendence.AsQueryable<Attendence>()
-            .Where(doc => doc.StudentId == appUser.Id && doc.CourseId == targetCourseId);
+        IQueryable<Attendance>? query = _collectionAttendence.AsQueryable<Attendance>()
+            .Where(doc => doc.StudentId == appUser.Id && doc.ClassId == targetClassId);
 
-        return await PagedList<Attendence>.CreatePagedListAsync(query, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
+        return await PagedList<Attendance>.CreatePagedListAsync(query, attendenceParams.PageNumber, attendenceParams.PageSize, cancellationToken);
     }
 
     public async Task<OperationResult<TargetMemberDto>> UpdateMemberAsync(MemberUpdateDto memberUpdateDto, ObjectId userId, CancellationToken cancellationToken)
@@ -61,7 +61,7 @@ public class MemberRepository : IMemberRepository
             return new(
                 false,
                 Error: new(
-                    ErrorCode.IsUserNotFound,
+                    ErrorCode.IsNotFound,
                     "User not found"
                 )
             );
@@ -145,9 +145,9 @@ public class MemberRepository : IMemberRepository
         );
     }
 
-    public async Task<ProfileDto?> GetProfileAsync(string HashedUserId, CancellationToken cancellationToken)
+    public async Task<ProfileDto?> GetProfileAsync(string hashedUserId, CancellationToken cancellationToken)
     {
-        ObjectId? userId = await _tokenService.GetActualUserIdAsync(HashedUserId, cancellationToken);
+        ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
         if (userId is null) return null;
 
@@ -167,11 +167,11 @@ public class MemberRepository : IMemberRepository
             : Mappers.ConvertAppUserToProfileDto(appUser);
     }
 
-    public async Task<List<Course>> GetCourseAsync(string hashedUserId, CancellationToken cancellationToken)
+    public async Task<List<ClassRoom>> GetClassesAsync(string hashedUserId, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
-        if (userId is null) return new List<Course>();
+        if (userId is null) return new List<ClassRoom>();
 
         string? loggedInUserName = await _collectionAppUser.AsQueryable()
             .Where(doc => doc.Id == userId)
@@ -179,26 +179,26 @@ public class MemberRepository : IMemberRepository
             .FirstOrDefaultAsync(cancellationToken);
 
         if (loggedInUserName is null)
-            return new List<Course>();
+            return new List<ClassRoom>();
 
-        List<string>? enrolledCourseIds = await _collectionAppUser.AsQueryable<AppUser>()
+        List<ObjectId>? enrolledCourseIds = await _collectionAppUser.AsQueryable<AppUser>()
             .Where(appUser => appUser.NormalizedUserName == loggedInUserName.ToUpper())
-            .SelectMany(appUser => appUser.EnrolledCourses)
-            .Select(doc => doc.CourseId.ToString())
+            .SelectMany(appUser => appUser.EnrolledClasses)
+            .Select(doc => doc.ClassRoomId)
             .ToListAsync(cancellationToken);
 
         if (enrolledCourseIds is null || enrolledCourseIds.Count == 0)
-            return new List<Course>();
+            return [];
 
-        List<Course>? courses = await _collectionCourse.Find<Course>(doc =>
-            enrolledCourseIds.Contains(doc.Id.ToString())).ToListAsync(cancellationToken);
+        List<ClassRoom>? courses = await _collectionClass.Find<ClassRoom>(doc =>
+            enrolledCourseIds.Contains(doc.Id)).ToListAsync(cancellationToken);
 
-        return courses ?? new List<Course>();
+        return courses ?? new List<ClassRoom>();
     }
 
-    public async Task<EnrolledCourse?> GetEnrolledCourseAsync(string HashedUserId, string courseTitle, CancellationToken cancellationToken)
+    public async Task<EnrolledClassRoom?> GetEnrolledCourseAsync(string hashedUserId, string classTitle, CancellationToken cancellationToken)
     {
-        ObjectId? userId = await _tokenService.GetActualUserIdAsync(HashedUserId, cancellationToken);
+        ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
         if (userId is null) return null;
 
@@ -209,11 +209,13 @@ public class MemberRepository : IMemberRepository
         if (appUser is null)
             return null;
 
-        EnrolledCourse? enrolledCourse = appUser.EnrolledCourses
-            .FirstOrDefault(ec => ec.CourseTitle == courseTitle.ToUpper());
-        if (enrolledCourse is null)
+        ClassRoom? targetClass = await _collectionClass.Find(doc => doc.ClassRoomName.ToUpper() == classTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+
+        EnrolledClassRoom? enrolledClass = appUser.EnrolledClasses
+            .FirstOrDefault(ec => ec.ClassRoomId == targetClass.Id);
+        if (enrolledClass is null)
             return null;
 
-        return enrolledCourse;
+        return enrolledClass;
     }
 }

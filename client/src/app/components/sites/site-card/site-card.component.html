@@ -1,0 +1,13 @@
+@if (siteIn) {
+@if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
+<div class="card-items" [routerLink]="['/' + 'dashboard/' + 'update-site/' + siteIn.siteName]" routerLinkActive
+    #rla="routerLinkActive">
+    <span class="site-title">{{ siteIn.siteName }}</span>
+    <span class="text">نام دپارتمان: {{ siteIn.departmanName }}</span>
+    <span class="text">طبقه: {{ siteIn.floor }}</span>
+    <span class="text">ظرفیت سایت: {{ siteIn.capacity }}</span>
+
+    <button class="btn-edit-site" mat-stroked-button>ویرایش سایت</button>
+</div>
+}
+}

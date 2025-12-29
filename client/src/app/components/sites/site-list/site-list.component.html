@@ -1,0 +1,39 @@
+<section class="sites-container">
+    <header>
+        <nav>
+            <app-navbar />
+        </nav>
+    </header>
+
+    <div class="div-title-site">
+        <app-back-forward-button class="bf-btns"></app-back-forward-button>
+
+        <span>سایت های آموزشگاه</span>
+    </div>
+    @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
+    <div class="div-btn-add-site" [class.fixed-mode]="isSticky">
+        <button class="add-btn" [routerLink]="['/dashboard/add-site']">
+            <span class="icon-wrap" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24" role="img" focusable="false">
+                    <circle cx="12" cy="12" r="9" fill="none" stroke="#ff2f72" stroke-width="2" />
+                    <path d="M12 8v8M8 12h8" fill="none" stroke="#ff2f72" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </span>
+            <span class="label">افزودن سایت جدید</span>
+        </button>
+    </div>
+    }
+
+    <div class="sites">
+        @for (site of showSites; track $index) {
+        <app-site-card [siteInput]="site"></app-site-card>
+        }
+    </div>
+    @if (pagination && siteParams) {
+    <mat-paginator #paginator (page)="handlePageEvent($event)" [length]="pagination.totalItems"
+        [pageSize]="siteParams.pageSize" [disabled]="false" [showFirstLastButtons]="true"
+        [pageSizeOptions]="true ? pageSizeOptions : []" [hidePageSize]="false" [pageIndex]="siteParams.pageNumber - 1"
+        aria-label="Select page" class="paginator">
+    </mat-paginator>
+    }
+</section>

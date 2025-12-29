@@ -60,13 +60,37 @@
         }
 
         <li routerLinkActive="active">
+            <a [routerLink]="['/dashboard/classes']" title="کلاس ها">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z" />
+                    </svg>
+                </span>
+                <span class="label">کلاس ها</span>
+            </a>
+        </li>
+
+        <li routerLinkActive="active">
             <a [routerLink]="['/dashboard/courses']" title="دوره‌ها">
                 <span class="icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24">
-                        <path d="M5 4h11a3 3 0 0 1 3 3v12H7a2 2 0 0 1-2-2Z" />
+                        <path
+                            d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z" />
                     </svg>
                 </span>
                 <span class="label">دوره ها</span>
+            </a>
+        </li>
+
+        <li routerLinkActive="active">
+            <a [routerLink]="['/dashboard/sites']" title="سایت ها">
+                <span class="icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z" />
+                    </svg>
+                </span>
+                <span class="label">سایت ها</span>
             </a>
         </li>
     </ul>

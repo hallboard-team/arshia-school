@@ -5,16 +5,18 @@ public class TeacherRepository : ITeacherRepository
     #region Vars and Constructor
     private readonly IMongoCollection<AppUser> _collectionAppUser;
     private readonly IMongoCollection<Course> _collectionCourse;
+    private readonly IMongoCollection<ClassRoom> _collectionClass;
     private readonly UserManager<AppUser> _userManager;
     private readonly ITokenService _tokenService;
-    private readonly IMongoCollection<Attendence> _collectionAttendence;
+    private readonly IMongoCollection<Attendance> _collectionAttendence;
 
     public TeacherRepository(IMongoClient client, ITokenService tokenService, IMyMongoDbSettings dbSettings, UserManager<AppUser> userManager)
     {
         var database = client.GetDatabase(dbSettings.DatabaseName);
         _collectionAppUser = database.GetCollection<AppUser>(AppVariablesExtensions.CollectionUsers);
-        _collectionAttendence = database.GetCollection<Attendence>(AppVariablesExtensions.CollectionAttendences);
+        _collectionAttendence = database.GetCollection<Attendance>(AppVariablesExtensions.CollectionAttendences);
         _collectionCourse = database.GetCollection<Course>(AppVariablesExtensions.CollectionCourses);
+        _collectionClass = database.GetCollection<ClassRoom>(AppVariablesExtensions.CollectionClasses);
 
         _userManager = userManager;
         _tokenService = tokenService;
@@ -31,17 +33,17 @@ public class TeacherRepository : ITeacherRepository
         return ValidationsExtensions.ValidateObjectId(studentId);
     }
 
-    public async Task<List<Course>> GetCourseAsync(string hashedUserId, CancellationToken cancellationToken)
+    public async Task<List<ClassRoom>> GetClassesAsync(string hashedUserId, CancellationToken cancellationToken)
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
         if (userId is null)
-            return new List<Course>();
+            return [];
 
-        List<Course>? courses = await _collectionCourse.Find<Course>(doc =>
+        List<ClassRoom>? classes = await _collectionClass.Find<ClassRoom>(doc =>
             doc.ProfessorsIds.Contains(userId.Value)).ToListAsync(cancellationToken);
 
-        return courses ?? new List<Course>();
+        return classes ?? [];
     }
 
     public async Task<ShowStudentStatusDto?> AddAsync(AddStudentStatusDto teacherInput, string courseTitle, CancellationToken cancellationToken)
@@ -66,14 +68,14 @@ public class TeacherRepository : ITeacherRepository
         if (teacherInput.IsAbsent == false)
             return null;
 
-        Attendence existingAttendence = await _collectionAttendence
-            .Find(doc => doc.StudentId == targetAppUser.Id && doc.Date == currentDate && doc.CourseId == targetCourseId)
+        Attendance existingAttendence = await _collectionAttendence
+            .Find(doc => doc.StudentId == targetAppUser.Id && doc.Date == currentDate && doc.ClassId == targetCourseId)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (existingAttendence != null)
             return null;
 
-        Attendence? attendence = Mappers.ConvertAddStudentStatusDtoToAttendence(teacherInput, targetAppUser.Id, targetCourseId, currentDate);
+        Attendance? attendence = Mappers.ConvertAddStudentStatusDtoToAttendence(teacherInput, targetAppUser.Id, targetCourseId, currentDate);
 
         if (_collectionAttendence is not null)
         {
@@ -106,7 +108,7 @@ public class TeacherRepository : ITeacherRepository
             .FirstOrDefaultAsync(cancellationToken);
 
         DeleteResult deleteResult = await _collectionAttendence.DeleteOneAsync(
-            doc => doc.StudentId == targetUserId && doc.Date == currentDate && doc.CourseId == targetCourseId,
+            doc => doc.StudentId == targetUserId && doc.Date == currentDate && doc.ClassId == targetCourseId,
             cancellationToken);
 
         return deleteResult.DeletedCount > 0;
@@ -122,8 +124,13 @@ public class TeacherRepository : ITeacherRepository
                 empty, paginationParams.PageNumber, paginationParams.PageSize, cancellationToken);
         }
 
+        ObjectId? classId = await _collectionClass.AsQueryable()
+            .Where(doc => doc.ClassRoomName.ToUpper() == targetTitle.ToUpper())
+            .Select(doc => doc.Id)
+            .FirstOrDefaultAsync(cancellationToken);
+
         IQueryable<AppUser> query = _collectionAppUser.AsQueryable()
-            .Where(user => user.EnrolledCourses.Any(course => course.CourseTitle == targetTitle.ToUpper() && user.Id != userId));
+            .Where(user => user.EnrolledClasses.Any(course => course.ClassRoomId == classId && user.Id != userId));
 
         return await PagedList<AppUser>.CreatePagedListAsync(query, paginationParams.PageNumber, paginationParams.PageSize, cancellationToken);
     }
@@ -133,7 +140,7 @@ public class TeacherRepository : ITeacherRepository
         DateOnly currentDate = DateOnly.FromDateTime(DateTime.UtcNow);
 
         var attendances = await _collectionAttendence
-            .Find(a => studentIds.Contains(a.StudentId) && a.CourseId == courseId && a.Date == currentDate)
+            .Find(a => studentIds.Contains(a.StudentId) && a.ClassId == courseId && a.Date == currentDate)
             .ToListAsync(cancellationToken);
 
         return studentIds.ToDictionary(

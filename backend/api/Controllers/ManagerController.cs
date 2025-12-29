@@ -28,7 +28,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
             ? Ok(new Response("User successfully updated."))
             : opResult.Error?.Code switch
             {
-                ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
+                ErrorCode.IsNotFound => BadRequest(opResult.Error.Message),
                 ErrorCode.IsInvalidType => BadRequest(opResult.Error.Message),
                 ErrorCode.IsOperationFailed => BadRequest(opResult.Error.Message),
                 _ => BadRequest("Operation failed. Try again or contact support.")
@@ -137,13 +137,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         [FromBody] AddEnrolledCourseDto managerInput, string targetUserName,
         CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(targetUserName))
-            return BadRequest("Username is required.");
-
-        if (string.IsNullOrWhiteSpace(managerInput.Title))
-            return BadRequest("Course title is required.");
-
-        var enrolledCourse = await _managerRepository.AddEnrolledCourseAsync(managerInput, targetUserName, cancellationToken);
+        var enrolledCourse = await _managerRepository.AddEnrolledClassAsync(managerInput, targetUserName, cancellationToken);
 
         return enrolledCourse is not null
             ? Ok(enrolledCourse)
@@ -173,13 +167,10 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         if (string.IsNullOrWhiteSpace(targetUserName))
             return BadRequest("Username is required.");
 
-        if (string.IsNullOrWhiteSpace(updateEnrolledDto.TitleCourse))
-            return BadRequest("Course title is required.");
-
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var updateResult = await _managerRepository.UpdateEnrolledCourseAsync(updateEnrolledDto, targetUserName, cancellationToken);
+        var updateResult = await _managerRepository.UpdateEnrolledClassAsync(updateEnrolledDto, targetUserName, cancellationToken);
 
         return updateResult?.ModifiedCount > 0
             ? Ok(new { message = "EnrolledCourse updated successfully" })
@@ -271,7 +262,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
             ? opResult.Result
             : opResult.Error?.Code switch
             {
-                ErrorCode.IsUserNotFound => BadRequest(opResult.Error.Message),
+                ErrorCode.IsNotFound => BadRequest(opResult.Error.Message),
                 ErrorCode.IsOperationFailed => BadRequest(opResult.Error.Message),
                 _ => BadRequest("Something unexpected went wrong. Try again or contact support")
             };
@@ -286,7 +277,9 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
         if (file is null)
             return BadRequest("No file is selected with this request.");
 
-        Photo? photo = await _managerRepository.AddPhotoAsync(file, targetPaymentId, cancellationToken);
+        ObjectId.TryParse(targetPaymentId, out var paymentId);
+
+        Photo? photo = await _managerRepository.AddPhotoAsync(file, paymentId, cancellationToken);
 
         return photo is null ? NotFound("No product with this ID found") : photo;
     }
@@ -300,7 +293,9 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
             return Unauthorized("The user is not logged in.");
         }
 
-        bool isDeleted = await _managerRepository.DeletePhotoAsync(targetPaymentId, cancellationToken);
+        ObjectId.TryParse(targetPaymentId, out var paymentId);
+
+        bool isDeleted = await _managerRepository.DeletePhotoAsync(paymentId, cancellationToken);
 
         if (!isDeleted)
         {
@@ -311,27 +306,27 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
     }
 
     [HttpGet("get-target-member-course/{targetUserName}")]
-    public async Task<ActionResult<List<CourseResponse>>> GetTargetMemberCourse(string targetUserName, CancellationToken cancellationToken)
+    public async Task<ActionResult<List<ShowClassRoomDto>>> GetTargetMemberCourse(string targetUserName, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(targetUserName))
         {
             return BadRequest("userName is required.");
         }
 
-        List<CourseResponse>? coursesRes = await _managerRepository.GetTargetMemberCourseAsync(targetUserName, cancellationToken);
+        List<ShowClassRoomDto>? classRes = await _managerRepository.GetTargetMemberClassesAsync(targetUserName, cancellationToken);
 
-        return Ok(coursesRes ?? new List<CourseResponse>());
+        return Ok(classRes ?? []);
     }
 
     [HttpGet("get-target-member-enrolled-course/{targetUserName}/{courseTitle}")]
-    public async Task<ActionResult<EnrolledCourse>> GetTargetMemberEnrolledCourse(string targetUserName, string courseTitle, CancellationToken cancellationToken)
+    public async Task<ActionResult<EnrolledClassRoom>> GetTargetMemberEnrolledCourse(string targetUserName, string courseTitle, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(targetUserName))
         {
             return BadRequest("نام کاربری باید وارد بشود");
         }
 
-        EnrolledCourse? enrolledCourse = await _managerRepository.GetTargetMemberEnrolledCourseAsync(targetUserName, courseTitle, cancellationToken);
+        EnrolledClassRoom? enrolledCourse = await _managerRepository.GetTargetMemberEnrolledClassAsync(targetUserName, courseTitle, cancellationToken);
 
         if (enrolledCourse == null)
             return NotFound("دوره مورد نظر یافت نشد");
@@ -342,7 +337,9 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
     [HttpGet("get-target-payment-by-id/{targetPaymentId}")]
     public async Task<ActionResult<Payment>> GetTargetPaymentById(string targetPaymentId, CancellationToken cancellationToken)
     {
-        Payment? payment = await _managerRepository.GetTargetPaymentByIdAsync(targetPaymentId, cancellationToken);
+        ObjectId.TryParse(targetPaymentId, out var paymentId);
+
+        Payment? payment = await _managerRepository.GetTargetPaymentByIdAsync(paymentId, cancellationToken);
 
         if (payment == null)
             return NotFound("پرداخت مورد نظر یافت نشد");
@@ -358,7 +355,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
             return BadRequest("نام کاربری باید وارد بشود");
         }
 
-        List<string> courseTitles = await _managerRepository.GetTargetCourseTitleAsync(targetUserName, cancellationToken);
+        List<string> courseTitles = await _managerRepository.GetTargetClassTitlesAsync(targetUserName, cancellationToken);
 
         return Ok(courseTitles ?? new List<string>());
     }
@@ -376,7 +373,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
             return BadRequest("دوره مورد نظر باید وارد بشود");
         }
 
-        PagedList<Attendence> pagedAttendences = await _managerRepository.GetAllAttendenceAsync(attendenceParams, targetMemberUserName, targetCourseTitle, cancellationToken);
+        PagedList<Attendance> pagedAttendences = await _managerRepository.GetAllAttendanceAsync(attendenceParams, targetMemberUserName, targetCourseTitle, cancellationToken);
 
         if (pagedAttendences.Count == 0)
             return NoContent();
@@ -392,7 +389,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
 
         List<ShowStudentStatusDto> showStudentStatusDtos = [];
 
-        foreach (Attendence attendence in pagedAttendences)
+        foreach (Attendance attendence in pagedAttendences)
         {
             showStudentStatusDtos.Add(Mappers.ConvertAttendenceToShowStudentStatusDto(attendence));
         }
