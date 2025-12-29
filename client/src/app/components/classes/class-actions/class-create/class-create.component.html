@@ -1,1 +1,134 @@
-<p>class-create works!</p>
+<header>
+    <nav>
+        <app-navbar />
+    </nav>
+</header>
+
+<div class="background">
+    <app-back-forward-button class="bf-btns"></app-back-forward-button>
+
+    <div class="div-title-radio-input">
+        <span class="title">افزودن کلاس جدید</span>
+    </div>
+
+    <form class="class-form" [formGroup]="classFg" (ngSubmit)="classFg.valid && createClass()">
+        <div class="content">
+
+            <div class="form-row">
+                <div class="form-item">
+                    <mat-form-field appearance="outline">
+                        <mat-label>نام کلاس</mat-label>
+                        <input class="input" autoFocusDir type="text" matInput dir="auto"
+                            formControlName="classRoomNameCtrl" placeholder="مثلا: A1">
+                        <mat-hint>نام منحصر به فرد کلاس</mat-hint>
+                        @if (ClassRoomNameCtrl.hasError('required')) {
+                        <mat-error>لطفاً نام کلاس را وارد کنید</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+
+                <div class="form-item">
+                    <mat-form-field appearance="outline">
+                        <mat-label>دوره مربوطه</mat-label>
+                        <mat-select formControlName="courseNameCtrl">
+                            @for (course of courseList; track $index) {
+                            <mat-option [value]="course.title">{{ course.title }}</mat-option>
+                            }
+                        </mat-select>
+                        @if (CourseNameCtrl.hasError('required')) {
+                        <mat-error>انتخاب دوره الزامی است</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-item">
+                    <mat-form-field appearance="outline">
+                        <mat-label>سایت / شعبه</mat-label>
+                        <mat-select formControlName="siteNameCtrl">
+                            @for (site of siteList; track $index) {
+                            <mat-option [value]="site.name">{{ site.name }}</mat-option>
+                            }
+                        </mat-select>
+                        @if (SiteNameCtrl.hasError('required')) {
+                        <mat-error>انتخاب سایت الزامی است</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+
+                <div class="form-item">
+                    <mat-form-field appearance="outline">
+                        <mat-label>مدت هر جلسه (دقیقه)</mat-label>
+                        <input class="input" type="number" matInput formControlName="classMinutesCtrl"
+                            placeholder="مثلا: 90">
+                        @if (ClassMinutesCtrl.hasError('required')) {
+                        <mat-error>مدت زمان کلاس الزامی است</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-item">
+                    <mat-form-field appearance="outline">
+                        <mat-label>شهریه (تومان)</mat-label>
+                        <input class="input" type="number" matInput formControlName="tuitionCtrl" placeholder="0">
+                        @if (TuitionCtrl.hasError('required')) {
+                        <mat-error>شهریه الزامی است</mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+
+                <div class="form-item">
+                    <app-datepicker formControlName="startDateCtrl" label="تاریخ شروع">
+                    </app-datepicker>
+                    
+                    @if (StartDateCtrl.hasError('required') && StartDateCtrl.touched) {
+                        <mat-error class="custom-error">تاریخ شروع الزامی است</mat-error>
+                    }
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-item">
+                    <app-datepicker formControlName="endedDateCtrl" label="تاریخ پایان">
+                    </app-datepicker>
+
+                    @if (EndedDateCtrl.hasError('required') && EndedDateCtrl.touched) {
+                        <mat-error class="custom-error">تاریخ پایان الزامی است</mat-error>
+                    }
+                </div>
+                <div class="form-item empty-item"></div>
+            </div>
+
+
+            <div class="radio-wrapper">
+                <div class="radio-section">
+                    <span class="radio-label">وضعیت برگزاری:</span>
+                    <mat-radio-group formControlName="isStartedCtrl" class="custom-radio-group">
+                        <mat-radio-button [value]="false">شروع نشده</mat-radio-button>
+                        <mat-radio-button [value]="true">در حال برگزاری</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <div class="radio-section">
+                    <span class="radio-label">وضعیت کلاس:</span>
+                    <mat-radio-group formControlName="isActiveCtrl" class="custom-radio-group">
+                        <mat-radio-button [value]="true">فعال</mat-radio-button>
+                        <mat-radio-button [value]="false">غیرفعال</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button type="button" class="neumorphic-btn cancel-btn" (click)="onCancel()">
+                    انصراف
+                </button>
+                <button type="submit" [disabled]="classFg.invalid" class="neumorphic-btn submit-btn">
+                    ثبت کلاس جدید
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

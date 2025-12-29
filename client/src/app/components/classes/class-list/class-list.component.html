@@ -1,1 +1,47 @@
-<p>class-list works!</p>
+<section class="courses-container">
+    <header>
+        <nav>
+            <app-navbar />
+        </nav>
+    </header>
+
+    <div class="div-title-course">
+        <app-back-forward-button class="bf-btns"></app-back-forward-button>
+        <span>لیست کلاس‌های آموزشگاه</span>
+    </div>
+
+    @if (loggedInUserSig && loggedInUserSig()?.roles?.includes('manager')) {
+    <div class="div-btn-add-course" [class.fixed-mode]="isSticky">
+        <button class="add-btn" [routerLink]="['/dashboard/add-class']">
+            <span class="icon-wrap" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24" role="img" focusable="false">
+                    <circle cx="12" cy="12" r="9" fill="none" stroke="#ff2f72" stroke-width="2" />
+                    <path d="M12 8v8M8 12h8" fill="none" stroke="#ff2f72" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </span>
+            <span class="label">افزودن کلاس جدید</span>
+        </button>
+    </div>
+    }
+
+    <div class="courses">
+        @for (classItem of showClasses; track classItem.id) {
+            <app-class-card [classInput]="classItem"></app-class-card>
+        }
+    </div>
+
+    @if (pagination && classParams) {
+    <mat-paginator #paginator 
+        (page)="handlePageEvent($event)" 
+        [length]="pagination.totalItems"
+        [pageSize]="classParams.pageSize" 
+        [disabled]="false" 
+        [showFirstLastButtons]="true"
+        [pageSizeOptions]="pageSizeOptions" 
+        [hidePageSize]="false" 
+        [pageIndex]="classParams.pageNumber - 1"
+        aria-label="Select page" 
+        class="paginator">
+    </mat-paginator>
+    }
+</section>
