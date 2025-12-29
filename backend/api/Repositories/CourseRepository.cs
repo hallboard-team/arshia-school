@@ -60,7 +60,7 @@ public class CourseRepository : ICourseRepository
         );
     }
 
-    public async Task<OperationResult<ShowCourseDto?>> UpdateCourseAsync(
+    public async Task<OperationResult<ShowCourseDto>> UpdateCourseAsync(
         UpdateCourseDto updateCourseDto, string targetCourseTitle,
         CancellationToken cancellationToken)
     {
@@ -100,8 +100,7 @@ public class CourseRepository : ICourseRepository
 
         return new(
             false,
-            null,
-            new(
+            Error: new(
                 ErrorCode.IsOperationFailed,
                 "Course update failed! Try again"
             )

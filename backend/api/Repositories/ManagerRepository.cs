@@ -188,7 +188,16 @@ public class ManagerRepository : IManagerRepository
     }
 
     bool alreadyEnrolledAdded = appUser.EnrolledClasses.Any(doc => doc.ClassRoomId == targetClass.Id);
-    if (alreadyEnrolledAdded) return null;
+    if (alreadyEnrolledAdded)
+    {
+      return new(
+        true,
+        Error: new(
+          ErrorCode.IsAlreadyEnrolled,
+          "User is already enrolled"
+        )
+      );
+    }
 
     int tuition = targetClass.Tuition;                       // شهریه کل (int)
     int paidAmount = addEnrolledCourseDto.PaidAmount;   // پیش‌پرداخت (int)
