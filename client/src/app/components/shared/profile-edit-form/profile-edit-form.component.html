@@ -4,20 +4,21 @@
         <mat-form-field appearance="outline">
             <mat-label>نام</mat-label>
             <input class="input" matInput type="text" formControlName="name" />
-            <mat-error *ngIf="f['name'].hasError('required')">الزامی</mat-error>
+            <mat-error *ngIf="f['name'].hasError('required')">وارد کردن نام الزامی است</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>نام خانوادگی</mat-label>
             <input class="input" matInput type="text" formControlName="lastName" />
-            <mat-error *ngIf="f['lastName'].hasError('required')">الزامی</mat-error>
+            <mat-error *ngIf="f['lastName'].hasError('required')">وارد کردن نام خانوادگی الزامی است</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
             <mat-label>شماره تلفن</mat-label>
             <span matPrefix dir="ltr" style="margin-right: 5px;">+98</span>
             <input matInput type="tel" maxlength="10" formControlName="phoneNum" dir="ltr" />
-            <mat-error *ngIf="f['phoneNum'].hasError('pattern')">نامعتبر</mat-error>
+            <mat-error *ngIf="f['phoneNum'].hasError('required')">وارد کردن شماره تلفن الزامیست</mat-error>
+            <mat-error *ngIf="f['phoneNum'].hasError('pattern')">شماره تلفن 10 رقم بدون صفر</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -25,6 +26,7 @@
             <mat-select formControlName="gender">
                 <mat-option value="female">خانم</mat-option>
                 <mat-option value="male">آقا</mat-option>
+                <mat-error *ngIf="f['gender'].hasError('required')">وارد کردن جنسیت الزامیست</mat-error>
             </mat-select>
         </mat-form-field>
 
