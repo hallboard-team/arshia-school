@@ -414,47 +414,4 @@ public class ClassRoomRepository : IClassRoomRepository
             null
         );
     }
-
-    public async Task<OperationResult> DeleteClassRoomAsync(ObjectId classRoomId, CancellationToken cancellationToken)
-    {
-        FilterDefinition<ClassRoom> idFilter = Builders<ClassRoom>.Filter.Eq(doc => doc.Id, classRoomId);
-
-        FilterDefinition<ClassRoom> notAssignedFilter = Builders<ClassRoom>.Filter.In(
-            doc => doc.CourseId,
-            [null, ObjectId.Empty]
-        );
-
-        FilterDefinition<ClassRoom> finalFilter = Builders<ClassRoom>.Filter.And(idFilter, notAssignedFilter);
-
-        DeleteResult deleteResult = await _collectionClassRoom.DeleteOneAsync(finalFilter, cancellationToken);
-
-        if (deleteResult.DeletedCount == 0)
-        {
-            bool isExist = await _collectionClassRoom.Find(doc => doc.Id == classRoomId).AnyAsync(cancellationToken);
-
-            if (!isExist)
-            {
-                return new(
-                    false,
-                    Error: new(
-                        ErrorCode.IsClassRoomNotFound,
-                        "ClassRoom not found!"
-                    )
-                );
-            }
-
-            return new(
-                false,
-                Error: new(
-                    ErrorCode.IsDeleteNotAllowed,
-                    "Cannot delete ClassRoom because it is assigned to a course."
-                )
-            );
-        }
-
-        return new(
-            true,
-            null
-        );
-    }
 }
