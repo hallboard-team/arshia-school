@@ -10,5 +10,5 @@ export interface UserProfile {
     dateOfBirth: string;
     gender: string;
     photoUrl: string;
-    memberPhoto: Photo;
+    photo: Photo;
 }
