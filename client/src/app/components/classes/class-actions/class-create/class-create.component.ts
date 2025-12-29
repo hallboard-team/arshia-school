@@ -130,7 +130,9 @@ export class ClassCreateComponent implements OnInit {
       classRoomMinutes: +this.ClassMinutesCtrl.value, 
       tuition: +this.TuitionCtrl.value,
       startDate: start,
-      endedDate: end
+      endedDate: end,
+      isStarted: this.IsStartedCtrl.value,
+      isActive: this.IsActiveCtrl.value
     };
 
     this._classService.addClass(addClass).subscribe({
