@@ -30,8 +30,6 @@ project.nuget.cache
 *.suo
 *.userosscache
 *.sln.docstates
-.vscode/
-
 
 # User-specific files
 *.rsuser
@@ -473,15 +471,6 @@ $RECYCLE.BIN/
 # JetBrains Rider
 .idea/
 *.sln.iml
-
-##
-## Visual Studio Code
-##
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 
 appsettings.json
 
