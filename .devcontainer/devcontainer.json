@@ -1,15 +1,17 @@
 {
-  "name": "dev-${localWorkspaceFolderBasename}-full",
-  "dockerComposeFile": "./docker/docker-compose.full.yml",
-  "service": "dev-full",
+  "name": "dev-${localWorkspaceFolderBasename}_fullstack-mongo",
+  "dockerComposeFile": "./docker/docker-compose.fullstack.yml",
+  "service": "dev-fullstack",
+  "initializeCommand": "./.devcontainer/docker/run-shared-mongo.sh",
   "runServices": [
-    "dev-full"
+    "dev-fullstack"
   ],
   "workspaceFolder": "/workspaces/app",
   "shutdownAction": "stopCompose",
   "updateRemoteUserUID": false,
   "remoteEnv": {
-    "VSCODE_SERVER_DIR": "/vscode/vscode-server"
+    "VSCODE_SERVER_DIR": "/vscode/vscode-server",
+    "CODEX_HOME": "/home/vscode/.codex"
   },
   "customizations": {
     "vscode": {
@@ -19,13 +21,11 @@
         "nurlybekovnt.csharpextensions",
         "adrianwilczynski.user-secrets",
         "patcx.vscode-nuget-gallery",
-        
         "formulahendry.auto-close-tag",
         "formulahendry.auto-rename-tag",
         "Angular.ng-template",
         "johnpapa.Angular2",
         "solnurkarim.html-to-css-autocompletion",
-        
         "openai.chatgpt",
         "maptz.regionfolder",
         "github.vscode-pull-request-github",

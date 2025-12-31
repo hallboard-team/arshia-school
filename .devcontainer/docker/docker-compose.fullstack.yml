@@ -1,0 +1,49 @@
+version: "3.9"
+
+x-mongo-image: &mongo_image "${MONGO_IMAGE:-ghcr.io/hallboard-team/tools:mongo-${MONGO_VERSION:-7.0}}"
+
+services:
+  dev-fullstack:
+    image: ghcr.io/hallboard-team/fullstack-dev:dotnet${DOTNET_VERSION:-10.0}-node${NODE_VERSION:-24}-ng${ANGULAR_VERSION:-21}
+    container_name: ${COMPOSE_PROJECT_NAME:-template}-ca-mvp-mongo_dev
+
+    user: "0:0"
+    working_dir: /workspaces/app
+
+    volumes:
+      - ../../:/workspaces/app:Z
+      - ${HOME}/.cache/vscode-server-shared:/home/vscode/.vscode-server-shared:Z
+      - ${HOME}/.cache/codex:/home/vscode/.codex:Z
+
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      VSCODE_SERVER_DIR: /home/vscode/.vscode-server-shared
+      CODEX_HOME: /home/vscode/.codex
+
+      MONGO_HOST: "mongo"
+      DB_USER: "${DB_USER:-backend_mongo_user}"
+      DB_PASSWORD: "${DB_PASSWORD:-backend_mongo_password}"
+
+      MyMongoDbSettings__ConnectionString: "mongodb://${DB_USER:-backend_mongo_user}:${DB_PASSWORD:-backend_mongo_password}@mongo:27017/${COMPOSE_PROJECT_NAME:-template}?authSource=admin&retryWrites=true&replicaSet=rs0"
+      MyMongoDbSettings__DatabaseName: "${COMPOSE_PROJECT_NAME:-template}"
+
+    ports:
+      - "${API_PORT:-5002}:5000"        # .NET API
+      - "${LANDING_PORT:-4202}:4200"    # Angular landing dev server
+      - "${DASHBOARD_PORT:-4203}:4201"  # Angular dashboard dev server
+    networks:
+      - shared-mongo-net
+
+    command: >
+      bash -c "
+        set -euo pipefail
+        dotnet --info &&
+        node -v &&
+        ng version || true &&
+        sleep infinity
+      "
+
+networks:
+  shared-mongo-net:
+    external: true
+    name: ${MONGO_NETWORK_NAME:-shared-mongo-net}
