@@ -18,9 +18,16 @@ public class SiteRepository : ISiteRepository
 
     public async Task<OperationResult<ShowSiteDto>> CreateSiteAsync(CreateSiteDto request, CancellationToken cancellationToken)
     {
-        Site? targetSite = await _collectionSite.Find(doc => doc.Name.ToUpper() == request.Name.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        string cleanSiteName = request.Name.ToNormalized();
 
-        if (targetSite is not null)
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
+        bool isSiteExist = await _collectionSite.Find(doc => doc.Name == cleanSiteName, options).AnyAsync(cancellationToken);
+
+        if (isSiteExist)
         {
             return new(
                 false,
@@ -57,7 +64,14 @@ public class SiteRepository : ISiteRepository
 
     public async Task<OperationResult<ShowSiteDto>> GetSiteByNameAsync(string siteName, CancellationToken cancellationToken)
     {
-        Site? site = await _collectionSite.Find(doc => doc.Name.ToUpper() == siteName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        string cleanSiteName = siteName.ToNormalized();
+
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
+        Site? site = await _collectionSite.Find(doc => doc.Name == cleanSiteName, options).FirstOrDefaultAsync(cancellationToken);
 
         if (site is null)
         {
@@ -101,7 +115,14 @@ public class SiteRepository : ISiteRepository
 
     public async Task<OperationResult<ShowSiteDto>> UpdateSiteAsync(string siteName, UpdateSiteDto request, CancellationToken cancellationToken)
     {
-        Site? targetSite = await _collectionSite.Find(doc => doc.Name.ToUpper() == siteName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        string cleanSiteName = siteName.ToNormalized();
+
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
+        Site? targetSite = await _collectionSite.Find(doc => doc.Name == cleanSiteName, options).FirstOrDefaultAsync(cancellationToken);
 
         if (targetSite is null)
         {
@@ -118,7 +139,7 @@ public class SiteRepository : ISiteRepository
         var updateDefinitions = new List<UpdateDefinition<Site>>();
 
         if (!string.Equals(targetSite.Name, request.Name, StringComparison.Ordinal))
-            updateDefinitions.Add(builder.Set(doc => doc.Name, request.Name));
+            updateDefinitions.Add(builder.Set(doc => doc.Name, request.Name.ToNormalized()));
 
         if (!string.Equals(targetSite.Department, request.Department, StringComparison.Ordinal))
             updateDefinitions.Add(builder.Set(doc => doc.Department, request.Department.Trim()));
@@ -137,7 +158,7 @@ public class SiteRepository : ISiteRepository
             await _collectionSite.UpdateOneAsync(filter, combinedUpdate, null, cancellationToken);
         }
 
-        Site? updatedSite = await _collectionSite.Find(doc => doc.Name.ToUpper() == request.Name.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        Site? updatedSite = await _collectionSite.Find(doc => doc.Id == targetSite.Id).FirstOrDefaultAsync(cancellationToken);
 
         return new(
             true,
@@ -148,7 +169,14 @@ public class SiteRepository : ISiteRepository
 
     public async Task<OperationResult> DeleteSiteAsync(string siteName, CancellationToken cancellationToken)
     {
-        Site? targetSite = await _collectionSite.Find(doc => doc.Name.ToUpper() == siteName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        string cleanSiteName = siteName.ToNormalized();
+
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
+        Site? targetSite = await _collectionSite.Find(doc => doc.Name == cleanSiteName, options).FirstOrDefaultAsync(cancellationToken);
 
         if (targetSite is null)
         {
@@ -162,7 +190,7 @@ public class SiteRepository : ISiteRepository
         }
 
         DeleteResult deleteResult = await _collectionSite.DeleteOneAsync(doc => doc.Id == targetSite.Id);
-        
+
         return deleteResult.DeletedCount == 1
                 ? new(
                     true,
