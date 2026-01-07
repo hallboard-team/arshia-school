@@ -72,6 +72,7 @@ public class CourseRepository : ICourseRepository
         CancellationToken cancellationToken)
     {
         string cleanCourseName = targetCourseTitle.ToNormalized();
+        string cleanReqCourseName = updateCourseDto.Title.ToNormalized();
 
         FindOptions options = new()
         {
@@ -79,6 +80,19 @@ public class CourseRepository : ICourseRepository
         };
 
         Course? targetCourse = await _collectionCourse.Find(doc => doc.Title == cleanCourseName, options).FirstOrDefaultAsync(cancellationToken);
+
+        bool isDuplicateCourse = await _collectionCourse.Find(doc => doc.Title == cleanReqCourseName, options).AnyAsync(cancellationToken);
+
+        if (isDuplicateCourse)
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsDuplicateCourse,
+                    "Your new course name is already exists! Select new one."
+                )
+            );
+        }
 
         if (targetCourse is null)
         {
