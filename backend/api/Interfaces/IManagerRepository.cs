@@ -10,7 +10,7 @@ public interface IManagerRepository
     Task<OperationResult<RegisteredUserDto>> CreateTeacherAsync(RegisterDto managerInput, CancellationToken cancellationToken);
     Task<OperationResult<PagedList<AppUser>>> GetAllAsync(MemberParams memberParams, CancellationToken cancellationToken);
     Task<OperationResult<IEnumerable<UserWithRoleDto>>> GetUsersWithRolesAsync();
-    Task<OperationResult<EnrolledClassRoom>> AddEnrolledClassAsync(AddEnrolledCourseDto managerInput, string targetUserName, CancellationToken cancellationToken);
+    Task<OperationResult<EnrolledClassRoom>> AddEnrolledClassAsync(AddEnrolledClassRoomDto managerInput, string targetUserName, CancellationToken cancellationToken);
     Task<OperationResult> UpdateEnrolledClassAsync(UpdateEnrolledDto updateEnrolledDto, string targetUserName, CancellationToken cancellationToken);
     Task<OperationResult> DeleteAsync(string targetMemberUserName, CancellationToken cancellationToken);
     Task<OperationResult<List<AppUser>>> GetAllTeachersAsync(CancellationToken cancellationToken);

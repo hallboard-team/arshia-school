@@ -79,7 +79,9 @@ public class ClassRoomController(IClassRoomRepository _classRoomRepository, ICou
         ? opResult.Result
         : opResult.Error?.Code switch
         {
+            ErrorCode.IsDuplicateClass => BadRequest(opResult.Error.Message),
             ErrorCode.IsNotFound => BadRequest(opResult.Error.Message),
+            ErrorCode.IsOperationFailed => BadRequest(opResult.Error.Message),
             _ => BadRequest("Operation failed! Try again or contact support")
         };
     }

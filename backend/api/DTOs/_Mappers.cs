@@ -8,8 +8,8 @@ public static class Mappers
             Email = userInput.Email, // required by AspNet Identity
             UserName = Utils.GenerateComplexUsername(),
             DateOfBirth = userInput.DateOfBirth,
-            Name = userInput.Name.Trim(),
-            LastName = userInput.LastName.Trim(),
+            Name = userInput.Name.ToNormalized(),
+            LastName = userInput.LastName.ToNormalized(),
             PhoneNum = userInput.PhoneNum,
             Gender = userInput.Gender,
         };
@@ -116,8 +116,8 @@ public static class Mappers
     public static Course ConvertAddCourseDtoToCourse(CreateCourseDto managerInput) =>
          new()
          {
-             Title = managerInput.Title.Trim().ToLower(),
-             Description = managerInput.Description.Trim().ToLower(),
+             Title = managerInput.Title.ToNormalized(),
+             Description = managerInput.Description.Trim(),
              TotalMinutes = managerInput.TotalHours,
              IsActive = managerInput.IsActive
          };
@@ -133,7 +133,7 @@ public static class Mappers
     public static Site ConvertCreateSiteDtoToSite(CreateSiteDto request) =>
          new()
          {
-             Name = request.Name.ToLower().Trim(),
+             Name = request.Name.ToNormalized(),
              Department = request.Department.Trim(),
              Floor = request.Floor,
              Capacity = request.Capacity
@@ -150,7 +150,7 @@ public static class Mappers
     public static ClassRoom ConvertCreateClassRoomDtoToClassRoom(CreateClassRoomDto request, ObjectId? courseId, ObjectId siteId, int daysCalc) =>
          new()
          {
-             ClassRoomName = request.ClassRoomName.Trim().ToLower(),
+             ClassRoomName = request.ClassRoomName.ToNormalized(),
              CourseId = courseId,
              SiteId = siteId,
              ProfessorsIds = [],
@@ -181,7 +181,7 @@ public static class Mappers
         );
 
     public static EnrolledClassRoom ConvertAddEnrolledCourseDtoToEnrolledCourse
-        (AddEnrolledCourseDto managerInput, ClassRoom model,
+        (AddEnrolledClassRoomDto managerInput, ClassRoom model,
             int paymentPerMonthCalc, int lastPaymentPerMonthCalc,
             int tuitionReminderCalc
         ) =>

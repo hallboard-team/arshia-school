@@ -22,8 +22,15 @@ public class AdminRepository : IAdminRepository
 
     public async Task<OperationResult<LoggedInDto>> CreateAsync(RegisterDto registerDto, CancellationToken cancellationToken)
     {
+        string cleanEmail = registerDto.Email.ToNormalized();
+
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
         bool doaseNameExist = await _collectionAppUser.Find<AppUser>(doc =>
-            doc.NormalizedEmail == registerDto.Email).AnyAsync(cancellationToken);
+            doc.NormalizedEmail == cleanEmail, options).AnyAsync(cancellationToken);
 
         if (doaseNameExist)
         {

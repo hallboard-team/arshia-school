@@ -1,6 +1,6 @@
 namespace api.DTOs;
 
-public record AddEnrolledCourseDto(
+public record AddEnrolledClassRoomDto(
     [Required(ErrorMessage = "ClassName is required.")]
     string ClassName,
 

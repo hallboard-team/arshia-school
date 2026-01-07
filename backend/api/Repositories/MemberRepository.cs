@@ -26,6 +26,13 @@ public class MemberRepository : IMemberRepository
 
     public async Task<OperationResult<PagedList<Attendance>>> GetAllAttendenceAsync(AttendanceParams attendanceParams, ObjectId? userId, string targetClassTitle, CancellationToken cancellationToken)
     {
+        string cleanClassRoomName = targetClassTitle.Normalize();
+
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
         AppUser? appUser = await _collectionAppUser.Find<AppUser>(
             doc => doc.Id == userId).FirstOrDefaultAsync(cancellationToken);
         if (appUser is null)
@@ -39,9 +46,9 @@ public class MemberRepository : IMemberRepository
             );
         }
 
-        ObjectId? targetClassId = await _collectionClass.AsQueryable()
-            .Where(doc => doc.ClassRoomName == targetClassTitle.ToUpper())
-            .Select(doc => doc.Id)
+        ObjectId? targetClassId = await _collectionClass
+            .Find(doc => doc.ClassRoomName == cleanClassRoomName, options)
+            .Project(doc => doc.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (targetClassId == default)
@@ -86,19 +93,19 @@ public class MemberRepository : IMemberRepository
 
         if (!string.IsNullOrWhiteSpace(memberUpdateDto.Name))
         {
-            string trimmed = memberUpdateDto.Name.Trim();
-            if (!string.Equals(targetAppUser.Name, trimmed, StringComparison.Ordinal))
+            string normalizedName = memberUpdateDto.Name.ToNormalized();
+            if (!string.Equals(targetAppUser.Name, normalizedName, StringComparison.Ordinal))
             {
-                updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.Name, trimmed));
+                updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.Name, normalizedName));
             }
         }
 
         if (!string.IsNullOrWhiteSpace(memberUpdateDto.LastName))
         {
-            string trimmed = memberUpdateDto.LastName.Trim();
-            if (!string.Equals(targetAppUser.LastName, trimmed, StringComparison.Ordinal))
+            string normalizedLastName = memberUpdateDto.LastName.ToNormalized();
+            if (!string.Equals(targetAppUser.LastName, normalizedLastName, StringComparison.Ordinal))
             {
-                updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.LastName, trimmed));
+                updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.LastName, normalizedLastName));
             }
         }
 
@@ -188,6 +195,11 @@ public class MemberRepository : IMemberRepository
     {
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
         if (userId is null)
         {
             return new(
@@ -215,13 +227,12 @@ public class MemberRepository : IMemberRepository
             );
         }
 
-        List<ObjectId>? enrolledClassIds = await _collectionAppUser.AsQueryable<AppUser>()
-            .Where(appUser => appUser.NormalizedUserName == loggedInUserName.ToUpper())
-            .SelectMany(appUser => appUser.EnrolledClasses)
-            .Select(doc => doc.ClassRoomId)
-            .ToListAsync(cancellationToken);
+        var enrolledClassIds = await _collectionAppUser
+            .Find(doc => doc.NormalizedUserName == loggedInUserName, options)
+            .Project(doc => doc.EnrolledClasses.Select(c => c.ClassRoomId))
+            .FirstOrDefaultAsync(cancellationToken);
 
-        if (enrolledClassIds is null || enrolledClassIds.Count == 0)
+        if (enrolledClassIds is null || !enrolledClassIds.Any())
             return new(
                 false,
                 Error: new(
@@ -242,6 +253,13 @@ public class MemberRepository : IMemberRepository
 
     public async Task<OperationResult<EnrolledClassRoom>> GetEnrolledCourseAsync(string hashedUserId, string classTitle, CancellationToken cancellationToken)
     {
+        string cleanClassName = classTitle.ToNormalized();
+
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
 
         if (userId is null)
@@ -270,7 +288,7 @@ public class MemberRepository : IMemberRepository
             );
         }
 
-        ClassRoom? targetClass = await _collectionClass.Find(doc => doc.ClassRoomName.ToUpper() == classTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        ClassRoom? targetClass = await _collectionClass.Find(doc => doc.ClassRoomName == cleanClassName, options).FirstOrDefaultAsync(cancellationToken);
 
         EnrolledClassRoom? enrolledClass = appUser.EnrolledClasses
             .FirstOrDefault(ec => ec.ClassRoomId == targetClass.Id);

@@ -22,9 +22,16 @@ public class CourseRepository : ICourseRepository
 
     public async Task<OperationResult<ShowCourseDto>> AddCourseAsync(CreateCourseDto managerInput, CancellationToken cancellationToken)
     {
-        Course? targetCourse = await _collectionCourse.Find(doc => doc.Title.ToUpper() == managerInput.Title.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        string cleanCourseName = managerInput.Title.ToNormalized();
 
-        if (targetCourse is not null)
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
+        bool isCourseExists = await _collectionCourse.Find(doc => doc.Title == cleanCourseName, options).AnyAsync(cancellationToken);
+
+        if (isCourseExists)
         {
             return new(
                 false,
@@ -64,7 +71,28 @@ public class CourseRepository : ICourseRepository
         UpdateCourseDto updateCourseDto, string targetCourseTitle,
         CancellationToken cancellationToken)
     {
-        Course? targetCourse = await _collectionCourse.Find(doc => doc.Title.ToUpper() == targetCourseTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        string cleanCourseName = targetCourseTitle.ToNormalized();
+        string cleanReqCourseName = updateCourseDto.Title.ToNormalized();
+
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
+        Course? targetCourse = await _collectionCourse.Find(doc => doc.Title == cleanCourseName, options).FirstOrDefaultAsync(cancellationToken);
+
+        bool isDuplicateCourse = await _collectionCourse.Find(doc => doc.Title == cleanReqCourseName, options).AnyAsync(cancellationToken);
+
+        if (isDuplicateCourse)
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsDuplicateCourse,
+                    "Your new course name is already exists! Select new one."
+                )
+            );
+        }
 
         if (targetCourse is null)
         {
@@ -78,8 +106,8 @@ public class CourseRepository : ICourseRepository
         }
 
         UpdateDefinition<Course> updatedDef = Builders<Course>.Update
-            .Set(c => c.Title, updateCourseDto.Title?.Trim().ToLower())
-            .Set(c => c.Description, updateCourseDto.Description.Trim().ToLower())
+            .Set(c => c.Title, updateCourseDto.Title.ToNormalized())
+            .Set(c => c.Description, updateCourseDto.Description)
             .Set(c => c.TotalMinutes, updateCourseDto.TotalMinutes)
             .Set(c => c.IsActive, updateCourseDto.IsActive);
 
@@ -109,8 +137,15 @@ public class CourseRepository : ICourseRepository
 
     public async Task<OperationResult<ShowCourseDto>> GetCourseByTitleAsync(string courseTitle, CancellationToken cancellationToken)
     {
+        string cleanCourseName = courseTitle.ToNormalized();
+
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
         Course? course = await _collectionCourse
-            .Find(c => c.Title.ToUpper() == courseTitle.ToUpper())
+            .Find(c => c.Title == cleanCourseName, options)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (course is null)
@@ -133,7 +168,14 @@ public class CourseRepository : ICourseRepository
 
     public async Task<OperationResult> DeleteCourseAsync(string courseName, CancellationToken cancellationToken)
     {
-        Course? course = await _collectionCourse.Find(doc => doc.Title.ToUpper() == courseName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        string cleanCourseName = courseName.ToNormalized();
+
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
+        Course? course = await _collectionCourse.Find(doc => doc.Title == cleanCourseName, options).FirstOrDefaultAsync(cancellationToken);
 
         if (course is null)
         {

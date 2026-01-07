@@ -28,9 +28,16 @@ public class TeacherRepository : ITeacherRepository
 
     public async Task<ObjectId?> GetObjectIdByUserNameAsync(string studentUserName, CancellationToken cancellationToken)
     {
-        ObjectId? studentId = await _collectionAppUser.AsQueryable<AppUser>()
-            .Where(appUser => appUser.NormalizedUserName == studentUserName.ToUpper())
-            .Select(item => item.Id)
+        string cleanStudentName = studentUserName.ToNormalized();
+
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
+        ObjectId? studentId = await _collectionAppUser
+            .Find(appUser => appUser.NormalizedUserName == cleanStudentName, options)
+            .Project(item => item.Id)
             .SingleOrDefaultAsync(cancellationToken);
 
         return ValidationsExtensions.ValidateObjectId(studentId);
@@ -61,8 +68,16 @@ public class TeacherRepository : ITeacherRepository
 
     public async Task<OperationResult<ShowStudentStatusDto>> AddAsync(AddStudentStatusDto teacherInput, string courseTitle, CancellationToken cancellationToken)
     {
+        string cleanUserName = teacherInput.UserName.ToNormalized();
+        string cleanCourseName = courseTitle.ToNormalized();
+
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
         AppUser? targetAppUser = await _collectionAppUser
-            .Find(s => s.NormalizedUserName == teacherInput.UserName.ToUpper())
+            .Find(s => s.NormalizedUserName == cleanUserName, options)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (targetAppUser is null)
@@ -78,9 +93,9 @@ public class TeacherRepository : ITeacherRepository
 
         DateOnly currentDate = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        ObjectId targetCourseId = await _collectionCourse.AsQueryable<Course>()
-            .Where(doc => doc.Title == courseTitle.ToUpper())
-            .Select(doc => doc.Id)
+        ObjectId targetCourseId = await _collectionCourse
+            .Find(doc => doc.Title == cleanCourseName, options)
+            .Project(doc => doc.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
         Attendance existingAttendance = await _collectionAttendance
@@ -111,9 +126,16 @@ public class TeacherRepository : ITeacherRepository
 
     public async Task<OperationResult> DeleteAsync(ObjectId userId, string targetUserName, string targetCourseTitle, DateOnly currentDate, CancellationToken cancellationToken)
     {
-        ObjectId? targetUserId = await _collectionAppUser.AsQueryable()
-            .Where(doc => doc.NormalizedUserName == targetUserName.ToUpper())
-            .Select(doc => doc.Id)
+        string cleanCourseTitle = targetCourseTitle.ToNormalized();
+
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
+        ObjectId? targetUserId = await _collectionAppUser
+            .Find(doc => doc.NormalizedUserName == targetUserName, options)
+            .Project(doc => doc.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (targetUserId is null)
@@ -127,9 +149,9 @@ public class TeacherRepository : ITeacherRepository
             );
         }
 
-        ObjectId targetCourseId = await _collectionCourse.AsQueryable()
-            .Where(doc => doc.Title == targetCourseTitle.ToUpper())
-            .Select(doc => doc.Id)
+        ObjectId targetCourseId = await _collectionCourse
+            .Find(doc => doc.Title == cleanCourseTitle, options)
+            .Project(doc => doc.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
         DeleteResult deleteResult = await _collectionAttendance.DeleteOneAsync(
@@ -155,6 +177,13 @@ public class TeacherRepository : ITeacherRepository
 
     public async Task<OperationResult<PagedList<AppUser>>> GetAllAsync(PaginationParams paginationParams, string targetTitle, string hashedUserId, CancellationToken cancellationToken)
     {
+        string cleanClassRoomName = targetTitle.ToNormalized();
+
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
         ObjectId? userId = await _tokenService.GetActualUserIdAsync(hashedUserId, cancellationToken);
         if (userId is null)
         {
@@ -167,9 +196,9 @@ public class TeacherRepository : ITeacherRepository
             );
         }
 
-        ObjectId? classId = await _collectionClass.AsQueryable()
-            .Where(doc => doc.ClassRoomName.ToUpper() == targetTitle.ToUpper())
-            .Select(doc => doc.Id)
+        ObjectId? classId = await _collectionClass
+            .Find(doc => doc.ClassRoomName == cleanClassRoomName, options)
+            .Project(doc => doc.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
         IQueryable<AppUser> query = _collectionAppUser.AsQueryable()

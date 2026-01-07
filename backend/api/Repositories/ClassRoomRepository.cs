@@ -31,9 +31,18 @@ public class ClassRoomRepository : IClassRoomRepository
 
     public async Task<OperationResult<ShowClassRoomDto>> CreateClassRoomAsync(CreateClassRoomDto request, CancellationToken cancellationToken)
     {
-        ClassRoom? targetClassRoom = await _collectionClassRoom.Find(doc => doc.ClassRoomName.ToUpper() == request.ClassRoomName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        string cleanClassRoomName = request.ClassRoomName.ToNormalized();
+        string cleanCourseName = request.CourseName.ToNormalized();
+        string cleanSiteName = request.SiteName.ToNormalized();
 
-        if (targetClassRoom is not null)
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
+        bool isClassRoomExist = await _collectionClassRoom.Find(doc => doc.ClassRoomName == cleanClassRoomName, options).AnyAsync(cancellationToken);
+
+        if (isClassRoomExist)
         {
             return new(
                 false,
@@ -44,7 +53,8 @@ public class ClassRoomRepository : IClassRoomRepository
             );
         }
 
-        Course? course = await _collectionCourse.Find(doc => doc.Title.ToUpper() == request.CourseName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        Course? course = await _collectionCourse
+        .Find(doc => doc.Title == cleanCourseName, options).FirstOrDefaultAsync(cancellationToken);
 
         if (course is null)
         {
@@ -57,7 +67,8 @@ public class ClassRoomRepository : IClassRoomRepository
             );
         }
 
-        Site? site = await _collectionSite.Find(doc => doc.Name.ToUpper() == request.SiteName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        Site? site = await _collectionSite
+            .Find(doc => doc.Name == cleanSiteName, options).FirstOrDefaultAsync(cancellationToken);
 
         if (site is null)
         {
@@ -104,7 +115,14 @@ public class ClassRoomRepository : IClassRoomRepository
 
     public async Task<OperationResult<ShowClassRoomDto>> GetClassRoomByNameAsync(string classRoomName, CancellationToken cancellationToken)
     {
-        ClassRoom model = await _collectionClassRoom.Find(doc => doc.ClassRoomName.ToUpper() == classRoomName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        string cleanClassRoomName = classRoomName.ToNormalized();
+
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
+        ClassRoom model = await _collectionClassRoom.Find(doc => doc.ClassRoomName == classRoomName, options).FirstOrDefaultAsync(cancellationToken);
 
         if (model is null)
         {
@@ -179,7 +197,27 @@ public class ClassRoomRepository : IClassRoomRepository
 
     public async Task<OperationResult<ShowClassRoomDto>> UpdateClassRoomAsync(string classRoomName, UpdateClassRoomDto request, CancellationToken cancellationToken)
     {
-        ClassRoom? targetClassRoom = await _collectionClassRoom.Find(doc => doc.ClassRoomName.ToUpper() == classRoomName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        string cleanClassRoomName = classRoomName.ToNormalized();
+        string cleanReqClassRoomName = request.ClassRoomName.ToNormalized();
+
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
+        ClassRoom? targetClassRoom = await _collectionClassRoom.Find(doc => doc.ClassRoomName == cleanClassRoomName, options).FirstOrDefaultAsync(cancellationToken);
+        bool isDuplicateClassRoom = await _collectionClassRoom.Find(doc => doc.ClassRoomName == cleanReqClassRoomName, options).AnyAsync(cancellationToken);
+
+        if (isDuplicateClassRoom)
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsDuplicateClass,
+                    "Your new classroom is already exists! Select new one."
+                )
+            );
+        }
 
         if (targetClassRoom is null)
         {
@@ -201,7 +239,7 @@ public class ClassRoomRepository : IClassRoomRepository
         int calcDays = (int)Math.Ceiling((double)totalMinutes / classMinutes);
 
         UpdateDefinition<ClassRoom> updateDef = Builders<ClassRoom>.Update
-            .Set(doc => doc.ClassRoomName, request.ClassRoomName.ToLower().Trim())
+            .Set(doc => doc.ClassRoomName, request.ClassRoomName.ToNormalized())
             .Set(doc => doc.Tuition, request.Tuition)
             .Set(doc => doc.ClassRoomMinutes, request.ClassRoomMinutes)
             .Set(doc => doc.Days, calcDays)
@@ -241,7 +279,14 @@ public class ClassRoomRepository : IClassRoomRepository
 
     public async Task<OperationResult> AddProfessorToClassRoomAsync(string targetClassRoomTitle, string professorUserName, CancellationToken cancellationToken)
     {
-        ClassRoom targetClassRoom = await _collectionClassRoom.Find(doc => doc.ClassRoomName.ToUpper() == targetClassRoomTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        string cleanClassRoomName = targetClassRoomTitle.ToNormalized();
+
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
+        ClassRoom targetClassRoom = await _collectionClassRoom.Find(doc => doc.ClassRoomName == cleanClassRoomName, options).FirstOrDefaultAsync(cancellationToken);
 
         if (targetClassRoom is null)
         {
@@ -254,9 +299,9 @@ public class ClassRoomRepository : IClassRoomRepository
             );
         }
 
-        ObjectId? professorId = await _collectionAppUser.AsQueryable()
-            .Where(doc => doc.NormalizedUserName == professorUserName.ToUpper())
-            .Select(doc => doc.Id)
+        ObjectId? professorId = await _collectionAppUser
+            .Find(doc => doc.NormalizedUserName == professorUserName.ToNormalized(), options)
+            .Project(doc => doc.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (professorId.Equals(null))
@@ -291,7 +336,14 @@ public class ClassRoomRepository : IClassRoomRepository
 
     public async Task<OperationResult> RemoveProfessorFromClassRoomAsync(string targetClassRoomTitle, string professorUserName, CancellationToken cancellationToken)
     {
-        ClassRoom targetClassRoom = await _collectionClassRoom.Find(doc => doc.ClassRoomName.ToUpper() == targetClassRoomTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+        string cleanClassRoomName = targetClassRoomTitle.ToNormalized();
+
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
+        ClassRoom targetClassRoom = await _collectionClassRoom.Find(doc => doc.ClassRoomName == cleanClassRoomName, options).FirstOrDefaultAsync(cancellationToken);
 
         if (targetClassRoom is null)
         {
@@ -304,9 +356,9 @@ public class ClassRoomRepository : IClassRoomRepository
             );
         }
 
-        ObjectId? professorId = await _collectionAppUser.AsQueryable()
-            .Where(doc => doc.NormalizedUserName == professorUserName.ToUpper())
-            .Select(doc => doc.Id)
+        ObjectId? professorId = await _collectionAppUser
+            .Find(doc => doc.NormalizedUserName == professorUserName.ToNormalized(), options)
+            .Project(doc => doc.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (professorId is null)
@@ -349,9 +401,16 @@ public class ClassRoomRepository : IClassRoomRepository
 
     public async Task<OperationResult<ObjectId>> GetClassRoomIdByName(string classRoomName, CancellationToken cancellationToken)
     {
-        ObjectId? classId = await _collectionClassRoom.AsQueryable()
-            .Where(doc => doc.ClassRoomName.ToUpper() == classRoomName.ToUpper())
-            .Select(doc => doc.Id)
+        string cleansSiteName = classRoomName.ToNormalized();
+
+        FindOptions options = new()
+        {
+            Collation = new Collation("en", strength: CollationStrength.Secondary)
+        };
+
+        ObjectId? classId = await _collectionClassRoom
+            .Find(doc => doc.ClassRoomName == cleansSiteName, options)
+            .Project(doc => doc.Id)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (classId is null)
