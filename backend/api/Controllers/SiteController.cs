@@ -71,6 +71,7 @@ public class SiteController(ISiteRepository _siteRepository) : BaseApiController
         ? opResult.Result
         : opResult.Error?.Code switch
         {
+            ErrorCode.IsDuplicateSite => BadRequest(opResult.Error.Message),
             ErrorCode.IsNotFound => BadRequest(opResult.Error.Message),
             _ => BadRequest("Operation failed! Try again or contact support")
         };

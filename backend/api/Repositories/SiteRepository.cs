@@ -116,6 +116,7 @@ public class SiteRepository : ISiteRepository
     public async Task<OperationResult<ShowSiteDto>> UpdateSiteAsync(string siteName, UpdateSiteDto request, CancellationToken cancellationToken)
     {
         string cleanSiteName = siteName.ToNormalized();
+        string cleanReqSiteName = request.Name.ToNormalized();
 
         FindOptions options = new()
         {
@@ -123,6 +124,18 @@ public class SiteRepository : ISiteRepository
         };
 
         Site? targetSite = await _collectionSite.Find(doc => doc.Name == cleanSiteName, options).FirstOrDefaultAsync(cancellationToken);
+        bool isDuplicateSite = await _collectionSite.Find(doc => doc.Name == cleanReqSiteName, options).AnyAsync(cancellationToken);
+
+        if (isDuplicateSite)
+        {
+            return new(
+                false,
+                Error: new(
+                    ErrorCode.IsDuplicateSite,
+                    "Your new site name is already Exists! Select new one."
+                )
+            );
+        }
 
         if (targetSite is null)
         {
