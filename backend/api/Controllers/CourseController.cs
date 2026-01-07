@@ -57,7 +57,9 @@ public class CourseController(ICourseRepository _courseRepository) : BaseApiCont
             ? opResult.Result
             : opResult.Error?.Code switch
             {
+                ErrorCode.IsDuplicateClass => BadRequest(opResult.Error.Message),
                 ErrorCode.IsNotFound => BadRequest(opResult.Error.Message),
+                ErrorCode.IsOperationFailed => BadRequest(opResult.Error.Message),
                 _ => BadRequest("operation failed! Try again or contact support")
             };
     }
