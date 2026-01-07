@@ -24,7 +24,7 @@ public class ManagerRepository : IManagerRepository
 
     if (!string.IsNullOrWhiteSpace(dto.Name))
     {
-      string trimmed = dto.Name.Trim();
+      string trimmed = dto.Name.ToNormalized();
       if (!string.Equals(user.Name, trimmed, StringComparison.Ordinal))
       {
         updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.Name, trimmed));
@@ -33,7 +33,7 @@ public class ManagerRepository : IManagerRepository
 
     if (!string.IsNullOrWhiteSpace(dto.LastName))
     {
-      string trimmed = dto.LastName.Trim();
+      string trimmed = dto.LastName.ToNormalized();
       if (!string.Equals(user.LastName, trimmed, StringComparison.Ordinal))
       {
         updateDefinitions.Add(updateDefinitionBuilder.Set(appUser => appUser.LastName, trimmed));
@@ -145,12 +145,20 @@ public class ManagerRepository : IManagerRepository
   }
 
   public async Task<OperationResult<EnrolledClassRoom>> AddEnrolledClassAsync(
-    AddEnrolledCourseDto addEnrolledCourseDto,
+    AddEnrolledClassRoomDto addEnrolledClassRoomDto,
     string targetUserName,
     CancellationToken cancellationToken
   )
   {
-    if (addEnrolledCourseDto.NumberOfPayments <= 0)
+    string cleanUserName = targetUserName.ToNormalized();
+    string cleanClassRoomName = addEnrolledClassRoomDto.ClassName.ToNormalized();
+
+    FindOptions options = new()
+    {
+      Collation = new Collation("en", strength: CollationStrength.Secondary)
+    };
+
+    if (addEnrolledClassRoomDto.NumberOfPayments <= 0)
     {
       return new(
         false,
@@ -161,7 +169,7 @@ public class ManagerRepository : IManagerRepository
       );
     }
 
-    AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == targetUserName.ToUpper()).
+    AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == cleanUserName, options).
       FirstOrDefaultAsync(cancellationToken);
     if (appUser is null)
     {
@@ -174,7 +182,7 @@ public class ManagerRepository : IManagerRepository
       );
     }
 
-    ClassRoom? targetClass = await _collectionClass.Find(doc => doc.ClassRoomName.ToUpper() == addEnrolledCourseDto.ClassName.ToUpper()).
+    ClassRoom? targetClass = await _collectionClass.Find(doc => doc.ClassRoomName == cleanClassRoomName, options).
       FirstOrDefaultAsync(cancellationToken);
     if (targetClass is null)
     {
@@ -200,7 +208,7 @@ public class ManagerRepository : IManagerRepository
     }
 
     int tuition = targetClass.Tuition;                       // شهریه کل (int)
-    int paidAmount = addEnrolledCourseDto.PaidAmount;   // پیش‌پرداخت (int)
+    int paidAmount = addEnrolledClassRoomDto.PaidAmount;   // پیش‌پرداخت (int)
 
     // مبلغ باقی‌مانده بعد از پیش‌پرداخت
     int tuitionReminderCalc = tuition - paidAmount;
@@ -210,9 +218,9 @@ public class ManagerRepository : IManagerRepository
     int paymentPerMonthCalc = 0;
     int lastpaymentPerMonthCalc = 0;
 
-    if (tuitionReminderCalc > 0 && addEnrolledCourseDto.NumberOfPayments > 0)
+    if (tuitionReminderCalc > 0 && addEnrolledClassRoomDto.NumberOfPayments > 0)
     {
-      int n = addEnrolledCourseDto.NumberOfPayments;
+      int n = addEnrolledClassRoomDto.NumberOfPayments;
 
       // مبلغ پایه هر قسط
       paymentPerMonthCalc = tuitionReminderCalc / n;
@@ -225,7 +233,7 @@ public class ManagerRepository : IManagerRepository
     }
 
     EnrolledClassRoom enrolledCourse = ConvertAddEnrolledCourseDtoToEnrolledCourse(
-      addEnrolledCourseDto, targetClass, paymentPerMonthCalc, lastpaymentPerMonthCalc, tuitionReminderCalc
+      addEnrolledClassRoomDto, targetClass, paymentPerMonthCalc, lastpaymentPerMonthCalc, tuitionReminderCalc
     );
 
     FilterDefinition<AppUser>? filter = Builders<AppUser>.Filter.Eq(u => u.Id, appUser.Id);
@@ -259,7 +267,15 @@ public class ManagerRepository : IManagerRepository
     CancellationToken cancellationToken
   )
   {
-    AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == targetUserName.ToUpper()).
+    string cleanUserName = targetUserName.ToNormalized();
+    string cleanClassRoomName = updateEnrolledDto.ClassName.ToNormalized();
+
+    FindOptions options = new()
+    {
+      Collation = new Collation("en", strength: CollationStrength.Secondary)
+    };
+
+    AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == cleanUserName, options).
       FirstOrDefaultAsync(cancellationToken);
 
     if (appUser is null)
@@ -273,7 +289,7 @@ public class ManagerRepository : IManagerRepository
       );
     }
 
-    ClassRoom targetClass = await _collectionClass.Find(doc => doc.ClassRoomName.ToUpper() == updateEnrolledDto.ClassName.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+    ClassRoom targetClass = await _collectionClass.Find(doc => doc.ClassRoomName == cleanClassRoomName, options).FirstOrDefaultAsync(cancellationToken);
 
     EnrolledClassRoom? enrolledClass = appUser.EnrolledClasses.FirstOrDefault(ec => ec.ClassRoomId == targetClass.Id);
 
@@ -337,7 +353,14 @@ public class ManagerRepository : IManagerRepository
 
   public async Task<OperationResult> DeleteAsync(string targetMemberUserName, CancellationToken cancellationToken)
   {
-    ObjectId? userId = await _collectionAppUser.Find(u => u.UserName == targetMemberUserName).
+    string cleanUserName = targetMemberUserName.ToNormalized();
+
+    FindOptions options = new()
+    {
+      Collation = new Collation("en", strength: CollationStrength.Secondary)
+    };
+
+    ObjectId? userId = await _collectionAppUser.Find(u => u.UserName == cleanUserName, options).
       Project(u => u.Id).FirstOrDefaultAsync(cancellationToken);
 
     if (userId is null)
@@ -416,7 +439,14 @@ public class ManagerRepository : IManagerRepository
     string targetUserName, CancellationToken cancellationToken
   )
   {
-    AppUser? appUser = await _collectionAppUser.Find(u => u.NormalizedUserName == targetUserName.ToUpper()).
+    string cleanUserName = targetUserName.ToNormalized();
+
+    FindOptions options = new()
+    {
+      Collation = new Collation("en", strength: CollationStrength.Secondary)
+    };
+
+    AppUser? appUser = await _collectionAppUser.Find(u => u.NormalizedUserName == cleanUserName, options).
       FirstOrDefaultAsync(cancellationToken);
 
     if (appUser is null)
@@ -443,8 +473,15 @@ public class ManagerRepository : IManagerRepository
        CancellationToken cancellationToken
    )
   {
+    string cleanUserName = memberUserName.ToNormalized();
+
+    FindOptions options = new()
+    {
+      Collation = new Collation("en", strength: CollationStrength.Secondary)
+    };
+
     AppUser? targetAppUser = await _collectionAppUser
-        .Find(u => u.NormalizedUserName == memberUserName.ToUpper())
+        .Find(u => u.NormalizedUserName == cleanUserName, options)
         .FirstOrDefaultAsync(cancellationToken);
 
     if (targetAppUser is null)
@@ -500,7 +537,7 @@ public class ManagerRepository : IManagerRepository
     }
 
     AppUser? updatedAppUser = await _collectionAppUser
-        .Find(u => u.NormalizedUserName == memberUserName.ToUpper())
+        .Find(u => u.Id == targetAppUser.Id)
         .FirstOrDefaultAsync(cancellationToken);
 
     return new(
@@ -512,7 +549,14 @@ public class ManagerRepository : IManagerRepository
 
   public async Task<OperationResult<MemberPhoto>> UploadMemberPhotoAsync(IFormFile file, string userName, CancellationToken cancellationToken)
   {
-    AppUser? targetAppUser = await _collectionAppUser.Find(u => u.NormalizedUserName == userName.ToUpper()).
+    string cleanUserName = userName.ToNormalized();
+
+    FindOptions options = new()
+    {
+      Collation = new Collation("en", strength: CollationStrength.Secondary)
+    };
+
+    AppUser? targetAppUser = await _collectionAppUser.Find(u => u.NormalizedUserName == cleanUserName, options).
       FirstOrDefaultAsync(cancellationToken);
 
     if (targetAppUser is null)
@@ -778,7 +822,15 @@ public class ManagerRepository : IManagerRepository
     string targetUserName, string classTitle, CancellationToken cancellationToken
   )
   {
-    AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == targetUserName.ToUpper()).
+    string cleanUserName = targetUserName.ToNormalized();
+    string cleanClassRoomName = classTitle.ToNormalized();
+
+    FindOptions options = new()
+    {
+      Collation = new Collation("en", strength: CollationStrength.Secondary)
+    };
+
+    AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == cleanUserName, options).
       FirstOrDefaultAsync(cancellationToken);
 
     if (appUser is null)
@@ -792,7 +844,7 @@ public class ManagerRepository : IManagerRepository
       );
     }
 
-    ClassRoom? targetClass = await _collectionClass.Find(doc => doc.ClassRoomName.ToUpper() == classTitle.ToUpper()).FirstOrDefaultAsync(cancellationToken);
+    ClassRoom? targetClass = await _collectionClass.Find(doc => doc.ClassRoomName == cleanClassRoomName, options).FirstOrDefaultAsync(cancellationToken);
 
     EnrolledClassRoom? enrolledClassRoom = appUser.EnrolledClasses.FirstOrDefault(ec => ec.ClassRoomId == targetClass.Id);
 
@@ -888,7 +940,15 @@ public class ManagerRepository : IManagerRepository
     CancellationToken cancellationToken
   )
   {
-    AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == targetMemberUserName.ToUpper()).
+    string cleanUserName = targetMemberUserName.ToNormalized();
+    string cleanClassRoomName = targetClassTitle.ToNormalized();
+
+    FindOptions options = new()
+    {
+      Collation = new Collation("en", strength: CollationStrength.Secondary)
+    };
+
+    AppUser? appUser = await _collectionAppUser.Find(doc => doc.NormalizedUserName == cleanUserName, options).
       FirstOrDefaultAsync(cancellationToken);
     if (appUser is null)
     {
@@ -901,8 +961,8 @@ public class ManagerRepository : IManagerRepository
       );
     }
 
-    ObjectId targetClassId = await _collectionClass.AsQueryable().
-      Where(doc => doc.ClassRoomName == targetClassTitle.ToUpper()).Select(doc => doc.Id).
+    ObjectId targetClassId = await _collectionClass.Find(doc => doc.ClassRoomName == cleanClassRoomName, options)
+    .Project(doc => doc.Id).
       FirstOrDefaultAsync(cancellationToken);
     if (targetClassId.Equals(null))
     {
@@ -1028,8 +1088,15 @@ public class ManagerRepository : IManagerRepository
 
   public async Task<ObjectId?> GetObjectIdByUserNameAsync(string userName, CancellationToken cancellationToken)
   {
-    ObjectId userId = await _collectionAppUser.AsQueryable().Where(u => u.NormalizedUserName == userName.ToUpper()).
-      Select(u => u.Id).SingleOrDefaultAsync(cancellationToken);
+    string cleanUserName = userName.ToNormalized();
+
+    FindOptions options = new()
+    {
+      Collation = new Collation("en", strength: CollationStrength.Secondary)
+    };
+
+    ObjectId userId = await _collectionAppUser.Find(u => u.NormalizedUserName == cleanUserName, options).
+      Project(u => u.Id).SingleOrDefaultAsync(cancellationToken);
 
     return ValidationsExtensions.ValidateObjectId(userId);
   }
