@@ -143,7 +143,7 @@ public class ManagerController(IManagerRepository _managerRepository, ITokenServ
 
     [HttpPost("add-enrolledCourse/{targetUserName}")]
     public async Task<ActionResult<EnrolledClassRoom>> AddEnrolledCourse(
-        AddEnrolledCourseDto managerInput, string targetUserName,
+        AddEnrolledClassRoomDto managerInput, string targetUserName,
         CancellationToken cancellationToken)
     {
         OperationResult<EnrolledClassRoom> opResult = await _managerRepository.AddEnrolledClassAsync(managerInput, targetUserName, cancellationToken);
