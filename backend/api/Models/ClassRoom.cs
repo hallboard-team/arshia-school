@@ -11,7 +11,7 @@ public class ClassRoom
     public ObjectId? SiteId { get; init; }
     public List<ObjectId> ProfessorsIds { get; init; } = [];
     public int Tuition { get; init; }
-    public int ClassRoomMinutes { get; init; }
+    public double ClassRoomMinutes { get; init; }
     public int Days { get; init; }
     public DateOnly StartDate { get; init; }
     public DateOnly EndedDate { get; init; }
